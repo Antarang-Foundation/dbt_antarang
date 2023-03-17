@@ -1,0 +1,9 @@
+version: 2
+
+sources:
+  - name: salesforce
+    description: dataset created by Glific on BigQuery
+    database: antarang-dashboard
+    schema: 'airbyte_antarang_salesforce'
+    tables:
+      - name: src_State_Govt_Body_Level__c
