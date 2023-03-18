@@ -7,3 +7,4 @@ sources:
     schema: 'airbyte_antarang_salesforce'
     tables:
       - name: src_State_Govt_Body_Level__c
+      - name: src_Session_Attendance__c
