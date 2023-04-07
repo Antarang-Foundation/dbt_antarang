@@ -1,1 +1,0 @@
-select * from {{ source('salesforce', 'src_State_Govt_Body_Level__c') }}
