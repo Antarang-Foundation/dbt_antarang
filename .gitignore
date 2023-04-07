@@ -1,4 +1,5 @@
-
+.dbtenv/
 target/
-dbt_packages/
-logs/
+profiles.yml
+.DS_Store
+profiles.yml

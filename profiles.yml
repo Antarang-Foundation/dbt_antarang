@@ -7,4 +7,4 @@ default:
       project: antarang-dashboard
       dataset: dev_goalkeep
       threads: 4
-      keyfile: "D:\Client Projects\Antarang\credentials\antarang-dashboard-42c9afa90cf2.json"
+      keyfile: '/Users/jishnusarkar/Documents/AntarangDocs/antarang_bigquery_credentials.json'
