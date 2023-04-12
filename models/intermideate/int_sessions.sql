@@ -10,8 +10,8 @@ int_sessions as (
     select *
     from 
         session_attendance
-        left join sessions using (record_type_id)
+        left join sessions using (sessions_id)
 
 )
 select *
-from int_cdm1_recordtypes
+from int_sessions
