@@ -11,7 +11,6 @@ renamed as (
     select
         id as session_attendance_id,
         session__c as sessions_id,
-        name as session_name,
         date__c as session_atendance_date,
         attendance__c as attendance_status,
         contact__c as contact_id
