@@ -2,26 +2,21 @@
 {{ config(materialized="view") }}
 
 with
-    cdm1 as (select * from {{ ref("stg_cdm1") }}),
+    cdm1 as (select * from {{ ref('stg_cdm1') }}),
+    recordtypes as (select * from {{ ref('stg_recordtypes') }}),
     
     
 
+int_cdm1_recordtypes as (
     
+    select *
+    from cdm1
+
+    left join 
+        recordtypes
+    on 
+        cdm1.record_type_id = recordtypes.record_type_id
+
+)
 select *
-from relevant_questions
-
-
-with
-    source2 as (select * from {{ref("stg_recordtypes")}}),
-
-    record_type as (
-        select
-            Name as assessment_type
-            id as record_type_id
-
-    )
-select *
-from record_type
-
-
-
+from int_cdm1_recordtypes

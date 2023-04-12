@@ -6,5 +6,6 @@ default:
       method: service-account
       project: antarang-dashboard
       dataset: dev_goalkeep
-      threads: 4
+      location: asia-south1
+      hreads: 4
       keyfile: 'D:\Client Projects\Antarang\credentials\antarang-dashboard-42c9afa90cf2.json'
