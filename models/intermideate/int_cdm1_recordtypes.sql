@@ -1,9 +1,19 @@
+
 {{ config(materialized="view") }}
-select 
-    a.*,
-    b.*
-FROM 
-    {{ ref('stg_cdm1') }} AS a
-LEFT JOIN 
-    {{ ref('stg_recordtypes') }} AS b
-USING (record_type_id)
+
+with
+    cdm1 as (select * from {{ ref('stg_cdm1') }}),
+    recordtypes as (select * from {{ ref('stg_recordtypes') }}),
+    
+    
+
+int_cdm1_recordtypes as (
+    
+    select *
+    from 
+        cdm1
+        left join recordtypes using (record_type_id)
+
+)
+select *
+from int_cdm1_recordtypes

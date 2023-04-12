@@ -22,3 +22,4 @@ renamed as (
 )
 
 select * from renamed
+Where attendance_status is not null
