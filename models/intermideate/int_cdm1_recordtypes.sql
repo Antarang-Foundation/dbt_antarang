@@ -3,7 +3,7 @@
 
 with
     cdm1 as (select * from {{ ref('stg_cdm1') }}),
-    recordtypes as (select * from {{ ref('stg_recordtypes') }}),
+    recordtypes as (select record_type_id,record_type from {{ ref('stg_recordtypes') }}),
     
     
 

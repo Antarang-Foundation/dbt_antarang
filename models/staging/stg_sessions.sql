@@ -24,3 +24,4 @@ renamed as (
 )
 
 select * from renamed
+where sessions_type = 'Student'
