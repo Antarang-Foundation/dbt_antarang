@@ -11,11 +11,10 @@ renamed as (
         FirstName as first_name,
         LastName as last_name,
         Bar_Code__c as student_barcode,
-        Contact_Type__c as contact_type
+        RecordTypeId
 
     from source
 
 )
 
 select * from renamed
-where  contact_type = 'Student'

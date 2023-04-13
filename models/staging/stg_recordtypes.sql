@@ -10,8 +10,7 @@ renamed as (
 
     select
         id as record_type_id,
-        name as record_type,
-        sobjecttype as subject_type
+        name as record_type
 
     from source
 
