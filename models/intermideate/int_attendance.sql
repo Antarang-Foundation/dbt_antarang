@@ -9,5 +9,5 @@ int_attendance as (
     left join int_batches_sessions_conducted using (batches_id)
     
 )
-select contact_id, first_name, last_name, batches_id, attendance_count, total_sessions
+select contact_id, first_name, last_name, attendance_count, total_sessions, ((attendance_count / total_sessions)*100) as percentage_attendance
 from int_attendance
