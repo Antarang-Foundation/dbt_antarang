@@ -1,7 +1,7 @@
 with
     session_attendance as (select * from {{ ref('stg_session_attendance') }}),
     sessions as (select * from {{ ref('stg_sessions') }}),
-    batches as (select * from {{ ref('stg_batches') }}),
+    contacts as (select * from {{ ref('stg_contacts') }}),
     
     
 
@@ -11,6 +11,7 @@ int_sessions as (
     from 
         session_attendance
         left join sessions using (sessions_id)
+        left join contacts using (contact_id)
 
 )
 select *

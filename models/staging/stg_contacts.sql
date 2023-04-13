@@ -18,4 +18,4 @@ renamed as (
 )
 
 select * from renamed
-where contact_type = 'Student'
+where  contact_type = 'Student'
