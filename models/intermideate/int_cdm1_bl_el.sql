@@ -27,3 +27,4 @@ select
     (total_endline - total_baseline) as change_in_score
 
 from int_cdm1_bl_el
+order by student_barcode

@@ -10,7 +10,7 @@ renamed as (
         Id as contact_id,
         FirstName as first_name,
         LastName as last_name,
-        Bar_Code__c as student_barcode,
+        Current_OMR_Barcode__c as student_barcode,
         RecordTypeId
 
     from source
