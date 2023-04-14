@@ -28,7 +28,7 @@ select
     attendance_count,
     total_sessions,
     percentage_attendance,
-    corr(change_in_score, percentage_attendance) as correlation_coefficient
+    corr(IFNULL(change_in_score,0),IFNULL(percentage_attendance,0)) as correlation_coefficient
     
 from attendance_assessment
 --WHERE correlation_coefficient IS NOT NULL
