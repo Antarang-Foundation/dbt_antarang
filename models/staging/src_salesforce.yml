@@ -1,0 +1,20 @@
+version: 2
+
+sources:
+  - name: salesforce
+    description: dataset created by Glific on BigQuery
+    database: antarang-dashboard
+    schema: 'airbyte_antarang_salesforce'
+    tables:
+      - name: src_RecordType
+        description: salesforce table for the record type info ie. Baseline/Endline
+      - name: src_Contact
+        description: salesforce table for cotact info of students/guardians/facilitators
+      - name: src_Batch__c
+        description: salesforce table holding all info for the batches created
+      - name: src_Session__c
+        description: salesforce table holding all info for the sessions
+      - name: src_Session_Attendance__c
+        description: salesforce table for the session attendance log
+      - name: src_OMR_Assessment__c
+        description: salesforce table for the CDM1 course assessment 

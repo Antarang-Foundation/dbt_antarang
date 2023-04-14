@@ -1,0 +1,22 @@
+{
+    // change this to your desired path!
+    "python.pythonPath": "C:\Users\jaini\.dbtenv\Scripts\python.exe",
+
+    "files.associations": {
+        // the pattern on the left side can be whatever you want: e.g.
+        "**/jaffle_shop/**/*.sql": "jinja-sql", // just the .sqlfiles inside of jaffle_shop, or
+        "*.sql": "jinja-sql", // all .sql files
+    
+        // optional: don't format models in `target/` dir
+        "**/target/**": "",
+        // I don't personally use these, but you can also have jinja work for `yaml` and `md` files
+        "**/<dbt-project-dir>/**/*.yaml": "jinja-yaml",
+         "**/<dbt-project-dir>/**/*.yml": "jinja-yaml",
+        "**/<dbt-project-dir>/**/docs/**/*.md": "jinja-md"
+    
+        // the vscode-dbt docs say you may need this
+        "editor.quickSuggestions": {
+        "strings": true
+        }
+    }
+}
