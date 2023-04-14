@@ -1,5 +1,5 @@
 with
-    assessment as (select * from {{ ref('int_cdm1_bl_el') }}),
+    assessment as (select * from {{ ref('int_assessment') }}),
     attendance as (select * from {{ ref('int_attendance') }}),
     
 
