@@ -1,6 +1,7 @@
 with
     pivot as (select * from {{ ref('int_pivot_cdm1_latest') }}),
-    contacts as (select student_barcode, concat(first_name, " ", last_name) as student_name from {{ ref('stg_contacts') }}),
+    contacts as (select student_barcode, concat(first_name, " ", last_name) as 
+    student_name from {{ ref('stg_contacts') }}),
     
 int_cdm1_bl_el as (
    
