@@ -9,6 +9,7 @@ with source as (
 renamed as (
 
     select
+    
         id as sessions_id,
         session_code__c as sessions_code,
         name as sessions_name,

@@ -7,6 +7,7 @@ with source as (
 renamed as (
 
     select
+    
         Id as contact_id,
         FirstName as first_name,
         LastName as last_name,

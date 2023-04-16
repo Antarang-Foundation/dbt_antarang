@@ -9,6 +9,7 @@ with source as (
 renamed as (
 
     select
+    
             Id as cdm1_id,
             Barcode__c as student_barcode,
             RecordTypeId as record_type_id,

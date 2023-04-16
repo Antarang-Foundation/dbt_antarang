@@ -9,6 +9,7 @@ with source as (
 renamed as (
 
     select
+    
         id as record_type_id,
         name as record_type
 
