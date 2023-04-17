@@ -1,6 +1,6 @@
 version : 2
 models:
-name: fct_attendance_assessments
+  - name: fct_attendance_assessments
     # description:
     columns:
       - name: student_barcode

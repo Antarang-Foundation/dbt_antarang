@@ -9,4 +9,4 @@ FROM (
     ) AS latest_record
   FROM {{ ref('int_cdm1_recordtypes') }}
 ) t
-WHERE latest_record = 1
+WHERE latest_record = 1 --and student_barcode = '220042918'

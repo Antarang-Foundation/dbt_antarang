@@ -31,7 +31,7 @@ select
     corr(IFNULL(change_in_score,0),IFNULL(percentage_attendance,0)) as correlation_coefficient
     
 from attendance_assessment
---WHERE correlation_coefficient IS NOT NULL
+--where student_barcode = '220042918'--WHERE correlation_coefficient IS NOT NULL
 group by student_barcode,
     student_name,
     q1_baseline,
