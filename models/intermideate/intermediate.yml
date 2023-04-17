@@ -1,46 +1,54 @@
 version: 2
 models:
-  - name: stg_batches
+  - name: int_assessments
+    # description:
+    columns:
+      - name: student_barcode
+        description: "The primary key for this table"
+        tests:
+           - unique
+           - not_null
+  - name: int_attendance
+    # description:
+    columns:
+      - name: student_barcode
+        description: "The primary key for this table"
+        tests:
+           - unique
+           - not_null
+  - name: int_batches_sessions_conducted
     # description:
     columns:
       - name: batches_id
         description: "The primary key for this table"
         tests:
-           - unique
-           - not_null
-  - name: stg_cdm1
+          - unique
+          - not_null
+  - name: int_cdm1_latest
     # description:
     columns:
       - name: cdm1_id
-        description: "The primary key for this table"
-        tests:
-           - unique
-           - not_null
-  - name: stg_contacts
-    # description:
-    columns:
-      - name: contact_id
-        description: "The primary key for this table"
-        tests:
-          - unique
-          - not_null
-  - name: stg_recordtypes
-    # description:
-    columns:
-      - name: record_type_id
         description: "The primary key of this table"
         tests:
           - unique
           - not_null
-  - name: stg_session_attendance
+  - name: int_cdm1_recordtypes
     # description:
     columns:
-      - name: session_attendance_id
+      - name: cdm1_id
         description: "The primary key of this table"
         tests:
           - unique
           - not_null
-  - name: stg_sessions
+  - name: int_pivot_cdm1_latest
+    # description:
+    columns:
+      - name: student_barcode
+        description: "The primary key of this table"
+        tests:
+          - unique
+          - not_null
+    name: int_sessions
     # description:
     columns:
       - name: sessions_id

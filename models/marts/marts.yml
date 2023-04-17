@@ -1,0 +1,10 @@
+version : 2
+models:
+name: fct_attendance_assessments
+    # description:
+    columns:
+      - name: student_barcode
+        description: "The primary key of this table"
+        tests:
+          - unique
+          - not_null
