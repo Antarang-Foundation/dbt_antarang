@@ -11,10 +11,9 @@ models:
   - name: int_attendance
     # description:
     columns:
-      - name: student_barcode
+      - name: contact_id
         description: "The primary key for this table"
         tests:
-           - unique
            - not_null
   - name: int_batches_sessions_conducted
     # description:
@@ -51,7 +50,7 @@ models:
     name: int_sessions
     # description:
     columns:
-      - name: sessions_id
+      - name: session_attendance_id
         description: "The primary key of this table"
         tests:
           - unique
