@@ -1,5 +1,5 @@
 SELECT *
-FROM (
+From (
   SELECT 
         student_barcode,
         q1_career_plan_marks as q1,

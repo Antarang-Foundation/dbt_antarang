@@ -24,4 +24,3 @@ renamed as (
 )
 
 select * from renamed
-where student_barcode = '220000627'

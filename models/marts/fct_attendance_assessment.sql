@@ -1,3 +1,4 @@
+{{ config(materialized="table") }}
 with
     assessment as (select * from {{ ref('int_assessment') }}),
     attendance as (select * from {{ ref('int_attendance') }}),
@@ -5,7 +6,7 @@ with
 
 attendance_assessment as (
     
-    select *
+    select * except (full_name)
     from 
         assessment
         left join attendance using (student_barcode)

@@ -1,6 +1,6 @@
 with
     pivot as (select * from {{ ref('int_pivot_cdm1_latest') }}),
-    contacts as (select student_barcode, concat(first_name, " ", last_name) as student_name from {{ ref('stg_contacts') }}),
+    contacts as (select student_barcode, full_name as student_full_name from {{ ref('stg_contacts') }}),
     
 int_cdm1_bl_el as (
    
@@ -13,16 +13,16 @@ int_cdm1_bl_el as (
 
 select 
     student_barcode,
-    student_name,
+    student_full_name,
     q1_baseline,
-    q1_endline,
     q2_baseline,
-    q2_endline,
     q3_baseline,
-    q3_endline,
     q4_baseline,
-    q4_endline,
     total_baseline,
+    q1_endline,
+    q2_endline,
+    q3_endline,
+    q4_endline,
     total_endline,
     (total_endline - total_baseline) as change_in_score
 
