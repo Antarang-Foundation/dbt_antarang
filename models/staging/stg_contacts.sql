@@ -9,8 +9,7 @@ renamed as (
     select
     
         Id as contact_id,
-        FirstName as first_name,
-        LastName as last_name,
+        Full_Name__c as full_name,
         Current_OMR_Barcode__c as student_barcode,
         RecordTypeId
 
@@ -19,3 +18,4 @@ renamed as (
 )
 
 select * from renamed
+--where student_barcode = '220069713'

@@ -15,4 +15,5 @@ int_sessions as (
 
 )
 select *
-from int_sessions
+from int_sessions 
+where sessions_type = 'Student'

@@ -1,5 +1,5 @@
 SELECT *
-FROM (
+From (
   SELECT 
         student_barcode,
         q1_career_plan_marks as q1,
@@ -8,9 +8,10 @@ FROM (
         q4_career_choice_marks as q4,
         total_marks as total,
         record_type
-  FROM {{ ref('int_cdm1_recordtypes') }}
+  FROM {{ ref('int_cdm1_latest') }}
 )
 PIVOT (
   max(q1) as q1, max(q2) as q2, max(q3) as q3, max(q4) as q4, max(total) as total   
   FOR record_type IN ('Baseline', 'Endline')
 )
+--where student_barcode = '220042918'

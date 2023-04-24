@@ -13,6 +13,7 @@ renamed as (
             Id as cdm1_id,
             Barcode__c as student_barcode,
             RecordTypeId as record_type_id,
+            CreatedDate as created_on,
             X1_A_good_career_plan_has_the_following__c as q1_career_plan_marks,
             Interest_Marks__c as q2_interest_marks,
             Aptitude_Marks__c as q3_aptitude_marks,
