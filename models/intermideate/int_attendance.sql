@@ -24,6 +24,7 @@ with
             contact_id,
             student_barcode,
             full_name,
+            batches_grade,
             attendance_count,
             total_sessions,
             safe_divide(attendance_count, total_sessions) as percentage_attendance

@@ -9,7 +9,7 @@ int_batches_sessions_conducted as (
     left join sessions using (batches_id)
     
 )
-select batches_id, Count(sessions_number) as total_sessions
+select batches_id, batches_grade, Count(sessions_number) as total_sessions
 from int_batches_sessions_conducted
 where sessions_type = 'Student'
-group by batches_id
+group by batches_id, batches_grade
