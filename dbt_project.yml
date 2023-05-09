@@ -34,5 +34,12 @@ clean-targets:         # directories to be removed by `dbt clean`
 models:
   antarang_dbt:
     # Applies to all files under models/example/
-    example:
+    staging:
+       materialized: view
+       +required_tests: {"unique.x|not_null": 1}
+    intermediate:
       materialized: view
+      +required_tests: {"unique.x|not_null": 1}
+    marts:
+      materialized: table
+      +required_tests: {"unique.x|not_null": 1}
