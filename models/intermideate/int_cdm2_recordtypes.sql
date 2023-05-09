@@ -16,4 +16,3 @@ int_cdm2_recordtypes as (
 )
 select *
 from int_cdm2_recordtypes
---where student_barcode = '220042918'
