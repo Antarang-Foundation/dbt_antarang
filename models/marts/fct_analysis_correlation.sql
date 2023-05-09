@@ -7,8 +7,8 @@ with
             count(student_barcode) as total_rows,
             count(distinct student_barcode) as total_students,
             countif(percentage_attendance is not null) as students_with_attendance_data,
-            countif(total_baseline is not null) as students_with_baseline_scores,
-            countif(total_endline is not null) as students_with_endline_scores,
+            countif(total_cdm1_baseline is not null) as students_with_baseline_scores,
+            countif(total_cdm1_endline is not null) as students_with_endline_scores,
             countif(change_in_score is not null) as students_with_change_in_score,
             countif(
                 percentage_attendance is not null and change_in_score is not null
