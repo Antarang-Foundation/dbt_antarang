@@ -17,4 +17,6 @@ sources:
       - name: src_Session_Attendance__c
         description: salesforce table for the session attendance log
       - name: src_OMR_Assessment__c
-        description: salesforce table for the CDM1 course assessment 
+        description: salesforce table for the CDM1 course assessment
+      - name: src_CDM2__c
+        description: salesforce table for the CDM2 course assessment 
