@@ -47,7 +47,7 @@ models:
         tests:
           - unique
           - not_null
-    name: int_sessions
+  - name: int_sessions
     # description:
     columns:
       - name: session_attendance_id
@@ -55,4 +55,61 @@ models:
         tests:
           - unique
           - not_null
+  - name: int_cdm2_normalised
+    # description:
+    columns:
+      - name: student_barcode
+        description: "The primary key for this table"
+        tests:
+           - unique
+           - not_null
+  - name: int_cdm2_recordtypes
+    # description:
+    columns:
+      - name: student_barcode
+        description: "The primary key for this table"
+        tests:
+           - unique
+           - not_null
+  - name: int_cdm2_latest
+    # description:
+    columns:
+      - name: student_barcode
+        description: "The primary key for this table"
+        tests:
+           - unique
+           - not_null
+  - name: int_pivot_cdm2_latest
+    # description:
+    columns:
+      - name: student_barcode
+        description: "The primary key for this table"
+        tests:
+           - unique
+           - not_null
+  - name: int_cdm1_cdm2
+    # description:
+    columns:
+      - name: student_barcode
+        description: "The primary key for this table"
+        tests:
+           - unique
+           - not_null
+  - name: int_assessment_cdm1_cdm2
+    # description:
+    columns:
+      - name: student_barcode
+        description: "The primary key for this table"
+        tests:
+           - unique
+           - not_null
+  - name: int_pivot_cdm1_latest_normalised
+    # description:
+    columns:
+      - name: student_barcode
+        description: "The primary key for this table"
+        tests:
+           - unique
+           - not_null
+  
  
