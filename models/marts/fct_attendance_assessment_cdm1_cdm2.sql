@@ -14,3 +14,4 @@ attendance_assessment as (
 )
 select *
 from attendance_assessment
+where batches_grade = "Grade 9"
