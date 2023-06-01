@@ -1,5 +1,4 @@
-SELECT *
-From (
+with source as (
   SELECT 
         student_barcode,
         q1_career_plan_marks as q1,
@@ -9,9 +8,17 @@ From (
         total_marks as total,
         record_type
   FROM {{ ref('int_cdm1_latest') }}
-)
-PIVOT (
-  max(q1) as q1, max(q2) as q2, max(q3) as q3, max(q4) as q4, max(total) as total   
+),
+
+pivot as (
+  select *
+  from source
+  PIVOT (
+  max(q1) as q1, max(q2) as q2, max(q3) as q3, max(q4) as q4, max(total) as total_cdm1   
   FOR record_type IN ('Baseline', 'Endline')
 )
+)
+SELECT *
+From pivot
+
 --where student_barcode = '220042918'

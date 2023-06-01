@@ -16,6 +16,14 @@ models:
         tests:
            - unique
            - not_null
+  - name: stg_cdm2
+    # description:
+    columns:
+      - name: cdm2_id
+        description: "The primary key for this table"
+        tests:
+           - unique
+           - not_null
   - name: stg_contacts
     # description:
     columns:

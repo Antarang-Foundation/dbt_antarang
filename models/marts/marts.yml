@@ -1,6 +1,6 @@
 version : 2
 models:
-  - name: fct_attendance_assessments
+  - name: fct_attendance_assessment
     # description:
     columns:
       - name: student_barcode
@@ -8,3 +8,10 @@ models:
         tests:
           - unique
           - not_null
+  - name: fct_attendance_assessment_cdm1_cdm2
+    # description:
+    columns:
+      - name: student_barcode
+        description: "The primary key of this table"
+        tests:
+          - unique
