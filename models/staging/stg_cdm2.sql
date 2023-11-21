@@ -2,7 +2,7 @@
 
 with source as (
 
-    select * from {{ source('salesforce', 'src_CDM2__c') }}
+    select * from {{ source('salesforce', 'CDM2__c') }}
 
 ),
 

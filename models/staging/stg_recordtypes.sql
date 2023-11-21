@@ -2,7 +2,7 @@
 
 with source as (
 
-    select * from {{ source('salesforce', 'src_RecordType') }}
+    select * from {{ source('salesforce', 'RecordType') }}
 
 ),
 

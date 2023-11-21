@@ -2,7 +2,7 @@
 
 with source as (
 
-    select * from {{ source('salesforce', 'src_Session__c') }}
+    select * from {{ source('salesforce', 'Session__c') }}
 
 ),
 

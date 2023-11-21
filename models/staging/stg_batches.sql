@@ -2,7 +2,7 @@
 
 with source as (
 
-    select * from {{ source('salesforce', 'src_Batch__c') }}
+    select * from {{ source('salesforce', 'Batch__c') }}
 
 ),
 

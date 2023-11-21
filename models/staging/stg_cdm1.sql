@@ -2,7 +2,7 @@
 
 with source as (
 
-    select * from {{ source('salesforce', 'src_OMR_Assessment__c') }}
+    select * from {{ source('salesforce', 'OMR_Assessment__c') }}
 
 ),
 
