@@ -19,6 +19,7 @@ renamed as (
         CAST(Barcode__c as STRING) as student_barcode,
         Grade__c as grade,
         CAST(Academic_Year__c as STRING) as academic_year,
+        CreatedDate as created_on,
         Error_Status__c as error_status
             
     from source
@@ -26,3 +27,4 @@ renamed as (
 )
 
 select * from renamed
+where error_status="No Error"

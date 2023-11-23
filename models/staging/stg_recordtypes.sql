@@ -18,4 +18,4 @@ renamed as (
 )
 
 select * from renamed
-where record_type in ('Baseline','Endline','Baseline Assessment','Endline Assessment')
+--where record_type in ('Baseline','Endline','Baseline Assessment','Endline Assessment')
