@@ -17,3 +17,4 @@ int_cdm1_recordtypes as (
 )
 select *
 from int_cdm1_recordtypes
+--where student_barcode='2303056088'
