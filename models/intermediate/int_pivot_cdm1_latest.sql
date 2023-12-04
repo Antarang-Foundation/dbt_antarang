@@ -21,4 +21,4 @@ pivot as (
 SELECT *
 From pivot
 
---where student_barcode = '220042918'
+where student_barcode = '2303214005'

@@ -7,7 +7,7 @@ with source as (
 renamed as (
 
     select
-    
+        id as account_id,
         name as account_name,
         RecordTypeId as record_type_id,
         District__c as account_district,

@@ -20,7 +20,15 @@ renamed as (
         Grade__c as grade,
         CAST(Academic_Year__c as STRING) as academic_year,
         CreatedDate as created_on,
-        Error_Status__c as error_status
+        Error_Status__c as error_status,
+        (
+            Q_11_Ans__c
+            +Q_12_Ans__c
+            +Q_13_Ans__c
+            +Q_14_Ans__c
+            +Q_15_Ans__c
+            +Q_16_Ans__c
+        ) as cs_total
             
     from source
    

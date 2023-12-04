@@ -18,7 +18,8 @@ renamed as (
             X6_Options_that_fit_into_Industry__c as q6,
             Grade__c as grade,
             CAST(Academic_Year__c as STRING) as academic_year,
-            Error_Status__c as error_status
+            Error_Status__c as error_status,
+            (X5_Confident_about_chosen_career__c +  X6_Options_that_fit_into_Industry__c) as cdm2_total
 
     from source
    
