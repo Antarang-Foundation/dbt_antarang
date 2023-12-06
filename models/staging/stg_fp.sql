@@ -36,3 +36,4 @@ renamed as (
 
 select * from renamed
 where error_status="No Error"
+--and student_barcode='2303214005'

@@ -6,8 +6,10 @@ with source as (
         q20_marks,
         q21_marks,
         q22_marks,
-        record_type_id,
-        student_barcode
+        fp_total,
+        record_type,
+        student_barcode,
+        academic_year
   FROM {{ ref('int_fp_latest') }}
 ),
 
@@ -27,4 +29,5 @@ pivot as (
 )
 SELECT *
 From pivot
---where q16_Baseline is not null and q11_Endline is not null
+--where student_barcode = '2303214005'
+--where q17_Baseline is null --and q11_Endline is not null

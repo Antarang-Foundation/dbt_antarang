@@ -12,7 +12,8 @@ with source as (
         q9_7_marks,
         q10_marks,
         cp_total,
-        record_type
+        record_type,
+        academic_year
   FROM {{ ref('int_cp_latest') }}
 ),
 
@@ -35,4 +36,4 @@ pivot as (
 )
 SELECT *
 From pivot
-where student_barcode='2303214005'
+--where student_barcode='2303214005'

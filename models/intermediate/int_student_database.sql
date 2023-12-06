@@ -1,27 +1,57 @@
 with
-    students as (select * from {{ ref('int_students') }}),
-    batch as (select * from {{ ref('stg_batches') }}),
-    account as (select * from {{ ref('stg_accounts') }}),
+    students as (select * except (academic_year, record_type_id) from {{ ref('int_students') }}),
+    batch as (select batches_id, school_id, school_district from {{ ref('stg_batches') }}),
+    account as (select * except (record_type_id, academic_year, account_district) from {{ ref('stg_accounts') }}),
     
-    
+unpivot_barcode AS (
+    SELECT 
+        * except (student_barcode),
+        (CASE 
+        WHEN field='g9_barcode' THEN 'Grade 9'
+        WHEN field='g10_barcode' THEN 'Grade 10'
+        WHEN field='g11_barcode' THEN 'Grade 11'
+        WHEN field='g12_barcode' THEN 'Grade 12'
+        ELSE null END)
+        as bar_grade
+    FROM students
+    UNPIVOT (barcode FOR field IN (g9_barcode, g10_barcode, g11_barcode, g12_barcode))
+  ),    
 
-int_students as (
+unpivot_batchcode AS (
+    SELECT 
+        contact_id as contact, batch_grade, batchcode, student_barcode,
+        (CASE 
+        WHEN batch_grade='g9_batch_code' THEN 'Grade 9'
+        WHEN batch_grade='g10_batch_code' THEN 'Grade 10'
+        WHEN batch_grade='g11_batch_code' THEN 'Grade 11'
+        WHEN batch_grade='g12_batch_code' THEN 'Grade 12'
+        ELSE null END)
+        as grade
+    FROM students
+    UNPIVOT (batchcode FOR batch_grade IN (g9_batch_code, g10_batch_code, g11_batch_code, g12_batch_code)) as y
+  ),
+
+  joined AS (
+    SELECT * except (student_barcode, bar_grade, contact, g9_batch_code, g10_batch_code, g11_batch_code, g12_batch_code, field, batch_grade)
+    FROM unpivot_barcode
+    LEFT JOIN unpivot_batchcode ON unpivot_barcode.contact_id=unpivot_batchcode.contact AND unpivot_barcode.bar_grade=unpivot_batchcode.grade
+  ),
+
+
+join_batch as (
     
     SELECT *
-    FROM students
-    LEFT JOIN batch ON (
-    batches_id = students.g9_batch_code OR
-    batches_id = students.g10_batch_code OR
-    batches_id = students.g11_batch_code OR
-    batches_id = students.g12_batch_code
-    )
-
+    FROM joined
+    LEFT JOIN batch ON joined.batchcode=batch.batches_id
 ),
-int_student_database as (
+join_account as (
     select
-        *
-    from int_students
-    Left Join account on int_students.school_id=account.account_id
+        * except (account_id)
+    from join_batch
+    Left Join account on join_batch.school_id=account.account_id
 )
 select *
-from int_student_database
+from join_account
+--where grade='Grade 11'
+--where full_name='VINAYAK GUPTA'
+--where student_barcode='2301053305'

@@ -7,7 +7,9 @@ with source as (
         q14_marks,
         q15_marks,
         q16_marks,
-        record_type_id
+        record_type,
+        cs_total,
+        academic_year
   FROM {{ ref('int_cs_latest') }}
 ),
 

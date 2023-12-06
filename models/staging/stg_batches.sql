@@ -16,7 +16,7 @@ renamed as (
         grade__c as batches_grade,
         batch_completed__c as batch_completed,
         batch_id__c as batch_id,
-        school_state__c as school_state
+        school_district__c as school_district
 
     from source
 
