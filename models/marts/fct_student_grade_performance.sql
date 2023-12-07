@@ -6,7 +6,7 @@ With source as (
     From {{ ref('int_student_grade_performance') }}
 )
 select * from source
-where grade='Grade 12'
+--where grade='Grade 12'
 --where showed_improvement is not null
 --where barcode='2301008570'
 --where academic_year='2022'
