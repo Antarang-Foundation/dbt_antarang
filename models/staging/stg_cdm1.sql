@@ -1,15 +1,9 @@
-
-
 with source as (
-
     select * from {{ source('salesforce', 'OMR_Assessment__c') }}
-
 ),
 
 renamed as (
-
     select
-    
             Id as cdm1_id,
             Barcode__c as student_barcode,
             RecordTypeId as record_type_id,
@@ -23,7 +17,6 @@ renamed as (
             CAST(Academic_Year__c as STRING) as academic_year,
             Error_Status__c as error_status
     from source
-   
 )
 
 select * from renamed

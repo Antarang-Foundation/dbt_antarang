@@ -1,13 +1,8 @@
-
-
 with source as (
-
     select * from {{ source('salesforce', 'Career_Skill__c') }}
-
 ),
 
 renamed as (
-
     select
         Q_11_Ans__c as q11_marks,
         Q_12_Ans__c as q12_marks,
@@ -23,15 +18,13 @@ renamed as (
         Error_Status__c as error_status,
         (
             Q_11_Ans__c
-            +Q_12_Ans__c
-            +Q_13_Ans__c
-            +Q_14_Ans__c
-            +Q_15_Ans__c
-            +Q_16_Ans__c
+            + Q_12_Ans__c
+            + Q_13_Ans__c
+            + Q_14_Ans__c
+            + Q_15_Ans__c
+            + Q_16_Ans__c
         ) as cs_total
-            
     from source
-   
 )
 
 select * from renamed

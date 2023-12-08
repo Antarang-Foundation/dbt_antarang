@@ -1,13 +1,8 @@
-
-
 with source as (
-
     select * from {{ source('salesforce', 'Batch__c') }}
-
 ),
 
 renamed as (
-
     select
         id as batches_id,
         batch_number__c as batches_number,
@@ -17,9 +12,7 @@ renamed as (
         batch_completed__c as batch_completed,
         batch_id__c as batch_id,
         school_district__c as school_district
-
     from source
-
 )
 
 select * from renamed

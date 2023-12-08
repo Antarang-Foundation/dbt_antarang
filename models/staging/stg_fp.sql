@@ -1,13 +1,8 @@
-
-
 with source as (
-
     select * from {{ source('salesforce', 'Future_Planning__c') }}
-
 ),
 
 renamed as (
-
     select
         Q_17_Ans__c as q17_marks,
         Q_18_Ans__c as q18_marks,
@@ -23,17 +18,14 @@ renamed as (
         Error_Status__c as error_status,
         (
             Q_17_Ans__c
-            +Q_18_Ans__c
-            +Q_19_Ans__c
-            +Q_20_Ans__c
-            +Q_21_Ans__c
-            +Q_22_Ans__c
+            + Q_18_Ans__c
+            + Q_19_Ans__c
+            + Q_20_Ans__c
+            + Q_21_Ans__c
+            + Q_22_Ans__c
         ) as fp_total
-            
     from source
-   
 )
 
 select * from renamed
 where error_status="No Error"
---and student_barcode='2303214005'

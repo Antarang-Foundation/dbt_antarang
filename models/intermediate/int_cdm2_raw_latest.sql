@@ -10,4 +10,3 @@ FROM (
   FROM {{ ref('int_cdm2_raw_recordtypes') }}
 ) t
 WHERE latest_record = 1
---and student_barcode='2303214005'
