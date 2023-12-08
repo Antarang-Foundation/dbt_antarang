@@ -9,11 +9,9 @@ with
         from {{ ref('int_sessions')}} 
         group by contact_id, batches_id, student_barcode, full_name
     ),
-    
     int_batches_sessions_conducted as (
         select * from {{ ref('int_batches_sessions_conducted') }}
     ),
-
     int_attendance as (
         select *
         from int_sessions
@@ -31,5 +29,5 @@ with
         from int_attendance
     )
 
-    select *
-    from select_columns
+select *
+from select_columns

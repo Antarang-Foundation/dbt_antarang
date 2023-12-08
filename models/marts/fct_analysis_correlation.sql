@@ -1,5 +1,3 @@
-{{ config(materialized="table") }}
-
 with
     source as (select * from {{ ref("fct_attendance_assessment") }}),
     overall_correlation as (
