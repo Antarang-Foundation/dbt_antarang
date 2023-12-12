@@ -65,6 +65,14 @@ with
                 ELSE "Not Mastered"
             END
             AS endline_mastered,
+            CASE
+                WHEN baseline_total IS NULL AND endline_total IS NULL THEN "None"
+                WHEN baseline_total IS NULL AND endline_total IS NOT NULL THEN "Only Endline"
+                WHEN baseline_total IS NOT NULL AND endline_total IS NULL THEN "Only Baseline"
+                WHEN baseline_total IS NOT NULL AND endline_total IS NOT NULL THEN "Both"
+                ELSE null
+            END
+            AS score_type,    
             FROM add_percentages
     )
 

@@ -15,7 +15,8 @@ source as (
         endline_mastered,
         gender,
         account_medium_language As school_medium_language,
-        school_district
+        school_district,
+        score_type
     from {{ ref('int_student_grade_performance') }}
 )
 
