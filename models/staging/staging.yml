@@ -56,4 +56,12 @@ models:
         tests:
           - unique
           - not_null
+  - name: stg_trainer
+    # description:
+    columns:
+      - name: contact_id
+        description: "The primary key of this table"
+        tests:
+          - unique
+          - not_null
           
