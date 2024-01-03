@@ -3,12 +3,10 @@ with
     contacts as (select student_barcode, full_name as student_full_name from {{ ref('stg_contacts') }}),
     
 int_assessment as (
-   
     select *
     from 
         pivot
         left join contacts using (student_barcode)
-        
 )
 
 select 

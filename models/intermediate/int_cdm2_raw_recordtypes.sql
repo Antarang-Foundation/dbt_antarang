@@ -1,7 +1,7 @@
 with
-    cdm2 as (select * from {{ ref('int_cdm2_normalised') }}),
+    cdm2 as (select * from {{ ref('stg_cdm2') }}),
     recordtypes as (select record_type_id,record_type from {{ ref('stg_recordtypes') }}),
-    int_cdm2_recordtypes as (
+    int_cdm1_recordtypes as (
         select *
         from 
             cdm2
@@ -9,4 +9,4 @@ with
     )
 
 select *
-from int_cdm2_recordtypes
+from int_cdm1_recordtypes

@@ -1,15 +1,12 @@
 with
     pivot as (select * from {{ ref('int_cdm1_cdm2') }}),
     contacts as (select student_barcode, full_name as student_full_name from {{ ref('stg_contacts') }}),
-    
-int_assessment_2 as (
-   
-    select *
-    from 
-        pivot
-        left join contacts using (student_barcode)
-        
-)
+    int_assessment_2 as (
+        select *
+        from 
+            pivot
+            left join contacts using (student_barcode)
+    )
 
 select 
     student_barcode,
@@ -29,6 +26,4 @@ select
     q6_endline,
     (total_cdm1_endline + total_cdm2_endline) as total_endline_cdm1_cdm2,
     ((total_cdm1_endline + total_cdm2_endline) - (total_cdm1_baseline + total_cdm2_baseline)) as change_in_score
-
 from int_assessment_2
-{# order by student_barcode #}
