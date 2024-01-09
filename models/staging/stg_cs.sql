@@ -4,6 +4,7 @@ with source as (
 
 renamed as (
     select
+        Id as cs_id,
         Q_11_Ans__c as q11_marks,
         Q_12_Ans__c as q12_marks,
         Q_13_Ans__c as q13_marks,

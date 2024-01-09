@@ -15,3 +15,15 @@ models:
         description: "The primary key of this table"
         tests:
           - unique
+  - name: fct_student_grade_performance
+    # description:
+    columns:
+      - name: contact_id
+        description: "The primary key of this table"
+        tests:
+          - not_null
+    columns:
+      - name: barcode
+        description: "The second primary key of this table"
+        tests:
+          - not_null

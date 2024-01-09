@@ -56,4 +56,35 @@ models:
         tests:
           - unique
           - not_null
-          
+  - name: stg_cp
+    # description:
+    columns:
+      - name: cp_id
+        description: "The primary key of this table"
+        tests:
+          - unique
+          - not_null
+  - name: stg_cs
+    # description:
+    columns:
+      - name: cs_id
+        description: "The primary key of this table"
+        tests:
+          - unique
+          - not_null
+  - name: stg_cs
+    # description:
+    columns:
+      - name: cs_id
+        description: "The primary key of this table"
+        tests:
+          - unique
+          - not_null
+  - name: stg_accounts
+    # description:
+    columns:
+      - name: account_id
+        description: "The primary key of this table"
+        tests:
+          - unique
+          - not_null          
