@@ -6,9 +6,17 @@ renamed as (
     select
         id as session_attendance_id,
         session__c as sessions_id,
-        date__c as session_atendance_date,
+        contact__c as contact_id,
+        Name as SA_Number,
         attendance__c as attendance_status,
-        contact__c as contact_id
+        date__c as session_atendance_date,
+        Time__c as session_atendance_time,
+        Status__c as Status,
+        Guardian_Parent_Attendance__c as Guardian_Parent_Attendance,
+        Career_Aspiration__c as Career_Aspiration,
+        Reason__c as Reason,
+        First_step_after_Class_10__c as First_step_after_Class
+
     from source
 )
 

@@ -25,7 +25,17 @@ renamed as (
         Grade_10_Barcode__c as g10_barcode,
         Grade_11_Barcode__c as g11_barcode,
         Grade_12_Barcode__c as g12_barcode,
-        Academic_Year__c as academic_year
+        Academic_Year__c as academic_year,
+        Year_of_Birth__c as Year_of_Birth,
+        Currently_Studying_In__c as Currently_Studying_In,
+        -- What_are_you_currently_studying__c as What_are_you_currently_studying,
+        Current_Batch_Name__c as Current_Batch_Name,
+        Current_Batch_Number__c as Current_Batch_Number,
+        Current_Whatsapp_Number__c as Current_Whatsapp_Number,
+        Current_Batch_Grade__c as Current_Batch_Grade,
+        Bar_Code__c as UID
+
+
     from source
 )
 
