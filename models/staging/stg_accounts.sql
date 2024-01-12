@@ -20,7 +20,7 @@ renamed as (
         Enrolled_Grade_10__c as Enrolled_Grade_10,
         Enrolled_Grade_11__c as Enrolled_Grade_11,
         Enrolled_Grade_12__c as Enrolled_Grade_12__c,
-        Tagged_for_Counselling__c as Tagged_for_Counselling
+        --Tagged_for_Counselling__c as Tagged_for_Counselling
         --Tagged_for_Experiential_Learning__c as Tagged_for_Experiential_Learning,
         --Tagged_for_Digital_Learning__c as Tagged_for_Digital_Learning__c
 
