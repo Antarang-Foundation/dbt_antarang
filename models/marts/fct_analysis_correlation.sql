@@ -2,6 +2,7 @@ with
     source as (select * from {{ ref("fct_attendance_assessment") }}),
     overall_correlation as (
         select
+            CAST(1 as string) as id,
             count(student_barcode) as total_rows,
             count(distinct student_barcode) as total_students,
             countif(percentage_attendance is not null) as students_with_attendance_data,

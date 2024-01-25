@@ -8,6 +8,14 @@ models:
         tests:
            - unique
            - not_null
+  - name: int_assessment
+    # description:
+    columns:
+      - name: student_barcode
+        description: "The primary key for this table"
+        tests:
+           - unique
+           - not_null
   - name: int_attendance
     # description:
     columns:
