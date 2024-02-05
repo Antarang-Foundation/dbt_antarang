@@ -225,12 +225,11 @@ models:
           - not_null
   - name: int_student_grade_performance
     # description:
-    columns:
-      - name: student_barcode
-        description: "The primary key of this table"
-        tests:
-          - unique
-          - not_null
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - contact_id
+            - barcode
   - name: int_students
     # description:
     columns:
@@ -241,9 +240,8 @@ models:
           - not_null
   - name: int_student_database
     # description:
-    columns:
-      - name: contact_id
-        description: "The primary key of this table"
-        tests:
-          - unique
-          - not_null
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - contact_id
+            - barcode
