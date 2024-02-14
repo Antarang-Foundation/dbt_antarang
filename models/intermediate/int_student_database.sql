@@ -1,7 +1,7 @@
 with
     students as (select * except (academic_year, record_type_id) from {{ ref('int_students') }}),
     batch as (select batches_id, school_id, school_district from {{ ref('stg_batches') }}),
-    account as (select * except (record_type_id, academic_year, account_district) from {{ ref('stg_accounts') }}),
+    account as (select * except (record_type_id, school_academic_year, account_district) from {{ ref('stg_accounts') }}),
     unpivot_barcode AS (
         SELECT 
             * except (student_barcode),
@@ -41,9 +41,9 @@ with
     ),
     join_account as (
         select
-            * except (account_id)
+            * except (school_id)
         from join_batch
-        Left Join account on join_batch.school_id=account.account_id
+        Left Join account on join_batch.school_id=account.school_id
     )
 
 select *

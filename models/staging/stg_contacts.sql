@@ -27,13 +27,22 @@ renamed as (
         Grade_12_Barcode__c as g12_barcode,
         Academic_Year__c as academic_year,
         Year_of_Birth__c as Year_of_Birth,
+        Birthdate as Birthdate,
         Currently_Studying_In__c as Currently_Studying_In,
         -- What_are_you_currently_studying__c as What_are_you_currently_studying,
-        Current_Batch_Name__c as Current_Batch_Name,
+        /* Current_Batch_Name__c as Current_Batch_Name,
         Current_Batch_Number__c as Current_Batch_Number,
         Current_Whatsapp_Number__c as Current_Whatsapp_Number,
-        Current_Batch_Grade__c as Current_Batch_Grade,
-        Bar_Code__c as UID
+        Current_Batch_Grade__c as Current_Batch_Grade, */
+        Bar_Code__c as UID,
+        G9_Whatsapp_Number__c as G9_Whatsapp_Number,
+        G10_Whatsapp_Number__c as G10_Whatsapp_Number,
+        G11_Whatsapp_Number__c as G11_Whatsapp_Number
+        --G12_Whatsapp_Number__c as G12_Whatsapp_Number,--
+       
+
+
+
 
 
     from source

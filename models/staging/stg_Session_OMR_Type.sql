@@ -18,7 +18,7 @@ renamed as (
         OMR_Received_Date__c as OMR_Received_Date,
         OMR_Received_By__c as OMR_Received_By,
         Number_of_Students_in_Batch__c as Number_of_Students_in_Batch
-        
+         
     from source
 )
 

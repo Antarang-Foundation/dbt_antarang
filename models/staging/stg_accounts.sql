@@ -4,12 +4,12 @@ with source as (
 
 renamed as (
     select
-        id as account_id,
+        id as school_id,
         name as account_name,
         RecordTypeId as record_type_id,
         District__c as account_district,
         Medium_Language_of_Instruction__c as account_medium_language,
-        CAST(Academic_Year__c as STRING) as academic_year,
+        CAST(Academic_Year__c as STRING) as school_academic_year,
         School_Timing__c as School_Timing,
         Partner__c as Partner,
         State__c as State,

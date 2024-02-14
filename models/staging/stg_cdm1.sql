@@ -15,7 +15,12 @@ renamed as (
             (X1_A_good_career_plan_has_the_following__c + Interest_Marks__c + Aptitude_Marks__c + Career_Choice_Total_Marks__c) as total_marks,
             Grade__c as grade,
             CAST(Academic_Year__c as STRING) as academic_year,
-            Error_Status__c as error_status
+            Error_Status__c as error_status,
+            
+            
+
+
+
     from source
 )
 

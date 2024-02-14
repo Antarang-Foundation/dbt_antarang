@@ -8,7 +8,7 @@ renamed as (
         batch_number__c as batches_number,
         Name as Batch_Name,
         School_Name__c as school_id,
-        academic_year__c as academic_year,
+        academic_year__c as batch_academic_year,
         grade__c as batches_grade,
         batch_completed__c as batch_completed,
         batch_id__c as batch_id,
