@@ -1,23 +1,60 @@
-with source as (
+with t0 as (
     select * from {{ source('salesforce', 'OMR_Assessment__c') }}
 ),
 
-renamed as (
+t1 as (
     select
             Id as cdm1_id,
             Barcode__c as student_barcode,
             RecordTypeId as record_type_id,
-            CreatedDate as created_on,
-            X1_A_good_career_plan_has_the_following__c as q1_career_plan_marks,
-            Interest_Marks__c as q2_interest_marks,
-            Aptitude_Marks__c as q3_aptitude_marks,
-            Career_Choice_Total_Marks__c as q4_career_choice_marks,
-            (X1_A_good_career_plan_has_the_following__c + Interest_Marks__c + Aptitude_Marks__c + Career_Choice_Total_Marks__c) as total_marks,
+            CreatedDate as created_on,                       
+            Name as cdm1_no,
+
+            Q_1__c as q1,
+            X1_A_good_career_plan_has_the_following__c as q1_marks,
+
+            Interest_1__c as q2_1, 
+            Interest_2__c as q2_2,  
+            Interest_Marks__c as q2_marks,
+
+            Aptitude_1__c as q3_1, 
+            Aptitude_2__c as q3_2,
+            Aptitude_Marks__c as q3_marks,
+
+            Career_Choice_1__c as q4_1,
+            Career_Choice_1_Marks__c as q4_1_marks,
+            Career_Choice_2__c as q4_2,
+            Career_Choice_2_Marks__c as q4_2_marks,
+            Career_Choice_Total_Marks__c as q4_marks,
+
+
+            (X1_A_good_career_plan_has_the_following__c + Interest_Marks__c + Aptitude_Marks__c + Career_Choice_Total_Marks__c) as cdm1_total_marks,
+
             Grade__c as grade,
             CAST(Academic_Year__c as STRING) as academic_year,
-            Error_Status__c as error_status
-    from source
-)
+            Batch_Id__c as batch_id,
 
-select * from renamed
-where error_status="No Error"
+            Error_Status__c as error_status, 
+            Created_from_Form__c as created_from_form,
+            Data_Clean_up__c as data_cleanup,
+            Marks_Recalculated__c as marks_recalculated,
+            Student_Linked__c as student_linked, 
+
+    from t0 
+),
+
+t2 as (select record_type_id,record_type from {{ ref('stg_recordtypes') }}),
+stg_cdm1 as (
+    select 
+        cdm1_id,
+        student_barcode,
+        record_type,
+        t1.* except(cdm1_id, student_barcode, record_type_id) 
+
+    from 
+        t1
+        left join t2 using (record_type_id) order by student_barcode, record_type
+    )
+
+select *
+from stg_cdm1
