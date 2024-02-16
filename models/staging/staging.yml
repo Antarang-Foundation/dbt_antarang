@@ -56,4 +56,20 @@ models:
         tests:
           - unique
           - not_null
+  - name: stg_trainer
+    # description:
+    columns:
+      - name: contact_id
+        description: "The primary key of this table"
+        tests:
+          - unique
+          - not_null
+  - name: stg_Session_OMR_Type
+    # description:
+    columns:
+      - name: Session_OMR_Type_id
+        description: "The primary key of this table"
+        tests:
+          - unique
+          - not_null
           

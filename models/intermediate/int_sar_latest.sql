@@ -1,6 +1,6 @@
 with 
 
-t0 as (select * from {{ ref('stg_cdm1') }} where error_status = 'No Error' and data_cleanup = true and marks_recalculated = true),
+t0 as (select * from {{ ref('stg_sar') }} where error_status = 'No Error' and data_cleanup = true and marks_recalculated = true),
 
 t1 as (
   SELECT 
@@ -19,5 +19,3 @@ t2 as (
     order by barcode, record_type)
 
 select * from t2
-
-
