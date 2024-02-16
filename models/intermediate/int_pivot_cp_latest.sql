@@ -1,39 +1,31 @@
 with
-    source as (
-    SELECT 
-            student_barcode,
-            q7_marks,
-            q8_marks,
-            q9_1_marks,
-            q9_2_marks,
-            q9_3_marks,
-            q9_4_marks,
-            q9_5_marks,
-            q9_6_marks,
-            q9_7_marks,
-            q10_marks,
-            cp_total,
-            record_type,
-            academic_year
-    FROM {{ ref('int_cp_latest') }}
+    t0 as (
+        SELECT 
+                barcode, cp_no, q7, q7_marks, q8, q8_marks, q9_1, q9_1_marks, q9_2, q9_2_marks, q9_3, q9_3_marks, q9_4, q9_4_marks, q9_5, q9_5_marks, 
+                q9_6, q9_6_marks, q9_7, q9_7_marks, q10, q10_marks, cp_total_marks, batch_id, record_type
+
+        FROM {{ ref('int_cp_latest') }}
     ),
-    pivot as (
+    t1 as (
         select *
-        from source
+        from t0
             PIVOT (
-            max(q7_marks) as q7, max(q8_marks) as q8,
-            max(q9_1_marks) as q9_1,
-            max(q9_2_marks) as q9_2,
-            max(q9_3_marks) as q9_3,
-            max(q9_4_marks) as q9_4,
-            max(q9_5_marks) as q9_5,
-            max(q9_6_marks) as q9_6,
-            max(q9_7_marks) as q9_7,
-            max(q10_marks) as q10,
-            max(cp_total) as cp_total
+            max(cp_no) as cp_no, max(batch_id) as batch_id, max(q7) as q7, max(q7_marks) as q7_marks, max(q8) as q8, max(q8_marks) as q8_marks,
+            max(q9_1) as q9_1, max(q9_1_marks) as q9_1_marks, max(q9_2) as q9_2, max(q9_2_marks) as q9_2_marks, max(q9_3) as q9_3, 
+            max(q9_3_marks) as q9_3_marks, max(q9_4) as q9_4, max(q9_4_marks) as q9_4_marks, max(q9_5) as q9_5, max(q9_5_marks) as q9_5_marks, 
+            max(q9_6) as q9_6, max(q9_6_marks) as q9_6_marks, max(q9_7) as q9_7, max(q9_7_marks) as q9_7_marks, max(q10) as q10, 
+            max(q10_marks) as q10_marks, max(cp_total_marks) as cp_total_marks
+
             FOR record_type IN ('Baseline', 'Endline')
             )
     )
     
+     
 SELECT *
-From pivot
+From t1
+
+
+
+
+
+

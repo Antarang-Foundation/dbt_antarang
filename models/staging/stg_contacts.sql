@@ -29,7 +29,7 @@ renamed as (
         Year_of_Birth__c as Year_of_Birth,
         Birthdate as Birthdate,
         Currently_Studying_In__c as Currently_Studying_In,
-        -- What_are_you_currently_studying__c as What_are_you_currently_studying,
+        -- What_are_you_currently_studying__c as What_are_you_currently_studying, --
         /* Current_Batch_Name__c as Current_Batch_Name,
         Current_Batch_Number__c as Current_Batch_Number,
         Current_Whatsapp_Number__c as Current_Whatsapp_Number,

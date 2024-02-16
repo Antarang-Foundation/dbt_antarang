@@ -30,4 +30,8 @@ sources:
         description: salesforce table for the Accounts
       - name: Session_OMR_Type__c
         description: salesforce table for the session omr type
+      - name: Self_Awareness_and_Feedback__c
+        description: salesforce table for the SAF quiz
+      - name: Self_Awareness_Realities__c
+        description: salesforce table for the SAR quiz
   

@@ -1,11 +1,13 @@
-with t0 as (
+with 
+
+t0 as (
     select * from {{ source('salesforce', 'OMR_Assessment__c') }}
 ),
 
 t1 as (
     select
             Id as cdm1_id,
-            Barcode__c as student_barcode,
+            Barcode__c as barcode,
             RecordTypeId as record_type_id,
             CreatedDate as created_on,                       
             Name as cdm1_no,
@@ -43,17 +45,18 @@ t1 as (
     from t0 
 ),
 
-t2 as (select record_type_id,record_type from {{ ref('stg_recordtypes') }}),
+t2 as (select record_type_id, record_type from {{ ref('stg_recordtypes') }}),
+
 stg_cdm1 as (
     select 
         cdm1_id,
-        student_barcode,
+        barcode,
         record_type,
-        t1.* except(cdm1_id, student_barcode, record_type_id) 
+        t1.* except(cdm1_id, barcode, record_type_id) 
 
     from 
         t1
-        left join t2 using (record_type_id) order by student_barcode, record_type
+        left join t2 using (record_type_id) order by barcode, record_type
     )
 
 select *
