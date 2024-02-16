@@ -2,7 +2,7 @@ with
     t0 as (
         SELECT 
                 barcode, cp_no, q7, q7_marks, q8, q8_marks, q9_1, q9_1_marks, q9_2, q9_2_marks, q9_3, q9_3_marks, q9_4, q9_4_marks, q9_5, q9_5_marks, 
-                q9_6, q9_6_marks, q9_7, q9_7_marks, q10, q10_marks, cp_total_marks, batch_id, record_type
+                q9_6, q9_6_marks, q9_7, q9_7_marks, q10, q10_marks, cp_total_marks, batch_id, record_type, created_on, grade, academic_year
 
         FROM {{ ref('int_cp_latest') }}
     ),
@@ -10,7 +10,8 @@ with
         select *
         from t0
             PIVOT (
-            max(cp_no) as cp_no, max(batch_id) as batch_id, max(q7) as q7, max(q7_marks) as q7_marks, max(q8) as q8, max(q8_marks) as q8_marks,
+            max(cp_no) as cp_no, max(batch_id) as batch_id, max(created_on) as created_on, max(grade) as grade, max(academic_year) as academic_year,
+            max(q7) as q7, max(q7_marks) as q7_marks, max(q8) as q8, max(q8_marks) as q8_marks,
             max(q9_1) as q9_1, max(q9_1_marks) as q9_1_marks, max(q9_2) as q9_2, max(q9_2_marks) as q9_2_marks, max(q9_3) as q9_3, 
             max(q9_3_marks) as q9_3_marks, max(q9_4) as q9_4, max(q9_4_marks) as q9_4_marks, max(q9_5) as q9_5, max(q9_5_marks) as q9_5_marks, 
             max(q9_6) as q9_6, max(q9_6_marks) as q9_6_marks, max(q9_7) as q9_7, max(q9_7_marks) as q9_7_marks, max(q10) as q10, 

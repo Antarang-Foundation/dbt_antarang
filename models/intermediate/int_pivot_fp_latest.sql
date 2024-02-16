@@ -3,7 +3,7 @@ with
         SELECT 
                 barcode, fp_no, q17, q17_marks, q18_1, q18_2, q18_3, q18_4, q18_5, q18_6, q18_7, q18_8, q18_9, q18_10, q18_11, q18_marks, 
                 q19, q19_marks, q20, q20_marks, q21, q21_marks, q22, q22_marks, fp_total_marks, f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12, 
-                batch_id, record_type
+                batch_id, record_type, created_on, grade, academic_year
 
         FROM {{ ref('int_fp_latest') }}
     ),
@@ -11,7 +11,9 @@ with
         select *
         from t0
             PIVOT (
-            max(fp_no) as fp_no, max(batch_id) as batch_id, max(q17) as q17, max(q17_marks) as q17_marks,           
+            max(fp_no) as fp_no, max(batch_id) as batch_id, max(created_on) as created_on, max(grade) as grade, max(academic_year) as academic_year,
+            
+            max(q17) as q17, max(q17_marks) as q17_marks,           
             
             max(q18_1) as q18_1, max(q18_2) as q18_2, max(q18_3) as q18_3, max(q18_4) as q18_4, max(q18_5) as q18_5, max(q18_6) as q18_6, 
             max(q18_7) as q18_7, max(q18_8) as q18_8, max(q18_9) as q18_9, max(q18_10) as q18_10, max(q18_11) as q18_11, max(q18_marks) as q18_marks, 
