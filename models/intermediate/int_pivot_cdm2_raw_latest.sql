@@ -3,7 +3,7 @@ with
         SELECT 
                 barcode, cdm2_no, q5, q5_marks, q6_1, q6_1_marks, q6_2, q6_2_marks, q6_3, q6_3_marks, q6_4, q6_4_marks, q6_5, q6_5_marks, q6_6, q6_6_marks, 
                 q6_7, q6_7_marks, q6_8, q6_8_marks, q6_9, q6_9_marks, q6_10, q6_10_marks, q6_11, q6_11_marks, q6_12, q6_12_marks, q6_total_marks, 
-                cdm2_total_marks, batch_id, record_type, created_on, grade, academic_year
+                cdm2_total_marks, batch_id, record_type, created_on, grade, academic_year, created_from_form
 
         FROM {{ ref('int_cdm2_raw_latest') }}
     ),
@@ -11,7 +11,8 @@ with
         select *
         from t0
             PIVOT (
-            max(cdm2_no) as cdm2_no, max(batch_id) as batch_id, max(created_on) as created_on, max(grade) as grade, max(academic_year) as academic_year,
+            max(cdm2_no) as cdm2_no, max(batch_id) as batch_id, max(created_on) as created_on, max(created_from_form) as created_from_form,
+            max(grade) as grade, max(academic_year) as academic_year,
             max(q5) as q5, max(q5_marks) as q5_marks, max(q6_1) as q6_1, max(q6_1_marks) as q6_1_marks,
             max(q6_2) as q6_2, max(q6_2_marks) as q6_2_marks, max(q6_3) as q6_3, max(q6_3_marks) as q6_3_marks, max(q6_4) as q6_4, 
             max(q6_4_marks) as q6_4_marks, max(q6_5) as q6_5, max(q6_5_marks) as q6_5_marks, max(q6_6) as q6_6, max(q6_6_marks) as q6_6_marks, 
