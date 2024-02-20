@@ -7,7 +7,7 @@ with
     saf as (select * from {{ ref('int_saf_latest') }}),
     sar as (select * from {{ ref('int_sar_latest') }}),
 
-    int_assessments_combined as (
+    int_assessments_combined_raw as (
         select 
         
         cdm1.barcode as cdm1_barcode, cdm2.barcode as cdm2_barcode, cp.barcode as cp_barcode, cs.barcode as cs_barcode, fp.barcode as fp_barcode, saf.barcode as saf_barcode, sar.barcode as sar_barcode, 
@@ -70,10 +70,78 @@ with
             full outer join sar on cdm1.barcode = sar.barcode and 
             (case when cdm1.academic_year_Baseline is not null then cdm1.academic_year_Baseline
             when cdm1.academic_year_Endline is not null then cdm1.academic_year_Endline end) = sar.academic_year
-    )
+    ),
+
+    int_assessments_combined as (
 
     select 
 
-        * 
+        (case 
+        when cdm1_barcode is not null then cdm1_barcode
+        when cdm2_barcode is not null then cdm2_barcode
+        when cp_barcode is not null then cp_barcode
+        when cs_barcode is not null then cs_barcode
+        when fp_barcode is not null then fp_barcode
+        when saf_barcode is not null then saf_barcode
+        when sar_barcode is not null then sar_barcode end) as barcode,
 
-    from int_assessments_combined
+        (case 
+        when cdm1_batch_id_Baseline is not null then cdm1_batch_id_Baseline
+	    when cdm1_batch_id_Endline is not null then cdm1_batch_id_Endline
+        when cdm2_batch_id_Baseline is not null then cdm2_batch_id_Baseline
+        when cdm2_batch_id_Endline is not null then cdm2_batch_id_Endline
+        when cp_batch_id_Baseline is not null then cp_batch_id_Baseline
+        when cp_batch_id_Endline is not null then cp_batch_id_Endline
+        when cs_batch_id_Baseline is not null then cs_batch_id_Baseline
+        when cs_batch_id_Endline is not null then cs_batch_id_Endline
+        when fp_batch_id_Baseline is not null then fp_batch_id_Baseline
+        when fp_batch_id_Endline is not null then fp_batch_id_Endline
+        when saf_batch_id is not null then saf_batch_id
+        when sar_batch_id is not null then sar_batch_id end) as batch_id,
+
+        (case 
+        when cdm1_created_from_form_Baseline is not null then cdm1_created_from_form_Baseline
+	    when cdm1_created_from_form_Endline is not null then cdm1_created_from_form_Endline
+        when cdm2_created_from_form_Baseline is not null then cdm2_created_from_form_Baseline
+        when cdm2_created_from_form_Endline is not null then cdm2_created_from_form_Endline
+        when cp_created_from_form_Baseline is not null then cp_created_from_form_Baseline
+        when cp_created_from_form_Endline is not null then cp_created_from_form_Endline
+        when cs_created_from_form_Baseline is not null then cs_created_from_form_Baseline
+        when cs_created_from_form_Endline is not null then cs_created_from_form_Endline
+        when fp_created_from_form_Baseline is not null then fp_created_from_form_Baseline
+        when fp_created_from_form_Endline is not null then fp_created_from_form_Endline
+        when saf_created_from_form is not null then saf_created_from_form
+        when sar_created_from_form is not null then sar_created_from_form end) as created_from_form,
+
+        (case 
+        when cdm1_grade_Baseline is not null then cdm1_grade_Baseline
+	    when cdm1_grade_Endline is not null then cdm1_grade_Endline
+        when cdm2_grade_Baseline is not null then cdm2_grade_Baseline
+        when cdm2_grade_Endline is not null then cdm2_grade_Endline
+        when cp_grade_Baseline is not null then cp_grade_Baseline
+        when cp_grade_Endline is not null then cp_grade_Endline
+        when cs_grade_Baseline is not null then cs_grade_Baseline
+        when cs_grade_Endline is not null then cs_grade_Endline
+        when fp_grade_Baseline is not null then fp_grade_Baseline
+        when fp_grade_Endline is not null then fp_grade_Endline
+        when saf_grade is not null then saf_grade
+        when sar_grade is not null then sar_grade end) as grade,
+
+        (case 
+        when cdm1_academic_year_Baseline is not null then cdm1_academic_year_Baseline
+	    when cdm1_academic_year_Endline is not null then cdm1_academic_year_Endline
+        when cdm2_academic_year_Baseline is not null then cdm2_academic_year_Baseline
+        when cdm2_academic_year_Endline is not null then cdm2_academic_year_Endline
+        when cp_academic_year_Baseline is not null then cp_academic_year_Baseline
+        when cp_academic_year_Endline is not null then cp_academic_year_Endline
+        when cs_academic_year_Baseline is not null then cs_academic_year_Baseline
+        when cs_academic_year_Endline is not null then cs_academic_year_Endline
+        when fp_academic_year_Baseline is not null then fp_academic_year_Baseline
+        when fp_academic_year_Endline is not null then fp_academic_year_Endline
+        when saf_academic_year is not null then saf_academic_year
+        when sar_academic_year is not null then sar_academic_year end) as academic_year,
+
+        *
+    from int_assessments_combined_raw)
+
+    select * from int_assessments_combined order by barcode, academic_year
