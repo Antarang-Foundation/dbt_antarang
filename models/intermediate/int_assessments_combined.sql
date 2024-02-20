@@ -19,6 +19,45 @@ with
         when saf.barcode is not null then saf.barcode
         when sar.barcode is not null then sar.barcode end) as barcode,
 
+        (case
+
+        when (cdm1_no_Baseline is null and cdm1_no_Endline is null) then 'Neither'
+        when (cdm1_no_Baseline is not null and cdm1_no_Endline is null) then 'Only_BL'
+        when (cdm1_no_Baseline is null and cdm1_no_Endline is not null) then 'Only_EL'
+        when (cdm1_no_Baseline is not null and cdm1_no_Endline is not null) then 'Both' end) cdm1_status,
+
+        (case
+
+        when (cdm2_no_Baseline is null and cdm2_no_Endline is null) then 'Neither'
+        when (cdm2_no_Baseline is not null and cdm2_no_Endline is null) then 'Only_BL'
+        when (cdm2_no_Baseline is null and cdm2_no_Endline is not null) then 'Only_EL'
+        when (cdm2_no_Baseline is not null and cdm2_no_Endline is not null) then 'Both' end) cdm2_status,
+
+        (case
+
+        when (cp_no_Baseline is null and cp_no_Endline is null) then 'Neither'
+        when (cp_no_Baseline is not null and cp_no_Endline is null) then 'Only_BL'
+        when (cp_no_Baseline is null and cp_no_Endline is not null) then 'Only_EL'
+        when (cp_no_Baseline is not null and cp_no_Endline is not null) then 'Both' end) cp_status,
+
+        (case
+
+        when (cs_no_Baseline is null and cs_no_Endline is null) then 'Neither'
+        when (cs_no_Baseline is not null and cs_no_Endline is null) then 'Only_BL'
+        when (cs_no_Baseline is null and cs_no_Endline is not null) then 'Only_EL'
+        when (cs_no_Baseline is not null and cs_no_Endline is not null) then 'Both' end) cs_status,
+
+        (case
+
+        when (fp_no_Baseline is null and fp_no_Endline is null) then 'Neither'
+        when (fp_no_Baseline is not null and fp_no_Endline is null) then 'Only_BL'
+        when (fp_no_Baseline is null and fp_no_Endline is not null) then 'Only_EL'
+        when (fp_no_Baseline is not null and fp_no_Endline is not null) then 'Both' end) fp_status,
+
+        (case when saf_no is not null then 'Submitted' else 'Not Submitted' end) saf_status,
+        
+        (case when sar_no is not null then 'Submitted' else 'Not Submitted' end) sar_status,
+
         (case 
         when cdm1.batch_id_Baseline is not null then cdm1.batch_id_Baseline
 	    when cdm1.batch_id_Endline is not null then cdm1.batch_id_Endline
