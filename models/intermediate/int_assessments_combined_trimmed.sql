@@ -1,6 +1,8 @@
-with t0 as (select * from {{ ref('int_assessments_combined') }})
+with 
 
-select 
+t0 as (select * from {{ ref('int_assessments_combined') }}), 
+
+int_assessments_combined_trimmed as (select 
 
 * except (cdm1_barcode, cdm2_barcode, cp_barcode, cs_barcode, fp_barcode, saf_barcode, sar_barcode, 
 
@@ -12,4 +14,6 @@ cdm1_grade_Baseline, cdm1_grade_Endline, cdm2_grade_Baseline, cdm2_grade_Endline
 
 cdm1_academic_year_Baseline, cdm1_academic_year_Endline, cdm2_academic_year_Baseline, cdm2_academic_year_Endline, cp_academic_year_Baseline, cp_academic_year_Endline, cs_academic_year_Baseline, cs_academic_year_Endline, fp_academic_year_Baseline, fp_academic_year_Endline, saf_academic_year, sar_academic_year)
 
-from t0
+from t0)
+
+select * from int_assessments_combined_trimmed
