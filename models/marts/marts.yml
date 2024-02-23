@@ -15,3 +15,27 @@ models:
         description: "The primary key of this table"
         tests:
           - unique
+          - not_null
+  - name: fct_student_grade_performance
+    # description:
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - contact_id
+            - barcode
+  - name: fct_analysis_correlation
+    # description:
+    columns:
+      - name: id
+        description: "The primary key of this table"
+        tests:
+          - unique
+          - not_null
+  - name: fct_analysis_correlation_poc2
+    # description:
+    columns:
+      - name: id
+        description: "The primary key of this table"
+        tests:
+          - unique
+          - not_null
