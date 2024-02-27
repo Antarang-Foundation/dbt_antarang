@@ -32,9 +32,9 @@ t1 as (
 
             (X1_A_good_career_plan_has_the_following__c + Interest_Marks__c + Aptitude_Marks__c + Career_Choice_Total_Marks__c) as cdm1_total_marks,
 
-            Grade__c as grade,
-            CAST(Academic_Year__c as STRING) as academic_year,
-            Batch_Id__c as batch_id,
+            Grade__c as assessment_grade,
+            CAST(Academic_Year__c as STRING) as assessment_academic_year,
+            Batch_Id__c as assessment_batch_id,
 
             Error_Status__c as error_status, 
             Created_from_Form__c as created_from_form,

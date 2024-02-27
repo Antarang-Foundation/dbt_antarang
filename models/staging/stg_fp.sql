@@ -26,9 +26,9 @@ t1 as (
         F_1__c as f1, F_2__c as f2, F_3__c as f3, F_4__c as f4, F_5__c as f5, F_6__c as f6, F_7__c as f7, F_8__c as f8, F_9__c as f9, F_10__c as f10, 
         F_11__c as f11, F_12__c as f12,
 
-        Grade__c as grade,
-        CAST(Academic_Year__c as STRING) as academic_year,
-        Batch_Id__c as batch_id,
+        Grade__c as assessment_grade,
+        CAST(Academic_Year__c as STRING) as assessment_academic_year,
+        Batch_Id__c as assessment_batch_id,
 
         Error_Status__c as error_status, 
         Created_from_Form__c as created_from_form,

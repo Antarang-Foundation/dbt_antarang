@@ -42,9 +42,9 @@ t1 as (
 
             (X5_Confident_about_chosen_career__c +  X6_Options_that_fit_into_Industry__c) as cdm2_total_marks,
 
-            Grade__c as grade,
-            CAST(Academic_Year__c as STRING) as academic_year,
-            Batch_Id__c as batch_id,
+            Grade__c as assessment_grade,
+            CAST(Academic_Year__c as STRING) as assessment_academic_year,
+            Batch_Id__c as assessment_batch_id,
 
             Error_Status__c as error_status, 
             Created_from_Form__c as created_from_form,

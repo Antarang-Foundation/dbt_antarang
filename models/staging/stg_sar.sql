@@ -26,9 +26,9 @@ t1 as (
         
         Quiz_2_Form_Submitted__c as q2_form_submitted, Reality_Form_Submitted__c as reality_form_submitted,
 
-        Grade__c as grade,
-        CAST(Academic_Year__c as STRING) as academic_year,
-        Batch_Id__c as batch_id,
+        Grade__c as assessment_grade,
+        CAST(Academic_Year__c as STRING) as assessment_academic_year,
+        Batch_Id__c as assessment_batch_id,
 
         Error_Status__c as error_status, 
         Created_from_Form__c as created_from_form,

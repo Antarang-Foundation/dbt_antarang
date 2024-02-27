@@ -33,9 +33,9 @@ t1 as (
             (Q_7_Marks__c + Q_8_Marks__c + Q_9_1_Marks__c + Q_9_2_Marks__c + Q_9_3_Marks__c + Q_9_4_Marks__c + Q_9_5_Marks__c + Q_9_6_Marks__c + 
             Q_9_7_Marks__c + Q_10_Marks__c) as cp_total_marks,
 
-            Grade__c as grade,
-            CAST(Academic_Year__c as STRING) as academic_year,
-            Batch_Id__c as batch_id,
+            Grade__c as assessment_grade,
+            CAST(Academic_Year__c as STRING) as assessment_academic_year,
+            Batch_Id__c as assessment_batch_id,
 
             Error_Status__c as error_status, 
             Created_from_Form__c as created_from_form,

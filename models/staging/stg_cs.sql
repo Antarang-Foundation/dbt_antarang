@@ -26,9 +26,9 @@ t1 as (
 
             (Q_11_Ans__c + Q_12_Ans__c + Q_13_Ans__c + Q_14_Ans__c + Q_15_Ans__c + Q_16_Ans__c) as cs_total_marks,
 
-            Grade__c as grade,
-            CAST(Academic_Year__c as STRING) as academic_year,
-            Batch_Id__c as batch_id,
+            Grade__c as assessment_grade,
+            CAST(Academic_Year__c as STRING) as assessment_academic_year,
+            Batch_Id__c as assessment_batch_id,
 
             Error_Status__c as error_status, 
             Created_from_Form__c as created_from_form,
