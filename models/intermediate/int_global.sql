@@ -10,7 +10,7 @@ with
         schools.account_medium_language as school_language, schools.school_academic_year, schools.Enrolled_Grade_9, schools.Enrolled_Grade_10, 
         schools.Enrolled_Grade_11, schools.Enrolled_Grade_12__c as Enrolled_Grade_12, school_district, School_State as school_state, 
         School_Partner as school_partner, schools.Partner as partner, schools.Taluka as taluka, schools.Ward as ward, schools.Tagged_for_Counselling, 
-        full_name as facilitator, trainers.academic_year as contacts_academic_year, donors.account_name as donor
+        full_name as batch_facilitator, trainers.contact_academic_year as contacts_academic_year, donors.account_name as donor
         from 
             batches
             left join schools on batches.school_id = schools.school_id
