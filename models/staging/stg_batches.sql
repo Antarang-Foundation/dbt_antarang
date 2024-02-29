@@ -13,14 +13,14 @@ renamed as (
         batch_completed__c as batch_completed,
         batch_id__c as batch_id_trimmed,
         Medium_Language_of_Instruction__c as batch_language,
-        Trainer_Name__c as batch_trainer_name,
+        Trainer_Name__c as batch_trainer_id,
         Date_of_facilitation_starting__c as fac_start_date,
         Date_of_facilitation_completion__c as fac_end_date,
         Allocation_Email_Sent__c as allocation_email_sent,
-        Donor_Name__c as donor,
-        School_State__c as batch_school_state,
-        school_district__c as batch_school_district,
-        School_Partner__c as batch_school_partner,
+        Donor_Name__c as donor_id,
+        School_State__c as school_state,
+        school_district__c as school_district,
+        School_Partner__c as school_partner,
         Number_of_students_facilitated__c as no_of_students_facilitated
 
     from source
