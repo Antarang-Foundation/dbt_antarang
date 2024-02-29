@@ -4,24 +4,24 @@ with source as (
 
 renamed as (
     select
-        id as batches_id,
-        batch_number__c as batches_number,
-        Name as Batch_Name,
+        id as batch_id,
+        batch_number__c as batch_no,
+        Name as batch_name,
         School_Name__c as school_id,
         academic_year__c as batch_academic_year,
-        grade__c as batches_grade,
+        grade__c as batch_grade,
         batch_completed__c as batch_completed,
-        batch_id__c as batch_id,
-        Medium_Language_of_Instruction__c as Medium_Language_of_Instruction,
-        Trainer_Name__c as Batch_Trainer_Name,
-        Date_of_facilitation_starting__c as Date_of_facilitation_starting,
-        Date_of_facilitation_completion__c as Date_of_facilitation_completion,
-        Allocation_Email_Sent__c as Allocation_Email_Sent,
-        Donor_Name__c as Donor_Name,
-        School_State__c as School_State,
-        school_district__c as school_district,
-        School_Partner__c as School_Partner,
-        Number_of_students_facilitated__c as Number_of_students_facilitated
+        batch_id__c as batch_id_trimmed,
+        Medium_Language_of_Instruction__c as batch_language,
+        Trainer_Name__c as batch_trainer_name,
+        Date_of_facilitation_starting__c as fac_start_date,
+        Date_of_facilitation_completion__c as fac_end_date,
+        Allocation_Email_Sent__c as allocation_email_sent,
+        Donor_Name__c as donor,
+        School_State__c as batch_school_state,
+        school_district__c as batch_school_district,
+        School_Partner__c as batch_school_partner,
+        Number_of_students_facilitated__c as no_of_students_facilitated
 
     from source
 )
