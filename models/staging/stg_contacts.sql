@@ -32,7 +32,6 @@ renamed as (
         Current_Batch_Number__c as current_batch_no,
         -- What_are_you_currently_studying__c as What_are_you_currently_studying, --
         /* Current_Batch_Name__c as Current_Batch_Name,
-        Current_Batch_Number__c as Current_Batch_Number,
         Current_Whatsapp_Number__c as Current_Whatsapp_Number,
         Current_Batch_Grade__c as Current_Batch_Grade, */
         Bar_Code__c as uid,
