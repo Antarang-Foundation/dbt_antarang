@@ -4,37 +4,37 @@ with
     ),
     renamed as (
         select
-            id as sessions_id,
-            session_code__c as sessions_code,
-            name as sessions_name,
-            session_type__c as sessions_type,
-            sessiondate__c as sessions_date,
-            session_grade__c as sessions_grade,
-            session_number__c as sessions_number,
-            assigned_facilitator__c as assigned_facilitator_id,
-            batch__c as batches_id,
-            Session_Delivery__c as Session_Delivery,
-            Session_Mode__c as 	Session_Mode,
-            Session_Start_Time__c as Session_Start_Time,
-            OMR_required__c as 	OMR_required,
-            OMR_s_received_for_session__c as OMR_s_received_for_session,
-            Total_Student_Present__c as Total_Student_Present,
-            Total_Parent_Present__c as 	Total_Parent_Present,
-            Log_Reason__c as Log_Reason,
-            Attendance_Submitted__c as Attendance_Submitted,
-            Present_Count__c as Present_Count,
-            Attendance_Count__c as Attendance_Count,
-            Payment_Status__c as Payment_Status,
-            Deferred_Reason__c as Deferred_Reason,
-            Invoice_Date__c as Invoice_Date,
-            Session_Amount__c as Session_Amount,
-            Number_of_Sessions_No_of_Units__c as Number_of_Sessions_No_of_Units,
-            Total_Amount__c as Total_Amount,
-            TDS_Deduction__c as TDS_Deduction
+            Id as session_id,
+            Session_Code__c as session_code,
+            Name as session_name,
+            Session_Type__c as session_type,
+            SessionDate__c as session_date,
+            Session_Grade__c as session_grade,
+            Session_Number__c as session_number,
+            Assigned_Facilitator__c as assigned_facilitator_id,
+            Batch__c as batch_id,
+            Session_Delivery__c as session_delivery,
+            Session_Mode__c as 	session_mode,
+            Session_Start_Time__c as session_start_time,
+            OMR_required__c as 	omr_required,
+            OMR_s_received_for_session__c as omrs_received,
+            Total_Student_Present__c as total_student_present,
+            Total_Parent_Present__c as 	total_parent_present,
+            Log_Reason__c as log_reason,
+            Attendance_Submitted__c as attendance_submitted,
+            Present_Count__c as present_count,
+            Attendance_Count__c as attendance_count,
+            Payment_Status__c as payment_status,
+            Deferred_Reason__c as deferred_reason,
+            Invoice_Date__c as invoice_date,
+            Session_Amount__c as session_amount,
+            Number_of_Sessions_No_of_Units__c as no_of_sessions_no_of_units,
+            Total_Amount__c as total_amount,
+            TDS_Deduction__c as tds_deduction
 
 
         from source
     )
 
 select * from renamed
-where sessions_type = 'Student'
+where session_type = 'Student'

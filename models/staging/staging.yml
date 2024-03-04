@@ -51,7 +51,7 @@ models:
   - name: stg_sessions
     # description:
     columns:
-      - name: sessions_id
+      - name: session_id
         description: "The primary key of this table"
         tests:
           - unique

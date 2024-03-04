@@ -10,4 +10,4 @@ with
     
 select *
 from int_trainer
-where record_type='CA Trainer'
+where record_type = 'CA Trainer' 
