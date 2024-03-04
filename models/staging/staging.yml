@@ -64,10 +64,10 @@ models:
         tests:
           - unique
           - not_null
-  - name: stg_Session_OMR_Type
+  - name: stg_session_omr_type
     # description:
     columns:
-      - name: Session_OMR_Type_id
+      - name: session_omr_type_id
         description: "The primary key of this table"
         tests:
           - unique
