@@ -1,5 +1,5 @@
 with
-    contacts as (select * from {{ ref('stg_contacts') }}),
+    contacts as (select * from {{ ref('stg_students') }}),
     recordtypes as (select record_type_id,record_type from {{ ref('stg_recordtypes') }}),
     int_students as (
         select *

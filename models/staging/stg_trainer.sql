@@ -17,6 +17,15 @@ renamed as (
         RecordTypeId as record_type_id,
         Academic_Year__c as academic_year
     from source 
-)
+),
 
-select * from renamed
+recordtypes as (select record_type_id,record_type from {{ ref('stg_recordtypes') }}),
+    stg_trainer as (
+        select *
+        from 
+            renamed
+            left join recordtypes using (record_type_id) where record_type = 'CA Trainer'
+    )
+    
+select *
+from stg_trainer
