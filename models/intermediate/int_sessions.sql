@@ -1,7 +1,7 @@
 with
     session_attendance as (select * from {{ ref('stg_session_attendance') }}),
     sessions as (select * from {{ ref('stg_sessions') }}),
-    contacts as (select * from {{ ref('stg_students') }}),
+    contacts as (select * from {{ ref('stg_student') }}),
     int_sessions as (
         select *
         from 

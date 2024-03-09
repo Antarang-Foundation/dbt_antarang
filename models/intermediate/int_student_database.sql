@@ -1,7 +1,7 @@
 with
-    students as (select * except (academic_year, record_type_id) from {{ ref('int_students') }}),
-    batch as (select batches_id, school_id, school_district from {{ ref('stg_batches') }}),
-    account as (select * except (record_type_id, school_academic_year, account_district) from {{ ref('stg_accounts') }}),
+    students as (select * except (academic_year, record_type_id) from {{ ref('int_student') }}),
+    batch as (select batches_id, school_id, school_district from {{ ref('stg_batch') }}),
+    account as (select * except (record_type_id, school_academic_year, account_district) from {{ ref('stg_school') }}),
     unpivot_barcode AS (
         SELECT 
             * except (student_barcode),

@@ -25,6 +25,16 @@ renamed as (
         --Tagged_for_Digital_Learning__c as Tagged_for_Digital_Learning__c
 
     from source
-)
+),
 
-select * from renamed
+recordtypes as (select record_type_id, record_type from {{ ref('stg_recordtypes') }}),
+    
+    stg_school as (
+        select * except (record_type_id)
+        from 
+            renamed
+            left join recordtypes using (record_type_id) where record_type = 'School'
+    )
+    
+select *
+from stg_school

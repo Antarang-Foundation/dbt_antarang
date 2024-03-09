@@ -1,6 +1,6 @@
 with
     pivot as (select * from {{ ref('int_pivot_cdm1_latest') }}),
-    contacts as (select student_barcode, full_name as student_full_name from {{ ref('stg_students') }}),
+    contacts as (select student_barcode, full_name as student_full_name from {{ ref('stg_student') }}),
     
 int_assessment as (
     select *

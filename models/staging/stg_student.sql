@@ -32,20 +32,19 @@ renamed as (
         Academic_Year__c as contact_academic_year,
         Year_of_Birth__c as birth_year,
         Birthdate as birthdate,
-        
-        -- What_are_you_currently_studying__c as What_are_you_currently_studying, --
+        What_are_you_currently_studying__c as What_are_you_currently_studying,
         /* Current_Batch_Name__c as Current_Batch_Name,
         Current_Whatsapp_Number__c as Current_Whatsapp_Number, */
         G9_Whatsapp_Number__c as g9_whatsapp_no,
         G10_Whatsapp_Number__c as g10_whatsapp_no,
-        G11_Whatsapp_Number__c as g11_whatsapp_no
-        --G12_Whatsapp_Number__c as G12_whatsapp_no,--
+        G11_Whatsapp_Number__c as g11_whatsapp_no,
+        G12_Whatsapp_Number__c as G12_whatsapp_no
     from source
 ),
 
 recordtypes as (select record_type_id, record_type from {{ ref('stg_recordtypes') }}),
     
-    stg_students as (
+    stg_student as (
         select * except (record_type_id)
         from 
             renamed
@@ -53,6 +52,6 @@ recordtypes as (select record_type_id, record_type from {{ ref('stg_recordtypes'
     )
     
 select *
-from stg_students
+from stg_student
 
 

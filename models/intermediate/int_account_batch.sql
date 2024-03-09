@@ -1,6 +1,6 @@
 with
-    batches as (select * from {{ ref('stg_batches') }}),
-    accounts as (select * from {{ ref('stg_accounts') }}),
+    batches as (select * from {{ ref('stg_batch') }}),
+    accounts as (select * from {{ ref('stg_school') }}),
     int_account_batch as (
         select *
         from 

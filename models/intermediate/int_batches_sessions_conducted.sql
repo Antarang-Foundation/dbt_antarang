@@ -1,5 +1,5 @@
 with
-    batches as (select * from {{ ref('stg_batches') }}),
+    batches as (select * from {{ ref('stg_batch') }}),
     sessions as (select * from {{ ref('stg_sessions') }}),
     int_batches_sessions_conducted as (
         select *

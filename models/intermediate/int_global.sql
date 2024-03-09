@@ -1,8 +1,8 @@
 with
-    batches as (select * from {{ ref('stg_batches') }}),
-    schools as (select * from {{ ref('stg_accounts') }} where record_type_id = '0127F000000Hqg2QAC'),
-    trainers as (select * from {{ ref('stg_trainer') }} where record_type_id in ('0127F000000Hqg5QAC', '0127F000000BfaOQAS')),
-    donors as (select * from {{ ref('stg_accounts') }} where record_type_id = '0127F000000Hqg1QAC'),
+    batches as (select * from {{ ref('stg_batch') }}),
+    schools as (select * from {{ ref('stg_school') }}),
+    trainers as (select * from {{ ref('stg_trainer') }}),
+    donors as (select * from {{ ref('stg_donor') }}),
     int_global as (
         select batch_id, batch_no, batch_academic_year, batch_grade, batch_language, no_of_students_facilitated, fac_start_date, fac_end_date, 
         allocation_email_sent, schools.tagged_for_counselling, full_name as batch_trainer_name,
