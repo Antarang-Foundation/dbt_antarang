@@ -1,20 +1,21 @@
 with
     batches as (select * from {{ ref('stg_batch') }}),
-    sessions as (select * from {{ ref('stg_sessions') }}),
-    int_batches_sessions_conducted as (
+    sessions as (select * from {{ ref('stg_session') }}),
+    batch_sessions as (
         select *
         from batches
-        left join sessions using (batches_id)
+        left join sessions using (batch_id)
     ),
-    get_total_sessions_by_batch_and_grade as (
+    int_batch_sessions_conducted as (
         select
-            batches_id,
-            batches_grade,
-            count(sessions_number) as total_sessions
-        from int_batches_sessions_conducted
-        where sessions_type = 'Student'
-        group by batches_id, batches_grade
+            batch_id, batch_no, batch_grade,
+            count(session_no) as total_sessions
+        from batch_sessions
+        where session_type = 'Student'
+        group by batch_id, batch_no, batch_grade
+        order by batch_id, batch_no, batch_grade
+
     )
 
 select *
-from get_total_sessions_by_batch_and_grade
+from int_batch_sessions_conducted

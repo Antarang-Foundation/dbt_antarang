@@ -1,7 +1,7 @@
 with
-    contacts as (select * from {{ ref('stg_trainer') }}),
+    contacts as (select * from {{ ref('stg_facilitator') }}),
     recordtypes as (select record_type_id,record_type from {{ ref('stg_recordtypes') }}),
-    int_trainer as (
+    int_facilitator as (
         select *
         from 
             contacts
@@ -9,5 +9,5 @@ with
     )
     
 select *
-from int_trainer
+from int_facilitator
 where record_type = 'CA Trainer' 

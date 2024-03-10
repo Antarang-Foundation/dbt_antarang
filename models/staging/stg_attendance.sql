@@ -4,15 +4,15 @@ with source as (
 
 renamed as (
     select
-        id as session_attendance_id,
+        id as attendance_id,
         session__c as session_id,
         contact__c as contact_id,
-        Name as session_attendance_no,
+        Name as attendance_no,
         attendance__c as attendance_status,
-        date__c as session_atendance_date,
-        Time__c as session_atendance_time,
+        date__c as attendance_date,
+        Time__c as attendance_time,
         Status__c as status,
-        Guardian_Parent_Attendance__c as guardian_parent_attendance,
+        Guardian_Parent_Attendance__c as guardian_attendance,
         Career_Aspiration__c as career_aspiration,
         Reason__c as reason,
         First_step_after_Class_10__c as first_step_after_class_10
@@ -22,3 +22,4 @@ renamed as (
 
 select * from renamed
 where attendance_status is not null
+order by attendance_id, session_id, contact_id

@@ -5,13 +5,13 @@ with source as (
 renamed as (
     select
         Id as contact_id,
-        Full_Name__c as full_name,
-        Language__c as language,
+        Full_Name__c as facilitator_name,
+        Language__c as facilitator_language,
         Facilitator_Work_Status__c as facilitator_work_status,
         Payment_Type__c as payment_type,
         Area_of_Operation__c as area_of_operation,
         Cities_of_Operation__c as cities_of_operation,
-        Trainer_Status__c as trainer_status,
+        Trainer_Status__c as facilitator_status,
         npe01__WorkEmail__c as work_email,
         MobilePhone as facilitator_mobile,
         RecordTypeId as record_type_id,
@@ -20,7 +20,7 @@ renamed as (
 ),
 
 recordtypes as (select record_type_id,record_type from {{ ref('stg_recordtypes') }}),
-    stg_trainer as (
+    stg_facilitator as (
         select *
         from 
             renamed
@@ -28,4 +28,4 @@ recordtypes as (select record_type_id,record_type from {{ ref('stg_recordtypes')
     )
     
 select *
-from stg_trainer
+from stg_facilitator

@@ -4,15 +4,15 @@ with
     ),
     renamed as (
         select
+            Batch__c as batch_id,
+            Assigned_Facilitator__c as session_facilitator_id,
             Id as session_id,
             Session_Code__c as session_code,
             Name as session_name,
             Session_Type__c as session_type,
             SessionDate__c as session_date,
             Session_Grade__c as session_grade,
-            Session_Number__c as session_number,
-            Assigned_Facilitator__c as assigned_facilitator_id,
-            Batch__c as batch_id,
+            Session_Number__c as session_no,
             Session_Delivery__c as session_delivery,
             Session_Mode__c as 	session_mode,
             Session_Start_Time__c as session_start_time,
@@ -38,3 +38,4 @@ with
 
 select * from renamed
 where session_type = 'Student'
+order by batch_id, session_id

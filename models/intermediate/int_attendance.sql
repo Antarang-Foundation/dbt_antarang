@@ -6,7 +6,7 @@ with
             count(distinct case when attendance_status = 'Present' then sessions_id else null end) as attendance_count, 
             batches_id, 
             student_barcode 
-        from {{ ref('int_sessions')}} 
+        from {{ ref('int_session')}} 
         group by contact_id, batches_id, student_barcode, full_name
     ),
     int_batches_sessions_conducted as (

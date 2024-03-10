@@ -13,7 +13,7 @@ renamed as (
         batch_completed__c as batch_completed,
         batch_id__c as batch_id_trimmed,
         Medium_Language_of_Instruction__c as batch_language,
-        Trainer_Name__c as batch_trainer_id,
+        Trainer_Name__c as facilitator_id,
         Date_of_facilitation_starting__c as fac_start_date,
         Date_of_facilitation_completion__c as fac_end_date,
         Allocation_Email_Sent__c as allocation_email_sent,
