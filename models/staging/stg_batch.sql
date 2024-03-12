@@ -7,20 +7,16 @@ renamed as (
         id as batch_id,
         batch_number__c as batch_no,
         Name as batch_name,
-        School_Name__c as school_id,
+        School_Name__c as batch_school_id,
         academic_year__c as batch_academic_year,
         grade__c as batch_grade,
         batch_completed__c as batch_completed,
-        batch_id__c as batch_id_trimmed,
         Medium_Language_of_Instruction__c as batch_language,
-        Trainer_Name__c as facilitator_id,
+        Trainer_Name__c as batch_facilitator_id,
         Date_of_facilitation_starting__c as fac_start_date,
         Date_of_facilitation_completion__c as fac_end_date,
         Allocation_Email_Sent__c as allocation_email_sent,
-        Donor_Name__c as donor_id,
-        School_State__c as school_state,
-        school_district__c as school_district,
-        School_Partner__c as school_partner,
+        Donor_Name__c as batch_donor_id,
         Number_of_students_facilitated__c as no_of_students_facilitated
 
     from source

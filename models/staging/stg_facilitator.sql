@@ -4,7 +4,7 @@ with source as (
 
 renamed as (
     select
-        Id as contact_id,
+        Id as facilitator_id,
         Full_Name__c as facilitator_name,
         Language__c as facilitator_language,
         Facilitator_Work_Status__c as facilitator_work_status,
@@ -15,13 +15,13 @@ renamed as (
         npe01__WorkEmail__c as work_email,
         MobilePhone as facilitator_mobile,
         RecordTypeId as record_type_id,
-        Academic_Year__c as academic_year
+        Academic_Year__c as facilitator_academic_year
     from source 
 ),
 
 recordtypes as (select record_type_id,record_type from {{ ref('stg_recordtypes') }}),
     stg_facilitator as (
-        select *
+        select * except (record_type_id)
         from 
             renamed
             left join recordtypes using (record_type_id) where record_type = 'CA Trainer'

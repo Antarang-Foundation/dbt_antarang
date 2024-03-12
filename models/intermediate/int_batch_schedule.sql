@@ -7,7 +7,7 @@ with
 
        select 
        
-       batch_global.batch_id, batch_no, batch_academic_year, batch_grade, batch_language, no_of_students_facilitated, fac_start_date, fac_end_date, 
+       batch_id, session_batch_id, batch_no, batch_academic_year, batch_grade, batch_language, no_of_students_facilitated, fac_start_date, fac_end_date, 
        allocation_email_sent, 
        
        school, school_language, school_academic_year, enrolled_g9, enrolled_g10, enrolled_g11, enrolled_g12, tagged_for_counselling,
@@ -23,7 +23,7 @@ with
        
        sessions
        
-       full outer join batch_global on sessions.batch_id = batch_global.batch_id
+       full outer join batch_global on sessions.session_batch_id = batch_global.batch_id
        full outer join trainers on sessions.session_facilitator_id = trainers.contact_id
        
     )

@@ -18,7 +18,7 @@ models:
   - name: int_batches_sessions_conducted
     # description:
     columns:
-      - name: batches_id
+      - name: batch_id
         description: "The primary key for this table"
         tests:
           - unique
