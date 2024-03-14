@@ -34,4 +34,13 @@ sources:
         description: salesforce table for the SAF quiz
       - name: Self_Awareness_Realities__c
         description: salesforce table for the SAR quiz
+      - name: State_Govt_Body_Level__c
+        description: salesforce table for the State
+      - name: District_Master__c
+        description: salesforce table for the district
+      - name: City_Master__c
+        description: salesforce table for the taluka
+      - name: Ward_Master__c
+        description: salesforce table for the ward
+        
   
