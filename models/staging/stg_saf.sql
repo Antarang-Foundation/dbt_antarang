@@ -22,7 +22,9 @@ t1 as (
         Feedback_6__c as saf_f6, Feedback_7__c as saf_f7, Feedback_8__c as saf_f8, Feedback_9__c as saf_f9, Feedback_10__c as saf_f10,
         Feedback_11__c as saf_f11, Feedback_12__c as saf_f12,
         
-        Interest_Form_Submitted__c, Apptitude_Form_Submitted__c, Feedback_Form_Submitted__c,
+        Interest_Form_Submitted__c as Interest_Form_Submitted,
+         Apptitude_Form_Submitted__c as Apptitude_Form_Submitted,
+         Feedback_Form_Submitted__c as Feedback_Form_Submitted,
 
         Grade__c as assessment_grade,
         CAST(Academic_Year__c as STRING) as assessment_academic_year,

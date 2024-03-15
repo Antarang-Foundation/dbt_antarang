@@ -1,8 +1,4 @@
-with source as (
-    select * from {{ source('salesforce', 'Account') }}
-),
-
-renamed as (
+with t0 as (
     select
         id as school_id,
         name as school_name,
@@ -24,17 +20,32 @@ renamed as (
         --Tagged_for_Experiential_Learning__c as Tagged_for_Experiential_Learning,
         --Tagged_for_Digital_Learning__c as Tagged_for_Digital_Learning__c
 
-    from source
+    from {{ source('salesforce', 'Account') }}
 ),
 
-recordtypes as (select record_type_id, record_type from {{ ref('stg_recordtypes') }}),
+t1 as (select record_type_id, record_type from {{ ref('stg_recordtypes') }}),
     
-    stg_school as (
+    t2 as (
         select * except (record_type_id)
         from 
-            renamed
-            left join recordtypes using (record_type_id) where record_type = 'School'
-    )
+            t0
+            left join t1 using (record_type_id) where record_type = 'School'
+    ),
+
+t3 as (select * from {{ ref('stg_state') }}),
+t4 as (select * from {{ ref('stg_district') }}),
+t5 as (select * from {{ ref('stg_ward') }}),
+t6 as (select * from {{ ref('stg_taluka') }}),
+
+t7 as (select * except (school_state_id, state_id, state_name, state_code, school_district_id, district_id, district_name, school_ward_id, ward_id, ward_name, school_taluka_id, taluka_id, taluka_name), state_name as school_state, district_name as school_district, ward_name as school_ward, taluka_name as school_taluka
+
+from t2 
+
+left join t3 on t2.school_state_id = t3.state_id 
+left join t4 on t2.school_district_id = t4.district_id 
+left join t5 on t2.school_ward_id = t5.ward_id 
+left join t6 on t2.school_taluka_id = t6.taluka_id 
+
+order by school_id)
+select * from t7
     
-select *
-from stg_school
