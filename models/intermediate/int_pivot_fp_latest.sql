@@ -27,8 +27,40 @@ with
 
             FOR record_type IN ('Baseline', 'Endline')
             )
-    )
+    ),
+
+    t2 as (select 
+
+barcode, 
+
+fp_no_Baseline as bl_fp_no, assessment_batch_id_Baseline as bl_assessment_batch_id, created_on_Baseline as bl_created_on, 
+created_from_form_Baseline as bl_created_from_form, assessment_grade_Baseline as bl_assessment_grade, 
+assessment_academic_year_Baseline as bl_assessment_academic_year, 
+
+q17_Baseline as bl_q17, q17_marks_Baseline as bl_q17_marks, q18_1_Baseline as bl_q18_1, q18_2_Baseline as bl_q18_2, q18_3_Baseline as bl_q18_3, 
+q18_4_Baseline as bl_q18_4, q18_5_Baseline as bl_q18_5, q18_6_Baseline as bl_q18_6, q18_7_Baseline as bl_q18_7, q18_8_Baseline as bl_q18_8, 
+q18_9_Baseline as bl_q18_9, q18_10_Baseline as bl_q18_10, q18_11_Baseline as bl_q18_11, q18_marks_Baseline as bl_q18_marks, q19_Baseline as bl_q19, 
+q19_marks_Baseline as bl_q19_marks, q20_Baseline as bl_q20, q20_marks_Baseline as bl_q20_marks, q21_Baseline as bl_q21, q21_marks_Baseline as bl_q21_marks,
+q22_Baseline as bl_q22, q22_marks_Baseline as bl_q22_marks, fp_total_marks_Baseline as bl_fp_total_marks, 
+
+f1_Baseline as bl_f1, f2_Baseline as bl_f2, f3_Baseline as bl_f3, f4_Baseline as bl_f4, f5_Baseline as bl_f5, f6_Baseline as bl_f6, f7_Baseline as bl_f7, 
+f8_Baseline as bl_f8, f9_Baseline as bl_f9, f10_Baseline as bl_f10, f11_Baseline as bl_f11, f12_Baseline as bl_f12,
+
+fp_no_Endline as el_fp_no, assessment_batch_id_Endline as el_assessment_batch_id, created_on_Endline as el_created_on, 
+created_from_form_Endline as el_created_from_form, assessment_grade_Endline as el_assessment_grade, 
+assessment_academic_year_Endline as el_assessment_academic_year, 
+
+q17_Endline as el_q17, q17_marks_Endline as el_q17_marks, q18_1_Endline as el_q18_1, q18_2_Endline as el_q18_2, q18_3_Endline as el_q18_3, 
+q18_4_Endline as el_q18_4, q18_5_Endline as el_q18_5, q18_6_Endline as el_q18_6, q18_7_Endline as el_q18_7, q18_8_Endline as el_q18_8, 
+q18_9_Endline as el_q18_9, q18_10_Endline as el_q18_10, q18_11_Endline as el_q18_11, q18_marks_Endline as el_q18_marks, q19_Endline as el_q19, 
+q19_marks_Endline as el_q19_marks, q20_Endline as el_q20, q20_marks_Endline as el_q20_marks, q21_Endline as el_q21, q21_marks_Endline as el_q21_marks,
+q22_Endline as el_q22, q22_marks_Endline as el_q22_marks, fp_total_marks_Endline as el_fp_total_marks, 
+
+f1_Endline as el_f1, f2_Endline as el_f2, f3_Endline as el_f3, f4_Endline as el_f4, f5_Endline as el_f5, f6_Endline as el_f6, f7_Endline as el_f7, 
+f8_Endline as el_f8, f9_Endline as el_f9, f10_Endline as el_f10, f11_Endline as el_f11, f12_Endline as el_f12,
+
+from t1
+)
     
-     
 SELECT *
-From t1
+From t2 order by barcode
