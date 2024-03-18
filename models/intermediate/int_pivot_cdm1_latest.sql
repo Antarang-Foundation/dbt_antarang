@@ -25,10 +25,13 @@ barcode,
 
 cdm1_no_Baseline as bl_cdm1_no, assessment_batch_id_Baseline as bl_assessment_batch_id, created_on_Baseline as bl_created_on, 
 created_from_form_Baseline as bl_created_from_form, assessment_grade_Baseline as bl_assessment_grade, 
-assessment_academic_year_Baseline as bl_assessment_academic_year, q1_Baseline as bl_q1, q1_marks_Baseline as bl_q1_marks, q2_1_Baseline as bl_q2_1, 
-q2_2_Baseline as bl_q2_2, q2_marks_Baseline as bl_q2_marks, q3_1_Baseline as bl_q3_1,
-q3_2_Baseline as bl_q3_2, q3_marks_Baseline as bl_q3_marks, q4_1_Baseline as bl_q4_1, q4_1_marks_Baseline as bl_q4_1_marks, q4_2_Baseline as bl_q4_2, 
-q4_2_marks_Baseline as bl_q4_2_marks, q4_marks_Baseline as bl_q4_marks, cdm1_total_marks_Baseline as bl_cdm1_total_marks,
+assessment_academic_year_Baseline as bl_assessment_academic_year, 
+
+q1_Baseline as bl_q1, q1_marks_Baseline as bl_q1_marks, 
+q2_1_Baseline as bl_q2_1, q2_2_Baseline as bl_q2_2, q2_marks_Baseline as bl_q2_marks, 
+q3_1_Baseline as bl_q3_1, q3_2_Baseline as bl_q3_2, q3_marks_Baseline as bl_q3_marks, 
+q4_1_Baseline as bl_q4_1, q4_1_marks_Baseline as bl_q4_1_marks, q4_2_Baseline as bl_q4_2, q4_2_marks_Baseline as bl_q4_2_marks, 
+q4_marks_Baseline as bl_q4_marks, cdm1_total_marks_Baseline as bl_cdm1_total_marks,
 
 cdm1_no_Endline as el_cdm1_no, assessment_batch_id_Endline as el_assessment_batch_id, created_on_Endline as el_created_on, 
 created_from_form_Endline as el_created_from_form, assessment_grade_Endline as el_assessment_grade, 
@@ -42,5 +45,3 @@ from t1
     
 SELECT *
 From t2 order by barcode
-
---where student_barcode = '220018166'

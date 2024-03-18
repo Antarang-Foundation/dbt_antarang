@@ -8,8 +8,8 @@ with
             attendance
             full outer join sessions using (session_id)
             full outer join students using (contact_id)
+            where session_type = 'Student'
     )
 
 select *
 from int_session
-where session_type = 'Student'

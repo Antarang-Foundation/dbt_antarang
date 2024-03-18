@@ -42,7 +42,7 @@ models:
   - name: int_pivot_cdm1_latest
     # description:
     columns:
-      - name: student_barcode
+      - name: barcode
         description: "The primary key of this table"
         tests:
           - unique
@@ -58,7 +58,7 @@ models:
   - name: int_cdm2_normalised
     # description:
     columns:
-      - name: student_barcode
+      - name: barcode
         description: "The primary key for this table"
         tests:
            - unique
@@ -74,15 +74,15 @@ models:
   - name: int_cdm2_latest
     # description:
     columns:
-      - name: student_barcode
+      - name: cdm2_id
         description: "The primary key for this table"
         tests:
            - unique
            - not_null
-  - name: int_pivot_cdm2_latest
+  - name: int_pivot_cdm2_raw_latest
     # description:
     columns:
-      - name: student_barcode
+      - name: barcode
         description: "The primary key for this table"
         tests:
            - unique
@@ -90,7 +90,7 @@ models:
   - name: int_cdm1_cdm2
     # description:
     columns:
-      - name: student_barcode
+      - name: barcode
         description: "The primary key for this table"
         tests:
            - unique
@@ -98,7 +98,7 @@ models:
   - name: int_assessment_cdm1_cdm2
     # description:
     columns:
-      - name: student_barcode
+      - name: barcode
         description: "The primary key for this table"
         tests:
            - unique
@@ -106,7 +106,7 @@ models:
   - name: int_pivot_cdm1_latest_normalised
     # description:
     columns:
-      - name: student_barcode
+      - name: barcode
         description: "The primary key for this table"
         tests:
            - unique

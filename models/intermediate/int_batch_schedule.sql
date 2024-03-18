@@ -1,6 +1,6 @@
 with
-    sessions as (select * from {{ref ('stg_session') }}),
     batch_global as (select * from {{ ref('int_global') }}),
+    sessions as (select * from {{ref ('stg_session') }}),
     trainers as (select contact_id, facilitator_name from {{ ref('stg_facilitator') }}),
 
     int_batch_schedule as (
