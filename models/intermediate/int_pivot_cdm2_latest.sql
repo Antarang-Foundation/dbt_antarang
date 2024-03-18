@@ -39,16 +39,16 @@ q6_9_marks_Baseline as bl_q6_9_marks, q6_10_Baseline as bl_q6_10, q6_10_marks_Ba
 q6_11_marks_Baseline as bl_q6_11_marks, q6_12_Baseline as bl_q6_12, q6_12_marks_Baseline as bl_q6_12_marks, 
  q6_total_marks_Baseline as bl_q6_total_marks, cdm2_total_marks_Baseline as bl_cdm2_total_marks,
 
-cdm2_no_Baseline as el_cdm2_no, assessment_batch_id_Baseline as el_assessment_batch_id, created_on_Baseline as el_created_on, 
-created_from_form_Baseline as el_created_from_form, assessment_grade_Baseline as el_assessment_grade, 
-assessment_academic_year_Baseline as el_assessment_academic_year, q5_Baseline as el_q5, q5_marks_Baseline as el_q5_marks, q6_1_Baseline as el_q6_1, 
-q6_1_marks_Baseline as el_q6_1_marks, q6_2_Baseline as el_q6_2, q6_2_marks_Baseline as el_q6_2_marks, q6_3_Baseline as el_q6_3, 
-q6_3_marks_Baseline as el_q6_3_marks, q6_4_Baseline as el_q6_4, q6_4_marks_Baseline as el_q6_4_marks, q6_5_Baseline as el_q6_5, 
-q6_5_marks_Baseline as el_q6_5_marks, q6_6_Baseline as el_q6_6, q6_6_marks_Baseline as el_q6_6_marks, q6_7_Baseline as el_q6_7,
-q6_7_marks_Baseline as el_q6_7_marks, q6_8_Baseline as el_q6_8, q6_8_marks_Baseline as el_q6_8_marks, q6_9_Baseline as el_q6_9, 
-q6_9_marks_Baseline as el_q6_9_marks, q6_10_Baseline as el_q6_10, q6_10_marks_Baseline as el_q6_10_marks, q6_11_Baseline as el_q6_11, 
-q6_11_marks_Baseline as el_q6_11_marks, q6_12_Baseline as el_q6_12, q6_12_marks_Baseline as el_q6_12_marks, 
- q6_total_marks_Baseline as el_q6_total_marks, cdm2_total_marks_Baseline as el_cdm2_total_marks
+cdm2_no_Endline as el_cdm2_no, assessment_batch_id_Endline as el_assessment_batch_id, created_on_Endline as el_created_on, 
+created_from_form_Endline as el_created_from_form, assessment_grade_Endline as el_assessment_grade, 
+assessment_academic_year_Endline as el_assessment_academic_year, q5_Endline as el_q5, q5_marks_Endline as el_q5_marks, q6_1_Endline as el_q6_1, 
+q6_1_marks_Endline as el_q6_1_marks, q6_2_Endline as el_q6_2, q6_2_marks_Endline as el_q6_2_marks, q6_3_Endline as el_q6_3, 
+q6_3_marks_Endline as el_q6_3_marks, q6_4_Endline as el_q6_4, q6_4_marks_Endline as el_q6_4_marks, q6_5_Endline as el_q6_5, 
+q6_5_marks_Endline as el_q6_5_marks, q6_6_Endline as el_q6_6, q6_6_marks_Endline as el_q6_6_marks, q6_7_Endline as el_q6_7,
+q6_7_marks_Endline as el_q6_7_marks, q6_8_Endline as el_q6_8, q6_8_marks_Endline as el_q6_8_marks, q6_9_Endline as el_q6_9, 
+q6_9_marks_Endline as el_q6_9_marks, q6_10_Endline as el_q6_10, q6_10_marks_Endline as el_q6_10_marks, q6_11_Endline as el_q6_11, 
+q6_11_marks_Endline as el_q6_11_marks, q6_12_Endline as el_q6_12, q6_12_marks_Endline as el_q6_12_marks, 
+ q6_total_marks_Endline as el_q6_total_marks, cdm2_total_marks_Endline as el_cdm2_total_marks
 
 from t1
 )
