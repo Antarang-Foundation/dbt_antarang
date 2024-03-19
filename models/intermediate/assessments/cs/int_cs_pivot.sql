@@ -1,7 +1,7 @@
 with
     t0 as (
         SELECT 
-                barcode, cs_no, q11_1, q11_2, q11_3, q11_4, q11_5, q11_6, q11_7, q11_8, q11_9, q11_marks, 
+                assessment_barcode, cs_no, q11_1, q11_2, q11_3, q11_4, q11_5, q11_6, q11_7, q11_8, q11_9, q11_marks, 
                 q12_1, q12_2, q12_3, q12_4, q12_marks, q13, q13_marks, q14, q14_marks, 
                 q15_1, q15_2, q15_3, q15_4, q15_5, q15_6, q15_7, q15_8, q15_9, q15_marks, q16, q16_marks, cs_total_marks, assessment_batch_id, record_type, 
                 created_on, assessment_grade, assessment_academic_year, created_from_form
@@ -32,7 +32,7 @@ with
 
     t2 as (select 
 
-barcode, 
+assessment_barcode, 
 
 cs_no_Baseline as bl_cs_no, assessment_batch_id_Baseline as bl_assessment_batch_id, created_on_Baseline as bl_created_on, 
 created_from_form_Baseline as bl_created_from_form, assessment_grade_Baseline as bl_assessment_grade, 
@@ -58,4 +58,4 @@ from t1
 )
     
 SELECT *
-From t2 order by barcode
+From t2 order by assessment_barcode

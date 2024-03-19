@@ -12,7 +12,7 @@ with
             q4_endline as q4_e,
             total_cdm1_baseline,
             total_cdm1_endline,
-        from {{ ref('int_pivot_cdm1_latest') }}
+        from {{ ref('int_cdm1_pivot') }}
     ),
     normalised as (
         select 

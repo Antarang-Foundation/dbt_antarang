@@ -1,9 +1,9 @@
 with
-    cdm1 as (select * from {{ ref('int_pivot_cdm1_latest') }}),
-    cdm2 as (select * from {{ ref('int_pivot_cdm2_latest') }}),
-    cp as (select * from {{ ref('int_pivot_cp_latest') }}),
-    cs as (select * from {{ ref('int_pivot_cs_latest') }}),
-    fp as (select * from {{ ref('int_pivot_fp_latest') }}),
+    cdm1 as (select * from {{ ref('int_cdm1_pivot') }}),
+    cdm2 as (select * from {{ ref('int_cdm2_pivot') }}),
+    cp as (select * from {{ ref('int_cp_pivot') }}),
+    cs as (select * from {{ ref('int_cs_pivot') }}),
+    fp as (select * from {{ ref('int_fp_pivot') }}),
     saf as (select * from {{ ref('int_saf_latest') }}),
     sar as (select * from {{ ref('int_sar_latest') }}),
 
@@ -11,13 +11,13 @@ with
         select 
 
         (case 
-        when cdm1.barcode is not null then cdm1.barcode
-        when cdm2.barcode is not null then cdm2.barcode
-        when cp.barcode is not null then cp.barcode
-        when cs.barcode is not null then cs.barcode
-        when fp.barcode is not null then fp.barcode
-        when saf.barcode is not null then saf.barcode
-        when sar.barcode is not null then sar.barcode end) as barcode,
+        when cdm1.assessment_barcode is not null then cdm1.assessment_barcode
+        when cdm2.assessment_barcode is not null then cdm2.assessment_barcode
+        when cp.assessment_barcode is not null then cp.assessment_barcode
+        when cs.assessment_barcode is not null then cs.assessment_barcode
+        when fp.assessment_barcode is not null then fp.assessment_barcode
+        when saf.assessment_barcode is not null then saf.assessment_barcode
+        when sar.assessment_barcode is not null then sar.assessment_barcode end) as assessment_barcode,
 
         (case
 
@@ -114,8 +114,8 @@ with
         when saf.assessment_academic_year is not null then saf.assessment_academic_year
         when sar.assessment_academic_year is not null then sar.assessment_academic_year end) as assessment_academic_year,
         
-        cdm1.barcode as cdm1_barcode, cdm2.barcode as cdm2_barcode, cp.barcode as cp_barcode, cs.barcode as cs_barcode, fp.barcode as fp_barcode, 
-        saf.barcode as saf_barcode, sar.barcode as sar_barcode, 
+        cdm1.assessment_barcode as cdm1_assessment_barcode, cdm2.assessment_barcode as cdm2_assessment_barcode, cp.assessment_barcode as cp_assessment_barcode, cs.assessment_barcode as cs_assessment_barcode, fp.assessment_barcode as fp_assessment_barcode, 
+        saf.assessment_barcode as saf_assessment_barcode, sar.assessment_barcode as sar_assessment_barcode, 
 
         cdm1.bl_assessment_batch_id as cdm1_bl_assessment_batch_id, cdm1.el_assessment_batch_id as cdm1_el_assessment_batch_id, 
         cdm2.bl_assessment_batch_id as cdm2_bl_assessment_batch_id, cdm2.el_assessment_batch_id as cdm2_el_assessment_batch_id, 
@@ -152,63 +152,61 @@ with
         fp.bl_assessment_academic_year as fp_bl_assessment_academic_year, fp.el_assessment_academic_year as fp_el_assessment_academic_year, 
         saf.assessment_academic_year as saf_assessment_academic_year, sar.assessment_academic_year as sar_assessment_academic_year,
         
-        cdm1.* except (barcode, bl_assessment_batch_id, bl_created_on, bl_created_from_form, bl_assessment_grade, bl_assessment_academic_year, 
+        cdm1.* except (assessment_barcode, bl_assessment_batch_id, bl_created_on, bl_created_from_form, bl_assessment_grade, bl_assessment_academic_year, 
         el_assessment_batch_id, el_created_on, el_created_from_form, el_assessment_grade, el_assessment_academic_year),
 
-        cdm2.* except (barcode, bl_assessment_batch_id, bl_created_on, bl_created_from_form, bl_assessment_grade, bl_assessment_academic_year, 
+        cdm2.* except (assessment_barcode, bl_assessment_batch_id, bl_created_on, bl_created_from_form, bl_assessment_grade, bl_assessment_academic_year, 
         el_assessment_batch_id, el_created_on, el_created_from_form, el_assessment_grade, el_assessment_academic_year),
 
-        cp.* except (barcode, bl_assessment_batch_id, bl_created_on, bl_created_from_form, bl_assessment_grade, bl_assessment_academic_year, 
+        cp.* except (assessment_barcode, bl_assessment_batch_id, bl_created_on, bl_created_from_form, bl_assessment_grade, bl_assessment_academic_year, 
         el_assessment_batch_id, el_created_on, el_created_from_form, el_assessment_grade, el_assessment_academic_year),
 
-        cs.* except (barcode, bl_assessment_batch_id, bl_created_on, bl_created_from_form, bl_assessment_grade, bl_assessment_academic_year, 
+        cs.* except (assessment_barcode, bl_assessment_batch_id, bl_created_on, bl_created_from_form, bl_assessment_grade, bl_assessment_academic_year, 
         el_assessment_batch_id, el_created_on, el_created_from_form, el_assessment_grade, el_assessment_academic_year),
 
-        fp.* except (barcode, bl_assessment_batch_id, bl_created_on, bl_created_from_form, bl_assessment_grade, bl_assessment_academic_year, 
+        fp.* except (assessment_barcode, bl_assessment_batch_id, bl_created_on, bl_created_from_form, bl_assessment_grade, bl_assessment_academic_year, 
         el_assessment_batch_id, el_created_on, el_created_from_form, el_assessment_grade, el_assessment_academic_year),
         
-        saf.* except (barcode, record_type, assessment_batch_id, created_on, created_from_form, assessment_grade, assessment_academic_year, 
-        error_status, data_cleanup, marks_recalculated, student_linked, is_latest),
+        saf.* except (assessment_barcode, record_type, assessment_batch_id, created_on, created_from_form, assessment_grade, assessment_academic_year),
 
-        sar.* except (barcode, record_type, assessment_batch_id, created_on, created_from_form, assessment_grade, assessment_academic_year, 
-        error_status, data_cleanup, marks_recalculated, student_linked, is_latest)  
+        sar.* except (assessment_barcode, record_type, assessment_batch_id, created_on, created_from_form, assessment_grade, assessment_academic_year)  
 
         from 
             cdm1 
             
-            full outer join cdm2 on cdm1.barcode = cdm2.barcode and 
+            full outer join cdm2 on cdm1.assessment_barcode = cdm2.assessment_barcode and 
             (case when cdm1.bl_assessment_academic_year is not null then cdm1.bl_assessment_academic_year
             when cdm1.el_assessment_academic_year is not null then cdm1.el_assessment_academic_year end) =
             (case when cdm2.bl_assessment_academic_year is not null then cdm2.bl_assessment_academic_year
             when cdm2.el_assessment_academic_year is not null then cdm2.el_assessment_academic_year end)
 
-            full outer join cp on cdm1.barcode = cp.barcode and 
+            full outer join cp on cdm1.assessment_barcode = cp.assessment_barcode and 
             (case when cdm1.bl_assessment_academic_year is not null then cdm1.bl_assessment_academic_year
             when cdm1.el_assessment_academic_year is not null then cdm1.el_assessment_academic_year end) =
             (case when cp.bl_assessment_academic_year is not null then cp.bl_assessment_academic_year
             when cp.el_assessment_academic_year is not null then cp.el_assessment_academic_year end)
 
-            full outer join cs on cdm1.barcode = cs.barcode and 
+            full outer join cs on cdm1.assessment_barcode = cs.assessment_barcode and 
             (case when cdm1.bl_assessment_academic_year is not null then cdm1.bl_assessment_academic_year
             when cdm1.el_assessment_academic_year is not null then cdm1.el_assessment_academic_year end) =
             (case when cs.bl_assessment_academic_year is not null then cs.bl_assessment_academic_year
             when cs.el_assessment_academic_year is not null then cs.el_assessment_academic_year end)
 
-            full outer join fp on cdm1.barcode = fp.barcode and 
+            full outer join fp on cdm1.assessment_barcode = fp.assessment_barcode and 
             (case when cdm1.bl_assessment_academic_year is not null then cdm1.bl_assessment_academic_year
             when cdm1.el_assessment_academic_year is not null then cdm1.el_assessment_academic_year end) =
             (case when fp.bl_assessment_academic_year is not null then fp.bl_assessment_academic_year
             when fp.el_assessment_academic_year is not null then fp.el_assessment_academic_year end)
 
-            full outer join saf on cdm1.barcode = saf.barcode and 
+            full outer join saf on cdm1.assessment_barcode = saf.assessment_barcode and 
             (case when cdm1.bl_assessment_academic_year is not null then cdm1.bl_assessment_academic_year
             when cdm1.el_assessment_academic_year is not null then cdm1.el_assessment_academic_year end) = saf.assessment_academic_year
 
-            full outer join sar on cdm1.barcode = sar.barcode and 
+            full outer join sar on cdm1.assessment_barcode = sar.assessment_barcode and 
             (case when cdm1.bl_assessment_academic_year is not null then cdm1.bl_assessment_academic_year
             when cdm1.el_assessment_academic_year is not null then cdm1.el_assessment_academic_year end) = sar.assessment_academic_year
 
-            order by barcode, assessment_academic_year
+            order by assessment_barcode
     )
 
     select * from int_assessments_combined 

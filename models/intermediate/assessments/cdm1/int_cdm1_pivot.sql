@@ -1,8 +1,8 @@
 with
     t0 as (
         SELECT 
-                barcode, cdm1_no, q1, q1_marks, q2_1, q2_2, q2_marks, q3_1, q3_2, q3_marks, q4_1, q4_1_marks, q4_2, q4_2_marks, q4_marks, cdm1_total_marks, 
-                assessment_batch_id, record_type, created_on, assessment_grade, assessment_academic_year, created_from_form
+                assessment_barcode, cdm1_no, q1, q1_marks, q2_1, q2_2, q2_marks, q3_1, q3_2, q3_marks, q4_1, q4_1_marks, q4_2, q4_2_marks, q4_marks, 
+                cdm1_total_marks, assessment_batch_id, record_type, created_on, assessment_grade, assessment_academic_year, created_from_form
         FROM {{ ref('int_cdm1_latest') }}
     ),
     t1 as (
@@ -21,7 +21,7 @@ with
 
 t2 as (select 
 
-barcode, 
+assessment_barcode, 
 
 cdm1_no_Baseline as bl_cdm1_no, assessment_batch_id_Baseline as bl_assessment_batch_id, created_on_Baseline as bl_created_on, 
 created_from_form_Baseline as bl_created_from_form, assessment_grade_Baseline as bl_assessment_grade, 
@@ -44,4 +44,4 @@ from t1
 )
     
 SELECT *
-From t2 order by barcode
+From t2 order by assessment_barcode

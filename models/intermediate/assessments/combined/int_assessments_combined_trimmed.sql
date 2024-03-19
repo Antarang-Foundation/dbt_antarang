@@ -6,13 +6,13 @@ with
         select
 
             * except (
-                cdm1_barcode,
-                cdm2_barcode,
-                cp_barcode,
-                cs_barcode,
-                fp_barcode,
-                saf_barcode,
-                sar_barcode,
+                cdm1_assessment_barcode,
+                cdm2_assessment_barcode,
+                cp_assessment_barcode,
+                cs_assessment_barcode,
+                fp_assessment_barcode,
+                saf_assessment_barcode,
+                sar_assessment_barcode,
 
                 cdm1_bl_assessment_batch_id,
                 cdm1_el_assessment_batch_id,
