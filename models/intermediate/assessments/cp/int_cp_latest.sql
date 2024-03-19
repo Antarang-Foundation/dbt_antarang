@@ -14,7 +14,7 @@ t1 as (
 
 t2 as (
     
-    select * from t1 
+    select * except (error_status, data_cleanup, marks_recalculated, student_linked, is_latest) from t1 
     where is_latest = 1
     order by barcode, record_type)
 
