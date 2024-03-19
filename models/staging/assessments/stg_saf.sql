@@ -6,10 +6,18 @@ t1 as (
     select
 
         Id as saf_id,
-        Barcode__c as barcode,
+        Barcode__c as assessment_barcode,
         RecordTypeId as record_type_id,
         CreatedDate as created_on,                       
         Name as saf_no,
+
+        Grade__c as assessment_grade,
+        CAST(Academic_Year__c as STRING) as assessment_academic_year,
+        Batch_Id__c as assessment_batch_id,
+
+        Interest_Form_Submitted__c as interest_submitted,
+        Apptitude_Form_Submitted__c as aptitude_submitted,
+        Feedback_Form_Submitted__c as feedback_submitted,
 
         Interest_1__c as saf_i1, Interest_2__c as saf_i2, Interest_3__c as saf_i3, Aptitude_1__c as saf_a1, Aptitude_2__c as saf_a2, 
         Aptitude_3__c as saf_a3, 
@@ -21,14 +29,6 @@ t1 as (
         Feedback_1__c as saf_f1, Feedback_2__c as saf_f2, Feedback_3__c as saf_f3, Feedback_4__c as saf_f4, Feedback_5__c as saf_f5, 
         Feedback_6__c as saf_f6, Feedback_7__c as saf_f7, Feedback_8__c as saf_f8, Feedback_9__c as saf_f9, Feedback_10__c as saf_f10,
         Feedback_11__c as saf_f11, Feedback_12__c as saf_f12,
-        
-        Interest_Form_Submitted__c as Interest_Form_Submitted,
-         Apptitude_Form_Submitted__c as Apptitude_Form_Submitted,
-         Feedback_Form_Submitted__c as Feedback_Form_Submitted,
-
-        Grade__c as assessment_grade,
-        CAST(Academic_Year__c as STRING) as assessment_academic_year,
-        Batch_Id__c as assessment_batch_id,
 
         Error_Status__c as error_status, 
         Created_from_Form__c as created_from_form,
@@ -41,17 +41,17 @@ t1 as (
 ),
 
 t2 as (select record_type_id,record_type from {{ ref('stg_recordtypes') }}),
-stg_saf as (
+t3 as (
     select 
         saf_id,
-        barcode,
+        assessment_barcode,
         record_type,
-        t1.* except(saf_id, barcode, record_type_id) 
+        t1.* except(saf_id, assessment_barcode, record_type_id) 
 
     from 
         t1
-        left join t2 using (record_type_id) order by barcode, record_type
+        left join t2 using (record_type_id) order by assessment_barcode, record_type
     )
 
 select *
-from stg_saf
+from t3

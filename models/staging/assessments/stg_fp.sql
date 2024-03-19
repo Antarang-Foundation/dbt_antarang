@@ -6,10 +6,14 @@ t1 as (
     select
 
         Id as fp_id,
-        Barcode__c as barcode,
+        Barcode__c as assessment_barcode,
         RecordTypeId as record_type_id,
         CreatedDate as created_on,                       
         Name as fp_no,
+
+        Grade__c as assessment_grade,
+        CAST(Academic_Year__c as STRING) as assessment_academic_year,
+        Batch_Id__c as assessment_batch_id,
 
         Q_17__c as q17, Q_17_Ans__c as q17_marks,
         
@@ -26,32 +30,28 @@ t1 as (
         F_1__c as f1, F_2__c as f2, F_3__c as f3, F_4__c as f4, F_5__c as f5, F_6__c as f6, F_7__c as f7, F_8__c as f8, F_9__c as f9, F_10__c as f10, 
         F_11__c as f11, F_12__c as f12,
 
-        Grade__c as assessment_grade,
-        CAST(Academic_Year__c as STRING) as assessment_academic_year,
-        Batch_Id__c as assessment_batch_id,
-
         Error_Status__c as error_status, 
         Created_from_Form__c as created_from_form,
         Data_Clean_up__c as data_cleanup,
         Marks_Recalculated__c as marks_recalculated,
-        Student_Linked__c as student_linked, 
+        Student_Linked__c as student_linked
         
 
     from t0 
 ),
 
 t2 as (select record_type_id,record_type from {{ ref('stg_recordtypes') }}),
-stg_fp as (
+t3 as (
     select 
         fp_id,
-        barcode,
+        assessment_barcode,
         record_type,
-        t1.* except(fp_id, barcode, record_type_id) 
+        t1.* except(fp_id, assessment_barcode, record_type_id) 
 
     from 
         t1
-        left join t2 using (record_type_id) order by barcode, record_type
+        left join t2 using (record_type_id) order by assessment_barcode, record_type
     )
 
 select *
-from stg_fp
+from t3

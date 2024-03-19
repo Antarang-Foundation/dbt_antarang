@@ -5,10 +5,14 @@ with t0 as (
 t1 as (
     select
             Id as cp_id,
-            Barcode__c as barcode,
+            Barcode__c as assessment_barcode,
             RecordTypeId as record_type_id,
             CreatedDate as created_on,                       
             Name as cp_no,
+
+            Grade__c as assessment_grade,
+            CAST(Academic_Year__c as STRING) as assessment_academic_year,
+            Batch_Id__c as assessment_batch_id,
 
             Q_7__c as q7, 
             Q_7_Marks__c as q7_marks,
@@ -33,10 +37,6 @@ t1 as (
             (Q_7_Marks__c + Q_8_Marks__c + Q_9_1_Marks__c + Q_9_2_Marks__c + Q_9_3_Marks__c + Q_9_4_Marks__c + Q_9_5_Marks__c + Q_9_6_Marks__c + 
             Q_9_7_Marks__c + Q_10_Marks__c) as cp_total_marks,
 
-            Grade__c as assessment_grade,
-            CAST(Academic_Year__c as STRING) as assessment_academic_year,
-            Batch_Id__c as assessment_batch_id,
-
             Error_Status__c as error_status, 
             Created_from_Form__c as created_from_form,
             Data_Clean_up__c as data_cleanup,
@@ -50,13 +50,13 @@ t2 as (select record_type_id,record_type from {{ ref('stg_recordtypes') }}),
 stg_cp as (
     select 
         cp_id,
-        barcode,
+        assessment_barcode,
         record_type,
-        t1.* except(cp_id, barcode, record_type_id) 
+        t1.* except(cp_id, assessment_barcode, record_type_id) 
 
     from 
         t1
-        left join t2 using (record_type_id) order by barcode, record_type
+        left join t2 using (record_type_id) order by assessment_barcode, record_type
     )
 
 select *

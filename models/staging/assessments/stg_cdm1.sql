@@ -7,10 +7,14 @@ t0 as (
 t1 as (
     select
             Id as cdm1_id,
-            Barcode__c as barcode,
+            Barcode__c as assessment_barcode,
             RecordTypeId as record_type_id,
             CreatedDate as created_on,                       
             Name as cdm1_no,
+
+            Grade__c as assessment_grade,
+            CAST(Academic_Year__c as STRING) as assessment_academic_year,
+            Batch_Id__c as assessment_batch_id,
 
             Q_1__c as q1,
             X1_A_good_career_plan_has_the_following__c as q1_marks,
@@ -32,10 +36,6 @@ t1 as (
 
             (X1_A_good_career_plan_has_the_following__c + Interest_Marks__c + Aptitude_Marks__c + Career_Choice_Total_Marks__c) as cdm1_total_marks,
 
-            Grade__c as assessment_grade,
-            CAST(Academic_Year__c as STRING) as assessment_academic_year,
-            Batch_Id__c as assessment_batch_id,
-
             Error_Status__c as error_status, 
             Created_from_Form__c as created_from_form,
             Data_Clean_up__c as data_cleanup,
@@ -47,17 +47,17 @@ t1 as (
 
 t2 as (select record_type_id, record_type from {{ ref('stg_recordtypes') }}),
 
-stg_cdm1 as (
+t3 as (
     select 
         cdm1_id,
-        barcode,
+        assessment_barcode,
         record_type,
-        t1.* except(cdm1_id, barcode, record_type_id) 
+        t1.* except(cdm1_id, assessment_barcode, record_type_id) 
 
     from 
         t1
-        left join t2 using (record_type_id) order by barcode, record_type
+        left join t2 using (record_type_id) order by assessment_barcode, record_type
     )
 
 select *
-from stg_cdm1
+from t3
