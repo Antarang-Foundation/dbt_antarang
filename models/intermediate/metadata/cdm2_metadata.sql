@@ -81,7 +81,7 @@ GROUP BY column_name),
 
 t2 as (SELECT column_name, COUNT(1) AS null_count FROM t0, UNNEST(REGEXP_EXTRACT_ALL(TO_JSON_STRING(t0), r'"(\w+)":null')) column_name GROUP BY column_name),
 
-t3 as (select 'int_student_global_cdm2_pivot' as table_name, column_name, (select count (*) from t0) as total_records, 
+t3 as (select '4b. int_student_global_cdm2_pivot' as table_name, column_name, (select count (*) from t0) as total_records, 
 (case when null_count is not null then null_count else 0 end) as null_count, distinct_count from t1 full outer join t2 using(column_name))
 
 select * from t3)),
