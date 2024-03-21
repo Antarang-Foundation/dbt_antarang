@@ -32,10 +32,10 @@ t1 as (select record_type_id, record_type from {{ ref('stg_recordtypes') }}),
             left join t1 using (record_type_id) where record_type = 'School'
     ),
 
-t3 as (select * from {{ ref('stg_state') }}),
-t4 as (select * from {{ ref('stg_district') }}),
-t5 as (select * from {{ ref('stg_ward') }}),
-t6 as (select * from {{ ref('stg_taluka') }}),
+t3 as (select * from {{ ref('seed_state') }}),
+t4 as (select * from {{ ref('seed_district') }}),
+t5 as (select * from {{ ref('seed_ward') }}),
+t6 as (select * from {{ ref('seed_taluka') }}),
 
 t7 as (select * except (school_state_id, state_id, state_name, state_code, school_district_id, district_id, district_name, school_ward_id, ward_id, ward_name, school_taluka_id, taluka_id, taluka_name), state_name as school_state, district_name as school_district, ward_name as school_ward, taluka_name as school_taluka
 
