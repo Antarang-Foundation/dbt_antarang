@@ -7,7 +7,7 @@ with
     saf as (select * from {{ ref('int_saf_latest') }}),
     sar as (select * from {{ ref('int_sar_latest') }}),
 
-    int_assessments_combined as (
+    int_assessment_raw as (
         select 
 
         (case 
@@ -209,4 +209,4 @@ with
             order by assessment_barcode
     )
 
-    select * from int_assessments_combined 
+    select * from int_assessment_raw

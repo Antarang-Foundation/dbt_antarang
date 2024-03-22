@@ -1,8 +1,8 @@
 with
 
-    t0 as (select * from {{ ref("int_assessments_combined") }}),
+    t0 as (select * from {{ ref("int_assessment_raw") }}),
 
-    int_assessments_combined_trimmed as (
+    int_assessment as (
         select
 
             * except (
@@ -71,4 +71,4 @@ with
     )
 
 select *
-from int_assessments_combined_trimmed
+from int_assessment

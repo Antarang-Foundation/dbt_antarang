@@ -240,11 +240,11 @@ t3 as (select '2d. int_global_session_attendance' as table_name, column_name, (s
 
 select * from t3)),
 
-int_pipeline_summary as (select table_name, column_name, total_records, null_count, (total_records - null_count) as nonnull_count, distinct_count, (total_records - distinct_count) as duplicate_count, 
+global_metadata as (select table_name, column_name, total_records, null_count, (total_records - null_count) as nonnull_count, distinct_count, (total_records - distinct_count) as duplicate_count, 
 
 round(100*null_count/total_records, 1) as pct_null, round(100*(total_records - null_count)/total_records, 1) as pct_nonnull, 
 round(100*distinct_count/total_records, 1) as pct_distinct, round(100*(total_records - distinct_count)/total_records, 1) as pct_duplicate from t order by column_name, table_name)
 
-select * from int_pipeline_summary where column_name != ""
+select * from global_metadata where column_name != ""
 
 
