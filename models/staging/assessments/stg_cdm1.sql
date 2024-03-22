@@ -45,7 +45,7 @@ t1 as (
     from t0 
 ),
 
-t2 as (select record_type_id, record_type from {{ ref('stg_recordtypes') }}),
+t2 as (select record_type_id, record_type from {{ ref('seed_recordtype') }}),
 
 t3 as (
     select 

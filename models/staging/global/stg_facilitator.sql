@@ -19,7 +19,7 @@ renamed as (
     from source 
 ),
 
-recordtypes as (select record_type_id,record_type from {{ ref('stg_recordtypes') }}),
+recordtypes as (select record_type_id,record_type from {{ ref('seed_recordtype') }}),
     stg_facilitator as (
         select * except (record_type_id)
         from 

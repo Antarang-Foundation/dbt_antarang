@@ -23,7 +23,7 @@ with t0 as (
     from {{ source('salesforce', 'Account') }}
 ),
 
-t1 as (select record_type_id, record_type from {{ ref('stg_recordtypes') }}),
+t1 as (select record_type_id, record_type from {{ ref('seed_recordtype') }}),
     
     t2 as (
         select * except (record_type_id)
