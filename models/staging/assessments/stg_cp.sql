@@ -7,7 +7,8 @@ t1 as (
             Id as cp_id,
             Barcode__c as assessment_barcode,
             RecordTypeId as record_type_id,
-            CreatedDate as created_on,                       
+            CreatedDate as created_on, 
+            Created_from_Form__c as created_from_form,                      
             Name as cp_no,
 
             Grade__c as assessment_grade,
@@ -38,7 +39,6 @@ t1 as (
             Q_9_7_Marks__c + Q_10_Marks__c) as cp_total_marks,
 
             Error_Status__c as error_status, 
-            Created_from_Form__c as created_from_form,
             Data_Clean_up__c as data_cleanup,
             Marks_Recalculated__c as marks_recalculated,
             Student_Linked__c as student_linked, 
@@ -47,17 +47,19 @@ t1 as (
 ),
 
 t2 as (select record_type_id,record_type from {{ ref('seed_recordtype') }}),
-stg_cp as (
-    select 
-        cp_id,
-        assessment_barcode,
-        record_type,
-        t1.* except(cp_id, assessment_barcode, record_type_id) 
 
-    from 
-        t1
-        left join t2 using (record_type_id) order by assessment_barcode, record_type
-    )
+t3 as (select cp_id, assessment_barcode, record_type, created_on, created_from_form, cp_no,
 
-select *
-from stg_cp
+(case 
+
+when cp_no is not null and (q7 is not null or q8 is not null or q9_1 is not null or q9_2 is not null 
+or q9_3 is not null or q9_4 is not null or q9_5 is not null or q9_6 is not null or q9_7 is not null or q10 is not null) then 1 
+
+when cp_no is not null and (q7 is null and q8 is null and q9_1 is null and q9_2 is null and q9_3 is null and q9_4 is null and q9_5 is null and q9_6 is null 
+and q9_7 is null and q10 is null) then 0 end) is_non_null,
+
+t1.* except(cp_id, assessment_barcode, record_type_id, created_on, created_from_form, cp_no) 
+
+from t1 left join t2 using (record_type_id) order by assessment_barcode, record_type)
+
+select * from t3

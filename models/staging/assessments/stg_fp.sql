@@ -8,7 +8,8 @@ t1 as (
         Id as fp_id,
         Barcode__c as assessment_barcode,
         RecordTypeId as record_type_id,
-        CreatedDate as created_on,                       
+        CreatedDate as created_on, 
+        Created_from_Form__c as created_from_form,                      
         Name as fp_no,
 
         Grade__c as assessment_grade,
@@ -31,7 +32,6 @@ t1 as (
         F_11__c as f11, F_12__c as f12,
 
         Error_Status__c as error_status, 
-        Created_from_Form__c as created_from_form,
         Data_Clean_up__c as data_cleanup,
         Marks_Recalculated__c as marks_recalculated,
         Student_Linked__c as student_linked
@@ -41,12 +41,21 @@ t1 as (
 ),
 
 t2 as (select record_type_id,record_type from {{ ref('seed_recordtype') }}),
-t3 as (
-    select 
-        fp_id,
-        assessment_barcode,
-        record_type,
-        t1.* except(fp_id, assessment_barcode, record_type_id) 
+t3 as (select fp_id, assessment_barcode, record_type, created_on, created_from_form, fp_no,
+
+(case 
+
+when fp_no is not null and (q17 is not null or q18_1 is not null or q18_2 is not null or q18_3 is not null or q18_4 is not null or q18_5 is not null or 
+q18_6 is not null or q18_7 is not null or q18_8 is not null or q18_9 is not null or q18_10 is not null or q18_11 is not null or q19 is not null or 
+q20 is not null or q21 is not null or q22 is not null or f1 is not null or f2 is not null or f3 is not null or f4 is not null or f5 is not null or 
+f6 is not null or f7 is not null or f8 is not null or f9 is not null or f10 is not null or f11 is not null or f12 is not null) then 1 
+
+when fp_no is not null and (q17 is null and q18_1 is null and q18_2 is null and q18_3 is null and q18_4 is null and q18_5 is null and 
+q18_6 is null and q18_7 is null and q18_8 is null and q18_9 is null and q18_10 is null and q18_11 is null and q19 is null and 
+q20 is null and q21 is null and q22 is null and f1 is null and f2 is null and f3 is null and f4 is null and f5 is null and 
+f6 is null and f7 is null and f8 is null and f9 is null and f10 is null and f11 is null and f12 is null) then 0 end) is_non_null,
+
+t1.* except(fp_id, assessment_barcode, record_type_id, created_on, created_from_form, fp_no) 
 
     from 
         t1

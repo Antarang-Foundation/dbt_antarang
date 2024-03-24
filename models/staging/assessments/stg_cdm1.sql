@@ -9,7 +9,8 @@ t1 as (
             Id as cdm1_id,
             Barcode__c as assessment_barcode,
             RecordTypeId as record_type_id,
-            CreatedDate as created_on,                       
+            CreatedDate as created_on,
+            Created_from_Form__c as created_from_form,                       
             Name as cdm1_no,
 
             Grade__c as assessment_grade,
@@ -37,27 +38,26 @@ t1 as (
             (X1_A_good_career_plan_has_the_following__c + Interest_Marks__c + Aptitude_Marks__c + Career_Choice_Total_Marks__c) as cdm1_total_marks,
 
             Error_Status__c as error_status, 
-            Created_from_Form__c as created_from_form,
             Data_Clean_up__c as data_cleanup,
             Marks_Recalculated__c as marks_recalculated,
-            Student_Linked__c as student_linked, 
+            Student_Linked__c as student_linked 
 
     from t0 
 ),
 
 t2 as (select record_type_id, record_type from {{ ref('seed_recordtype') }}),
 
-t3 as (
-    select 
-        cdm1_id,
-        assessment_barcode,
-        record_type,
-        t1.* except(cdm1_id, assessment_barcode, record_type_id) 
+t3 as (select cdm1_id, assessment_barcode, record_type, created_on, created_from_form, cdm1_no,
 
-    from 
-        t1
-        left join t2 using (record_type_id) order by assessment_barcode, record_type
-    )
+(case 
 
-select *
-from t3
+when cdm1_no is not null and (q1 is not null or q2_1 is not null or q2_2 is not null or q3_1 is not null or q3_2 is not null or q4_1 is not null 
+or q4_2 is not null) then 1 
+when cdm1_no is not null and (q1 is null and q2_1 is null and q2_2 is null and q3_1 is null and q3_2 is null and q4_1 is null and q4_2 is null) 
+then 0 end) is_non_null,
+
+t1.* except(cdm1_id, assessment_barcode, record_type_id, created_on, created_from_form, cdm1_no) 
+
+from t1 left join t2 using (record_type_id) order by assessment_barcode, record_type)
+
+select * from t3 
