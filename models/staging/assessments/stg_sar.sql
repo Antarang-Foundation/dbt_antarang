@@ -56,12 +56,13 @@ r8f4 is null) then 0 end) is_non_null,
 (case 
 
 when sar_no is not null and (sar_q1 is not null or sar_q2 is not null or sar_q3 is not null or sar_q4 is not null or sar_q5 is not null) then 1 
-when sar_no is not null and (sar_q1 is null and sar_q2 is null and sar_q3 is null and sar_q4 is null and sar_q5 is null) then 0 end) sar_atleast_one_quiz,
+when sar_no is not null and (sar_q1 is null and sar_q2 is null and sar_q3 is null and sar_q4 is null and sar_q5 is null) 
+then 0 end) sar_atleast_one_quiz,
 
 (case 
 
-when sar_no is not null and (r1s1 is not null or r2s2 is not null or r3s3 is not null or r4s4 is not null or r5f1 is not null or r6f2 is not null or r7f3 is not null or 
-r8f4 is not null) then 1 
+when sar_no is not null and (r1s1 is not null or r2s2 is not null or r3s3 is not null or r4s4 is not null or r5f1 is not null or 
+r6f2 is not null or r7f3 is not null or r8f4 is not null) then 1 
 
 when sar_no is not null and (r1s1 is null and r2s2 is null and r3s3 is null and r4s4 is null and r5f1 is null and r6f2 is null and r7f3 is null and 
 r8f4 is null) then 0 end) sar_atleast_one_reality,

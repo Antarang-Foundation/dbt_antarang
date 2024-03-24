@@ -1,0 +1,1 @@
+select * from {{ref('int_student_global_assessment_status')}}
