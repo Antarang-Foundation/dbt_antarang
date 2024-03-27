@@ -47,6 +47,8 @@ renamed as (
         G12_Whatsapp_Number__c as g12_whatsapp_no
 
     from source
+
+    where Full_Name__c not like '%test%' or Full_Name__c not like '%Test%' or Full_Name__c not like '%demo%' or Full_Name__c not like '%Demo%'
 ),
 
 recordtypes as (select record_type_id, record_type from {{ ref('seed_recordtype') }}),
