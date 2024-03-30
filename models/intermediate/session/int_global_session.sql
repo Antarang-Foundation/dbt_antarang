@@ -1,6 +1,6 @@
 with
 
-t0 as (select * from {{ ref('int_student_global_session_attendance')}}),
+t0 as (select * from {{ ref('int_student_global_session')}}),
 t1 as (select distinct batch_id, batch_no, batch_academic_year, batch_grade, batch_language, no_of_students_facilitated, facilitator_name, 
 school_name, school_taluka, school_ward, school_district, school_state, school_partner, batch_donor, session_id, session_batch_id, 
 session_facilitator_id, session_code, session_name, session_type, session_date, session_grade, session_no, omr_required, omrs_received, 

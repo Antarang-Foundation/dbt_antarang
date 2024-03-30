@@ -112,6 +112,28 @@ union all
 
 (with 
 
+t0 as (select * from {{ ref("stg_donor") }}),
+
+t1 as (SELECT column_name, (COUNT(DISTINCT val)) AS distinct_count
+FROM (
+  SELECT TRIM(x[0], '"') AS column_name, TRIM(x[safe_offset(1)], '"') AS val
+  FROM t0,
+  UNNEST(SPLIT(TRIM(TO_JSON_STRING(t0), '{}'), ',"')) kv,
+  UNNEST([STRUCT(SPLIT(kv, '":') AS x)]) 
+)  
+GROUP BY column_name),
+
+t2 as (SELECT column_name, COUNT(1) AS null_count FROM t0, UNNEST(REGEXP_EXTRACT_ALL(TO_JSON_STRING(t0), r'"(\w+)":null')) column_name GROUP BY column_name),
+
+t3 as (select 'e1. stg_donor' as table_name, column_name, (select count (*) from t0) as total_records, 
+(case when null_count is not null then null_count else 0 end) as null_count, distinct_count from t1 full outer join t2 using(column_name))
+
+select * from t3)
+
+union all
+
+(with 
+
 t0 as (select * from {{ ref("int_student_global") }}),
 
 t1 as (SELECT column_name, (COUNT(DISTINCT val)) AS distinct_count
@@ -125,7 +147,7 @@ GROUP BY column_name),
 
 t2 as (SELECT column_name, COUNT(1) AS null_count FROM t0, UNNEST(REGEXP_EXTRACT_ALL(TO_JSON_STRING(t0), r'"(\w+)":null')) column_name GROUP BY column_name),
 
-t3 as (select 'e1. int_student_global' as table_name, column_name, (select count (*) from t0) as total_records, 
+t3 as (select 'f1. int_student_global' as table_name, column_name, (select count (*) from t0) as total_records, 
 (case when null_count is not null then null_count else 0 end) as null_count, distinct_count from t1 full outer join t2 using(column_name))
 
 select * from t3)
@@ -147,7 +169,7 @@ GROUP BY column_name),
 
 t2 as (SELECT column_name, COUNT(1) AS null_count FROM t0, UNNEST(REGEXP_EXTRACT_ALL(TO_JSON_STRING(t0), r'"(\w+)":null')) column_name GROUP BY column_name),
 
-t3 as (select 'f1. stg_session' as table_name, column_name, (select count (*) from t0) as total_records, 
+t3 as (select 'g1. stg_session' as table_name, column_name, (select count (*) from t0) as total_records, 
 (case when null_count is not null then null_count else 0 end) as null_count, distinct_count from t1 full outer join t2 using(column_name))
 
 select * from t3)
@@ -169,7 +191,7 @@ GROUP BY column_name),
 
 t2 as (SELECT column_name, COUNT(1) AS null_count FROM t0, UNNEST(REGEXP_EXTRACT_ALL(TO_JSON_STRING(t0), r'"(\w+)":null')) column_name GROUP BY column_name),
 
-t3 as (select 'g1. stg_somrt' as table_name, column_name, (select count (*) from t0) as total_records, 
+t3 as (select 'h1. stg_somrt' as table_name, column_name, (select count (*) from t0) as total_records, 
 (case when null_count is not null then null_count else 0 end) as null_count, distinct_count from t1 full outer join t2 using(column_name))
 
 select * from t3)
@@ -191,7 +213,7 @@ GROUP BY column_name),
 
 t2 as (SELECT column_name, COUNT(1) AS null_count FROM t0, UNNEST(REGEXP_EXTRACT_ALL(TO_JSON_STRING(t0), r'"(\w+)":null')) column_name GROUP BY column_name),
 
-t3 as (select 'h1. stg_attendance' as table_name, column_name, (select count (*) from t0) as total_records, 
+t3 as (select 'i1. stg_attendance' as table_name, column_name, (select count (*) from t0) as total_records, 
 (case when null_count is not null then null_count else 0 end) as null_count, distinct_count from t1 full outer join t2 using(column_name))
 
 select * from t3)
@@ -200,7 +222,7 @@ union all
 
 (with 
 
-t0 as (select * from {{ ref("int_student_global_session_attendance") }}),
+t0 as (select * from {{ ref("int_session") }}),
 
 t1 as (SELECT column_name, (COUNT(DISTINCT val)) AS distinct_count
 FROM (
@@ -213,7 +235,7 @@ GROUP BY column_name),
 
 t2 as (SELECT column_name, COUNT(1) AS null_count FROM t0, UNNEST(REGEXP_EXTRACT_ALL(TO_JSON_STRING(t0), r'"(\w+)":null')) column_name GROUP BY column_name),
 
-t3 as (select 'i1. int_student_global_session_attendance' as table_name, column_name, (select count (*) from t0) as total_records, 
+t3 as (select 'j1. int_session' as table_name, column_name, (select count (*) from t0) as total_records, 
 (case when null_count is not null then null_count else 0 end) as null_count, distinct_count from t1 full outer join t2 using(column_name))
 
 select * from t3)
@@ -222,7 +244,7 @@ union all
 
 (with 
 
-t0 as (select * from {{ ref("int_global_session_attendance") }}),
+t0 as (select * from {{ ref("int_student_global_session") }}),
 
 t1 as (SELECT column_name, (COUNT(DISTINCT val)) AS distinct_count
 FROM (
@@ -235,7 +257,29 @@ GROUP BY column_name),
 
 t2 as (SELECT column_name, COUNT(1) AS null_count FROM t0, UNNEST(REGEXP_EXTRACT_ALL(TO_JSON_STRING(t0), r'"(\w+)":null')) column_name GROUP BY column_name),
 
-t3 as (select 'i2. int_global_session_attendance' as table_name, column_name, (select count (*) from t0) as total_records, 
+t3 as (select 'k1. int_student_global_session' as table_name, column_name, (select count (*) from t0) as total_records, 
+(case when null_count is not null then null_count else 0 end) as null_count, distinct_count from t1 full outer join t2 using(column_name))
+
+select * from t3)
+
+union all
+
+(with 
+
+t0 as (select * from {{ ref("int_global_session") }}),
+
+t1 as (SELECT column_name, (COUNT(DISTINCT val)) AS distinct_count
+FROM (
+  SELECT TRIM(x[0], '"') AS column_name, TRIM(x[safe_offset(1)], '"') AS val
+  FROM t0,
+  UNNEST(SPLIT(TRIM(TO_JSON_STRING(t0), '{}'), ',"')) kv,
+  UNNEST([STRUCT(SPLIT(kv, '":') AS x)]) 
+)  
+GROUP BY column_name),
+
+t2 as (SELECT column_name, COUNT(1) AS null_count FROM t0, UNNEST(REGEXP_EXTRACT_ALL(TO_JSON_STRING(t0), r'"(\w+)":null')) column_name GROUP BY column_name),
+
+t3 as (select 'k2. int_global_session' as table_name, column_name, (select count (*) from t0) as total_records, 
 (case when null_count is not null then null_count else 0 end) as null_count, distinct_count from t1 full outer join t2 using(column_name))
 
 select * from t3)),

@@ -58,6 +58,7 @@ recordtypes as (select record_type_id, record_type from {{ ref('seed_recordtype'
         from 
             renamed
             left join recordtypes using (record_type_id) where record_type = 'CA Student'
+            order by first_barcode
     )
     
 select *

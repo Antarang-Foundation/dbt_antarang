@@ -22,4 +22,6 @@ renamed as (
     from source
 )
 
-select * from renamed
+select * from renamed 
+
+-- where batch_name like '%Dummy%' or batch_name like '%dummy%'
