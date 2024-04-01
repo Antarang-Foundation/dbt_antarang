@@ -13,7 +13,7 @@ renamed as (
         OMR_Assessment_Count__c as omr_assessment_count,
         OMR_Assessment_Record_Type__c as omr_assessment_record_type,
         Session_Batch_Number__c as somrt_batch_no,
-        First_OMR_Uploaded_Date__c as first_omr_uploaded_date,
+        First_OMR_Uploaded_Date__c as first_omr_upload_date,
         OMRs_Received_Count__c as omr_received_count,
         OMR_Received_Date__c as omr_received_date,
         OMR_Received_By__c as omr_received_by,
