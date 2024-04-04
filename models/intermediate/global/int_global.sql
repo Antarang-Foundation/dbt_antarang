@@ -11,9 +11,9 @@ with
         enrolled_g10, enrolled_g11, enrolled_g12, tagged_for_counselling, school_partner, batch_donor_id, donor_id, donor_name as batch_donor
         from 
             batches
-            left join schools on batches.batch_school_id = schools.school_id
-            left join facilitators on batches.batch_facilitator_id = facilitators.facilitator_id
-            left join donors on batches.batch_donor_id = donors.donor_id)
+            full outer join schools on batches.batch_school_id = schools.school_id
+            full outer join facilitators on batches.batch_facilitator_id = facilitators.facilitator_id
+            full outer join donors on batches.batch_donor_id = donors.donor_id)
     
 select *
 
