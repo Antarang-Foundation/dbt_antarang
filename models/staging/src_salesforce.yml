@@ -6,41 +6,43 @@ sources:
     database: antarang-dashboard
     schema: 'dalgo_salesforce_sources'
     tables:
-      - name: RecordType
-        description: salesforce table for the record type info ie. Baseline/Endline
       - name: Contact
-        description: salesforce table for cotact info of students/guardians/facilitators
-      - name: Batch__c
-        description: salesforce table holding all info for the batches created
-      - name: Session__c
-        description: salesforce table holding all info for the sessions
-      - name: Session_Attendance__c
-        description: salesforce table for the session attendance log
-      - name: OMR_Assessment__c
-        description: salesforce table for the CDM1 course assessment
-      - name: CDM2__c
-        description: salesforce table for the CDM2 course assessment 
-      - name: Career_Planning__c
-        description: salesforce table for the CP course assessment  
-      - name: Career_Skill__c
-        description: salesforce table for the CS course assessment
-      - name: Future_Planning__c
-        description: salesforce table for the PFF course assessment  
+        description: A Salesforce table with contact information of students, parents, and facilitators. 
       - name: Account
-        description: salesforce table for the Accounts
-      - name: Session_OMR_Type__c
-        description: salesforce table for the session omr type
-      - name: Self_Awareness_and_Feedback__c
-        description: salesforce table for the SAF quiz
-      - name: Self_Awareness_Realities__c
-        description: salesforce table for the SAR quiz
+        description: A Salesforce table with details of all schools and donors. 
+      - name: Batch__c
+        description: A Salesforce table with details of all batches. 
+      - name: RecordType
+        description: A Salesforce table with a mapping of record_type_id and record_type_name.
       - name: State_Govt_Body_Level__c
-        description: salesforce table for the State
+        description: A Salesforce table with a mapping of school_state_id and school_state.
       - name: District_Master__c
-        description: salesforce table for the district
-      - name: City_Master__c
-        description: salesforce table for the taluka
+        description: A Salesforce table with a mapping of school_district_id and school_district.
       - name: Ward_Master__c
-        description: salesforce table for the ward
+        description: A Salesforce table with a mapping of school_ward_id and school_ward.
+      - name: City_Master__c
+        description: A Salesforce table with a mapping of school_taluka_id and school_taluka.      
+      - name: Session__c
+        description: A Salesforce table with details of all sessions.
+      - name: Session_OMR_Type__c
+        description: A Salesforce table with details of session-wise collection status of all OMR types.
+      - name: Session_Attendance__c
+        description: A Salesforce table with details of all student attendances.
+      - name: OMR_Assessment__c
+        description: A Salesforce table with details of all CDM1 uploads.
+      - name: CDM2__c
+        description: A Salesforce table with details of all CDM2 uploads.
+      - name: Career_Planning__c
+        description: A Salesforce table with details of all CP uploads. 
+      - name: Career_Skill__c
+        description: A Salesforce table with details of all CS uploads.
+      - name: Future_Planning__c
+        description: A Salesforce table with details of all FP uploads.
+      - name: Self_Awareness_and_Feedback__c
+        description: A Salesforce table with details of all SAF uploads.
+      - name: Self_Awareness_Realities__c
+        description: A Salesforce table with details of all SAR uploads.
+      
+      
         
   

@@ -1,0 +1,224 @@
+version: 2
+
+models:
+  - name: stg_student
+    description: "A staging table derived from SF Source Contact with details of all students."
+    columns:
+      - name: student_id
+        description: "Student's ID from SF Source Contact"
+
+      - name: first_barcode
+        description: "First barcode assigned to the student"
+
+      - name: student_name
+        description: "Student's Full Name"
+
+      - name: gender
+        description: "Student's Gender"
+
+      - name: current_barcode
+        description: "Student's current barcode"
+
+      - name: g9_barcode
+        description: "Student's barcode in Grade 9"
+
+      - name: g10_barcode
+        description: "Student's barcode in Grade 10"
+
+      - name: g11_barcode
+        description: "Student's barcode in Grade 11"
+
+      - name: g12_barcode
+        description: "Student's barcode in Grade 12"
+
+      - name: current_batch_no
+        description: "Student's current batch number"
+
+      - name: g9_batch_id
+        description: "Student's batch_id in Grade 9"
+
+      - name: g10_batch_id
+        description: "Student's batch_id in Grade 10"
+
+      - name: g11_batch_id
+        description: "Student's batch_id in Grade 11"
+
+      - name: g12_batch_id
+        description: "Student's batch_id in Grade 12"
+
+      - name: current_grade1
+        description: "Student's current grade (1)"
+
+      - name: current_grade2
+        description: "Student's current grade (2)"
+
+      - name: birth_year
+        description: "Student's year of birth"
+
+      - name: birth_date
+        description: "Student's date of birth"
+
+      - name: currently_studying
+        description: ""
+
+      - name: g9_whatsapp_no
+        description: ""
+
+      - name: g10_whatsapp_no
+        description: ""
+
+      - name: g11_whatsapp_no
+        description: ""
+
+      - name: g12_whatsapp_no
+        description: ""
+
+      - name: record_type
+        description: ""
+
+  - name: stg_batch
+    description: "A staging table derived from SF Source 'Batch__c' with details of all batches"
+    columns:
+      - name: batch_id
+        description: ""
+
+      - name: batch_no
+        description: ""
+
+      - name: batch_name
+        description: ""
+
+      - name: batch_school_id
+        description: ""
+
+      - name: batch_academic_year
+        description: ""
+
+      - name: batch_grade
+        description: ""
+
+      - name: batch_completed
+        description: ""
+
+      - name: batch_language
+        description: ""
+
+      - name: batch_facilitator_id
+        description: ""
+
+      - name: fac_start_date
+        description: ""
+
+      - name: fac_end_date
+        description: ""
+
+      - name: allocation_email_sent
+        description: ""
+
+      - name: batch_donor_id
+        description: ""
+
+      - name: no_of_students_facilitated
+        description: ""
+
+  - name: stg_school
+    description: ""
+    columns:
+      - name: school_id
+        description: ""
+
+      - name: school_name
+        description: ""
+
+      - name: school_language
+        description: ""
+
+      - name: school_academic_year
+        description: ""
+
+      - name: school_timing
+        description: ""
+
+      - name: school_partner
+        description: ""
+
+      - name: enrolled_g9
+        description: ""
+
+      - name: enrolled_g10
+        description: ""
+
+      - name: enrolled_g11
+        description: ""
+
+      - name: enrolled_g12
+        description: ""
+
+      - name: tagged_for_counselling
+        description: ""
+
+      - name: record_type
+        description: ""
+
+      - name: school_state
+        description: ""
+
+      - name: school_district
+        description: ""
+
+      - name: school_ward
+        description: ""
+
+      - name: school_taluka
+        description: ""
+
+  - name: stg_facilitator
+    description: ""
+    columns:
+      - name: facilitator_id
+        description: ""
+
+      - name: facilitator_name
+        description: ""
+
+      - name: facilitator_language
+        description: ""
+
+      - name: facilitator_work_status
+        description: ""
+
+      - name: payment_type
+        description: ""
+
+      - name: facilitator_area
+        description: ""
+
+      - name: facilitator_city
+        description: ""
+
+      - name: facilitator_shift
+        description: ""
+
+      - name: facilitator_email
+        description: ""
+
+      - name: facilitator_mobile
+        description: ""
+
+      - name: facilitator_academic_year
+        description: ""
+
+      - name: record_type
+        description: ""
+
+  - name: stg_donor
+    description: ""
+    columns:
+      - name: donor_id
+        description: ""
+
+      - name: donor_name
+        description: ""
+
+      - name: record_type
+        description: ""

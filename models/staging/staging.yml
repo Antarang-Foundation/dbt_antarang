@@ -1,29 +1,29 @@
 version: 2
 models:
-  - name: stg_batches
-    # description:
+  - name: stg_student
+    description: A
     columns:
       - name: batches_id
         description: "The primary key for this table"
         tests:
-           - unique
-           - not_null
+          - unique
+          - not_null
   - name: stg_cdm1
     # description:
     columns:
       - name: cdm1_id
         description: "The primary key for this table"
         tests:
-           - unique
-           - not_null
+          - unique
+          - not_null
   - name: stg_cdm2
     # description:
     columns:
       - name: cdm2_id
         description: "The primary key for this table"
         tests:
-           - unique
-           - not_null
+          - unique
+          - not_null
   - name: stg_contacts
     # description:
     columns:
@@ -72,4 +72,3 @@ models:
         tests:
           - unique
           - not_null
-          
