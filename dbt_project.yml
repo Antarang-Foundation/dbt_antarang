@@ -43,3 +43,9 @@ models:
     marts:
       materialized: table
       +required_tests: {"unique.x|not_null": 1}
+    seeds:
+      +schema: mappings
+
+tests:
+  +store_failures_as: view
+  +schema: dbt_test_failures

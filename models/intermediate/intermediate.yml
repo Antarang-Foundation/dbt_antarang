@@ -1,116 +1,314 @@
 version: 2
 models:
-  - name: int_assessments
-    # description:
+  - name: int_student
+    description: "A student-grade level intermediate table with multiple grade rows for each student."
     columns:
       - name: student_barcode
         description: "The primary key for this table"
         tests:
            - unique
            - not_null
-  - name: int_attendance
-    # description:
-    columns:
-      - name: contact_id
-        description: "The primary key for this table"
-        tests:
-           - not_null
-  - name: int_batches_sessions_conducted
-    # description:
+
+  - name: int_global
+    description: "A batch-level intermediate table with each batch linked to school, donor, and facilitator."
     columns:
       - name: batch_id
         description: "The primary key for this table"
         tests:
-          - unique
-          - not_null
-  - name: int_cdm1_latest
-    # description:
-    columns:
-      - name: cdm1_id
-        description: "The primary key of this table"
-        tests:
-          - unique
-          - not_null
-  - name: int_cdm1_recordtypes
-    # description:
-    columns:
-      - name: cdm1_id
-        description: "The primary key of this table"
-        tests:
-          - unique
-          - not_null
-  - name: int_pivot_cdm1_latest
-    # description:
-    columns:
-      - name: barcode
-        description: "The primary key of this table"
-        tests:
-          - unique
-          - not_null
-  - name: int_sessions
-    # description:
-    columns:
-      - name: session_attendance_id
-        description: "The primary key of this table"
-        tests:
-          - unique
-          - not_null
-  - name: int_cdm2_normalised
-    # description:
-    columns:
-      - name: barcode
-        description: "The primary key for this table"
-        tests:
            - unique
            - not_null
-  - name: int_cdm2_recordtypes
-    # description:
+           
+  - name: int_student_global
+    description: "A student-grade level intermediate table with multiple grade rows for each student, linked with batch, school, donor, and facilitator."
     columns:
       - name: student_barcode
         description: "The primary key for this table"
         tests:
-           - unique
-           - not_null
+          - unique
+          - not_null
+
+  - name: int_session
+    description: "A student-level master table with batch-session-wise details, status of received OMR types, and student-level attendance."
+    columns:
+      - name: attendance_id
+        description: "The primary key for this table"
+        tests:
+          - unique
+          - not_null
+
+  - name: int_global_session
+    description: "A student-level master table with batch-session-wise details, status of received OMR types, and student-level attendance, linked with global fields."
+    columns:
+      - name: attendance_id
+        description: "The primary key for this table"
+        tests:
+          - unique
+          - not_null
+
+  - name: int_student_global_session
+    description: "A student-level master table with batch-session-wise details, status of received OMR types, and student-level attendance, linked with all students and global fields."
+    columns:
+      - name: attendance_id
+        description: "The primary key for this table"
+        tests:
+          - unique
+          - not_null
+
+  - name: int_cdm1_latest
+    description: "A student-record_type level intermediate table with No Error, latest CDM1 records in separate rows for BL and EL."
+    columns:
+      - name: cdm1_id
+        description: "The primary key of this table"
+        tests:
+          - unique
+          - not_null
+  
+  - name: int_student_global_cdm1_latest
+    description: "A student-record_type level intermediate table with No Error, latest CDM1 BL and EL records in separate rows, linked with all students and global fields."
+    columns:
+      - name: cdm1_id
+        description: "The primary key of this table"
+        tests:
+          - unique
+          - not_null
+
+  - name: int_cdm1_pivot
+    description: "A student-level intermediate table with No Error, latest CDM1 records and BL, EL in the same row."
+    columns:
+      - name: assessment_barcode
+        description: "The primary key of this table"
+        tests:
+          - unique
+          - not_null
+  
+  - name: int_student_global_cdm1_pivot
+    description: "A student-level intermediate table with No Error, latest CDM1 BL and ELrecords in the same row, linked with all students and global fields."
+    columns:
+      - name: student_barcode
+        description: "The primary key of this table"
+        tests:
+          - unique
+          - not_null
+
   - name: int_cdm2_latest
-    # description:
+    description: "A student-record_type level intermediate table with No Error, latest CDM2 records in separate rows for BL and EL."
     columns:
       - name: cdm2_id
-        description: "The primary key for this table"
+        description: "The primary key of this table"
         tests:
-           - unique
-           - not_null
-  - name: int_pivot_cdm2_raw_latest
-    # description:
+          - unique
+          - not_null
+  
+  - name: int_student_global_cdm2_latest
+    description: "A student-record_type level intermediate table with No Error, latest CDM2 BL and EL records in separate rows, linked with all students and global fields."
     columns:
-      - name: barcode
-        description: "The primary key for this table"
+      - name: cdm2_id
+        description: "The primary key of this table"
         tests:
-           - unique
-           - not_null
-  - name: int_cdm1_cdm2
-    # description:
+          - unique
+          - not_null
+
+  - name: int_cdm2_pivot
+    description: "A student-level intermediate table with No Error, latest CDM2 records and BL, EL in the same row."
     columns:
-      - name: barcode
-        description: "The primary key for this table"
+      - name: assessment_barcode
+        description: "The primary key of this table"
         tests:
-           - unique
-           - not_null
-  - name: int_assessment_cdm1_cdm2
-    # description:
+          - unique
+          - not_null
+  
+  - name: int_student_global_cdm2_pivot
+    description: "A student-level intermediate table with No Error, latest CDM2 BL and ELrecords in the same row, linked with all students and global fields."
     columns:
-      - name: barcode
-        description: "The primary key for this table"
+      - name: student_barcode
+        description: "The primary key of this table"
         tests:
-           - unique
-           - not_null
-  - name: int_pivot_cdm1_latest_normalised
-    # description:
+          - unique
+          - not_null   
+
+  - name: int_cp_latest
+    description: "A student-record_type level intermediate table with No Error, latest CP records in separate rows for BL and EL."
     columns:
-      - name: barcode
-        description: "The primary key for this table"
+      - name: cp_id
+        description: "The primary key of this table"
         tests:
-           - unique
-           - not_null
+          - unique
+          - not_null
+  
+  - name: int_student_global_cp_latest
+    description: "A student-record_type level intermediate table with No Error, latest CP BL and EL records in separate rows, linked with all students and global fields."
+    columns:
+      - name: cp_id
+        description: "The primary key of this table"
+        tests:
+          - unique
+          - not_null
+
+  - name: int_cp_pivot
+    description: "A student-level intermediate table with No Error, latest CP records and BL, EL in the same row."
+    columns:
+      - name: assessment_barcode
+        description: "The primary key of this table"
+        tests:
+          - unique
+          - not_null
+  
+  - name: int_student_global_cp_pivot
+    description: "A student-level intermediate table with No Error, latest CP BL and ELrecords in the same row, linked with all students and global fields."
+    columns:
+      - name: student_barcode
+        description: "The primary key of this table"
+        tests:
+          - unique
+          - not_null
+
+  - name: int_cs_latest
+    description: "A student-record_type level intermediate table with No Error, latest CS records in separate rows for BL and EL."
+    columns:
+      - name: cs_id
+        description: "The primary key of this table"
+        tests:
+          - unique
+          - not_null
+  
+  - name: int_student_global_cs_latest
+    description: "A student-record_type level intermediate table with No Error, latest CS BL and EL records in separate rows, linked with all students and global fields."
+    columns:
+      - name: cs_id
+        description: "The primary key of this table"
+        tests:
+          - unique
+          - not_null
+
+  - name: int_cs_pivot
+    description: "A student-level intermediate table with No Error, latest CS records and BL, EL in the same row."
+    columns:
+      - name: assessment_barcode
+        description: "The primary key of this table"
+        tests:
+          - unique
+          - not_null
+  
+  - name: int_student_global_cs_pivot
+    description: "A student-level intermediate table with No Error, latest CS BL and ELrecords in the same row, linked with all students and global fields."
+    columns:
+      - name: student_barcode
+        description: "The primary key of this table"
+        tests:
+          - unique
+          - not_null
+
+  - name: int_fp_latest
+    description: "A student-record_type level intermediate table with No Error, latest FP records in separate rows for BL and EL."
+    columns:
+      - name: fp_id
+        description: "The primary key of this table"
+        tests:
+          - unique
+          - not_null
+  
+  - name: int_student_global_fp_latest
+    description: "A student-record_type level intermediate table with No Error, latest FP BL and EL records in separate rows, linked with all students and global fields."
+    columns:
+      - name: fp_id
+        description: "The primary key of this table"
+        tests:
+          - unique
+          - not_null
+
+  - name: int_fp_pivot
+    description: "A student-level intermediate table with No Error, latest FP records and BL, EL in the same row."
+    columns:
+      - name: assessment_barcode
+        description: "The primary key of this table"
+        tests:
+          - unique
+          - not_null
+  
+  - name: int_student_global_fp_pivot
+    description: "A student-level intermediate table with No Error, latest FP BL and ELrecords in the same row, linked with all students and global fields."
+    columns:
+      - name: student_barcode
+        description: "The primary key of this table"
+        tests:
+          - unique
+          - not_null
+
+  - name: int_saf_latest
+    description: "A student-level intermediate table with No Error, latest SAF records."
+    columns:
+      - name: assessment_barcode
+        description: "The primary key of this table"
+        tests:
+          - unique
+          - not_null
+  
+  - name: int_student_global_saf
+    description: "A student-level intermediate table with No Error, latest SAF records, linked with all students and global fields."
+    columns:
+      - name: student_barcode
+        description: "The primary key of this table"
+        tests:
+          - unique
+          - not_null
+
+  - name: int_sar_latest
+    description: "A student-level intermediate table with No Error, latest SAR records."
+    columns:
+      - name: assessment_barcode
+        description: "The primary key of this table"
+        tests:
+          - unique
+          - not_null
+  
+  - name: int_student_global_sar
+    description: "A student-level intermediate table with No Error, latest SAR records, linked with all students and global fields."
+    columns:
+      - name: student_barcode
+        description: "The primary key of this table"
+        tests:
+          - unique
+          - not_null
+
+  - name: int_assessment_raw
+    description: "A student-level, raw master table with all No Error, latest assessments combined in the same row."
+    columns:
+      - name: assessment_barcode
+        description: "The primary key of this table"
+        tests:
+          - unique
+          - not_null
+
+  - name: int_assessment
+    description: "A student-level, compact master table with all No Error, latest assessments combined in the same row."
+    columns:
+      - name: assessment_barcode
+        description: "The primary key of this table"
+        tests:
+          - unique
+          - not_null
+
+  - name: int_student_global_assessment
+    description: "A student-level, compact master table with all No Error, latest assessments combined in the same row and linked with all students and global fields."
+    columns:
+      - name: student_barcode
+        description: "The primary key of this table"
+        tests:
+          - unique
+          - not_null
+
+  - name: int_student_global_assessment_status
+    description: "A student-level, compact master table with upload status of all No Error, latest assessments combined and linked with all students and global fields."
+    columns:
+      - name: student_barcode
+        description: "The primary key of this table"
+        tests:
+          - unique
+          - not_null
+  
+     
+
+
  
   
  

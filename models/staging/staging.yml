@@ -1,74 +1,186 @@
 version: 2
 models:
   - name: stg_student
-    description: A
+    description: "A student-level staging table derived from SF Source Contact with details of all students."
     columns:
-      - name: batches_id
+      - name: student_id
         description: "The primary key for this table"
         tests:
           - unique
           - not_null
-  - name: stg_cdm1
-    # description:
+      - name: first_barcode
+        description: "The secondary key for this table"
+        tests:
+          - unique
+          - not_null
+
+  - name: stg_batch
+    description: "A batch-level staging table derived from SF Source Batch__c with details of all batches."
     columns:
-      - name: cdm1_id
+      - name: batch_id
         description: "The primary key for this table"
         tests:
           - unique
           - not_null
-  - name: stg_cdm2
-    # description:
+      - name: batch_no
+        description: "The secondary key for this table"
+        tests:
+          - unique
+          - not_null
+
+  - name: stg_school
+    description: "A school-level staging table derived from SF Source Account with details of all schools."
     columns:
-      - name: cdm2_id
+      - name: school_id
         description: "The primary key for this table"
         tests:
           - unique
           - not_null
-  - name: stg_contacts
-    # description:
+
+  - name: stg_facilitator
+    description: "A facilitator-level staging table derived from SF Source Contact with details of all facilitators."
     columns:
-      - name: contact_id
+      - name: facilitator_id
         description: "The primary key for this table"
         tests:
           - unique
           - not_null
-  - name: stg_recordtypes
-    # description:
+
+  - name: stg_donor
+    description: "A donor-level staging table derived from SF Source Account with details of all donors."
     columns:
-      - name: record_type_id
-        description: "The primary key of this table"
+      - name: donor_id
+        description: "The primary key for this table"
         tests:
           - unique
           - not_null
-  - name: stg_session_attendance
-    # description:
-    columns:
-      - name: session_attendance_id
-        description: "The primary key of this table"
-        tests:
-          - unique
-          - not_null
-  - name: stg_sessions
-    # description:
+
+  - name: stg_session
+    description: "A session-level staging table derived from SF Source Session__c with details of all sessions."
     columns:
       - name: session_id
         description: "The primary key of this table"
         tests:
           - unique
           - not_null
-  - name: stg_trainer
-    # description:
+
+  - name: stg_somrt
+    description: "A session-omr_type-level staging table derived from SF Source Session_OMR_Type__c with session-wise receiving status of all OMR types."
     columns:
-      - name: contact_id
+      - name: somrt_id
         description: "The primary key of this table"
         tests:
           - unique
           - not_null
-  - name: stg_session_omr_type
-    # description:
+
+  - name: stg_attendance
+    description: "A student-level staging table derived from SF Source Session_Attendance__c with session-wise attendance of all students."
     columns:
-      - name: session_omr_type_id
+      - name: attendance_id
         description: "The primary key of this table"
         tests:
           - unique
           - not_null
+
+  - name: stg_cdm1
+    description: "A student-level staging table derived from SF Source OMR_Assessment__c with details of all CDM1 uploads."
+    columns:
+      - name: cdm1_id
+        description: "The primary key for this table"
+        tests:
+          - unique
+          - not_null
+      - name: cdm1_no
+        description: "The secondary key for this table"
+        tests:
+          - unique
+          - not_null   
+          
+  - name: stg_cdm2
+    description: "A student-level staging table derived from SF Source CDM2__c with details of all CDM2 uploads."
+    columns:
+      - name: cdm2_id
+        description: "The primary key for this table"
+        tests:
+          - unique
+          - not_null
+      - name: cdm2_no
+        description: "The secondary key for this table"
+        tests:
+          - unique
+          - not_null
+
+  - name: stg_cp
+    description: "A student-level staging table derived from SF Source Career_Planning__c with details of all CP uploads."
+    columns:
+      - name: cp_id
+        description: "The primary key for this table"
+        tests:
+          - unique
+          - not_null
+      - name: cp_no
+        description: "The secondary key for this table"
+        tests:
+          - unique
+          - not_null
+
+  - name: stg_cs
+    description: "A student-level staging table derived from SF Source Career_Skill__c with details of all CS uploads."
+    columns:
+      - name: cs_id
+        description: "The primary key for this table"
+        tests:
+          - unique
+          - not_null
+      - name: cs_no
+        description: "The secondary key for this table"
+        tests:
+          - unique
+          - not_null
+
+  - name: stg_fp
+    description: "A student-level staging table derived from SF Source Future_Planning__c with details of all FP uploads."
+    columns:
+      - name: fp_id
+        description: "The primary key for this table"
+        tests:
+          - unique
+          - not_null
+      - name: fp_no
+        description: "The secondary key for this table"
+        tests:
+          - unique
+          - not_null
+
+  - name: stg_saf
+    description: "A student-level staging table derived from SF Source Self_Awareness_and_Feedback__c with details of all SAF uploads."
+    columns:
+      - name: saf_id
+        description: "The primary key for this table"
+        tests:
+          - unique
+          - not_null
+      - name: saf_no
+        description: "The secondary key for this table"
+        tests:
+          - unique
+          - not_null
+
+  - name: stg_sar
+    description: "A student-level staging table derived from SF Source Self_Awareness_Realities__c with details of all SAR uploads."
+    columns:
+      - name: sar_id
+        description: "The primary key for this table"
+        tests:
+          - unique
+          - not_null
+      - name: sar_no
+        description: "The secondary key for this table"
+        tests:
+          - unique
+          - not_null
+      - name: record_type
+        description: "The secondary key for this table"
+        tests:
+          - accepted_values:
+              values: ['Baseline']
