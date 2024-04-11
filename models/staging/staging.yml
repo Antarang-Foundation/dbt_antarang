@@ -13,6 +13,42 @@ models:
         tests:
           - unique
           - not_null
+      - name: g9_barcode
+        description: "The secondary key for this table"
+        tests:
+          - unique
+          - not_null
+      - name: g10_barcode
+        description: "The secondary key for this table"
+        tests:
+          - unique
+          - not_null
+      - name: g11_barcode
+        description: "The secondary key for this table"
+        tests:
+          - unique
+          - not_null
+      - name: g12_barcode
+        description: "The secondary key for this table"
+        tests:
+          - unique
+          - not_null
+      - name: g9_batch_id
+        description: "The secondary key for this table"
+        tests:
+          - not_null
+      - name: g10_batch_id
+        description: "The secondary key for this table"
+        tests:
+          - not_null
+      - name: g11_batch_id
+        description: "The secondary key for this table"
+        tests:
+          - not_null
+      - name: g12_batch_id
+        description: "The secondary key for this table"
+        tests:
+          - not_null
 
   - name: stg_batch
     description: "A batch-level staging table derived from SF Source Batch__c with details of all batches."
@@ -36,6 +72,11 @@ models:
         tests:
           - unique
           - not_null
+      - name: school_name
+        description: "The primary key for this table"
+        tests:
+          - unique
+          - not_null
 
   - name: stg_facilitator
     description: "A facilitator-level staging table derived from SF Source Contact with details of all facilitators."
@@ -45,11 +86,21 @@ models:
         tests:
           - unique
           - not_null
+      - name: facilitator_name
+        description: "The primary key for this table"
+        tests:
+          - unique
+          - not_null
 
   - name: stg_donor
     description: "A donor-level staging table derived from SF Source Account with details of all donors."
     columns:
       - name: donor_id
+        description: "The primary key for this table"
+        tests:
+          - unique
+          - not_null
+      - name: donor_name
         description: "The primary key for this table"
         tests:
           - unique

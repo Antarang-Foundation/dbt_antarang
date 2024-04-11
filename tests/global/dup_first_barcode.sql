@@ -1,0 +1,1 @@
+{{ single_field_duplicates('stg_student', 'first_barcode') }}

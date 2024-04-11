@@ -1,0 +1,1 @@
+{{ double_field_duplicates('stg_cdm1', 'assessment_barcode', 'record_type') }}

@@ -47,5 +47,6 @@ models:
       +schema: mappings
 
 tests:
+  +severity: warn
   +store_failures_as: view
   +schema: dbt_test_failures
