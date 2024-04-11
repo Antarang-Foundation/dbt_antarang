@@ -8,6 +8,11 @@ models:
         tests:
            - unique
            - not_null
+      - name: student_batch_id
+        description: "A foreign key linking students with batches, and through batches with schools, donors, and facilitators. Null implies batches without students."
+        tests:
+           - unique
+           - not_null
 
   - name: int_global
     description: "A batch-level intermediate table with each batch linked to school, donor, and facilitator."
@@ -17,6 +22,38 @@ models:
         tests:
            - unique
            - not_null
+      - name: batch_no
+        description: "The secondary key for this table"
+        tests:
+           - unique
+           - not_null
+      - name: batch_school_id
+        description: "A foreign key linking batches with schools. Null implies schools without batches."
+        tests:
+           - not_null
+      - name: school_id
+        description: "A foreign key linking batches with schools. Null implies batches without schools."
+        tests:
+           - unique
+           - not_null
+      - name: batch_facilitator_id
+        description: "A foreign key linking batches with facilitators. Null implies facilitators without batches."
+        tests:
+           - not_null
+      - name: facilitator_id
+        description: "A foreign key linking batches with facilitators. Null implies batches without facilitators."
+        tests:
+           - unique
+           - not_null
+      - name: batch_donor_id
+        description: "A foreign key linking batches with donors. Null implies donors without batches."
+        tests:
+           - not_null
+      - name: donor_id
+        description: "A foreign key linking batches with donors. Null implies batches without donors."
+        tests:
+           - unique
+           - not_null    
            
   - name: int_student_global
     description: "A student-grade level intermediate table with multiple grade rows for each student, linked with batch, school, donor, and facilitator."
@@ -26,6 +63,49 @@ models:
         tests:
           - unique
           - not_null
+      - name: student_batch_id
+        description: "A foreign key linking students with batches, and through batches with schools, donors, and facilitators. Null implies batches without students."
+        tests:
+           - unique
+           - not_null
+      - name: batch_id
+        description: "A foreign key linking students with batches, and through batches with schools, donors, and facilitators. Null implies students without batches."
+        tests:
+           - unique
+           - not_null
+      - name: batch_no
+        description: "A secondary, foreign key linking students with batches, and through batches with schools, donors, and facilitators. Null implies students without batches."
+        tests:
+           - unique
+           - not_null
+      - name: batch_school_id
+        description: "A foreign key linking batches with schools. Null implies schools without batches."
+        tests:
+           - not_null
+      - name: school_id
+        description: "A foreign key linking batches with schools. Null implies batches without schools."
+        tests:
+           - unique
+           - not_null
+      - name: batch_facilitator_id
+        description: "A foreign key linking batches with facilitators. Null implies facilitators without batches."
+        tests:
+           - not_null
+      - name: facilitator_id
+        description: "A foreign key linking batches with facilitators. Null implies batches without facilitators."
+        tests:
+           - unique
+           - not_null
+      - name: batch_donor_id
+        description: "A foreign key linking batches with donors. Null implies donors without batches."
+        tests:
+           - not_null
+      - name: donor_id
+        description: "A foreign key linking batches with donors. Null implies batches without donors."
+        tests:
+           - unique
+           - not_null
+      
 
   - name: int_session
     description: "A student-level master table with batch-session-wise details, status of received OMR types, and student-level attendance."
