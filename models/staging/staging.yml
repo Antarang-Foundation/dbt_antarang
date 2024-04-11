@@ -14,39 +14,39 @@ models:
           - unique
           - not_null
       - name: g9_barcode
-        description: "The secondary key for this table"
+        description: "An important foreign key linking all students with assessments."
         tests:
           - unique
           - not_null
       - name: g10_barcode
-        description: "The secondary key for this table"
+        description: "An important foreign key linking all students with assessments."
         tests:
           - unique
           - not_null
       - name: g11_barcode
-        description: "The secondary key for this table"
+        description: "An important foreign key linking all students with assessments."
         tests:
           - unique
           - not_null
       - name: g12_barcode
-        description: "The secondary key for this table"
+        description: "An important foreign key linking all students with assessments."
         tests:
           - unique
           - not_null
       - name: g9_batch_id
-        description: "The secondary key for this table"
+        description: "An important foreign key linking all students with sessions, batches, schools, donors, and facilitators."
         tests:
           - not_null
       - name: g10_batch_id
-        description: "The secondary key for this table"
+        description: "An important foreign key linking all students with sessions, batches, schools, donors, and facilitators."
         tests:
           - not_null
       - name: g11_batch_id
-        description: "The secondary key for this table"
+        description: "An important foreign key linking all students with sessions, batches, schools, donors, and facilitators."
         tests:
           - not_null
       - name: g12_batch_id
-        description: "The secondary key for this table"
+        description: "An important foreign key linking all students with sessions, batches, schools, donors, and facilitators."
         tests:
           - not_null
 
@@ -73,7 +73,7 @@ models:
           - unique
           - not_null
       - name: school_name
-        description: "The primary key for this table"
+        description: "The secondary key for this table"
         tests:
           - unique
           - not_null
@@ -87,7 +87,7 @@ models:
           - unique
           - not_null
       - name: facilitator_name
-        description: "The primary key for this table"
+        description: "The secondary key for this table"
         tests:
           - unique
           - not_null
@@ -101,7 +101,7 @@ models:
           - unique
           - not_null
       - name: donor_name
-        description: "The primary key for this table"
+        description: "The secondary key for this table"
         tests:
           - unique
           - not_null
@@ -216,6 +216,11 @@ models:
         tests:
           - unique
           - not_null
+      - name: record_type
+        description: "The secondary key for this table"
+        tests:
+          - accepted_values:
+              values: ['Baseline']
 
   - name: stg_sar
     description: "A student-level staging table derived from SF Source Self_Awareness_Realities__c with details of all SAR uploads."
