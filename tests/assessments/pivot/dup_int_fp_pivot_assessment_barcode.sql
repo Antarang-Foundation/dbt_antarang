@@ -1,0 +1,1 @@
+{{ single_field_duplicates('int_fp_pivot', 'assessment_barcode') }}

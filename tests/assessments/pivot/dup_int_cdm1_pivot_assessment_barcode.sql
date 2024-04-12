@@ -1,0 +1,1 @@
+{{ single_field_duplicates('int_cdm1_pivot', 'assessment_barcode') }}

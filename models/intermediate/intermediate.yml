@@ -11,7 +11,6 @@ models:
       - name: student_batch_id
         description: "A foreign key linking students with batches, and through batches with schools, donors, and facilitators. Null implies batches without students."
         tests:
-           - unique
            - not_null
 
   - name: int_global
@@ -34,7 +33,6 @@ models:
       - name: school_id
         description: "A foreign key linking batches with schools. Null implies batches without schools."
         tests:
-           - unique
            - not_null
       - name: batch_facilitator_id
         description: "A foreign key linking batches with facilitators. Null implies facilitators without batches."
@@ -43,7 +41,6 @@ models:
       - name: facilitator_id
         description: "A foreign key linking batches with facilitators. Null implies batches without facilitators."
         tests:
-           - unique
            - not_null
       - name: batch_donor_id
         description: "A foreign key linking batches with donors. Null implies donors without batches."
@@ -52,7 +49,6 @@ models:
       - name: donor_id
         description: "A foreign key linking batches with donors. Null implies batches without donors."
         tests:
-           - unique
            - not_null    
            
   - name: int_student_global
@@ -66,17 +62,14 @@ models:
       - name: student_batch_id
         description: "A foreign key linking students with batches, and through batches with schools, donors, and facilitators. Null implies batches without students."
         tests:
-           - unique
            - not_null
       - name: batch_id
         description: "A foreign key linking students with batches, and through batches with schools, donors, and facilitators. Null implies students without batches."
         tests:
-           - unique
            - not_null
       - name: batch_no
         description: "A secondary, foreign key linking students with batches, and through batches with schools, donors, and facilitators. Null implies students without batches."
         tests:
-           - unique
            - not_null
       - name: batch_school_id
         description: "A foreign key linking batches with schools. Null implies schools without batches."
@@ -85,7 +78,6 @@ models:
       - name: school_id
         description: "A foreign key linking batches with schools. Null implies batches without schools."
         tests:
-           - unique
            - not_null
       - name: batch_facilitator_id
         description: "A foreign key linking batches with facilitators. Null implies facilitators without batches."
@@ -94,7 +86,6 @@ models:
       - name: facilitator_id
         description: "A foreign key linking batches with facilitators. Null implies batches without facilitators."
         tests:
-           - unique
            - not_null
       - name: batch_donor_id
         description: "A foreign key linking batches with donors. Null implies donors without batches."
@@ -103,7 +94,6 @@ models:
       - name: donor_id
         description: "A foreign key linking batches with donors. Null implies batches without donors."
         tests:
-           - unique
            - not_null
       
 
@@ -115,6 +105,46 @@ models:
         tests:
           - unique
           - not_null
+      - name: session_id
+        description: "A foreign key in this table linking with session details."
+        tests:
+          - not_null
+      - name: session_batch_id
+        description: "A foreign key in this table linking with batch details."
+        tests:
+          - not_null
+      - name: session_facilitator_id
+        description: "A foreign key in this table linking with facilitator details."
+        tests:
+          - not_null
+      - name: somrt_id
+        description: "A foreign key in this table linking with session-omr_type details."
+        tests:
+          - not_null
+      - name: somrt_no
+        description: "A secondary foreign key in this table linking with session-omr_type details."
+        tests:
+          - not_null
+      - name: somrt_session_id
+        description: "A foreign key in this table linking with session-omr_type details."
+        tests:
+          - not_null
+      - name: somrt_batch_id
+        description: "A secondary foreign key in this table linking with session-omr_type details."
+        tests:
+          - not_null
+      - name: somrt_batch_no
+        description: "A foreign key in this table linking with session-omr_type details."
+        tests:
+          - not_null
+      - name: attendance_session_id
+        description: "A secondary foreign key in this table linking with student attendance details."
+        tests:
+          - not_null
+      - name: attendance_student_id
+        description: "A foreign key in this table linking with student attendance details."
+        tests:
+          - not_null
 
   - name: int_global_session
     description: "A student-level master table with batch-session-wise details, status of received OMR types, and student-level attendance, linked with global fields."
@@ -123,6 +153,78 @@ models:
         description: "The primary key for this table"
         tests:
           - unique
+          - not_null
+      - name: batch_id
+        description: "A foreign key linking batches with batch details."
+        tests:
+           - not_null
+      - name: batch_no
+        description: "A secondary foreign key linking batches with batch details."
+        tests:
+           - not_null
+      - name: batch_school_id
+        description: "A foreign key linking batches with schools."
+        tests:
+           - not_null
+      - name: school_id
+        description: "A foreign key linking batches with schools."
+        tests:
+           - not_null
+      - name: batch_facilitator_id
+        description: "A foreign key linking batches with facilitators."
+        tests:
+           - not_null
+      - name: facilitator_id
+        description: "A foreign key linking batches with facilitators."
+        tests:
+           - not_null
+      - name: batch_donor_id
+        description: "A foreign key linking batches with donors."
+        tests:
+           - not_null
+      - name: donor_id
+        description: "A foreign key linking batches with donors."
+        tests:
+           - not_null   
+      - name: session_id
+        description: "A foreign key in this table linking with session details."
+        tests:
+          - not_null
+      - name: session_batch_id
+        description: "A foreign key in this table linking with batch details."
+        tests:
+          - not_null
+      - name: session_facilitator_id
+        description: "A foreign key in this table linking with facilitator details."
+        tests:
+          - not_null
+      - name: somrt_id
+        description: "A foreign key in this table linking with session-omr_type details."
+        tests:
+          - not_null
+      - name: somrt_no
+        description: "A secondary foreign key in this table linking with session-omr_type details."
+        tests:
+          - not_null
+      - name: somrt_session_id
+        description: "A foreign key in this table linking with session-omr_type details."
+        tests:
+          - not_null
+      - name: somrt_batch_id
+        description: "A secondary foreign key in this table linking with session-omr_type details."
+        tests:
+          - not_null
+      - name: somrt_batch_no
+        description: "A foreign key in this table linking with session-omr_type details."
+        tests:
+          - not_null
+      - name: attendance_session_id
+        description: "A secondary foreign key in this table linking with student attendance details."
+        tests:
+          - not_null
+      - name: attendance_student_id
+        description: "A foreign key in this table linking with student attendance details."
+        tests:
           - not_null
 
   - name: int_student_global_session
@@ -133,11 +235,98 @@ models:
         tests:
           - unique
           - not_null
+      - name: student_barcode
+        description: "The secondary key for this table"
+        tests:
+          - unique
+          - not_null
+      - name: student_batch_id
+        description: "A foreign key linking students with batches, and through batches with schools, donors, and facilitators."
+        tests:
+           - unique
+           - not_null
+      - name: batch_id
+        description: "A foreign key linking with batch details."
+        tests:
+           - not_null
+      - name: batch_no
+        description: "A secondary foreign key linking with batch details."
+        tests:
+           - not_null
+      - name: batch_school_id
+        description: "A foreign key linking batches with schools."
+        tests:
+           - not_null
+      - name: school_id
+        description: "A secondary foreign key linking batches with schools."
+        tests:
+           - not_null
+      - name: batch_facilitator_id
+        description: "A foreign key linking batches with facilitators."
+        tests:
+           - not_null
+      - name: facilitator_id
+        description: "A secondary foreign key linking batches with facilitators."
+        tests:
+           - not_null
+      - name: batch_donor_id
+        description: "A foreign key linking batches with donors."
+        tests:
+           - not_null
+      - name: donor_id
+        description: "A secondary foreign key linking batches with donors."
+        tests:
+           - not_null   
+      - name: session_id
+        description: "A foreign key in this table linking with session details."
+        tests:
+          - not_null
+      - name: session_batch_id
+        description: "A foreign key in this table linking sessions with batch details."
+        tests:
+          - not_null
+      - name: session_facilitator_id
+        description: "A foreign key in this table linking sessions with facilitator details."
+        tests:
+          - not_null
+      - name: somrt_id
+        description: "A foreign key in this table linking with session-omr_type details."
+        tests:
+          - not_null
+      - name: somrt_no
+        description: "A secondary foreign key in this table linking with session-omr_type details."
+        tests:
+          - not_null
+      - name: somrt_session_id
+        description: "A foreign key in this table linking sessions with session-omr_type details."
+        tests:
+          - not_null
+      - name: somrt_batch_id
+        description: "A foreign key in this table linking batches with session-omr_type details."
+        tests:
+          - not_null
+      - name: somrt_batch_no
+        description: "A secondary foreign key in this table linking batches with session-omr_type details."
+        tests:
+          - not_null
+      - name: attendance_session_id
+        description: "A secondary foreign key in this table linking sessions with student attendance details."
+        tests:
+          - not_null
+      - name: attendance_student_id
+        description: "A foreign key in this table linking students with student attendance details."
+        tests:
+          - not_null
 
   - name: int_cdm1_latest
     description: "A student-record_type level intermediate table with No Error, latest CDM1 records in separate rows for BL and EL."
     columns:
       - name: cdm1_id
+        description: "The primary key of this table"
+        tests:
+          - unique
+          - not_null
+      - name: cdm1_no
         description: "The primary key of this table"
         tests:
           - unique
@@ -151,6 +340,7 @@ models:
         tests:
           - unique
           - not_null
+      
 
   - name: int_cdm1_pivot
     description: "A student-level intermediate table with No Error, latest CDM1 records and BL, EL in the same row."
@@ -174,6 +364,11 @@ models:
     description: "A student-record_type level intermediate table with No Error, latest CDM2 records in separate rows for BL and EL."
     columns:
       - name: cdm2_id
+        description: "The primary key of this table"
+        tests:
+          - unique
+          - not_null
+      - name: cdm2_no
         description: "The primary key of this table"
         tests:
           - unique
@@ -214,6 +409,11 @@ models:
         tests:
           - unique
           - not_null
+      - name: cp_no
+        description: "The primary key of this table"
+        tests:
+          - unique
+          - not_null
   
   - name: int_student_global_cp_latest
     description: "A student-record_type level intermediate table with No Error, latest CP BL and EL records in separate rows, linked with all students and global fields."
@@ -246,6 +446,11 @@ models:
     description: "A student-record_type level intermediate table with No Error, latest CS records in separate rows for BL and EL."
     columns:
       - name: cs_id
+        description: "The primary key of this table"
+        tests:
+          - unique
+          - not_null
+      - name: cs_no
         description: "The primary key of this table"
         tests:
           - unique
@@ -286,6 +491,11 @@ models:
         tests:
           - unique
           - not_null
+      - name: fp_no
+        description: "The primary key of this table"
+        tests:
+          - unique
+          - not_null
   
   - name: int_student_global_fp_latest
     description: "A student-record_type level intermediate table with No Error, latest FP BL and EL records in separate rows, linked with all students and global fields."
@@ -322,6 +532,16 @@ models:
         tests:
           - unique
           - not_null
+      - name: saf_id
+        description: "A secondary key of this table"
+        tests:
+          - unique
+          - not_null
+      - name: saf_no
+        description: "A secondary key of this table"
+        tests:
+          - unique
+          - not_null
   
   - name: int_student_global_saf
     description: "A student-level intermediate table with No Error, latest SAF records, linked with all students and global fields."
@@ -337,6 +557,16 @@ models:
     columns:
       - name: assessment_barcode
         description: "The primary key of this table"
+        tests:
+          - unique
+          - not_null
+      - name: sar_id
+        description: "A secondary key of this table"
+        tests:
+          - unique
+          - not_null
+      - name: sar_no
+        description: "A secondary key of this table"
         tests:
           - unique
           - not_null

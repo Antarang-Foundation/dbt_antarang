@@ -1,0 +1,1 @@
+{{ double_field_duplicates('int_cp_latest', 'assessment_barcode', 'record_type') }}

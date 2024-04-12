@@ -63,6 +63,18 @@ models:
         tests:
           - unique
           - not_null
+      - name: batch_school_id
+        description: "A foreign key linking batches to schools."
+        tests:
+          - not_null
+      - name: batch_facilitator_id
+        description: "A foreign key linking batches to facilitators."
+        tests:
+          - not_null
+      - name: batch_donor_id
+        description: "A foreign key linking batches to donors."
+        tests:
+          - not_null
 
   - name: stg_school
     description: "A school-level staging table derived from SF Source Account with details of all schools."
@@ -114,6 +126,14 @@ models:
         tests:
           - unique
           - not_null
+      - name: session_batch_id
+        description: "A foreign key in the table linking with batch_name and through this with global fields."
+        tests:
+          - not_null
+      - name: session_facilitator_id
+        description: "A foreign key in the table linking with facilitator_name."
+        tests:
+          - not_null
 
   - name: stg_somrt
     description: "A session-omr_type-level staging table derived from SF Source Session_OMR_Type__c with session-wise receiving status of all OMR types."
@@ -123,6 +143,24 @@ models:
         tests:
           - unique
           - not_null
+      - name: somrt_no
+        description: "The secondary key of this table"
+        tests:
+          - unique
+          - not_null
+      - name: somrt_session_id
+        description: "A foreign key in the table linking with session details."
+        tests:
+          - not_null
+      - name: somrt_batch_id
+        description: "A foreign key in the table linking with batch details."
+        tests:
+          - not_null
+      - name: somrt_batch_no
+        description: "A secondary foreign key in the table linking with batch details."
+        tests:
+          - not_null
+
 
   - name: stg_attendance
     description: "A student-level staging table derived from SF Source Session_Attendance__c with session-wise attendance of all students."
@@ -132,6 +170,15 @@ models:
         tests:
           - unique
           - not_null
+      - name: attendance_session_id
+        description: "A foreign key in the table linking with session details."
+        tests:
+          - not_null
+      - name: attendance_student_id
+        description: "A foreign key in the table linking with student details."
+        tests:
+          - not_null
+        
 
   - name: stg_cdm1
     description: "A student-level staging table derived from SF Source OMR_Assessment__c with details of all CDM1 uploads."
