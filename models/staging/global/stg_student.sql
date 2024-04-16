@@ -57,7 +57,7 @@ recordtypes as (select record_type_id, record_type from {{ ref('seed_recordtype'
         select * except (record_type_id)
         from 
             renamed
-            left join recordtypes using (record_type_id) where record_type = 'CA Student'
+            left join recordtypes using (record_type_id) where record_type = 'CA Student' and first_barcode is not null
             order by first_barcode
     )
     

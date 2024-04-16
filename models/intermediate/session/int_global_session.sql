@@ -1,26 +1,4 @@
-with
+with t1 as (select * from {{ref('int_global')}}),
+t2 as (select * from {{ref('int_session')}})
 
-t0 as (select * from {{ ref('int_student_global_session')}}),
-
-t1 as (select distinct batch_id, batch_no, batch_academic_year, batch_grade, batch_language, no_of_students_facilitated, facilitator_name, 
-batch_school_id, batch_donor_id, batch_facilitator_id,  
-
-donor_id, facilitator_id,
-
-school_id, school_name, school_taluka, school_ward, school_district, school_state, school_partner, batch_donor, 
-
-session_id, session_batch_id, session_facilitator_id, session_code, session_name, session_type, session_date, session_grade, session_no, omr_required, 
-omrs_received, total_student_present, total_parent_present, log_reason, attendance_submitted, present_count, attendance_count, payment_status, 
-deferred_reason, invoice_date, session_amount, no_of_sessions_no_of_units, total_amount,
-
-somrt_id, somrt_no, somrt_session_id, somrt_batch_id, omr_type, omr_assessment_object, omr_assessment_count, omr_assessment_record_type, somrt_batch_no, 
-first_omr_upload_date, omr_received_count, omr_received_date, omr_received_by, number_of_students_in_batch,
-
-attendance_id, attendance_student_id, attendance_session_id, attendance_no, attendance_status, attendance_date, attendance_time, guardian_attendance
-
-from t0 
-
-where batch_id is not null 
-order by batch_id, session_id, attendance_student_id)
-
-select * from t1 
+select * from t1 full outer join t2 on t1.batch_id = t2.session_batch_id order by batch_id, session_id, somrt_id, attendance_id
