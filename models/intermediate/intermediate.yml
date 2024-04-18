@@ -97,7 +97,7 @@ models:
            - not_null
       
 
-  - name: int_session
+  - name: int_session_combined
     description: "A student-level master table with batch-session-wise details, status of received OMR types, and student-level attendance."
     columns:
       - name: attendance_id
@@ -146,7 +146,7 @@ models:
         tests:
           - not_null
 
-  - name: int_global_session
+  - name: int_global_session_combined
     description: "A student-level master table with batch-session-wise details, status of received OMR types, and student-level attendance, linked with global fields."
     columns:
       - name: attendance_id
@@ -227,7 +227,7 @@ models:
         tests:
           - not_null
 
-  - name: int_student_global_session
+  - name: int_student_global_session_combined
     description: "A student-level master table with batch-session-wise details, status of received OMR types, and student-level attendance, linked with all students and global fields."
     columns:
       - name: attendance_id

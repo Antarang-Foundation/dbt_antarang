@@ -222,7 +222,7 @@ union all
 
 (with 
 
-t0 as (select * from {{ ref("int_session") }}),
+t0 as (select * from {{ ref("int_session_combined") }}),
 
 t1 as (SELECT column_name, (COUNT(DISTINCT val)) AS distinct_count
 FROM (
@@ -244,7 +244,7 @@ union all
 
 (with 
 
-t0 as (select * from {{ ref("int_student_global_session") }}),
+t0 as (select * from {{ ref("int_student_global_session_combined") }}),
 
 t1 as (SELECT column_name, (COUNT(DISTINCT val)) AS distinct_count
 FROM (
@@ -266,7 +266,7 @@ union all
 
 (with 
 
-t0 as (select * from {{ ref("int_global_session") }}),
+t0 as (select * from {{ ref("int_global_session_combined") }}),
 
 t1 as (SELECT column_name, (COUNT(DISTINCT val)) AS distinct_count
 FROM (
