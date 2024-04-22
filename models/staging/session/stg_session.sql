@@ -1,8 +1,8 @@
 with
-    source as (
+    t0 as (
         select * from {{ source('salesforce', 'Session__c') }}
     ),
-    renamed as (
+    t1 as (
         select
             Id as session_id,
             Batch__c as session_batch_id,
@@ -33,8 +33,10 @@ with
             /* TDS_Deduction__c as tds_deduction */
 
 
-        from source
-    )
+        from t0
+    ),
 
-select * from renamed
+    t2 as (select *, MAX(total_student_present) OVER (PARTITION BY session_batch_id) AS max_reach from t1)
+
+select * from t2 
 order by session_batch_id, session_id
