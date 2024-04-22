@@ -36,7 +36,7 @@ with
         from t0
     ),
 
-    t2 as (select *, MAX(total_student_present) OVER (PARTITION BY session_batch_id) AS max_reach from t1)
+    t2 as (select *, MAX(total_student_present) OVER (PARTITION BY session_batch_id) AS max_attendance from t1)
 
 select * from t2 
 order by session_batch_id, session_id
