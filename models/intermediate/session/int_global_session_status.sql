@@ -3,10 +3,18 @@ with
 t1 as (SELECT batch_no, batch_donor, school_partner, school_state, school_district, school_ward, school_taluka, school_name, facilitator_name, 
 batch_academic_year, batch_grade, session_grade, batch_language, 
 
-count(distinct session_no) `expected_sessions`, count(distinct case when session_date is not null then session_id end) `scheduled_sessions`,
+max(no_of_students_facilitated) `batch_strength`, 
+max(total_student_present) `max_overall_attendance`, 
+
+count(distinct session_no) `expected_sessions`, 
+count(distinct case when session_date is not null then session_id end) `scheduled_sessions`,
 count(distinct case when session_date is not null and total_student_present > 0 then session_id end) `conducted_sessions`, 
 
-max(no_of_students_facilitated) `batch_strength`, max(total_student_present) `max_overall_attendance` 
+round(100*safe_divide(count(distinct case when session_date is not null then session_code end), count(distinct session_code)), 1) `pct_scheduled_vs_expected`,
+
+round(100*safe_divide(count(distinct case when session_date is not null and total_student_present > 0 then session_code end), count(distinct case when session_date is not null then session_code end)), 1) `pct_conducted_vs_scheduled`,
+
+round(100*safe_divide(count(distinct case when session_date is not null and total_student_present > 0 then session_code end), count(distinct session_code)), 1) `pct_conducted_vs_expected`
 
 FROM {{ref('int_global_session')}} 
 
