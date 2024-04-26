@@ -32,11 +32,23 @@ with
             Total_Amount__c as total_amount,
             /* TDS_Deduction__c as tds_deduction */
 
-
         from t0
     ),
 
-    t2 as (select *, MAX(total_student_present) OVER (PARTITION BY session_batch_id) AS max_attendance from t1)
+    t2 as (select *, 
+    
+    count(distinct session_code) OVER (PARTITION BY session_batch_id) `batch_expected_sessions`,
 
-select * from t2 
+    count(distinct case when session_date is not null then session_code end) OVER (PARTITION BY session_batch_id) `batch_scheduled_sessions`,
+
+    count(distinct case when session_date is not null and total_student_present > 0 then session_code end) OVER (PARTITION BY session_batch_id) `batch_completed_sessions`,
+
+    max(total_student_present) OVER (PARTITION BY session_batch_id) `batch_max_session_attendance`,
+
+    avg(case when session_type = 'Student' then  total_student_present when session_type = 'Parent' then total_parent_present when session_type = 'Counseling' then total_student_present end) OVER (PARTITION BY session_batch_id order by session_type) `batch_session_type_based_avg_overall_attendance`
+    from t1  
+    
+    )
+
+select * from t2
 order by session_batch_id, session_id

@@ -21,5 +21,4 @@ renamed as (
 )
 
 select * from renamed
-where attendance_status is not null
 order by attendance_student_id, attendance_session_id

@@ -1,6 +1,6 @@
 with 
 
-t0 as (select * from {{ ref('stg_cdm2') }} where error_status = 'No Error' and data_cleanup = true and marks_recalculated = true and student_linked = true),
+t0 as (select * from {{ ref('stg_cdm2') }} where data_cleanup = true and marks_recalculated = true and student_linked = true),
 
 t1 as (
   SELECT 
