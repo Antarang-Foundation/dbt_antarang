@@ -1,16 +1,19 @@
 with 
 
 t1 as (select * from {{ref('int_global')}}),
+
 t2 as (select * from {{ref('stg_somrt')}}),
+
 t3 as (select session_id, session_facilitator_id, omr_required, omrs_received, total_student_present, total_parent_present, attendance_count, 
 present_count from {{ref('stg_session')}}),
+
 t4 as (select * from t2 full outer join t3 on t2.somrt_session_id = t3.session_id),
 t5 as (select * from t1 full outer join t4 on t1.batch_id = t4.somrt_batch_id order by batch_id, omr_type), 
 
 t6 as (select batch_id, count(*) `total_students`, count(distinct bl_cdm1_no) `bl_cdm1`, count(distinct bl_cdm2_no) `bl_cdm2`, 
 count(distinct bl_cp_no) `bl_cp`, count(distinct bl_cs_no) `bl_cs`, count(distinct bl_fp_no) `bl_fp`, count(distinct el_cdm1_no) `el_cdm1`, 
 count(distinct el_cdm2_no) `el_cdm2`, count(distinct el_cp_no) `el_cp`, count(distinct el_cs_no) `el_cs`, count(distinct el_fp_no) `el_fp`, 
-count(distinct saf_no) `saf`, count(distinct sar_no) `sar` from {{ref('fct_student_global_assessment_status')}} group by batch_id order by batch_id),
+count(distinct saf_no) `saf`, count(distinct sar_no) `sar` from {{ref('int_student_global_assessment_status')}} group by batch_id order by batch_id),
 
 t7 as (
     
