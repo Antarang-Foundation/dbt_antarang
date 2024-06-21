@@ -15,7 +15,7 @@ assessment_grade, assessment_academic_year, created_from_form,
       regexp_replace(trim(to_json_string(t0), '{}'), r'"[^"]+":null,?', ''), 
       r'"([^"]+)":')) as col
   where col in ('bl_cdm1_no', 'el_cdm1_no', 'bl_cdm2_no', 'el_cdm2_no', 'bl_cp_no', 'el_cp_no', 'bl_cs_no', 'el_cs_no', 
-  'bl_cp_no', 'el_cp_no', 'saf_no', 'sar_no')
+  'bl_fp_no', 'el_fp_no', 'saf_no', 'sar_no') 
   ) as status_col
 )) submissions,
 

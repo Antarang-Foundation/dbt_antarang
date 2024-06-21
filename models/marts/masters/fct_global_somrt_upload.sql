@@ -32,7 +32,7 @@ when t5.omr_type = 'Career Skills A' then t6.bl_cs
 when t5.omr_type = 'Career Skills B' then t6.el_cs
 when t5.omr_type = 'Planning for Future A' then t6.bl_fp
 when t5.omr_type = 'Planning for Future B' then t6.el_fp
-when t5.omr_type = 'Planning for Future B' then t6.el_fp
+/* when t5.omr_type = 'Planning for Future B' then t6.el_fp */
 when t5.omr_type = 'Student Details' then t6.total_students
 end) `omr_upload_count`
 

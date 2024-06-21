@@ -20,6 +20,7 @@ max(batch_completed_sessions) `student_batch_completed_sessions`,
 max(batch_max_session_attendance) `student_batch_max_session_attendance`,
 
 count(distinct case when session_date is not null and total_student_present > 0 and attendance_status = 'Present' then session_code end) `student_present_sessions`,
+count(distinct case when session_date is not null and total_student_present > 0 and attendance_status = 'Absent' then session_code end) `student_absent_sessions`,
 
 FROM t1
 

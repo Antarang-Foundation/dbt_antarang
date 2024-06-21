@@ -16,7 +16,8 @@ with t0 as (
         Enrolled_Grade_10__c as enrolled_g10,
         Enrolled_Grade_11__c as enrolled_g11,
         Enrolled_Grade_12__c as enrolled_g12,
-        Tagged_for_Counselling__c as tagged_for_counselling
+        Tagged_for_Counselling__c as tagged_for_counselling,
+        School_Area__c as school_area
         --Tagged_for_Experiential_Learning__c as Tagged_for_Experiential_Learning,
         --Tagged_for_Digital_Learning__c as Tagged_for_Digital_Learning__c
 
