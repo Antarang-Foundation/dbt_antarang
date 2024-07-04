@@ -10,8 +10,6 @@ count(distinct el_cdm1_no) `el_cdm1_correct`, count(distinct bl_cdm2_no) `bl_cdm
 count(distinct bl_cp_no) `bl_cp_correct`, count(distinct el_cp_no) `el_cp_correct`, count(distinct bl_cs_no) `bl_cs_correct`, 
 count(distinct el_cs_no) `el_cs_correct`, count(distinct bl_fp_no) `bl_fp_correct`, count(distinct el_fp_no) `el_fp_correct`, 
 count(distinct saf_no) `saf_correct`, count(distinct sar_no) `sar_correct` ,
-
-
 from {{ref('fct_student_global_assessment_status')}} where created_from_form=True 
 group by batch_no, batch_academic_year, batch_grade, batch_language, fac_start_date, facilitator_name, school_name, school_academic_year, school_language, school_taluka, 
 school_ward, school_district, school_state, school_partner, batch_donor)
