@@ -1,5 +1,5 @@
 with source as (
-    select * from {{ source('salesforce', 'Batch__c') }}
+    select * from {{ source('salesforce', 'Batch__c') }} where IsDeleted = false
 ),
 
 renamed as (

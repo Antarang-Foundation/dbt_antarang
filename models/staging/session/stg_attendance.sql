@@ -1,5 +1,5 @@
 with source as (
-    select * from {{ source('salesforce', 'Session_Attendance__c') }}
+    select * from {{ source('salesforce', 'Session_Attendance__c') }} where IsDeleted = false
 ),
 
 renamed as (

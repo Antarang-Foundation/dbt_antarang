@@ -1,7 +1,7 @@
 with 
 
 t0 as (
-    select * from {{ source('salesforce', 'OMR_Assessment__c') }}
+    select * from {{ source('salesforce', 'OMR_Assessment__c') }} where IsDeleted = false
 ),
 
 t1 as (

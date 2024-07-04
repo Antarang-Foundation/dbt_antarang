@@ -1,5 +1,5 @@
 with t0 as (
-    select * from {{ source('salesforce', 'Self_Awareness_Realities__c') }}
+    select * from {{ source('salesforce', 'Self_Awareness_Realities__c') }} where IsDeleted = false
 ),
 
 t1 as (

@@ -1,5 +1,5 @@
 with t0 as (
-    select * from {{ source('salesforce', 'Career_Skill__c') }}
+    select * from {{ source('salesforce', 'Career_Skill__c') }} where IsDeleted = false
 ),
 
 t1 as (

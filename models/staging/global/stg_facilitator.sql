@@ -1,5 +1,5 @@
 with source as (
-    select * from {{ source('salesforce', 'Contact') }}
+    select * from {{ source('salesforce', 'Contact') }} where IsDeleted = false
 ),
 
 renamed as (
