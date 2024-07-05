@@ -1,5 +1,5 @@
 with source as (
-    select * from {{ source('salesforce', 'Session_OMR_Type__c') }}
+    select * from {{ source('salesforce', 'Session_OMR_Type__c') }} where IsDeleted = false
 ),
 
 renamed as (

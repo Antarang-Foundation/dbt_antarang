@@ -1,6 +1,6 @@
 with
     t0 as (
-        select * from {{ source('salesforce', 'Session__c') }}
+        select * from {{ source('salesforce', 'Session__c') }} where IsDeleted = false
     ),
     t1 as (
         select
