@@ -45,6 +45,12 @@ models:
       +required_tests: {"unique.x|not_null": 1}
     seeds:
       +schema: mappings
+  ## see docs: https://docs.elementary-data.com/
+  elementary:
+    ## elementary models will be created in the schema '<your_schema>_elementary'
+    +schema: "elementary"
+    ## To disable elementary for dev, uncomment this:
+    # enabled: "{{ target.name in ['prod'] }}"
 
 tests:
   +severity: warn
