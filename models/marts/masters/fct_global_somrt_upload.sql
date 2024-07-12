@@ -37,6 +37,7 @@ when t5.omr_type = 'Student Details' then t6.total_students
 end) `omr_upload_count`
 
 
- from t5 full outer join t6 on t5.batch_id = t6.batch_id order by t5.batch_id, t5.omr_type)
+ /* from t5 full outer join t6 on t5.batch_id = t6.batch_id order by t5.batch_id, t5.omr_type) */
+ from t5 INNER JOIN t6 on t5.batch_id = t6.batch_id order by t5.batch_id, t5.omr_type)
 
  select * from t7
