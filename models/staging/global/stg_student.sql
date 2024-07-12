@@ -48,7 +48,7 @@ renamed as (
 
     from source
 
-    where Full_Name__c not like '%test%' or Full_Name__c not like '%Test%' or Full_Name__c not like '%demo%' or Full_Name__c not like '%Demo%'
+    where Full_Name__c not like '%test%' or Full_Name__c not like '%Test%' 
 ),
 
 recordtypes as (select record_type_id, record_type from {{ ref('seed_recordtype') }}),
