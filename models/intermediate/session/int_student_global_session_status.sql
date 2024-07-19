@@ -24,6 +24,6 @@ count(distinct case when session_date is not null and total_student_present > 0 
 
 FROM t1
 
-group by student_barcode, student_name, batch_no, batch_donor, school_partner, school_state, school_district, school_ward, school_taluka, school_name, facilitator_name, batch_academic_year, batch_grade, session_grade, batch_language)
+group by student_barcode, student_name, batch_no, batch_donor, school_partner, school_state, school_district, school_ward, school_taluka, school_name, facilitator_name, batch_academic_year, batch_grade, session_grade, session_type, batch_language)
 
 select * from t2 
