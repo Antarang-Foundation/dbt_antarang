@@ -9,7 +9,7 @@ from {{ref('int_student_global_session_combined')}}),
 
 t2 as
 
-(select student_barcode, student_name, batch_no, batch_donor, school_partner, school_state, school_district, school_ward, school_taluka, school_name, facilitator_name, batch_academic_year, batch_grade, session_grade, batch_language, 
+(select student_barcode, student_name, batch_no, batch_donor, school_partner, school_state, school_district, school_ward, school_taluka, school_name, facilitator_name, batch_academic_year, batch_grade, session_grade, session_type, batch_language, 
 
 max(school_batches_completing_program) `school_batches_completing_program`,
 max(school_no_of_batches) `school_no_of_batches`,
