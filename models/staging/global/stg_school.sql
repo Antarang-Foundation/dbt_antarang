@@ -3,7 +3,6 @@ with t0 as (
         id as school_id,
         name as school_name,
         RecordTypeId as record_type_id,
-        /* District__c as account_district, */
         Medium_Language_of_Instruction__c as school_language,
         CAST(Academic_Year__c as STRING) as school_academic_year,
         School_Timing__c as school_timing,

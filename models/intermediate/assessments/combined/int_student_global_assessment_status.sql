@@ -3,7 +3,7 @@ with t0 as (select * from {{ref('int_student_global_assessment')}})
 select
 
 student_barcode, student_grade, gender, batch_id, batch_no, batch_academic_year, batch_grade, batch_language, fac_start_date, facilitator_name, school_name, 
-school_academic_year, school_language, school_taluka, school_ward, school_district, school_state, school_partner, batch_donor, assessment_barcode, 
+school_academic_year, school_language, school_taluka, school_ward, school_district, school_state, school_partner, school_area, batch_donor, assessment_barcode, 
 assessment_grade, assessment_academic_year, created_from_form, 
 
 (select regexp_replace(status_col, r'_no', '') from

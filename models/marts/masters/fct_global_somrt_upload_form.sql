@@ -1,7 +1,7 @@
 with t1 as (select * from {{ref('fct_global_assessment_raw_uploads')}}),
 
 t2 as (select batch_no, batch_academic_year, batch_grade, batch_language, fac_start_date, facilitator_name, school_name, school_academic_year, school_language, 
-school_taluka, school_ward, school_district, school_state, school_partner, batch_donor, 
+school_taluka, school_ward, school_district, school_state, school_partner,school_area, batch_donor, 
 
 
 count(distinct student_barcode) `combined_sd`, 
@@ -12,7 +12,7 @@ count(distinct el_cs_no) `el_cs_correct`, count(distinct bl_fp_no) `bl_fp_correc
 count(distinct saf_no) `saf_correct`, count(distinct sar_no) `sar_correct` ,
 from {{ref('fct_student_global_assessment_status')}} where created_from_form=True 
 group by batch_no, batch_academic_year, batch_grade, batch_language, fac_start_date, facilitator_name, school_name, school_academic_year, school_language, school_taluka, 
-school_ward, school_district, school_state, school_partner, batch_donor)
+school_ward, school_district, school_state, school_partner,school_area, batch_donor)
 
 select 
 
@@ -30,6 +30,7 @@ coalesce(t1.school_ward, t2.school_ward) as school_ward,
 coalesce(t1.school_district, t2.school_district) as school_district,
 coalesce(t1.school_state, t2.school_state) as school_state,
 coalesce(t1.school_partner, t2.school_partner) as school_partner,
+coalesce(t1.school_area, t2.school_area) as school_area,
 coalesce(t1.batch_donor, t2.batch_donor) as batch_donor,
 
 stg_cdm1_sd, stg_cdm1_barcodes, bl_cdm1_raw, bl_cdm1_correct, el_cdm1_raw, el_cdm1_correct, 
