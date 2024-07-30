@@ -17,7 +17,8 @@ renamed as (
         OMRs_Received_Count__c as omr_received_count,
         OMR_Received_Date__c as omr_received_date,
         OMR_Received_By__c as omr_received_by,
-        Number_of_Students_in_Batch__c as number_of_students_in_batch
+        Number_of_Students_in_Batch__c as number_of_students_in_batch,
+        --OMR_Submission_Notes__c as omr_submission_notes
          
     from source
 )

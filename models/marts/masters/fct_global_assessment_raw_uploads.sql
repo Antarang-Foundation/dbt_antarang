@@ -1,60 +1,60 @@
 with 
 
 cdm1 as (select batch_no, batch_academic_year, batch_grade, batch_language, fac_start_date, facilitator_name, school_name, school_academic_year, school_language, 
-school_taluka, school_ward, school_district, school_state, school_partner, batch_donor, count(distinct student_barcode) `stg_cdm1_sd`, 
+school_taluka, school_ward, school_district, school_state, school_partner,school_area, batch_donor, count(distinct student_barcode) `stg_cdm1_sd`, 
 count(distinct assessment_barcode) `stg_cdm1_barcodes`, count(distinct case when record_type = 'Baseline' then cdm1_no end) `bl_cdm1_raw`, 
 count(distinct case when record_type = 'Endline' then cdm1_no end) `el_cdm1_raw`
  from {{ref('int_student_global_stg_cdm1')}} where created_from_form=True 
  group by batch_no, batch_academic_year, batch_grade, batch_language, fac_start_date, facilitator_name, school_name, school_academic_year, school_language, school_taluka, 
- school_ward, school_district, school_state, school_partner, batch_donor),
+ school_ward, school_district, school_state, school_partner,school_area, batch_donor),
 
 cdm2 as (select batch_no, batch_academic_year, batch_grade, batch_language, fac_start_date, facilitator_name, school_name, school_academic_year, school_language, 
-school_taluka, school_ward, school_district, school_state, school_partner, batch_donor, count(distinct student_barcode) `stg_cdm2_sd`, 
+school_taluka, school_ward, school_district, school_state, school_partner, school_area, batch_donor, count(distinct student_barcode) `stg_cdm2_sd`, 
 count(distinct assessment_barcode) `stg_cdm2_barcodes`, count(distinct case when record_type = 'Baseline' then cdm2_no end) `bl_cdm2_raw`, 
 count(distinct case when record_type = 'Endline' then cdm2_no end) `el_cdm2_raw`
  from {{ref('int_student_global_stg_cdm2')}} where created_from_form=True 
  group by batch_no, batch_academic_year, batch_grade, batch_language, fac_start_date, facilitator_name, school_name, school_academic_year, school_language, school_taluka, 
- school_ward, school_district, school_state, school_partner, batch_donor),
+ school_ward, school_district, school_state, school_partner,school_area, batch_donor),
 
 cp as (select batch_no, batch_academic_year, batch_grade, batch_language, fac_start_date, facilitator_name, school_name, school_academic_year, school_language, 
-school_taluka, school_ward, school_district, school_state, school_partner, batch_donor, count(distinct student_barcode) `stg_cp_sd`, 
+school_taluka, school_ward, school_district, school_state, school_partner, school_area, batch_donor, count(distinct student_barcode) `stg_cp_sd`, 
 count(distinct assessment_barcode) `stg_cp_barcodes`, count(distinct case when record_type = 'Baseline' then cp_no end) `bl_cp_raw`, 
 count(distinct case when record_type = 'Endline' then cp_no end) `el_cp_raw`
  from {{ref('int_student_global_stg_cp')}} where created_from_form=True 
  group by batch_no, batch_academic_year, batch_grade, batch_language, fac_start_date, facilitator_name, school_name, school_academic_year, school_language, school_taluka, 
- school_ward, school_district, school_state, school_partner, batch_donor),
+ school_ward, school_district, school_state, school_partner, school_area, batch_donor),
 
 cs as (select batch_no, batch_academic_year, batch_grade, batch_language, fac_start_date, facilitator_name, school_name, school_academic_year, school_language, 
-school_taluka, school_ward, school_district, school_state, school_partner, batch_donor, count(distinct student_barcode) `stg_cs_sd`, 
+school_taluka, school_ward, school_district, school_state, school_partner, school_area, batch_donor, count(distinct student_barcode) `stg_cs_sd`, 
 count(distinct assessment_barcode) `stg_cs_barcodes`, count(distinct case when record_type = 'Baseline' then cs_no end) `bl_cs_raw`, 
 count(distinct case when record_type = 'Endline' then cs_no end) `el_cs_raw`
  from {{ref('int_student_global_stg_cs')}} where created_from_form=True 
  group by batch_no, batch_academic_year, batch_grade, batch_language, fac_start_date, facilitator_name, school_name, school_academic_year, school_language, school_taluka, 
- school_ward, school_district, school_state, school_partner, batch_donor),
+ school_ward, school_district, school_state, school_partner, school_area, batch_donor),
 
 fp as (select batch_no, batch_academic_year, batch_grade, batch_language, fac_start_date, facilitator_name, school_name, school_academic_year, school_language, 
-school_taluka, school_ward, school_district, school_state, school_partner, batch_donor, count(distinct student_barcode) `stg_fp_sd`, 
+school_taluka, school_ward, school_district, school_state, school_partner, school_area, batch_donor, count(distinct student_barcode) `stg_fp_sd`, 
 count(distinct assessment_barcode) `stg_fp_barcodes`, count(distinct case when record_type = 'Baseline' then fp_no end) `bl_fp_raw`, 
 count(distinct case when record_type = 'Endline' then fp_no end) `el_fp_raw`
  from {{ref('int_student_global_stg_fp')}} where created_from_form=True 
  group by batch_no, batch_academic_year, batch_grade, batch_language, fac_start_date, facilitator_name, school_name, school_academic_year, school_language, school_taluka, 
- school_ward, school_district, school_state, school_partner, batch_donor),
+ school_ward, school_district, school_state, school_partner, school_area, batch_donor),
 
 saf as (select batch_no, batch_academic_year, batch_grade, batch_language, fac_start_date, facilitator_name, school_name, school_academic_year, school_language, 
-school_taluka, school_ward, school_district, school_state, school_partner, batch_donor, count(distinct student_barcode) `stg_saf_sd`, 
+school_taluka, school_ward, school_district, school_state, school_partner, school_area,batch_donor, count(distinct student_barcode) `stg_saf_sd`, 
 count(distinct assessment_barcode) `stg_saf_barcodes`, count(distinct case when record_type = 'Baseline' then saf_no end) `bl_saf_raw`, 
 count(distinct case when record_type = 'Endline' then saf_no end) `el_saf_raw`
  from {{ref('int_student_global_stg_saf')}} where created_from_form=True 
  group by batch_no, batch_academic_year, batch_grade, batch_language, fac_start_date, facilitator_name, school_name, school_academic_year, school_language, school_taluka, 
- school_ward, school_district, school_state, school_partner, batch_donor),
+ school_ward, school_district, school_state, school_partner, school_area, batch_donor),
 
 sar as (select batch_no, batch_academic_year, batch_grade, batch_language, fac_start_date, facilitator_name, school_name, school_academic_year, school_language, 
-school_taluka, school_ward, school_district, school_state, school_partner, batch_donor, count(distinct student_barcode) `stg_sar_sd`, 
+school_taluka, school_ward, school_district, school_state, school_partner,school_area, batch_donor, count(distinct student_barcode) `stg_sar_sd`, 
 count(distinct assessment_barcode) `stg_sar_barcodes`, count(distinct case when record_type = 'Baseline' then sar_no end) `bl_sar_raw`, 
 count(distinct case when record_type = 'Endline' then sar_no end) `el_sar_raw`
  from {{ref('int_student_global_stg_sar')}} where created_from_form=True 
  group by batch_no, batch_academic_year, batch_grade, batch_language, fac_start_date, facilitator_name, school_name, school_academic_year, school_language, school_taluka, 
- school_ward, school_district, school_state, school_partner, batch_donor),
+ school_ward, school_district, school_state, school_partner, school_area, batch_donor),
 
 fct_global_assessment_raw_uploads as 
 
@@ -74,16 +74,17 @@ coalesce(cdm1.school_ward, cdm2.school_ward, cp.school_ward, cs.school_ward, fp.
 coalesce(cdm1.school_district, cdm2.school_district, cp.school_district, cs.school_district, fp.school_district, saf.school_district, sar.school_district) as school_district,
 coalesce(cdm1.school_state, cdm2.school_state, cp.school_state, cs.school_state, fp.school_state, saf.school_state, sar.school_state) as school_state,
 coalesce(cdm1.school_partner, cdm2.school_partner, cp.school_partner, cs.school_partner, fp.school_partner, saf.school_partner, sar.school_partner) as school_partner,
+coalesce(cdm1.school_area, cdm2.school_area, cp.school_area, cs.school_area, fp.school_area, saf.school_area, sar.school_area) as school_area,
 coalesce(cdm1.batch_donor, cdm2.batch_donor, cp.batch_donor, cs.batch_donor, fp.batch_donor, saf.batch_donor, sar.batch_donor) as batch_donor,
 
 
-cdm1.* except (batch_no, batch_academic_year, batch_grade, batch_language, fac_start_date, facilitator_name, school_name, school_academic_year, school_language, school_taluka, school_ward, school_district, school_state, school_partner, batch_donor),
-cdm2.* except (batch_no, batch_academic_year, batch_grade, batch_language, fac_start_date, facilitator_name, school_name, school_academic_year, school_language, school_taluka, school_ward, school_district, school_state, school_partner, batch_donor),
-cp.* except (batch_no, batch_academic_year, batch_grade, batch_language, fac_start_date, facilitator_name, school_name, school_academic_year, school_language, school_taluka, school_ward, school_district, school_state, school_partner, batch_donor),
-cs.* except (batch_no, batch_academic_year, batch_grade, batch_language, fac_start_date, facilitator_name, school_name, school_academic_year, school_language, school_taluka, school_ward, school_district, school_state, school_partner, batch_donor),
-fp.* except (batch_no, batch_academic_year, batch_grade, batch_language, fac_start_date, facilitator_name, school_name, school_academic_year, school_language, school_taluka, school_ward, school_district, school_state, school_partner, batch_donor),
-saf.* except (batch_no, batch_academic_year, batch_grade, batch_language, fac_start_date, facilitator_name, school_name, school_academic_year, school_language, school_taluka, school_ward, school_district, school_state, school_partner, batch_donor),
-sar.* except (batch_no, batch_academic_year, batch_grade, batch_language, fac_start_date, facilitator_name, school_name, school_academic_year, school_language, school_taluka, school_ward, school_district, school_state, school_partner, batch_donor),
+cdm1.* except (batch_no, batch_academic_year, batch_grade, batch_language, fac_start_date, facilitator_name, school_name, school_academic_year, school_language, school_taluka, school_ward, school_district, school_state, school_partner, school_area, batch_donor),
+cdm2.* except (batch_no, batch_academic_year, batch_grade, batch_language, fac_start_date, facilitator_name, school_name, school_academic_year, school_language, school_taluka, school_ward, school_district, school_state, school_partner, school_area, batch_donor),
+cp.* except (batch_no, batch_academic_year, batch_grade, batch_language, fac_start_date, facilitator_name, school_name, school_academic_year, school_language, school_taluka, school_ward, school_district, school_state, school_partner, school_area, batch_donor),
+cs.* except (batch_no, batch_academic_year, batch_grade, batch_language, fac_start_date, facilitator_name, school_name, school_academic_year, school_language, school_taluka, school_ward, school_district, school_state, school_partner, school_area, batch_donor),
+fp.* except (batch_no, batch_academic_year, batch_grade, batch_language, fac_start_date, facilitator_name, school_name, school_academic_year, school_language, school_taluka, school_ward, school_district, school_state, school_partner, school_area, batch_donor),
+saf.* except (batch_no, batch_academic_year, batch_grade, batch_language, fac_start_date, facilitator_name, school_name, school_academic_year, school_language, school_taluka, school_ward, school_district, school_state, school_partner,school_area, batch_donor),
+sar.* except (batch_no, batch_academic_year, batch_grade, batch_language, fac_start_date, facilitator_name, school_name, school_academic_year, school_language, school_taluka, school_ward, school_district, school_state, school_partner,school_area, batch_donor),
 
 from 
             cdm1 
