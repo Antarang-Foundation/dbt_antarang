@@ -1,6 +1,6 @@
 with t1 as (select * from {{ref('fct_global_assessment_raw_uploads')}}),
 
-t2 as (select batch_no, batch_academic_year, batch_grade, batch_language, fac_start_date, facilitator_name, school_name, school_academic_year, school_language, 
+t2 as (select batch_no, batch_academic_year, batch_grade, batch_language, fac_start_date, facilitator_name, facilitator_email, school_name, school_academic_year, school_language, 
 school_taluka, school_ward, school_district, school_state, school_partner,school_area, batch_donor, 
 
 
@@ -11,7 +11,7 @@ count(distinct bl_cp_no) `bl_cp_correct`, count(distinct el_cp_no) `el_cp_correc
 count(distinct el_cs_no) `el_cs_correct`, count(distinct bl_fp_no) `bl_fp_correct`, count(distinct el_fp_no) `el_fp_correct`, 
 count(distinct saf_no) `saf_correct`, count(distinct sar_no) `sar_correct` ,
 from {{ref('fct_student_global_assessment_status')}} where created_from_form=True 
-group by batch_no, batch_academic_year, batch_grade, batch_language, fac_start_date, facilitator_name, school_name, school_academic_year, school_language, school_taluka, 
+group by batch_no, batch_academic_year, batch_grade, batch_language, fac_start_date, facilitator_name, facilitator_email, school_name, school_academic_year, school_language, school_taluka, 
 school_ward, school_district, school_state, school_partner,school_area, batch_donor)
 
 select 
@@ -22,6 +22,7 @@ coalesce(t1.batch_grade, t2.batch_grade) as batch_grade,
 coalesce(t1.batch_language, t2.batch_language) as batch_language,
 coalesce(t1.fac_start_date, t2.fac_start_date) as fac_start_date,
 coalesce(t1.facilitator_name, t2.facilitator_name) as facilitator_name,
+coalesce(t1.facilitator_email, t2.facilitator_email) as facilitator_email,
 coalesce(t1.school_name, t2.school_name) as school_name,
 coalesce(t1.school_academic_year, t2.school_academic_year) as school_academic_year,
 coalesce(t1.school_language, t2.school_language) as school_language,

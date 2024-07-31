@@ -1,0 +1,10 @@
+packages:
+- package: dbt-labs/dbt_utils
+  version: 1.0.0
+- package: dbt-labs/codegen
+  version: 0.9.0
+- package: tnightengale/dbt_meta_testing
+  version: 0.3.6
+- package: elementary-data/elementary
+  version: 0.15.2
+sha1_hash: d35f29f664489a254b8a380e843b861edb2ab5bf
