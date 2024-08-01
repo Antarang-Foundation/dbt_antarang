@@ -45,3 +45,6 @@ stg_sar_sd, stg_sar_barcodes, bl_sar_raw, el_sar_raw, sar_correct,
 combined_sd, combined_barcodes
 
 from t1 full outer join t2 on t1.batch_no = t2.batch_no
+
+
+
