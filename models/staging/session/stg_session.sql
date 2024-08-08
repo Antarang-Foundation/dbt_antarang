@@ -52,7 +52,7 @@ with
     max(case 
     when session_type = 'Student' then total_student_present 
     when session_type = 'Parent' then total_parent_present 
-    when session_type = 'Counseling' then total_parent_present
+    --when session_type = 'Counseling' then total_parent_present
     when session_type = 'Counseling' then total_student_present 
     end) 
     OVER (PARTITION BY session_batch_id, session_type) `batch_session_type_based_avg_overall_attendance`
