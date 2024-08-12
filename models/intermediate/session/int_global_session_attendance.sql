@@ -10,7 +10,13 @@ t3 as (select * from {{ref('stg_attendance')}}),
 t4 as (select * from t1 full outer join t2 on t1.batch_id = t2.session_batch_id),
 t5 as (select * from t4 inner join t3 on t4.student_id = t3.attendance_student_id)
 
+
+
 select * from t5
+
+
+
+
 
 /* student_id, student_name, first_barcode, student_barcode, student_batch_id, gender,
 batch_id, batch_no, batch_academic_year, batch_grade, batch_language, no_of_students_facilitated, fac_start_date, allocation_email_sent,
