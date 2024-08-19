@@ -5,7 +5,7 @@ with source as (
 renamed as (
     select
         Id as facilitator_id,
-        Full_Name__c as facilitator_name,
+        Name as facilitator_name,
         Language__c as facilitator_language,
         Facilitator_Work_Status__c as facilitator_work_status,
         Payment_Type__c as payment_type,
