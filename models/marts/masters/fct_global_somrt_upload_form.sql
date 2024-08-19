@@ -12,10 +12,9 @@ count(distinct el_cs_no) `el_cs_correct`, count(distinct bl_fp_no) `bl_fp_correc
 count(distinct saf_no) `saf_correct`, count(distinct sar_no) `sar_correct` ,
 from {{ref('fct_student_global_assessment_status')}} where created_from_form=True 
 group by batch_no, batch_academic_year, batch_grade, batch_language, fac_start_date, facilitator_name, facilitator_email, school_name, school_academic_year, school_language, school_taluka, 
-school_ward, school_district, school_state, school_partner,school_area, batch_donor)
+school_ward, school_district, school_state, school_partner,school_area, batch_donor),
 
-select 
-
+t3 as (select 
 coalesce(t1.batch_no, t2.batch_no) as batch_no,
 coalesce(t1.batch_academic_year, t2.batch_academic_year) as batch_academic_year,
 coalesce(t1.batch_grade, t2.batch_grade) as batch_grade,
@@ -42,9 +41,14 @@ stg_fp_sd, stg_fp_barcodes, bl_fp_raw, bl_fp_correct, el_fp_raw, el_fp_correct,
 stg_saf_sd, stg_saf_barcodes, bl_saf_raw, el_saf_raw, saf_correct, 
 stg_sar_sd, stg_sar_barcodes, bl_sar_raw, el_sar_raw, sar_correct, 
 
-combined_sd, combined_barcodes
+combined_sd, combined_barcodes from t1 full outer join t2 on t1.batch_no = t2.batch_no),
 
-from t1 full outer join t2 on t1.batch_no = t2.batch_no
+t4 as (select * from t3),
+t5 as (select batch_no AS session_batch_no, session_name,session_type, total_student_present, total_parent_present, present_count, attendance_count from {{ref('fct_global_session')}}),
+
+t6 as (select * from t4 full outer join t5 on t4.batch_no = t5.session_batch_no)
+
+select * from t6
 
 
 
