@@ -93,14 +93,9 @@ from
             full outer join cdm2 on cdm1.batch_no = cdm2.batch_no 
             full outer join cp on coalesce(cdm1.batch_no, cdm2.batch_no) =  cp.batch_no 
             full outer join cs on coalesce(cdm1.batch_no, cdm2.batch_no, cp.batch_no) =  cs.batch_no 
-            full outer join fp on coalesce(cdm1.batch_no, cdm2.batch_no, cp.batch_no, 
-            cs.batch_no) =  fp.batch_no 
-            full outer join saf on coalesce(cdm1.batch_no, cdm2.batch_no, cp.batch_no, cs.batch_no, 
-            fp.batch_no) = saf.batch_no
-            full outer join sar on coalesce(cdm1.batch_no, cdm2.batch_no, cp.batch_no, cs.batch_no, 
-            fp.batch_no, saf.batch_no) = sar.batch_no 
-
-
+            full outer join fp on coalesce(cdm1.batch_no, cdm2.batch_no, cp.batch_no, cs.batch_no) =  fp.batch_no 
+            full outer join saf on coalesce(cdm1.batch_no, cdm2.batch_no, cp.batch_no, cs.batch_no, fp.batch_no) = saf.batch_no
+            full outer join sar on coalesce(cdm1.batch_no, cdm2.batch_no, cp.batch_no, cs.batch_no, fp.batch_no, saf.batch_no) = sar.batch_no 
             order by batch_no
     )
 
