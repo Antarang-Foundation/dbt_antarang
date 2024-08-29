@@ -1,4 +1,4 @@
-/* with t1 as (select * from {{ref('fct_global_assessment_raw_uploads')}}),
+with t1 as (select * from {{ref('fct_global_assessment_raw_uploads')}}),
 
 t2 as (select batch_no, batch_academic_year, batch_grade, batch_language, fac_start_date, facilitator_name, facilitator_email, school_name, school_academic_year, school_language, 
 school_taluka, school_ward, school_district, school_state, school_partner,school_area, batch_donor, 
@@ -49,8 +49,9 @@ t5 as (select batch_no AS session_batch_no, session_name,session_type, total_stu
 t6 as (select * from t4 full outer join t5 on t4.batch_no = t5.session_batch_no)
 
 select * from t6
-*/
 
+
+/*
 WITH t1 AS (
     SELECT 
         batch_no, 
