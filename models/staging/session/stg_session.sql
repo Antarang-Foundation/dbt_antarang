@@ -22,8 +22,8 @@ with
             Total_Parent_Present__c as 	total_parent_present,
             Log_Reason__c as log_reason,
             Attendance_Submitted__c as attendance_submitted,
-            Present_Count__c as present_count,
-            Attendance_Count__c as attendance_count,
+            Present_Count__c as present_count,        --- present check on all session type. Use for individual session attednace
+            Attendance_Count__c as attendance_count,  -- present + absent
             Payment_Status__c as payment_status,
             Deferred_Reason__c as deferred_reason,
             Invoice_Date__c as invoice_date,
