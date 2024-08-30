@@ -5,12 +5,14 @@ school_taluka, school_ward, school_district, school_state, school_partner,school
 
 
 count(distinct student_barcode) `combined_sd`, 
-count(distinct assessment_barcode) `combined_barcodes`, count(distinct bl_cdm1_no) `bl_cdm1_correct`, 
+count(distinct assessment_barcode) `combined_barcodes`, 
+count(distinct bl_cdm1_no) `bl_cdm1_correct`, 
 count(distinct el_cdm1_no) `el_cdm1_correct`, count(distinct bl_cdm2_no) `bl_cdm2_correct`, count(distinct el_cdm2_no) `el_cdm2_correct`, 
 count(distinct bl_cp_no) `bl_cp_correct`, count(distinct el_cp_no) `el_cp_correct`, count(distinct bl_cs_no) `bl_cs_correct`, 
 count(distinct el_cs_no) `el_cs_correct`, count(distinct bl_fp_no) `bl_fp_correct`, count(distinct el_fp_no) `el_fp_correct`, 
-count(distinct saf_no) `saf_correct`, count(distinct sar_no) `sar_correct` ,
-from {{ref('fct_student_global_assessment_status')}} where created_from_form=True 
+count(distinct saf_no) `saf_correct`, count(distinct sar_no) `sar_correct` 
+from {{ref('fct_student_global_assessment_status')}} 
+WHERE created_from_form = True AND school_district IN ('Nagaland', 'Palghar')          
 group by batch_no, batch_academic_year, batch_grade, batch_language, fac_start_date, facilitator_name, facilitator_email, school_name, school_academic_year, school_language, school_taluka, 
 school_ward, school_district, school_state, school_partner,school_area, batch_donor),
 
@@ -41,78 +43,20 @@ stg_fp_sd, stg_fp_barcodes, bl_fp_raw, bl_fp_correct, el_fp_raw, el_fp_correct,
 stg_saf_sd, stg_saf_barcodes, bl_saf_raw, el_saf_raw, saf_correct, 
 stg_sar_sd, stg_sar_barcodes, bl_sar_raw, el_sar_raw, sar_correct, 
 
-combined_sd, combined_barcodes from t1 full outer join t2 on t1.batch_no = t2.batch_no),
+combined_sd, combined_barcodes from t1 full outer join t2 on t1.batch_no = t2.batch_no)
 
+select * from t3
+
+-- introduce newtable batch level create sd count then join with 2 tables
+/*
+session code
 t4 as (select * from t3),
 t5 as (select batch_no AS session_batch_no, session_name,session_type, total_student_present, total_parent_present, present_count, attendance_count from {{ref('fct_global_session')}}),
 
 t6 as (select * from t4 full outer join t5 on t4.batch_no = t5.session_batch_no)
 
 select * from t6
-
-
-/*
-WITH t1 AS (
-    SELECT 
-        batch_no, 
-        batch_academic_year, 
-        batch_grade, 
-        batch_language, 
-        fac_start_date, 
-        facilitator_name, 
-        facilitator_email, 
-        school_name, 
-        school_academic_year, 
-        school_language, 
-        school_taluka, 
-        school_ward, 
-        school_district, 
-        school_state, 
-        school_partner,
-        school_area, 
-        batch_donor,
-        COUNT(DISTINCT student_barcode) AS distinct_student_count,
-        COUNT(DISTINCT assessment_barcode) AS distinct_assessment_count,
-        COUNT(DISTINCT bl_cdm1_no) AS bl_cdm1_correct, 
-        COUNT(DISTINCT el_cdm1_no) AS el_cdm1_correct, 
-        COUNT(DISTINCT bl_cdm2_no) AS bl_cdm2_correct, 
-        COUNT(DISTINCT el_cdm2_no) AS el_cdm2_correct, 
-        COUNT(DISTINCT bl_cp_no) AS bl_cp_correct, 
-        COUNT(DISTINCT el_cp_no) AS el_cp_correct, 
-        COUNT(DISTINCT bl_cs_no) AS bl_cs_correct, 
-        COUNT(DISTINCT el_cs_no) AS el_cs_correct, 
-        COUNT(DISTINCT bl_fp_no) AS bl_fp_correct, 
-        COUNT(DISTINCT el_fp_no) AS el_fp_correct, 
-        COUNT(DISTINCT saf_no) AS saf_correct, 
-        COUNT(DISTINCT sar_no) AS sar_correct
-    FROM {{ref('fct_student_global_assessment_status')}}  
-    GROUP BY 
-        batch_no, 
-        batch_academic_year, 
-        batch_grade, 
-        batch_language, 
-        fac_start_date, 
-        facilitator_name, 
-        facilitator_email, 
-        school_name, 
-        school_academic_year, 
-        school_language, 
-        school_taluka, 
-        school_ward, 
-        school_district, 
-        school_state, 
-        school_partner,
-        school_area, 
-        batch_donor
-)
-select * from t1
-
-/* t2 as (select * from t1),
-t3 as (select batch_no AS session_batch_no, session_name,session_type, total_student_present, total_parent_present, present_count, attendance_count from {{ref('fct_global_session')}}),
-
-t4 as (select * from t2 Right JOIN t3 on t2.batch_no = t3.session_batch_no)
-
-select * from t4
 */
+
 
 
