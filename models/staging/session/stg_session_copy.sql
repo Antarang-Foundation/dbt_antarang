@@ -38,11 +38,15 @@ with
 
     count(distinct case when session_date is not null and total_student_present > 0 then session_code end) OVER (PARTITION BY session_batch_id) `batch_completed_sessions`,
 
-    max(total_student_present) OVER (PARTITION BY session_batch_id, session_type ) `batch_max_student_session_attendance`,
+    /* max(total_student_present) OVER (PARTITION BY session_batch_id, session_type ) `batch_max_student_session_attendance`,
     max(total_parent_present) OVER  (PARTITION BY session_batch_id, session_type) `batch_max_session_parent_attendance`,
     max(total_student_present) OVER (PARTITION BY session_batch_id, session_type) `batch_max_session_counseling_attendance`,
-    max(total_student_present) OVER (PARTITION BY session_batch_id, session_type) `batch_max_session_flexible_attendance`,
-    
+    max(total_student_present) OVER (PARTITION BY session_batch_id, session_type) `batch_max_session_flexible_attendance`, */
+
+    max(case when session_type = 'Student' then total_student_present end) OVER (PARTITION BY session_batch_id, session_type) `batch_test_stud_attendance`,
+    max(case when session_type = 'Parent' then total_parent_present end) OVER (PARTITION BY session_batch_id, session_type) `batch_test_parent_attendance`,
+    max(case when session_type = 'Flexible' then total_student_present end) OVER (PARTITION BY session_batch_id, session_type) `batch_test_flexible_attendance`,
+    max(case when session_type = 'Counseling' then present_count end) OVER (PARTITION BY session_batch_id, session_type) `batch_test_counseling_attendance`,
 
     /* max(case when session_type = 'Student' then total_student_present when session_type = 'Parent' then total_parent_present when session_type = 'Counseling' then total_student_present end) OVER (PARTITION BY session_batch_id, session_type) `batch_session_type_based_avg_overall_attendance`
     from t1  */
