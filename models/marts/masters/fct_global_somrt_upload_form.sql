@@ -1,4 +1,6 @@
-with t1 as (select * from {{ref('fct_global_assessment_raw_uploads')}}),
+with t1 as (select * from  
+{{ref('fct_global_assessment_raw_uploads')}}
+where school_district In ('Nagaland', 'Palghar')),
 
 t2 as (select batch_no, batch_academic_year, batch_grade, batch_language, fac_start_date, facilitator_name, facilitator_email, school_name, school_academic_year, school_language, 
 school_taluka, school_ward, school_district, school_state, school_partner,school_area, batch_donor, 
