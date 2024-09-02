@@ -17,7 +17,7 @@ max(school_no_of_batches) `school_no_of_batches`,
 max(batch_expected_sessions) `student_batch_expected_sessions`,
 max(batch_scheduled_sessions) `student_batch_scheduled_sessions`,
 max(batch_completed_sessions) `student_batch_completed_sessions`,
-max(batch_max_session_attendance) `student_batch_max_session_attendance`,
+max(batch_max_student_session_attendance) `student_batch_max_session_attendance`,
 
 count(distinct case when session_date is not null and total_student_present > 0 and attendance_status = 'Present' then session_code end) `student_present_sessions`,
 count(distinct case when session_date is not null and total_student_present > 0 and attendance_status = 'Absent' then session_code end) `student_absent_sessions`,
