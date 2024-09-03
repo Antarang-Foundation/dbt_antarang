@@ -45,11 +45,10 @@ stg_fp_sd, stg_fp_barcodes, bl_fp_raw, bl_fp_correct, el_fp_raw, el_fp_correct,
 stg_saf_sd, stg_saf_barcodes, bl_saf_raw, el_saf_raw, saf_correct, 
 stg_sar_sd, stg_sar_barcodes, bl_sar_raw, el_sar_raw, sar_correct, 
 
-combined_sd, combined_barcodes from t1 full outer join t2 on t1.batch_no = t2.batch_no)
+combined_sd, combined_barcodes from t1 full outer join t2 on t1.batch_no = t2.batch_no),
 
-select * from t3
+--select * from t3
 
--- introduce newtable batch level create sd count then join with 2 tables
 /*
 session code
 t4 as (select * from t3),
@@ -60,5 +59,18 @@ t6 as (select * from t4 full outer join t5 on t4.batch_no = t5.session_batch_no)
 select * from t6
 */
 
+t4 AS (
+    SELECT 
+        batch_no AS session_batch_no,
+        SUM(batch_max_student_session_attendance) AS total_student_attendance,
+        SUM(batch_max_session_parent_attendance) AS total_parent_attendance,
+        SUM(batch_max_session_counseling_attendance) AS total_counseling_attendance,
+        SUM(batch_max_session_flexible_attendance) AS total_flexible_attendance
+    FROM {{ ref('fct_global_session_type_attendance') }}
+    GROUP BY batch_no
+),
 
+t5 as (select * from t3 LEFT JOIN t4 on t3.batch_no = t4.session_batch_no)
+
+select * from t5
 
