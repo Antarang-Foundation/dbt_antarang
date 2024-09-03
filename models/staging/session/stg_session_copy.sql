@@ -48,8 +48,11 @@ with
     max(case when session_type = 'Flexible' then total_student_present end) OVER (PARTITION BY session_batch_id, session_type) `batch_test_flexible_attendance`,
     max(case when session_type = 'Counseling' then present_count end) OVER (PARTITION BY session_batch_id, session_type) `batch_test_counseling_attendance`,
 
-    /* max(case when session_type = 'Student' then total_student_present when session_type = 'Parent' then total_parent_present when session_type = 'Counseling' then total_student_present end) OVER (PARTITION BY session_batch_id, session_type) `batch_session_type_based_avg_overall_attendance`
-    from t1  */
+   max(case when session_type = 'Student' then present_count end) OVER (PARTITION BY session_batch_id, session_type) `batch_indi_stud_attendance`,
+   max(case when session_type = 'Parent' then present_count end) OVER (PARTITION BY session_batch_id, session_type) `batch_indi_parent_attendance`,
+   max(case when session_type = 'Flexible' then present_count end) OVER (PARTITION BY session_batch_id, session_type) `batch_indi_flexible_attendance`,
+   max(case when session_type = 'Counseling' then present_count end) OVER (PARTITION BY session_batch_id, session_type) `batch_indi_counseling_attendance`,
+
     max(case 
     when session_type = 'Student' then total_student_present 
     when session_type = 'Parent' then total_parent_present 
@@ -58,8 +61,7 @@ with
     end) 
     OVER (PARTITION BY session_batch_id, session_type) `batch_session_type_based_avg_overall_attendance`
     from t1
-    
-    )
+)
 
 select * from t2 
 order by session_batch_id, session_id
