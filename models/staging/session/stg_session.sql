@@ -11,6 +11,7 @@ with
             Name as session_name,
             Session_Type__c as session_type,
             SessionDate__c as session_date,
+            Session_Start_Time__c as session_start_time,
             Session_Grade__c as session_grade,
             Session_Number__c as session_no,
             OMR_required__c as 	omr_required,
