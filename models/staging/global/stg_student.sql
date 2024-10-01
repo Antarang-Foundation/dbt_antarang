@@ -44,7 +44,11 @@ renamed as (
         G9_Whatsapp_Number__c as g9_whatsapp_no,
         G10_Whatsapp_Number__c as g10_whatsapp_no,
         G11_Whatsapp_Number__c as g11_whatsapp_no,
-        G12_Whatsapp_Number__c as g12_whatsapp_no
+        G12_Whatsapp_Number__c as g12_whatsapp_no,
+        G9_Alternate_Mobile_No__c as g9_alternate_no,
+        G10_Alternate_Mobile_No__c as g10_alternate_no,
+        G11_Alternate_Mobile_No__c as g11_alternate_no
+        --G12_Alternate_Mobile_No__c as g12_alternate_no
 
     from source
 
