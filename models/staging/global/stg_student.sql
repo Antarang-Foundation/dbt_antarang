@@ -44,7 +44,7 @@ renamed as (
         G9_Alternate_Mobile_No__c as g9_alternate_no,
         G10_Alternate_Mobile_No__c as g10_alternate_no,
         G11_Alternate_Mobile_No__c as g11_alternate_no,
-        --G12_Alternate_Mobile_No__c as g12_alternate_no
+        G12_Alternate_Mobile_No__c as g12_alternate_no,
         Religion__c as religion,
         Caste_Certificate_present__c as caste,
         Father_Education__c as father_education,

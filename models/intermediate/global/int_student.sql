@@ -1,7 +1,7 @@
 with
 
     t0 as (select student_id, first_barcode, student_name, gender, current_barcode, g9_barcode, g10_barcode, g11_barcode, g12_barcode, current_batch_no, birth_year, birth_date, 
-    g9_whatsapp_no, g10_whatsapp_no, g11_whatsapp_no, g12_whatsapp_no, g9_alternate_no, g10_alternate_no, g11_alternate_no, religion, caste, father_education, father_occupation, mother_education, mother_occupation,
+    g9_whatsapp_no, g10_whatsapp_no, g11_whatsapp_no, g12_whatsapp_no, g9_alternate_no, g10_alternate_no, g11_alternate_no, g12_alternate_no, religion, caste, father_education, father_occupation, mother_education, mother_occupation,
     g9_batch_id, g10_batch_id, g11_batch_id, g12_batch_id, current_grade1, current_grade2 
     from {{ ref("stg_student") }}),
 
