@@ -69,6 +69,6 @@ recordtypes as (select record_type_id, record_type from {{ ref('seed_recordtype'
     )
     
 select *
-from stg_student
+from renamed
 
 

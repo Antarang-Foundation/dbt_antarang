@@ -1,67 +1,50 @@
-with
-    t0 as (
-        select * from {{ source('salesforce', 'Session__c') }} where IsDeleted = false
-    ),
-    t1 as (
-        select
-            Id as session_id,
-            Batch__c as session_batch_id,
-            Assigned_Facilitator__c as session_facilitator_id,
-            Session_Code__c as session_code,
-            Name as session_name,
-            Session_Type__c as session_type,
-            SessionDate__c as session_date,
-            Session_Grade__c as session_grade,
-            Session_Number__c as session_no,
-            OMR_required__c as 	omr_required,
-            OMR_s_received_for_session__c as omrs_received,
-            Total_Student_Present__c as total_student_present,
-            Total_Parent_Present__c as 	total_parent_present,
-            Log_Reason__c as log_reason,
-            Attendance_Submitted__c as attendance_submitted,
-            Present_Count__c as present_count,        --- present check on all session type. Use for individual session attednace
-            Attendance_Count__c as attendance_count,  -- present + absent
-            Payment_Status__c as payment_status,
-            Deferred_Reason__c as deferred_reason,
-            Invoice_Date__c as invoice_date,
-            Session_Amount__c as session_amount,
-            Number_of_Sessions_No_of_Units__c as no_of_sessions_no_of_units,
-            Total_Amount__c as total_amount
-        from t0
-    ),
+WITH t0 AS (
+    SELECT 
+        batch_no, 
+        batch_academic_year, 
+        batch_grade, 
+        no_of_students_facilitated, 
+        school_district, 
+        school_state, 
+        session_no,  
+        total_student_present
+    FROM {{ref('int_global_session')}}
+    WHERE school_district IN ('Nagaland', 'Palghar', 'Yamunanagar')
+),
 
-    t2 as (select *, 
-    
-    count(distinct session_code) OVER (PARTITION BY session_batch_id) `batch_expected_sessions`,
+t1 AS (
+    SELECT *
+    FROM t0
+    PIVOT (
+        MAX(total_student_present) 
+        FOR session_no IN (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14)
+    ) AS p
+),
 
-    count(distinct case when session_date is not null then session_code end) OVER (PARTITION BY session_batch_id) `batch_scheduled_sessions`,
 
-    count(distinct case when session_date is not null and total_student_present > 0 then session_code end) OVER (PARTITION BY session_batch_id) `batch_completed_sessions`,
-
-    /* max(total_student_present) OVER (PARTITION BY session_batch_id, session_type ) `batch_max_student_session_attendance`,
-    max(total_parent_present) OVER  (PARTITION BY session_batch_id, session_type) `batch_max_session_parent_attendance`,
-    max(total_student_present) OVER (PARTITION BY session_batch_id, session_type) `batch_max_session_counseling_attendance`,
-    max(total_student_present) OVER (PARTITION BY session_batch_id, session_type) `batch_max_session_flexible_attendance`, */
-
-    max(case when session_type = 'Student' then total_student_present end) OVER (PARTITION BY session_batch_id, session_type) `batch_test_stud_attendance`,
-    max(case when session_type = 'Parent' then total_parent_present end) OVER (PARTITION BY session_batch_id, session_type) `batch_test_parent_attendance`,
-    max(case when session_type = 'Flexible' then total_student_present end) OVER (PARTITION BY session_batch_id, session_type) `batch_test_flexible_attendance`,
-    max(case when session_type = 'Counseling' then present_count end) OVER (PARTITION BY session_batch_id, session_type) `batch_test_counseling_attendance`,
-
-   max(case when session_type = 'Student' then present_count end) OVER (PARTITION BY session_batch_id, session_type) `batch_indi_stud_attendance`,
-   max(case when session_type = 'Parent' then present_count end) OVER (PARTITION BY session_batch_id, session_type) `batch_indi_parent_attendance`,
-   max(case when session_type = 'Flexible' then present_count end) OVER (PARTITION BY session_batch_id, session_type) `batch_indi_flexible_attendance`,
-   max(case when session_type = 'Counseling' then present_count end) OVER (PARTITION BY session_batch_id, session_type) `batch_indi_counseling_attendance`,
-
-    max(case 
-    when session_type = 'Student' then total_student_present 
-    when session_type = 'Parent' then total_parent_present 
-    when session_type = 'Counseling' then total_student_present 
-    when session_type = 'Flexible' then total_student_present
-    end) 
-    OVER (PARTITION BY session_batch_id, session_type) `batch_session_type_based_avg_overall_attendance`
-    from t1
+renamed as (
+    select 
+        batch_no as batch_no,
+        batch_academic_year as batch_academic_year,
+        batch_grade as batch_grade,
+        no_of_students_facilitated as no_of_students_facilitated,
+        school_district as school_district,
+        school_state as school_state,
+        _1 as total_student_present_s1,
+        _2 as total_student_present_s2,
+        _3 as total_student_present_s3,
+        _4 as total_student_present_s4,
+        _5 as total_student_present_s5,
+        _6 as total_student_present_s6,
+        _7 as total_student_present_s7,
+        _8 as total_student_present_s8,
+        _9 as total_student_present_s9,
+        _10 as total_student_present_s10,
+        _11 as total_student_present_s11,
+        _12 as total_student_present_s12,
+        _13 as total_student_present_s13,
+        _14 as total_student_present_s14,
+  from t1  
 )
 
-select * from t2 
-order by session_batch_id, session_id
+SELECT * FROM renamed
