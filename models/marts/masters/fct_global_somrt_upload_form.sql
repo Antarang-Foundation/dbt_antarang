@@ -47,30 +47,30 @@ stg_sar_sd, stg_sar_barcodes, bl_sar_raw, el_sar_raw, sar_correct,
 
 combined_sd, combined_barcodes from t1 full outer join t2 on t1.batch_no = t2.batch_no),
 
---select * from t3
-
-/*
-session code
-t4 as (select * from t3),
-t5 as (select batch_no AS session_batch_no, session_name,session_type, total_student_present, total_parent_present, present_count, attendance_count from {{ref('fct_global_session')}}),
-
-t6 as (select * from t4 full outer join t5 on t4.batch_no = t5.session_batch_no)
-
-select * from t6
-*/
-
-t4 AS (
-    SELECT 
-        batch_no AS session_batch_no,
-        SUM(batch_max_student_session_attendance) AS total_student_attendance,
-        SUM(batch_max_session_parent_attendance) AS total_parent_attendance,
-        SUM(batch_max_session_counseling_attendance) AS total_counseling_attendance,
-        SUM(batch_max_session_flexible_attendance) AS total_flexible_attendance
-    FROM {{ ref('fct_global_session_type_attendance') }}
-    GROUP BY batch_no
+t4 as (
+    select 
+        batch_no as session_batch_no,
+        no_of_students_facilitated,
+        total_student_present_s1,
+        total_student_present_s2,
+        total_student_present_s3,
+        total_student_present_s4,
+        total_student_present_s5,
+        total_student_present_s6,
+        total_student_present_s7,
+        total_student_present_s8,
+        total_student_present_s9,
+        total_student_present_s10,
+        total_student_present_s11,
+        total_student_present_s12,
+        total_student_present_s13,
+        total_student_present_s14
+        from {{ref('stg_session_copy')}}
 ),
 
-t5 as (select * from t3 LEFT JOIN t4 on t3.batch_no = t4.session_batch_no)
+t5 as (
+    select * from t3 LEFT JOIN t4 on t3.batch_no = t4.session_batch_no
+)
 
 select * from t5
 
