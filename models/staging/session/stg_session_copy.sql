@@ -9,7 +9,7 @@ WITH t0 AS (
         session_no,  
         total_student_present
     FROM {{ref('int_global_session')}}
-    WHERE school_district IN ('Nagaland', 'Palghar', 'Yamunanagar')
+    WHERE school_district IN ('Nagaland', 'Palghar', 'Yamunanagar', 'RJ Model B')
 ),
 
 t1 AS (
