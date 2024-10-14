@@ -4,7 +4,8 @@ t1 as (select * from {{ref('int_global')}}),
 
 t2 as (select * from {{ref('stg_somrt')}}),
 
-t3 as (select session_id, session_facilitator_id, omr_required, omrs_received, total_student_present, total_parent_present, attendance_count, 
+t3 as (select session_id, session_facilitator_id, omr_required, omrs_received, total_student_present, total_parent_present, attendance_count,
+--FORMAT_DATE('%d-%m-%Y', session_date) AS session_date,DATE_DIFF(current_date, session_date, DAY) AS TAT, 
 present_count from {{ref('stg_session')}}),
 
 t4 as (select * from t2 INNER JOIN t3 on t2.somrt_session_id = t3.session_id),
