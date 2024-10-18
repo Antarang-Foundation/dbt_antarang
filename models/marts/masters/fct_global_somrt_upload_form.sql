@@ -65,7 +65,7 @@ t4 as (
         total_student_present_s12,
         total_student_present_s13,
         total_student_present_s14
-        from {{ref('stg_session_copy')}}
+        from {{ref('stg_overall_attendance')}}
 ),
 
 t5 as (
