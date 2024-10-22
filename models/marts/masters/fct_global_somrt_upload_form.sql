@@ -1,6 +1,6 @@
 with t1 as (select * from  
 {{ref('fct_global_assessment_raw_uploads')}}
-where school_district In ('Nagaland', 'Palghar', 'Yamunangar')),
+where school_district In ('Nagaland', 'Palghar', 'Yamunanagar')), 
 
 t2 as (select batch_no, batch_academic_year, batch_grade, batch_language, fac_start_date, facilitator_name, facilitator_email, school_name, school_academic_year, school_language, 
 school_taluka, school_ward, school_district, school_state, school_partner,school_area, batch_donor, 
@@ -14,7 +14,7 @@ count(distinct bl_cp_no) `bl_cp_correct`, count(distinct el_cp_no) `el_cp_correc
 count(distinct el_cs_no) `el_cs_correct`, count(distinct bl_fp_no) `bl_fp_correct`, count(distinct el_fp_no) `el_fp_correct`, 
 count(distinct saf_no) `saf_correct`, count(distinct sar_no) `sar_correct` 
 from {{ref('fct_student_global_assessment_status')}} 
-WHERE school_district IN ('Nagaland', 'Palghar', 'Yamunangar')          
+WHERE school_district IN ('Nagaland', 'Palghar', 'Yamunanagar')          
 group by batch_no, batch_academic_year, batch_grade, batch_language, fac_start_date, facilitator_name, facilitator_email, school_name, school_academic_year, school_language, school_taluka, 
 school_ward, school_district, school_state, school_partner,school_area, batch_donor),
 
