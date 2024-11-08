@@ -11,6 +11,7 @@ t2 AS (
         session_code, 
         session_name, 
         session_type, 
+        updated_session_type,
         session_date, 
         session_no, 
         session_grade, 
@@ -18,7 +19,7 @@ t2 AS (
         total_parent_present,
         attendance_submitted, 
         present_count 
-    FROM {{ref('stg_session')}}
+    FROM {{ref('int_global_session')}}
 ),
 
 t3 AS (
@@ -69,7 +70,8 @@ SELECT
     school_partner,
     facilitator_name,
     session_batch_id, 
-    session_type, 
+    session_type,
+    updated_session_type, 
     session_name,
     student_id, 
     student_name,
