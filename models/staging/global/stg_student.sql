@@ -50,7 +50,17 @@ renamed as (
         Father_Education__c as father_education,
         Father_Occupation__c as father_occupation,
         Mother_Education__c as mother_education,
-        Mother_Occupation__c as mother_occupation
+        Mother_Occupation__c as mother_occupation,
+        Reality_1__c as reality_1,
+        Reality_2__c as reality_2,
+        Reality_3__c as reality_3,
+        Reality_5__c as reality_5,
+        Reality_6__c as reality_6,
+        Aspiration_1__c as aspiration_1,
+        Aspiration_2__c as aspiration_2,
+        Aspiration_3__c as aspiration_3,
+        Recommedation_Status__c as recommedation_status,
+        Recommendation_Report_Status__c as  recommendation_report_status
 
 
     from source

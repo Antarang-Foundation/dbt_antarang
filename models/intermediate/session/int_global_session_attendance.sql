@@ -60,6 +60,7 @@ t6 AS (
 
 SELECT 
     batch_academic_year,
+    batch_no,
     batch_grade,
     no_of_students_facilitated,
     school_state,
@@ -72,10 +73,13 @@ SELECT
     session_batch_id, 
     session_type,
     updated_session_type, 
+    session_no,
     session_name,
     student_id, 
+    student_barcode,
     student_name,
     attendance_status,
+    attendance_submitted,
     indi_student_attendance, 
     indi_parent_attendance, 
     indi_counseling_attendance 
