@@ -50,5 +50,9 @@ t6 AS (
     FROM t5
 )
 
-SELECT * FROM t6
+SELECT 
+batch_no, batch_academic_year, batch_grade, batch_language, no_of_students_facilitated, fac_start_date, facilitator_name, facilitator_id,
+school_id, school_name, school_state, school_district, school_taluka, school_partner, school_area, batch_donor, 
+batch_max_overall_attendance, total_reached_students
+FROM t6
 
