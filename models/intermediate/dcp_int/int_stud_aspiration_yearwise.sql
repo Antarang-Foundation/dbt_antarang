@@ -17,14 +17,14 @@ WITH t1 AS (
         school_taluka, 
         school_partner, 
         batch_donor, 
-        gender 
+        gender
     FROM {{ ref('int_student_global_cdm1_pivot') }}
 ),
 
 baseline_unpivot AS (
     SELECT 
         student_id, 
-        assessment_barcode, 
+        assessment_barcode as bl_assessment_barcode, 
         bl_assessment_academic_year, 
         batch_no, 
         batch_academic_year, 
@@ -35,8 +35,8 @@ baseline_unpivot AS (
         school_taluka, 
         school_partner, 
         batch_donor, 
-        gender,
-        baseline_stud_aspiration, 
+        gender, 
+        baseline_stud_aspiration,
         bl_aspiration
     FROM t1
     UNPIVOT (
@@ -47,7 +47,7 @@ baseline_unpivot AS (
 endline_unpivot AS (
     SELECT 
         student_id, 
-        assessment_barcode, 
+        assessment_barcode as el_assessment_barcode, 
         el_assessment_academic_year,
         endline_stud_aspiration, 
         el_aspiration
@@ -60,7 +60,7 @@ endline_unpivot AS (
 t2 AS (
     SELECT 
         b.student_id, 
-        b.assessment_barcode, 
+        b.bl_assessment_barcode, 
         b.bl_assessment_academic_year, 
         b.batch_no, 
         b.batch_academic_year, 
@@ -74,12 +74,28 @@ t2 AS (
         b.gender,
         b.baseline_stud_aspiration, 
         b.bl_aspiration,
+        e.el_assessment_barcode,
         e.endline_stud_aspiration, 
         e.el_aspiration, 
         e.el_assessment_academic_year
-    FROM baseline_unpivot AS b
-    JOIN endline_unpivot AS e 
-    ON b.student_id = e.student_id
+    FROM baseline_unpivot AS b JOIN endline_unpivot AS e ON b.bl_assessment_barcode = e.el_assessment_barcode
 )
 
-SELECT * FROM t2
+SELECT
+        student_id,
+        el_assessment_barcode as assessment_barcode,
+        batch_academic_year, 
+        batch_grade, 
+        batch_language, 
+        school_state, 
+        school_district, 
+        school_taluka, 
+        school_partner, 
+        batch_donor, 
+        gender,
+        baseline_stud_aspiration, 
+        bl_aspiration,
+        endline_stud_aspiration, 
+        el_aspiration
+ FROM t2 
+ 

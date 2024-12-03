@@ -10,7 +10,7 @@ t1 AS (
 t2 AS (
     SELECT 
         batch_no AS session_batch, 
-        batch_session_type_based_avg_overall_attendance as batch_max_overall_attendance,
+        batch_max_overall_attendance,
         total_reached_parents
     FROM {{ref("fct_global_session")}}
 ),
@@ -26,7 +26,8 @@ t3 AS (
 t4 as (
     select stud_batch_no,
     student_barcode as student_barcode_att,
-    total_student_session_att
+    total_student_session_att, 
+    SUM(total_student_session_att) OVER (PARTITION BY stud_batch_no) AS total_student_session_att_batchwise
     from  {{ref("int_student_attendace")}}  
 ), 
 
@@ -44,15 +45,15 @@ t6 AS (
         CASE
             WHEN batch_academic_year <= 2022 THEN no_of_students_facilitated
             WHEN batch_academic_year = 2023 THEN batch_max_overall_attendance
-            WHEN batch_academic_year >= 2024 THEN total_student_session_att
+            WHEN batch_academic_year >= 2024 THEN total_student_session_att_batchwise
             ELSE 0
         END AS total_reached_students
     FROM t5
 )
 
-SELECT 
+SELECT distinct 
 batch_no, batch_academic_year, batch_grade, batch_language, no_of_students_facilitated, fac_start_date, facilitator_name, facilitator_id,
 school_id, school_name, school_state, school_district, school_taluka, school_partner, school_area, batch_donor, 
-batch_max_overall_attendance, total_reached_students
+batch_max_overall_attendance, total_student_session_att_batchwise, total_reached_students
 FROM t6
 

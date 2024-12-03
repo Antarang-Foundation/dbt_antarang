@@ -10,6 +10,7 @@ t2 AS (
     SELECT 
         attendance_student_id, 
         attendance_status,
+        guardian_attendance,
         session_att_grade
     FROM {{ref('stg_attendance')}} 
     WHERE attendance_status = 'Present'
@@ -20,7 +21,7 @@ t3 AS (
 ),
 
 t4 as (
-    select student_id, attendance_student_id, session_att_grade,
+    select student_id, attendance_student_id, session_att_grade, 
     count(*) as total_student_session_att
     from t3 
     group by student_id, attendance_student_id, session_att_grade
