@@ -60,7 +60,10 @@ renamed as (
         Aspiration_2__c as aspiration_2,
         Aspiration_3__c as aspiration_3,
         Recommedation_Status__c as recommedation_status,
-        Recommendation_Report_Status__c as  recommendation_report_status
+        Recommendation_Report_Status__c as  recommendation_report_status,
+        Possible_Career_Report_Formula__c as possible_career_report,
+        Career_Tracks__c as career_tracks,
+        Clarity_Report__c as clarity_report
 
 
     from source

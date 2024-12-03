@@ -16,14 +16,24 @@ WITH t1 AS (
 t2 as (
     select student_id, student_barcode, batch_no, batch_academic_year, 
     school_state, school_district, school_taluka, 
-    gender, birth_year, no_of_students_facilitated,
+    gender, birth_year, no_of_students_facilitated, 
     (batch_academic_year - birth_year) AS student_age
 from {{ref('int_student_global')}}
 ),
 
 t3 as (
     select * from t1 inner join t2 on t1.stud_id = t2.student_id
+),
+
+t4 as(
+    select t3.*,
+     CASE 
+            WHEN recommedation_status = 'Processed' AND recommendation_report_status = 'Report processed' 
+            THEN 1 
+            ELSE 0 
+        END AS total_stud_have_report
+        from t3
 )
 
-select * from t3
+select * from t4
 
