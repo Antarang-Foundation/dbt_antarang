@@ -293,3 +293,9 @@ models:
     columns:
       - name: phone
       - name: id
+
+  - name: stg_assessment_marks
+    description: A table consists student with their assessment_marks object data with all global filters
+    columns:
+      - name: assessment_student_id
+      - name: student_id
