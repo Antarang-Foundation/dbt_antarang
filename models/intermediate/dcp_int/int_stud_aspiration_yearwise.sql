@@ -20,11 +20,10 @@ WITH t1 AS (
         gender
     FROM {{ ref('int_student_global_cdm1_pivot') }}
 ),
-
 baseline_unpivot AS (
     SELECT 
         student_id, 
-        assessment_barcode as bl_assessment_barcode, 
+        assessment_barcode AS bl_assessment_barcode, 
         bl_assessment_academic_year, 
         batch_no, 
         batch_academic_year, 
@@ -43,11 +42,10 @@ baseline_unpivot AS (
         baseline_stud_aspiration FOR bl_aspiration IN (bl_q4_1, bl_q4_2)
     ) AS unpvt1
 ),
-
 endline_unpivot AS (
     SELECT 
         student_id, 
-        assessment_barcode as el_assessment_barcode, 
+        assessment_barcode AS el_assessment_barcode, 
         el_assessment_academic_year,
         endline_stud_aspiration, 
         el_aspiration
@@ -56,7 +54,6 @@ endline_unpivot AS (
         endline_stud_aspiration FOR el_aspiration IN (el_q4_1, el_q4_2)
     ) AS unpvt2
 ),
-
 t2 AS (
     SELECT 
         b.student_id, 
@@ -78,24 +75,41 @@ t2 AS (
         e.endline_stud_aspiration, 
         e.el_aspiration, 
         e.el_assessment_academic_year
-    FROM baseline_unpivot AS b JOIN endline_unpivot AS e ON b.bl_assessment_barcode = e.el_assessment_barcode
+    FROM baseline_unpivot AS b 
+    JOIN endline_unpivot AS e 
+        ON b.bl_assessment_barcode = e.el_assessment_barcode
 )
-
 SELECT
-        student_id,
-        el_assessment_barcode as assessment_barcode,
-        batch_academic_year, 
-        batch_grade, 
-        batch_language, 
-        school_state, 
-        school_district, 
-        school_taluka, 
-        school_partner, 
-        batch_donor, 
-        gender,
-        baseline_stud_aspiration, 
-        bl_aspiration,
-        endline_stud_aspiration, 
-        el_aspiration
- FROM t2 
- 
+    student_id,
+    el_assessment_barcode AS assessment_barcode,
+    batch_academic_year, 
+    batch_grade, 
+    batch_language, 
+    school_state, 
+    school_district, 
+    school_taluka, 
+    school_partner, 
+    batch_donor, 
+    gender,
+    baseline_stud_aspiration, 
+    bl_aspiration,
+    endline_stud_aspiration, 
+    el_aspiration
+FROM t2
+GROUP BY 
+    student_id, 
+    el_assessment_barcode, 
+    batch_academic_year, 
+    batch_grade, 
+    batch_language, 
+    school_state, 
+    school_district, 
+    school_taluka, 
+    school_partner, 
+    batch_donor, 
+    gender, 
+    bl_aspiration, 
+    el_aspiration,
+    baseline_stud_aspiration,
+    endline_stud_aspiration 
+  
