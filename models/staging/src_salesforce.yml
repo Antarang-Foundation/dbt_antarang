@@ -46,6 +46,9 @@ sources:
         description: A Salesforce table with details of all old assessment uploads.
       - name: contacts
         description: A big query table with details of all chatbot contact data.
+      - name: flow_results
+        description: A big query table with details of all chatbot flow results data.
+
       
         
   

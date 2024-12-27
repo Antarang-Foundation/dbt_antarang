@@ -299,3 +299,9 @@ models:
     columns:
       - name: assessment_student_id
       - name: student_id
+
+  - name: stg_bot_flow_results
+    description: A table consists chat bot flow results data
+    columns:
+      - name: contact_phone
+      - name: name
