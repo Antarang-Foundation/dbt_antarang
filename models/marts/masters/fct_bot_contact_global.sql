@@ -37,7 +37,7 @@ t4 AS (
 t5 as (
     select 
     student_id, student_name, first_barcode, student_grade, student_barcode, student_batch_id, student_contact, 
-    gender, id, phone,
+    gender, phone,
     case when RIGHT(student_contact, 10) = RIGHT(phone, 10) then 1   
          else 0
     end as student_on_chatbot
