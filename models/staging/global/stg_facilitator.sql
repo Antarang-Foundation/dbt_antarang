@@ -17,6 +17,7 @@ renamed as (
         RecordTypeId as record_type_id,
         Academic_Year__c as facilitator_academic_year
     from source 
+    
 ),
 
 recordtypes as (select record_type_id,record_type from {{ ref('seed_recordtype') }}),
@@ -28,4 +29,4 @@ recordtypes as (select record_type_id,record_type from {{ ref('seed_recordtype')
     )
     
 select *
-from stg_facilitator
+from stg_facilitator where facilitator_name not like '%test%' or facilitator_name not like '%Test%' 
