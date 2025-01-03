@@ -47,5 +47,5 @@ left join t5 on t2.school_ward_id = t5.ward_id
 left join t6 on t2.school_taluka_id = t6.taluka_id 
 
 order by school_id)
-select * from t7
+select * from t7 where school_name not like '%test%' or school_name not like '%Test%' 
     

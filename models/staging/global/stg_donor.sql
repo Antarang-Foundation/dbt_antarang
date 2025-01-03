@@ -9,6 +9,7 @@ renamed as (
         RecordTypeId as record_type_id
 
     from source
+    
 ),
 
 recordtypes as (select record_type_id, record_type from {{ ref('seed_recordtype') }}),
@@ -21,4 +22,4 @@ recordtypes as (select record_type_id, record_type from {{ ref('seed_recordtype'
     )
     
 select *
-from stg_donor
+from stg_donor where donor_name not like '%test%' or donor_name not like '%Test%' 

@@ -20,8 +20,9 @@ renamed as (
         Number_of_students_facilitated__c as no_of_students_facilitated
 
     from source
+     
 )
 
-select * from renamed 
+select * from renamed where batch_name not like '%test%' or batch_name not like '%Test%'
 
 -- where batch_name like '%Dummy%' or batch_name like '%dummy%'
