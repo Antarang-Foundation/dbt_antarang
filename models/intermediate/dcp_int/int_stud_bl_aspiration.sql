@@ -1,6 +1,7 @@
 WITH t1 AS (
     SELECT 
         student_id, 
+        student_barcode,
         assessment_barcode, 
         bl_assessment_academic_year, 
         el_assessment_academic_year, 
@@ -17,13 +18,16 @@ WITH t1 AS (
         school_taluka, 
         school_partner, 
         batch_donor, 
-        gender
+        gender,
+        bl_cdm1_no
     FROM {{ ref('int_student_global_cdm1_pivot') }}
 ),
 
 b AS (
     SELECT 
         student_id, 
+        student_barcode as stud_barcode,
+        bl_cdm1_no,
         assessment_barcode AS bl_assessment_barcode, 
         bl_assessment_academic_year, 
         batch_no, 
@@ -50,24 +54,16 @@ t3 AS (
         CASE 
             WHEN bl_aspiration = 'bl_q4_1' THEN 'q4_1'
             WHEN bl_aspiration = 'bl_q4_2' THEN 'q4_2'
-            ELSE NULL
+            ELSE 'DNA'
         END AS aspiration_mapping
     FROM b
 )
 
 select 
-student_id, 
-        bl_assessment_barcode, 
-        bl_assessment_academic_year, 
-        batch_no, 
-        batch_academic_year, 
-        batch_grade, 
-        batch_language, 
-        school_state, 
-        school_district, 
-        school_taluka, 
-        school_partner, 
-        batch_donor, 
+        student_id, 
+        stud_barcode,
+        bl_assessment_barcode,
+        bl_cdm1_no, 
         gender, 
         baseline_stud_aspiration,
         aspiration_mapping
