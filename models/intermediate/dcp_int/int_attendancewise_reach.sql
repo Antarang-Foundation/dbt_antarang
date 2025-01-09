@@ -1,5 +1,5 @@
 with t1 as (
-    select student_id, student_barcode, gender, batch_no
+    select student_id, student_barcode, gender, batch_no, total_stud_have_report
     from {{ref('fct_studentwise_reach')}}
 ),
 
@@ -9,12 +9,12 @@ t2 as (select
     batch_academic_year, batch_grade, batch_language, batch_donor, facilitator_id, facilitator_name,
     school_name, school_id, school_state, school_district, school_taluka, school_partner, school_area,
     session_id, session_type, session_no, attendance_submitted, 
-    batch_expected_sessions, batch_scheduled_sessions, batch_completed_sessions
+    batch_expected_sessions, batch_expected_student_type_session, batch_scheduled_sessions, batch_completed_sessions
     from {{ref('int_global_session')}}
 ),
 
 t3 as (
-    select * from t1 full outer join t2 on t1.batch_no = t2.session_batch_no
+    select * from t1 Inner join t2 on t1.batch_no = t2.session_batch_no
 ),
 
 t4 as (
@@ -24,7 +24,7 @@ t4 as (
 ),
 
 t5 as (
-    select * from t3 full outer join t4 on t3.student_id = t4.attendance_student_id and t3.session_id = t4.attendance_session_id
+    select * from t3 left join t4 on t3.student_id = t4.attendance_student_id and t3.session_id = t4.attendance_session_id
 ),
 
 t6 AS (
@@ -34,9 +34,16 @@ t6 AS (
         COUNT(CASE WHEN attendance_status = 'Present' AND session_type = 'Parent' THEN 1 END) OVER (PARTITION BY student_barcode, batch_no) AS `total_attended_parent_type_session`,
         COUNT(CASE WHEN attendance_status = 'Present' AND session_type = 'Counseling' THEN 1 END) OVER (PARTITION BY student_barcode, batch_no) AS `total_attended_counseling_type_session`,
         COUNT(CASE WHEN guardian_attendance = 'Present' AND session_type = 'Parent' THEN 1 END) OVER (PARTITION BY student_barcode, batch_no) AS `total_parent_attended_parent_type_session`,
-         COUNT(CASE WHEN guardian_attendance = 'Present' AND session_type = 'Counseling' THEN 1 END) OVER (PARTITION BY student_barcode, batch_no) AS `total_parent_attended_Counseling_type_session`, 
+        COUNT(CASE WHEN guardian_attendance = 'Present' AND session_type = 'Counseling' THEN 1 END) OVER (PARTITION BY student_barcode, batch_no) AS `total_parent_attended_Counseling_type_session`
     FROM t5
+),
+
+t7 as (
+    select *,
+    Case when batch_expected_student_type_session = total_attended_student_type_session THEN 1 ELSE 0 end as student_completed_program
+    from t6
 )
 
-select * from t6
+select * from t7
+
 

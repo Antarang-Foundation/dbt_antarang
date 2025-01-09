@@ -37,6 +37,7 @@ with
     t2 as (select *, 
     
     count(distinct session_code) OVER (PARTITION BY session_batch_id) `batch_expected_sessions`,
+    count(distinct case when session_type = 'Student' then session_code end) OVER (partition by session_batch_id) `batch_expected_student_type_session`,
 
     count(distinct case when session_date is not null then session_code end) OVER (PARTITION BY session_batch_id) `batch_scheduled_sessions`,
 
