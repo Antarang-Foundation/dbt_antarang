@@ -1,6 +1,6 @@
 with t1 as (
     select student_id, student_barcode, gender, batch_no, total_stud_have_report
-    from {{ref('fct_studentwise_reach')}}
+    from {{ref('fct_studentwise_demographic')}}
 ),
 
 t2 as (select 
