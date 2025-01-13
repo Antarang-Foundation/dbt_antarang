@@ -10,6 +10,7 @@ WITH t1 AS (
 t2 AS (
     SELECT 
         batch_no, 
+        facilitator_name,
         batch_academic_year, 
         batch_grade, 
         batch_language, 
@@ -32,7 +33,7 @@ t2 AS (
         END AS adoption_percentage
     FROM t1
     GROUP BY 
-        batch_no, batch_academic_year, batch_grade, batch_language, 
+        batch_no, facilitator_name, batch_academic_year, batch_grade, batch_language, 
         no_of_students_facilitated, school_name, school_state, 
         school_district, batch_donor
 )

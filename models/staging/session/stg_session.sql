@@ -49,6 +49,7 @@ with
     max(case when session_type = 'Counseling' then present_count end) OVER (PARTITION BY session_batch_id, session_type) `batch_max_session_counseling_attendance`,
     
     max(case when session_type = 'Student' then present_count end) OVER (PARTITION BY session_batch_id, session_type) `batch_indi_stud_attendance`,
+    sum(case when session_type = 'Student' then present_count end) OVER (PARTITION BY session_batch_id, session_id) `test_ batch_indi_stud_attendance`,
     max(case when session_type = 'Parent' then present_count end) OVER (PARTITION BY session_batch_id, session_type) `batch_indi_parent_attendance`,
     max(case when session_type = 'Flexible' then present_count end) OVER (PARTITION BY session_batch_id, session_type) `batch_indi_flexible_attendance`,
     max(case when session_type = 'Counseling' then present_count end) OVER (PARTITION BY session_batch_id, session_type) `batch_indi_counseling_attendance`,
