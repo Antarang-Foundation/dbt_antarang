@@ -64,6 +64,7 @@ with
         
     MAX(total_student_present) OVER (PARTITION BY session_batch_id) AS batch_max_overall_attendance,
     max(CASE WHEN session_no = 0 AND session_type = 'Parent' THEN parent_present_count end) OVER (PARTITION BY session_batch_id, session_type) `total_reached_parents`
+    
 
 
     from t1  
