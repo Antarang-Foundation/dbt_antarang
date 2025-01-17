@@ -17,7 +17,13 @@ t4 AS (
             WHEN t3.session_mode = 'Any' AND t3.school_district = 'RJ Model B' 
             THEN 'HW Session'
             ELSE t3.session_type
-        END)updated_session_type
+        END)updated_session_type,
+        (case 
+            when lower(session_name) like '%endline%' and total_student_present is not null and session_date is not null
+            then "Batch Completed" --above queries are processed first so baseline and endline do not clash
+            when lower(session_name) like '%01.%' and total_student_present is not null and session_date is not null
+             then "Batch Started"
+        end)batch_status
     FROM t3
 )
 
@@ -32,6 +38,6 @@ present_count,attendance_count,payment_status,deferred_reason,invoice_date,sessi
 session_mode,batch_expected_sessions, batch_expected_student_type_session, batch_scheduled_sessions,batch_completed_sessions,batch_max_student_session_attendance,batch_max_session_parent_attendance,
 batch_max_session_flexible_attendance,batch_max_session_counseling_attendance,batch_indi_stud_attendance,batch_indi_parent_attendance,batch_indi_flexible_attendance,
 batch_indi_counseling_attendance,batch_session_type_based_avg_overall_attendance,batch_max_overall_attendance,total_reached_parents,
-session_type as previous_session_type, updated_session_type as session_type
+session_type as previous_session_type, updated_session_type as session_type, batch_status
 FROM t4
 
