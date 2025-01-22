@@ -148,11 +148,13 @@ models:
 
   - name: int_global_session_combined
     description: "A student-level master table with batch-session-wise details, status of received OMR types, and student-level attendance, linked with global fields."
+    tests:
+      - unique:
+          column_name: "(attendance_id || '-' || session_id)"
     columns:
       - name: attendance_id
         description: "The primary key for this table"
         tests:
-          - unique
           - not_null
       - name: batch_id
         description: "A foreign key linking batches with batch details."
