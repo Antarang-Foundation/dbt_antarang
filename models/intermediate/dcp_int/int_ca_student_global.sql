@@ -14,7 +14,7 @@ WITH t1 AS (
 
 
 t2 as (
-    select student_id, student_barcode, batch_no, batch_academic_year, 
+    select student_id, student_barcode, batch_no, batch_academic_year, batch_grade,
     school_state, school_district, school_taluka, 
     gender, birth_year, no_of_students_facilitated, 
     (batch_academic_year - birth_year) AS student_age
