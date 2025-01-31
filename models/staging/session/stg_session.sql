@@ -23,11 +23,11 @@ with
             Present_Count__c as present_count,        --- present check on all session type. Use for individual session attednace
             Attendance_Count__c as attendance_count,  -- present + absent
             Payment_Status__c as payment_status,
-            --Deferred_Reason__c as deferred_reason,
-            --Invoice_Date__c as invoice_date,
-            --Session_Amount__c as session_amount,
+            Deferred_Reason__c as deferred_reason,
+            Invoice_Date__c as invoice_date,
+            Session_Amount__c as session_amount,
             Number_of_Sessions_No_of_Units__c as no_of_sessions_no_of_units,
-            --Total_Amount__c as total_amount,
+            Total_Amount__c as total_amount,
             Guardian_Parent_Count__c as parent_present_count,
             Session_Mode__c as session_mode
         from t0

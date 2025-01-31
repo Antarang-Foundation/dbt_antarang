@@ -46,16 +46,21 @@ t6 AS (
     COUNT(CASE 
             WHEN attendance_status = 'Present' AND session_type = 'Student' 
             THEN 1 END) 
-            OVER (PARTITION BY attendance_student_id) AS indi_student_attendance,
+            OVER (PARTITION BY attendance_student_id,session_id) AS indi_student_attendance,
     COUNT(CASE 
             WHEN guardian_attendance = 'Present' AND session_type = 'Parent' 
             THEN 1 END) 
-            OVER (PARTITION BY attendance_student_id) AS indi_parent_attendance,
+            OVER (PARTITION BY attendance_student_id, session_id) AS indi_parent_attendance,
     COUNT(CASE 
             WHEN attendance_status = 'Present' AND session_type = 'Counseling' 
             THEN 1 END) 
-            OVER (PARTITION BY attendance_student_id) AS indi_counseling_attendance
+            OVER (PARTITION BY attendance_student_id,session_id) AS indi_counseling_attendance,
+     COUNT(CASE 
+            WHEN attendance_status = 'Present' AND session_type = 'HW Session' 
+            THEN 1 END) 
+            OVER (PARTITION BY attendance_student_id,session_id) AS indi_HW_session_attendance,      
     FROM t5
+    
 )
 
 SELECT 
@@ -82,6 +87,7 @@ SELECT
     attendance_submitted,
     indi_student_attendance, 
     indi_parent_attendance, 
-    indi_counseling_attendance 
+    indi_counseling_attendance,
+    indi_HW_session_attendance
 FROM t6
 
