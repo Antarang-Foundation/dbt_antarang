@@ -1,7 +1,7 @@
 with flow_result as (
     select id, name, profile_id, inserted_at, updated_at, contact_name, flow_version,
     contact_phone, bq_inserted_at, flow_context_id
-    from {{source ('chatbot', 'flow_results')}}
+    from {{source ('salesforce', 'flow_results')}}
 ),
 
 
