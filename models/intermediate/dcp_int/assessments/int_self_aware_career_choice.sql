@@ -12,9 +12,9 @@ t2 AS (
 
 t3 AS (
     SELECT * FROM t1 INNER JOIN t2 ON t1.assessment_student_id = t2.student_id
-), 
+) 
 
-t4 AS (
+/*t4 AS (
     SELECT 
         student_barcode, 
         possible_career_report, 
@@ -39,5 +39,7 @@ t4 AS (
         END AS self_aware_career_choice
     FROM t3
 )
+*/
 
-SELECT * FROM t4
+
+SELECT * FROM t3
