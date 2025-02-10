@@ -1,0 +1,39 @@
+version: 2
+
+sources:
+  - name: chatbot
+    description: dataset created by Glific on BigQuery
+    database: whats-next-v1
+    schema: '917208473080'
+    tables:
+      - name: contact_histories
+        description: A chatbot table with contact history information of contacts. 
+      - name: contact_messages_contacts
+        description: A chatbot table with contact messages details.
+      - name: contacts
+        description: A chatbot table consits of chatbot contact details.
+      - name: contacts_fields
+        description: A chatbot table consists of contact oject fields
+      - name: contacts_groups
+      - name: contacts_wa_groups
+      - name: flow_contexts
+        description: A chatbot table consists of flow details
+      - name: flow_counts
+      - name: flow_labels
+      - name: flow_results
+      - name: flows
+        description: This table consists flows details and results.
+      - name: groups
+      - name: message_broadcast_contacts
+      - name: message_broadcasts
+      - name: message_conversations
+      - name: messages
+      - name: profiles
+        description: A chatbot table conasists profiles details
+
+      
+    
+
+      
+        
+  

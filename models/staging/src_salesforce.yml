@@ -2,7 +2,7 @@ version: 2
 
 sources:
   - name: salesforce
-    description: dataset created by Glific on BigQuery
+    description: dataset consists of salesforce data on BigQuery
     database: antarang-dashboard
     schema: 'dalgo_salesforce_sources'
     tables:
@@ -47,7 +47,7 @@ sources:
       - name: contacts
         description: A big query table with details of all chatbot contact data.
       - name: flow_results
-        description: A big query table with details of all chatbot flow results data.
+        description: A big query table with details of all chatbot flow results data.       
 
       
         
