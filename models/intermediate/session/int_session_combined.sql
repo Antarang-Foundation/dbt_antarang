@@ -19,4 +19,3 @@ t4 as (select * from t1 left join t2 on t1.session_id = t2.somrt_session_id),
 t5 as (select * from t4 left join t3 on t4.session_id = t3.attendance_session_id)
 
 select * from t5
-
