@@ -11,7 +11,4 @@ batch_max_overall_attendance, batch_max_student_session_attendance, batch_max_se
 from {{ref('int_student_global_session_combined')}}
 
 
-/* select 
-*
-from {{ref('int_student_global_session_combined')}}
-*/
+--select *from {{ref('int_student_global_session_combined')}} 
