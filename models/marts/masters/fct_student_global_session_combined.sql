@@ -1,5 +1,5 @@
 select 
-student_barcode, student_name, school_name, school_area, school_district, school_partner, school_state, school_taluka, 
+student_barcode, student_name, caste, school_name, school_area, school_district, school_partner, school_state, school_taluka, 
 batch_academic_year, batch_donor, batch_grade, batch_language, batch_no, fac_start_date, facilitator_email, facilitator_name, gender, 
 attendance_status, guardian_attendance,
 omr_type, session_type, session_code, session_no, session_name, session_date, 

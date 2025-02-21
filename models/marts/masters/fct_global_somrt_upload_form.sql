@@ -70,7 +70,65 @@ t4 as (
 
 t5 as (
     select * from t3 LEFT JOIN t4 on t3.batch_no = t4.session_batch_no
+),
+
+t6 as (
+    SELECT 
+        *, 
+        total_student_present_s1 AS TSP_Baseline,
+
+        CASE 
+            WHEN school_district = 'Nagaland' AND batch_grade IN ('Grade 9', 'Grade 11') THEN total_student_present_s14
+            WHEN school_district = 'Nagaland' AND batch_grade IN ('Grade 10', 'Grade 12') THEN total_student_present_s6
+            WHEN (school_district LIKE '%Model B' OR school_district LIKE '%Model C') 
+                 AND batch_grade IN ('Grade 10', 'Grade 11', 'Grade 12') THEN total_student_present_s4
+            WHEN (school_district LIKE '%Model B' OR school_district LIKE '%Model C') 
+                 AND batch_grade = 'Grade 9' THEN total_student_present_s10
+        END AS TSP_Endline,
+
+        CASE 
+            WHEN school_district = 'Nagaland' AND batch_grade IN ('Grade 9', 'Grade 11') THEN total_student_present_s2
+            WHEN (school_district LIKE '%Model B' OR school_district LIKE '%Model C') 
+                 AND batch_grade = 'Grade 9' THEN total_student_present_s2
+        END AS TSP_SAF_Interest,
+
+        CASE 
+            WHEN school_district = 'Nagaland' AND batch_grade IN ('Grade 9', 'Grade 11') THEN total_student_present_s4
+            WHEN (school_district LIKE '%Model B' OR school_district LIKE '%Model C') 
+                 AND batch_grade = 'Grade 9' THEN total_student_present_s4
+        END AS TSP_SAF_Aptitude,
+
+        CASE 
+            WHEN school_district = 'Nagaland' AND batch_grade IN ('Grade 9', 'Grade 11') THEN total_student_present_s5
+            WHEN school_district = 'Nagaland' AND batch_grade = 'Grade 10' THEN total_student_present_s3
+            WHEN school_district = 'Nagaland' AND batch_grade = 'Grade 12' THEN total_student_present_s4
+        END AS TSP_SAF_QF,
+
+        CASE 
+            WHEN school_district = 'Nagaland' AND batch_grade IN ('Grade 9', 'Grade 11') THEN total_student_present_s6
+            WHEN (school_district LIKE '%Model B' OR school_district LIKE '%Model C') 
+                 AND batch_grade = 'Grade 9' THEN total_student_present_s6
+        END AS TSP_SAR_Reality,
+
+        CASE 
+            WHEN school_district = 'Nagaland' AND batch_grade IN ('Grade 9', 'Grade 11') THEN total_student_present_s11
+        END AS TSP_SAR_Quiz2
+
+    FROM t5 
+    WHERE batch_academic_year <= 2024
 )
 
-select * from t5
+SELECT * except (
+total_student_present_s1, total_student_present_s2, total_student_present_s3, total_student_present_s4,
+total_student_present_s5, total_student_present_s6, total_student_present_s7, total_student_present_s8,
+total_student_present_s9, total_student_present_s10, total_student_present_s11,
+total_student_present_s12, total_student_present_s13, total_student_present_s14)
+FROM t6
+
+
+
+
+--select * from t5
+
+
 
