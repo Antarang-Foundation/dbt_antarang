@@ -40,10 +40,15 @@ t6 AS (
 
 t7 as (
     select *,
-    Case when batch_expected_student_type_session = total_attended_student_type_session THEN 1 ELSE 0 end as student_completed_program
-    from t6
+    Case when batch_expected_student_type_session = total_attended_student_type_session THEN 1 ELSE 0 end as student_completed_program,
+    case when (total_attended_student_type_session / batch_expected_student_type_session) >=0 AND (total_attended_student_type_session/batch_expected_student_type_session)<0.26 then '0% to 25% Attended'
+         when (total_attended_student_type_session / batch_expected_student_type_session)>0.25 AND (total_attended_student_type_session / batch_expected_student_type_session)<0.51 then '26% to 50% Attended'
+         when (total_attended_student_type_session / batch_expected_student_type_session)>0.50 AND (total_attended_student_type_session / batch_expected_student_type_session)<0.76 then '51% to 75% Attended'
+         when (total_attended_student_type_session / batch_expected_student_type_session)>0.75 AND (total_attended_student_type_session / batch_expected_student_type_session)<=1 then '75% to 100% Attended'
+    END `category_of_percentage_of_session_attended`
+    FROM t6
 )
 
-select * from t7
+SELECT * FROM t7
 
 
