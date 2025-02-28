@@ -56,6 +56,9 @@ renamed as (
         Reality_3__c as reality_3,
         Reality_5__c as reality_5,
         Reality_6__c as reality_6,
+        Reality_4__c as reality_4,
+        Reality_7__c as reality_7,
+        Reality_8__c as reality_8,
         Aspiration_1__c as aspiration_1,
         Aspiration_2__c as aspiration_2,
         Aspiration_3__c as aspiration_3,
@@ -63,8 +66,13 @@ renamed as (
         Recommendation_Report_Status__c as  recommendation_report_status,
         Possible_Career_Report_Formula__c as possible_career_report,
         Career_Tracks__c as career_tracks,
-        Clarity_Report__c as clarity_report
-
+        Clarity_Report__c as clarity_report,
+        Current_Aspiration__c as current_aspiration,
+        Possible_Careers_1__c as possible_careers_1,
+        Possible_Careers_2__c as possible_careers_2,
+        Possible_Careers_3__c as possible_careers_3,
+        Followup1Aspiration__c as followup_1_aspiration,
+        Followup2Aspiration__c as followup_2_aspiration
 
     from source
 

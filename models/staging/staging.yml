@@ -305,3 +305,9 @@ models:
     columns:
       - name: contact_phone
       - name: name
+
+  - name: stg_iarp_master
+    description: IARP details with profession
+    columns: 
+      - name: Id
+      - name: profession_name
