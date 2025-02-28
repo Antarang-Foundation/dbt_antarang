@@ -47,7 +47,9 @@ sources:
       - name: contacts
         description: A big query table with details of all chatbot contact data.
       - name: flow_results
-        description: A big query table with details of all chatbot flow results data.       
+        description: A big query table with details of all chatbot flow results data.  
+      - name: IARP_Master__c
+        description: IARP details with profession name and details.
 
       
         

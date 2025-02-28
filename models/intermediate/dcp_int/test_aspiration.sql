@@ -1,53 +1,41 @@
-with t1 as (
-    select student_id as stud_id, 
-        stud_barcode,
-        bl_assessment_barcode,
-        bl_cdm1_no, 
-        gender, 
-        baseline_stud_aspiration,
-        aspiration_mapping from {{ref('int_stud_bl_aspiration')}}
+WITH t1 AS (
+    SELECT 
+        student_id, student_name, student_barcode, batch_no, batch_academic_year, batch_grade,
+        current_aspiration, possible_careers_1, possible_careers_2, possible_careers_3, 
+        followup_1_aspiration, followup_2_aspiration
+    FROM {{ ref('int_student_global') }}
 ),
 
-t2 as (
-    select 
-        student_id,
-        student_barcode, 
-        batch_no, 
-        batch_academic_year, 
-        batch_grade, 
-        batch_language, 
-        school_state, 
-        school_district, 
-        school_taluka, 
-        school_partner, 
-        batch_donor
-        from {{ref('int_student_global')}}
+t2 AS (
+    SELECT id AS career_id, profession_name FROM {{ ref('stg_iarp_master') }}
 ),
 
-t3 as (
-    select * from t2 left join t1 on t2.student_barcode = t1.stud_barcode
+t3 AS (
+    SELECT 
+        t1.*, 
+        t2_1.profession_name AS profession_1
+    FROM t1
+    LEFT JOIN t2 AS t2_1 ON t1.possible_careers_1 = t2_1.career_id
 ),
 
-t4 as (
-    select 
-        el_student_id, 
-        el_cdm1_no,
-        el_assessment_barcode, 
-        el_assessment_academic_year,
-        endline_stud_aspiration, 
-        el_aspiration_mapping
-        from {{ref('int_stud_el_aspiration')}}
+t4 AS (
+    SELECT 
+        t3.*, 
+        t2_2.profession_name AS profession_2
+    FROM t3
+    LEFT JOIN t2 AS t2_2 ON t3.possible_careers_2 = t2_2.career_id
 ),
 
-t5 as (
-    select * from t3 left join t4 on t3.student_barcode = t4.el_assessment_barcode
-    and t3.aspiration_mapping = t4.el_aspiration_mapping   -- this means we can see only records whose both bl and el aspiration there
+t5 AS (
+    SELECT 
+        t4.*, 
+        t2_3.profession_name AS profession_3
+    FROM t4
+    LEFT JOIN t2 AS t2_3 ON t4.possible_careers_3 = t2_3.career_id
 )
 
-select 
-*
-from t5 
-
---student_id, student_barcode,gender, batch_no, batch_academic_year, batch_grade, batch_language, school_state, school_district, school_taluka, school_partner, batch_donor,bl_assessment_barcode, bl_cdm1_no, el_cdm1_no, el_assessment_barcode, aspiration_mapping,el_aspiration_mapping, baseline_stud_aspiration, endline_stud_aspiration
-
-
+SELECT 
+    student_id, student_name, student_barcode, batch_no, batch_academic_year, batch_grade,
+    current_aspiration, profession_1, profession_2, profession_3, 
+    followup_1_aspiration, followup_2_aspiration
+FROM t5
