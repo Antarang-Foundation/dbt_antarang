@@ -37,7 +37,7 @@ t4 as(
         END AS total_stud_have_report,
 
         case when reality_1 is null and reality_2 is null and reality_3 is null and reality_4 is null and reality_5 is null and reality_6 is null and reality_7 is null and 
-reality_8 is null then 1 else 0 end as sar_with_no_reality_data
+reality_8 is null then 0 else 1 end as sar_atleast_one_reality
     from t3
 )
 
