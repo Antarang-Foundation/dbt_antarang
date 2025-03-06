@@ -22,6 +22,7 @@ t2 as (
         school_partner, 
         batch_donor
         from {{ref('int_student_global')}}
+        where batch_academic_year >= 2022 and batch_academic_year is not null and batch_grade is not null
 ),
 
 t3 as (
