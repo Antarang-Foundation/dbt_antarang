@@ -22,7 +22,7 @@ t2 as (
         school_partner, 
         batch_donor
         from {{ref('int_student_global')}}
-        where batch_academic_year >= 2022 and batch_academic_year is not null and batch_grade is not null
+        where batch_academic_year >= 2022 and batch_academic_year is not null and batch_grade is not null and student_barcode is not null
 ),
 
 t3 as (
@@ -43,12 +43,26 @@ t4 as (
 t5 as (
     select * from t3 left join t4 on t3.student_barcode = t4.el_assessment_barcode
     and t3.aspiration_mapping = t4.el_aspiration_mapping   -- this means we can see only records whose both bl and el aspiration there
-)
+),
 
+t6 as (
 select 
 student_id, student_barcode,gender, batch_no, batch_academic_year, batch_grade, batch_language, school_state, school_district, school_taluka, school_partner, 
 batch_donor,bl_assessment_barcode, bl_cdm1_no, el_cdm1_no, el_assessment_barcode, 
 aspiration_mapping, baseline_stud_aspiration, endline_stud_aspiration
 from t5
+),
+
+t7 as (
+    select * from t6 
+
+    UNION ALL
+    select * from {{ref('aspiration_G9_before_2022')}}
+
+    UNION ALL
+    select * from {{ref('aspiration_G10_before_2022')}}
+)
+
+select * from t7
 
 
