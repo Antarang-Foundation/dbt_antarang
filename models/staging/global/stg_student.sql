@@ -72,7 +72,8 @@ renamed as (
         Possible_Careers_2__c as possible_careers_2,
         Possible_Careers_3__c as possible_careers_3,
         Followup1Aspiration__c as followup_1_aspiration,
-        Followup2Aspiration__c as followup_2_aspiration
+        Followup2Aspiration__c as followup_2_aspiration,
+        Student_Details_2__c as student_details_2_submitted
 
     from source
 

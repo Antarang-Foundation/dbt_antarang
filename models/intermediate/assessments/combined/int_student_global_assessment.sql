@@ -1,6 +1,6 @@
 with
 
-    t1 as (select student_id, student_barcode, student_grade, gender, student_batch_id, batch_id, batch_no, batch_academic_year, batch_grade, batch_language, fac_start_date,
+    t1 as (select student_id, first_barcode, student_barcode, student_grade, gender, student_details_2_submitted, student_batch_id, batch_id, batch_no, batch_academic_year, batch_grade, batch_language, fac_start_date,
     batch_facilitator_id, batch_school_id, facilitator_id, facilitator_name, facilitator_email, school_id, school_name, school_academic_year, school_language, school_taluka, 
     school_ward, school_district, school_state, school_partner, school_area, batch_donor_id, donor_id, batch_donor,no_of_students_facilitated  
     from {{ ref("int_student_global") }}),
