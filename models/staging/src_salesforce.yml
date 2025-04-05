@@ -44,10 +44,6 @@ sources:
         description: A Salesforce table with details of all SAR uploads.
       - name: Assessment_Marks__c
         description: A Salesforce table with details of all old assessment uploads.
-      - name: contacts
-        description: A big query table with details of all chatbot contact data.
-      - name: flow_results
-        description: A big query table with details of all chatbot flow results data.  
       - name: IARP_Master__c
         description: IARP details with profession name and details.
 

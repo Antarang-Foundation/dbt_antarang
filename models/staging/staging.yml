@@ -288,23 +288,11 @@ models:
           - accepted_values:
               values: ['Baseline']
 
-  - name: stg_bot_contacts
-    description: A table consists chat bot contact level data
-    columns:
-      - name: phone
-      - name: id
-
   - name: stg_assessment_marks
     description: A table consists student with their assessment_marks object data with all global filters
     columns:
       - name: assessment_student_id
       - name: student_id
-
-  - name: stg_bot_flow_results
-    description: A table consists chat bot flow results data
-    columns:
-      - name: contact_phone
-      - name: name
 
   - name: stg_iarp_master
     description: IARP details with profession
