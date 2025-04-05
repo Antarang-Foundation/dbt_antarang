@@ -41,24 +41,27 @@ with
     count(distinct case when session_type = 'Parent' then session_code end) OVER (partition by session_batch_id) `batch_expected_parent_type_session`,
     count(distinct case when session_type = 'Flexible' then session_code end) OVER (partition by session_batch_id) `batch_expected_flexible_type_session`,
     count(distinct case when session_type = 'Counseling' then session_code end) OVER (partition by session_batch_id) `batch_expected_counseling_type_session`,
+    
 
     count(distinct case when session_date is not null then session_code end) OVER (PARTITION BY session_batch_id) `batch_scheduled_sessions`,
     count(distinct case when session_type = 'Student' and session_date is not null then session_code end) OVER (PARTITION BY session_batch_id) `batch_student_type_scheduled_sessions`,
     count(distinct case when session_type = 'Parent' and session_date is not null then session_code end) OVER (PARTITION BY session_batch_id) `batch_parent_type_scheduled_sessions`,
     count(distinct case when session_type = 'Flexible' and session_date is not null then session_code end) OVER (PARTITION BY session_batch_id) `batch_flexible_type_scheduled_sessions`,
     count(distinct case when session_type = 'Counseling' and session_date is not null then session_code end) OVER (PARTITION BY session_batch_id) `batch_counseling_type_scheduled_sessions`,
+    
 
     count(distinct case when session_date is not null and total_student_present > 0 then session_code end) OVER (PARTITION BY session_batch_id) `batch_completed_sessions`,
     count(distinct case when session_type = 'Student' and session_date is not null and total_student_present > 0 then session_code end) OVER (PARTITION BY session_batch_id) `batch_student_type_completed_sessions`,
     count(distinct case when session_type = 'Parent' and session_date is not null and total_student_present > 0 then session_code end) OVER (PARTITION BY session_batch_id) `batch_parent_type_completed_sessions`,
     count(distinct case when session_type = 'Flexible' and session_date is not null and total_student_present > 0 then session_code end) OVER (PARTITION BY session_batch_id) `batch_flexible_type_completed_sessions`,
     count(distinct case when session_type = 'Counseling' and session_date is not null and total_student_present > 0 then session_code end) OVER (PARTITION BY session_batch_id) `batch_Counseling_type_completed_sessions`,
-
+    
 
     max(case when session_type = 'Student' then total_student_present end) OVER (PARTITION BY session_batch_id, session_type) `batch_max_student_session_attendance`,
     max(case when session_type = 'Parent' then total_parent_present end) OVER (PARTITION BY session_batch_id, session_type) `batch_max_session_parent_attendance`,
     max(case when session_type = 'Flexible' then total_student_present end) OVER (PARTITION BY session_batch_id, session_type) `batch_max_session_flexible_attendance`,
     max(case when session_type = 'Counseling' then present_count end) OVER (PARTITION BY session_batch_id, session_type) `batch_max_session_counseling_attendance`,
+    
     
      --sum(case when session_type = 'Student' then present_count end) OVER (PARTITION BY session_batch_id) `batch_indi_stud_attendance`,
     max(case when session_type = 'Student' then present_count end) OVER (PARTITION BY session_batch_id, session_type) `batch_indi_stud_attendance`,
