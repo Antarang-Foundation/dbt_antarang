@@ -31,11 +31,7 @@ with
                         and session_date is not null
                     then "Batch Started"
                 end
-            ) batch_status,
-             
-             count(distinct case when session_type = 'HW Session' then session_code end) OVER (partition by session_batch_id) `batch_expected_HW_type_session`,
-             count(distinct case when session_type = 'HW Session' and session_date is not null then session_code end) OVER (PARTITION BY session_batch_id) `batch_HW_type_scheduled_sessions`,
-             count(distinct case when session_type = 'HW Session' and session_date is not null and total_student_present > 0 then session_code end) OVER (PARTITION BY session_batch_id) `batch_HW_type_completed_sessions`
+            ) batch_status
         from t3
     )
 
@@ -50,9 +46,9 @@ select
     session_date, session_start_time, session_grade, session_no,
     omr_required, omrs_received, total_student_present, total_parent_present, log_reason, attendance_submitted, present_count, attendance_count,
     payment_status, parent_present_count, session_mode,
-    batch_expected_sessions, batch_expected_student_type_session, batch_expected_HW_type_session,
-    batch_scheduled_sessions, batch_HW_type_scheduled_sessions,
-    batch_completed_sessions, batch_HW_type_completed_sessions,
+    batch_expected_sessions, batch_expected_student_type_session, batch_expected_parent_type_session, batch_expected_flexible_type_session, batch_expected_counseling_type_session,
+    batch_scheduled_sessions, batch_student_type_scheduled_sessions, batch_parent_type_scheduled_sessions, batch_flexible_type_scheduled_sessions, batch_counseling_type_scheduled_sessions,
+    batch_completed_sessions, batch_student_type_completed_sessions, batch_parent_type_completed_sessions, batch_flexible_type_completed_sessions, batch_Counseling_type_completed_sessions, 
     batch_max_student_session_attendance, batch_max_session_parent_attendance, batch_max_session_flexible_attendance, batch_max_session_counseling_attendance,
     batch_indi_stud_attendance, batch_indi_parent_attendance, batch_indi_flexible_attendance, batch_indi_counseling_attendance,
     batch_session_type_based_avg_overall_attendance,
