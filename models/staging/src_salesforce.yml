@@ -46,6 +46,8 @@ sources:
         description: A Salesforce table with details of all old assessment uploads.
       - name: IARP_Master__c
         description: IARP details with profession name and details.
+      - name: Opportunity__c
+        description:  this is opportunity records with details  
 
       
         
