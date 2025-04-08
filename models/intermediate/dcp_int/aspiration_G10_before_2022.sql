@@ -53,10 +53,10 @@ t3 AS (
 t4 AS (
     SELECT 
         t3.*,  
-        CAST(NULL AS STRING) AS bl_assessment_barcode, 
+        --CAST(NULL AS STRING) AS bl_assessment_barcode, 
         CAST(NULL AS STRING) AS bl_cdm1_no,
         CAST(NULL AS STRING) AS el_cdm1_no,
-        CAST(NULL AS STRING) AS el_assessment_barcode
+        --CAST(NULL AS STRING) AS el_assessment_barcode
     FROM t3
 )
 
@@ -73,10 +73,10 @@ SELECT
     school_taluka,
     school_partner,
     batch_donor,
-    bl_assessment_barcode,
+    --bl_assessment_barcode,
     bl_cdm1_no,
     el_cdm1_no,
-    el_assessment_barcode,
+    --el_assessment_barcode,
     aspiration_mapping,
     baseline_stud_aspiration,
     endline_stud_aspiration

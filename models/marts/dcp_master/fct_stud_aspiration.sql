@@ -47,9 +47,9 @@ t5 as (
 
 t6 as (
 select 
-student_id, student_barcode,gender, batch_no, batch_academic_year, batch_grade, batch_language, school_state, school_district, school_taluka, school_partner, 
-batch_donor,bl_assessment_barcode, bl_cdm1_no, el_cdm1_no, el_assessment_barcode, 
-aspiration_mapping, baseline_stud_aspiration, endline_stud_aspiration
+student_id, student_barcode, gender, batch_no, batch_academic_year, batch_grade, batch_language, school_state, school_district, school_taluka, school_partner, 
+batch_donor, bl_cdm1_no, el_cdm1_no, aspiration_mapping, baseline_stud_aspiration, endline_stud_aspiration
+--bl_assessment_barcode, el_assessment_barcode
 from t5
 ),
 
@@ -58,11 +58,27 @@ t7 as (
 
     UNION ALL
     select * from {{ref('aspiration_G9_before_2022')}}
-
+    
     UNION ALL
     select * from {{ref('aspiration_G10_before_2022')}}
+),
+
+t8 AS (
+    SELECT 
+        t7.*,
+        CASE 
+            WHEN aspiration_mapping LIKE '%PC1 and CA%' 
+                 OR aspiration_mapping LIKE '%q4_1%' 
+                 OR aspiration_mapping LIKE '%q4_2%' 
+            THEN student_barcode 
+        END AS bl_assessment_barcode,
+        CASE 
+            WHEN endline_stud_aspiration IS NOT NULL 
+            THEN student_barcode 
+        END AS el_assessment_barcode
+    FROM t7
 )
 
-select * from t7
+select * from t8
 
 

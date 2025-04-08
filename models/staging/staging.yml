@@ -299,3 +299,7 @@ models:
     columns: 
       - name: Id
       - name: profession_name
+
+  - name: stg_opportunity
+    description: opportunity details of cr student
+  
