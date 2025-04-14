@@ -90,5 +90,5 @@ SELECT
     indi_counseling_attendance,
     indi_HW_session_attendance
 FROM t6
-where batch_academic_year = 2024 and facilitator_name is not null
+where batch_academic_year >= 2024 and facilitator_name is not null
 

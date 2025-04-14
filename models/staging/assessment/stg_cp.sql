@@ -48,7 +48,8 @@ t1 as (
 
 t2 as (select record_type_id,record_type from {{ ref('seed_recordtype') }}),
 
-t3 as (select cp_id, assessment_barcode, record_type, created_on, created_from_form, cp_no,
+t3 as 
+(select cp_id, assessment_barcode, record_type, created_on, created_from_form, cp_no,
 
 (case 
 
@@ -60,6 +61,34 @@ and q9_7 is null and q10 is null) then 0 end) is_non_null,
 
 t1.* except(cp_id, assessment_barcode, record_type_id, created_on, created_from_form, cp_no) 
 
-from t1 left join t2 using (record_type_id) order by assessment_barcode, record_type)
+from t1 left join t2 using (record_type_id) order by assessment_barcode, record_type
+),
 
-select * from t3
+t4 AS (
+    SELECT 
+        t3.*,
+        CASE 
+            WHEN q8 IS NOT NULL AND q8 != '*' THEN q8_marks
+            ELSE 3
+        END AS q8_null,
+        
+        CASE
+            WHEN 
+                CASE WHEN q8 IS NOT NULL AND q8 != '*' THEN q8_marks ELSE 3 
+                END = 1 THEN '1. Yes'
+            WHEN 
+                CASE WHEN q8 IS NOT NULL AND q8 != '*' THEN q8_marks 
+                    ELSE 3 
+                END = 0.5 THEN '3. Other'
+            WHEN 
+                CASE 
+                    WHEN q8 IS NOT NULL AND q8 != '*' THEN q8_marks 
+                    ELSE 3 
+                END = 0 THEN '2. No'
+            ELSE '4. DNA'
+        END AS q8_bucket
+from t3
+)
+
+
+select * from t4

@@ -55,6 +55,7 @@ with
         fp.bl_assessment_batch_id as fp_bl_assessment_batch_id, fp.el_assessment_batch_id as fp_el_assessment_batch_id, 
         saf.assessment_batch_id as saf_assessment_batch_id, sar.assessment_batch_id as sar_assessment_batch_id, 
 
+        -- below statement can be used for data quality purpose
         cdm1.bl_created_from_form as cdm1_bl_created_from_form, cdm1.el_created_from_form as cdm1_el_created_from_form, 
         cdm2.bl_created_from_form as cdm2_bl_created_from_form, cdm2.el_created_from_form as cdm2_el_created_from_form, 
         cp.bl_created_from_form as cp_bl_created_from_form, cp.el_created_from_form as cp_el_created_from_form, 

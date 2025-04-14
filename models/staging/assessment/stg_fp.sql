@@ -60,7 +60,33 @@ t1.* except(fp_id, assessment_barcode, record_type_id, created_on, created_from_
     from 
         t1
         left join t2 using (record_type_id) order by assessment_barcode, record_type
-    )
+),
+
+t4 AS (
+    SELECT 
+        t3.*,
+        CASE 
+            WHEN q21 IS NOT NULL AND q21 != '*' THEN q21_marks
+            ELSE 3
+        END AS q21_null,
+        
+        CASE
+            WHEN 
+                CASE WHEN q21 IS NOT NULL AND q21 != '*' THEN q21_marks ELSE 3 
+                END = 1 THEN '1. Yes'
+            WHEN 
+                CASE WHEN q21 IS NOT NULL AND q21 != '*' THEN q21_marks 
+                    ELSE 3 
+                END = 0.5 THEN '3. Other'
+            WHEN 
+                CASE 
+                    WHEN q21 IS NOT NULL AND q21 != '*' THEN q21_marks 
+                    ELSE 3 
+                END = 0 THEN '2. No'
+            ELSE '4. DNA'
+        END AS q21_bucket
+from t3
+)
 
 select *
-from t3
+from t4
