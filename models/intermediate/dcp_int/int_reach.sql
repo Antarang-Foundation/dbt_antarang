@@ -43,8 +43,8 @@ t6 AS (
     SELECT 
         t5.*,
         CASE
-            WHEN batch_academic_year <= 2022 THEN no_of_students_facilitated
-            WHEN batch_academic_year = 2023 THEN batch_max_overall_attendance
+            WHEN batch_academic_year <= 2022 THEN no_of_students_facilitated --total sd count in batch
+            WHEN batch_academic_year = 2023 THEN batch_max_overall_attendance --max tsp/max reach per batch
             WHEN batch_academic_year >= 2024 THEN total_student_session_att_batchwise
             ELSE 0
         END AS total_reached_students

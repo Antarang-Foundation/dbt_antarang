@@ -4,7 +4,7 @@ with t1 as (
         bl_assessment_barcode,
         bl_cdm1_no, 
         baseline_stud_aspiration,
-        aspiration_mapping from {{ref('int_stud_bl_aspiration')}}
+        aspiration_mapping from {{ref('int_stud_bl_aspiration')}}  -- this table is used for after 2022 bl aspiration
 ),
 
 t2 as (

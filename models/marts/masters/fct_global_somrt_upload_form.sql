@@ -50,7 +50,7 @@ combined_sd, combined_barcodes from t1 full outer join t2 on t1.batch_no = t2.ba
 t4 as (
     select 
         batch_no as session_batch_no,
-        no_of_students_facilitated,
+        no_of_students_facilitated, --- this means total sd uploaded into batch by filling form on SF.
         total_student_present_s1,
         total_student_present_s2,
         total_student_present_s3,
@@ -115,7 +115,7 @@ t6 as (
         END AS TSP_SAR_Quiz2
 
     FROM t5 
-    WHERE batch_academic_year <= 2024
+    WHERE batch_academic_year >= 2024
 )
 
 SELECT * except (
