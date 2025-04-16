@@ -3,7 +3,7 @@ WITH t1 AS (
         student_id as stud_id, first_barcode, g9_barcode, g10_barcode, g11_barcode, g12_barcode, 
         reality_1, reality_2, reality_3, reality_5, reality_6, 
         reality_4, reality_7, reality_8,
-        recommedation_status, recommendation_report_status, aspiration_1, aspiration_2, aspiration_3,
+        recommedation_status, recommendation_report_status, aspiration_1, aspiration_2, aspiration_3, --aspiration_3 is blank from 2022 onwards
         -- Counting the number of non-null grade barcodes for each student
         (
             CASE WHEN g9_barcode IS NOT NULL THEN 1 ELSE 0 END +
