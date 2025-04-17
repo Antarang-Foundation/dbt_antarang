@@ -40,7 +40,7 @@ t5 as (
 ),
 
 t6 as (
-    select * from t4 left join t5 on t4.student_id = t5.stud_id
+    select * from t4 full join t5 on t4.student_id = t5.stud_id
 ),
 
 t7 as (

@@ -12,7 +12,7 @@ with
                 else 'Completed'
             end as is_batch_completed
         from {{ ref('fct_global_session') }}
-        where batch_academic_year >= 2024
+        where batch_academic_year >= 2023
         group by
             school_name, school_district, school_area, school_taluka, school_partner
     )

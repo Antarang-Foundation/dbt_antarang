@@ -52,7 +52,7 @@ with t1 as (
                     sum(tsp_sar_reality) tsp_sar_reality,
                     sum(tsp_sar_quiz2) tsp_sar_quiz2
                 from {{ref('fct_global_somrt_upload_form')}}
-                where batch_academic_year >= 2024 and school_district = 'Nagaland'
+                where batch_academic_year >= 2023 and school_district = 'Nagaland'
                 group by
                     school_district,
                     batch_grade,
@@ -81,7 +81,7 @@ with t1 as (
                     sum(sar_atleast_one_quiz) sar_atleast_one_quiz,
                     sum(sar_atleast_one_reality) sar_atleast_one_reality
                 from {{ref('fct_student_global_assessment')}}
-                where batch_academic_year >= 2024 and school_district = 'Nagaland'
+                where batch_academic_year >= 2023 and school_district = 'Nagaland'
                 group by
                     school_district,
                     batch_grade,

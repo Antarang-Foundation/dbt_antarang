@@ -115,7 +115,7 @@ t6 as (
         END AS TSP_SAR_Quiz2
 
     FROM t5 
-    WHERE batch_academic_year >= 2024
+    WHERE batch_academic_year >= 2023
 )
 
 SELECT * except (
