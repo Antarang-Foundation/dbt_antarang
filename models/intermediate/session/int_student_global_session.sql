@@ -16,4 +16,4 @@ t4 AS (
     FROM t3
 )
 
-SELECT * FROM t4 where batch_academic_year >= 2024 and facilitator_name is not null
+SELECT * FROM t4 where batch_academic_year >= 2023 and facilitator_name is not null
