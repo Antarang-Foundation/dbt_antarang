@@ -16,5 +16,6 @@ with
             full outer join donors on batches.batch_donor_id = donors.donor_id)
     
 select *
-
-from int_global order by batch_id
+from int_global 
+where batch_academic_year>=2023 
+order by batch_id

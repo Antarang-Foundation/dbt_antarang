@@ -2,7 +2,7 @@ with t1 as (
         select
             a.school_district,
             a.batch_grade,
-            a.facilitator_name,
+            a.facilitator_name,facilitator_email,
             a.school_name,
             a.batch_no,
             batch_donor,
@@ -32,7 +32,7 @@ with t1 as (
                 select
                     school_district,
                     batch_grade,
-                    facilitator_name,
+                    facilitator_name,facilitator_email,
                     school_name,
                     batch_no,
                     batch_donor,
@@ -56,7 +56,7 @@ with t1 as (
                 group by
                     school_district,
                     batch_grade,
-                    facilitator_name,
+                    facilitator_name,facilitator_email,
                     school_name,
                     batch_no,
                     batch_donor,
