@@ -1,0 +1,281 @@
+version: 2
+models:
+  - name: dev_stg_batch
+    description: "A batch-level staging table derived from SF Source Batch__c with details of all batches."
+    columns:
+      - name: batch_id
+        description: "The primary key for this table"
+        tests:
+          - unique
+          - not_null
+      - name: batch_no
+        description: "The secondary key for this table"
+        tests:
+          - unique
+          - not_null
+      - name: batch_school_id
+        description: "A foreign key linking batches to schools."
+        tests:
+          - not_null
+      - name: batch_facilitator_id
+        description: "A foreign key linking batches to facilitators."
+        tests:
+          - not_null
+      - name: batch_donor_id
+        description: "A foreign key linking batches to donors."
+        tests:
+          - not_null
+
+  - name: dev_stg_school
+    description: "A school-level staging table derived from SF Source Account with details of all schools."
+    columns:
+      - name: school_id
+        description: "The primary key for this table"
+        tests:
+          - unique
+          - not_null
+      - name: school_name
+        description: "The secondary key for this table"
+        tests:
+          - unique
+          - not_null
+
+  - name: dev_stg_facilitator
+    description: "A facilitator-level staging table derived from SF Source Contact with details of all facilitators."
+    columns:
+      - name: facilitator_id
+        description: "The primary key for this table"
+        tests:
+          - unique
+          - not_null
+      - name: facilitator_name
+        description: "The secondary key for this table"
+        tests:
+          - unique
+          - not_null
+
+  - name: dev_stg_donor
+    description: "A donor-level staging table derived from SF Source Account with details of all donors."
+    columns:
+      - name: donor_id
+        description: "The primary key for this table"
+        tests:
+          - unique
+          - not_null
+      - name: donor_name
+        description: "The secondary key for this table"
+        tests:
+          - unique
+          - not_null
+  - name: dev_stg_student
+    description: "A student-level staging table derived from SF Source Contact with details of all students."
+    columns:
+      - name: student_id
+        description: "The primary key for this table"
+        tests:
+          - unique
+          - not_null
+      - name: first_barcode
+        description: "The secondary key for this table"
+        tests:
+          - unique
+          - not_null
+      - name: g9_barcode
+        description: "An important foreign key linking all students with assessments."
+        tests:
+          - unique
+          - not_null
+      - name: g10_barcode
+        description: "An important foreign key linking all students with assessments."
+        tests:
+          - unique
+          - not_null
+      - name: g11_barcode
+        description: "An important foreign key linking all students with assessments."
+        tests:
+          - unique
+          - not_null
+      - name: g12_barcode
+        description: "An important foreign key linking all students with assessments."
+        tests:
+          - unique
+          - not_null
+      - name: g9_batch_id
+        description: "An important foreign key linking all students with sessions, batches, schools, donors, and facilitators."
+        tests:
+          - not_null
+      - name: g10_batch_id
+        description: "An important foreign key linking all students with sessions, batches, schools, donors, and facilitators."
+        tests:
+          - not_null
+      - name: g11_batch_id
+        description: "An important foreign key linking all students with sessions, batches, schools, donors, and facilitators."
+        tests:
+          - not_null
+      - name: g12_batch_id
+        description: "An important foreign key linking all students with sessions, batches, schools, donors, and facilitators."
+        tests:
+          - not_null
+  - name: dev_stg_sar
+    description: "A student-level staging table derived from SF Source Self_Awareness_Realities__c with details of all SAR uploads."
+    columns:
+      - name: sar_id
+        description: "The primary key for this table"
+        tests:
+          - unique
+          - not_null
+      - name: sar_no
+        description: "The secondary key for this table"
+        tests:
+          - unique
+          - not_null
+      - name: record_type
+        description: "The secondary key for this table"
+        tests:
+          - accepted_values:
+              values: ["Baseline"]
+  - name: dev_stg_session
+    description: "A session-level staging table derived from SF Source Session__c with details of all sessions."
+    columns:
+      - name: session_id
+        description: "The primary key of this table"
+        tests:
+          - unique
+          - not_null
+      - name: session_batch_id
+        description: "A foreign key in the table linking with batch_name and through this with global fields."
+        tests:
+          - not_null
+      - name: session_facilitator_id
+        description: "A foreign key in the table linking with facilitator_name."
+        tests:
+          - not_null
+  - name: dev_stg_attendance
+    description: "A student-level staging table derived from SF Source Session_Attendance__c with session-wise attendance of all students."
+    columns:
+      - name: attendance_id
+        description: "The primary key of this table"
+        tests:
+          - unique
+          - not_null
+      - name: attendance_session_id
+        description: "A foreign key in the table linking with session details."
+        tests:
+          - not_null
+      - name: attendance_student_id
+        description: "A foreign key in the table linking with student details."
+        tests:
+          - not_null
+  - name: dev_stg_somrt
+    description: "A session-omr_type-level staging table derived from SF Source Session_OMR_Type__c with session-wise receiving status of all OMR types."
+    columns:
+      - name: somrt_id
+        description: "The primary key of this table"
+        tests:
+          - unique
+          - not_null
+      - name: somrt_no
+        description: "The secondary key of this table"
+        tests:
+          - unique
+          - not_null
+      - name: somrt_session_id
+        description: "A foreign key in the table linking with session details."
+        tests:
+          - not_null
+      - name: somrt_batch_id
+        description: "A foreign key in the table linking with batch details."
+        tests:
+          - not_null
+      - name: somrt_batch_no
+        description: "A secondary foreign key in the table linking with batch details."
+        tests:
+          - not_null
+  - name: dev_stg_cdm1
+    description: "A student-level staging table derived from SF Source OMR_Assessment__c with details of all CDM1 uploads."
+    columns:
+      - name: cdm1_id
+        description: "The primary key for this table"
+        tests:
+          - unique
+          - not_null
+      - name: cdm1_no
+        description: "The secondary key for this table"
+        tests:
+          - unique
+          - not_null
+
+  - name: dev_stg_cdm2
+    description: "A student-level staging table derived from SF Source CDM2__c with details of all CDM2 uploads."
+    columns:
+      - name: cdm2_id
+        description: "The primary key for this table"
+        tests:
+          - unique
+          - not_null
+      - name: cdm2_no
+        description: "The secondary key for this table"
+        tests:
+          - unique
+          - not_null
+
+  - name: dev_stg_cp
+    description: "A student-level staging table derived from SF Source Career_Planning__c with details of all CP uploads."
+    columns:
+      - name: cp_id
+        description: "The primary key for this table"
+        tests:
+          - unique
+          - not_null
+      - name: cp_no
+        description: "The secondary key for this table"
+        tests:
+          - unique
+          - not_null
+
+  - name: dev_stg_cs
+    description: "A student-level staging table derived from SF Source Career_Skill__c with details of all CS uploads."
+    columns:
+      - name: cs_id
+        description: "The primary key for this table"
+        tests:
+          - unique
+          - not_null
+      - name: cs_no
+        description: "The secondary key for this table"
+        tests:
+          - unique
+          - not_null
+
+  - name: dev_stg_fp
+    description: "A student-level staging table derived from SF Source Future_Planning__c with details of all FP uploads."
+    columns:
+      - name: fp_id
+        description: "The primary key for this table"
+        tests:
+          - unique
+          - not_null
+      - name: fp_no
+        description: "The secondary key for this table"
+        tests:
+          - unique
+          - not_null
+
+  - name: dev_stg_saf
+    description: "A student-level staging table derived from SF Source Self_Awareness_and_Feedback__c with details of all SAF uploads."
+    columns:
+      - name: saf_id
+        description: "The primary key for this table"
+        tests:
+          - unique
+          - not_null
+      - name: saf_no
+        description: "The secondary key for this table"
+        tests:
+          - unique
+          - not_null
+      - name: record_type
+        description: "The secondary key for this table"
+        tests:
+          - accepted_values:
+              values: ["Baseline"]

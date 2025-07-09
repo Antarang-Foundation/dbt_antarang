@@ -1,11 +1,5 @@
 with source as (
-    select * 
-    from {{ source('salesforce', 'Contact') }} 
-    where IsDeleted = false
-),
-
-a as (
-    select
+    select 
         Id as facilitator_id,
         Name as facilitator_name,
         Language__c as facilitator_language,
@@ -17,9 +11,9 @@ a as (
         npe01__WorkEmail__c as facilitator_email,
         MobilePhone as facilitator_mobile,
         RecordTypeId as record_type_id,
-        Academic_Year__c as facilitator_academic_year
-    from source 
-    where lower(name) not like '%test%'
+        Academic_Year__c as facilitator_academic_year 
+    from {{ source('salesforce', 'Contact') }} 
+    where IsDeleted = false and lower(name) not like '%test%'
 ),
 
 recordtypes as (
@@ -28,23 +22,23 @@ recordtypes as (
     where record_type = 'CA Trainer'
 ),
 
-stg_facilitator as (
+dev_stg_facilitator as (
     select 
-        facilitator_id, 
-        facilitator_name, 
-        facilitator_language, 
-        facilitator_work_status, 
-        payment_type, 
-        facilitator_area, 
-        facilitator_city, 
-        facilitator_shift, 
-        facilitator_email, 
-        facilitator_mobile, 
-        facilitator_academic_year, 
-        record_type
-    from a
-    inner join recordtypes b using (record_type_id)
+        a.facilitator_id,
+        a.facilitator_name, 
+        a.facilitator_language, 
+        a.facilitator_work_status, 
+        a.payment_type, 
+        a.facilitator_area, 
+        a.facilitator_city, 
+        a.facilitator_shift, 
+        a.facilitator_email, 
+        a.facilitator_mobile, 
+        a.facilitator_academic_year, 
+        b.record_type
+    from source a
+    inner join recordtypes b ON a.record_type_id = b.record_type_id
 )
 
 select *
-from stg_facilitator
+from dev_stg_facilitator

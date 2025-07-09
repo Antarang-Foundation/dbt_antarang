@@ -1,4 +1,4 @@
-select
+select 
     student_barcode,
     student_name,
     caste,
@@ -48,5 +48,4 @@ select
 from
     {{ ref("int_student_global_session_combined") }}
 
-    -- select *from {{ref('int_student_global_session_combined')}} 
-    
+    -- select *from {{ref('int_student_global_session_combined')}}

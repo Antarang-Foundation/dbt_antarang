@@ -7,7 +7,7 @@ count(distinct case when batch_expected_sessions > 0 and batch_expected_sessions
 from {{ref('int_student_global_session_combined')}}),
 
 t2 as(
-select student_barcode, first_barcode, student_name, batch_no, batch_donor, school_partner, school_state, school_district, school_taluka, school_name, school_area, facilitator_name, facilitator_email, batch_academic_year, batch_grade, 
+select student_barcode, first_barcode, student_name, gender, batch_no, batch_donor, school_partner, school_state, school_district, school_taluka, school_name, school_area, facilitator_name, facilitator_email, batch_academic_year, batch_grade, 
 batch_language, g9_whatsapp_no, g10_whatsapp_no, g11_whatsapp_no, g12_whatsapp_no,
 
 max(school_batches_completing_program) `school_batches_completing_program`,
@@ -38,14 +38,19 @@ count(distinct case when session_date is not null and total_student_present > 0 
 count(distinct case when session_date is not null and total_student_present > 0 and attendance_status = 'Present' and session_type = 'Student' then session_code end) `stud_present_student_type_sessions`,
 count(distinct case when session_date is not null and total_student_present > 0 and attendance_status = 'Present' and session_type = 'Parent' then session_code end) `stud_present_parent_type_sessions`,
 count(distinct case when session_date is not null and total_student_present > 0 and attendance_status = 'Present' and session_type = 'Flexible' then session_code end) `stud_present_flexible_type_sessions`,
-count(distinct case when session_date is not null and total_student_present > 0 and attendance_status = 'Present' and session_type = 'Counseling' then session_code end) `stud_present_counseling_type_sessions`
+count(distinct case when session_date is not null and total_student_present > 0 and attendance_status = 'Present' and session_type = 'Counseling' then session_code end) `stud_present_counseling_type_sessions`,
+
+count(distinct case when session_date is not null and total_student_present > 0 and attendance_status = 'Absent' and session_type = 'Student' then session_code end) `stud_absent_student_type_sessions`,
+count(distinct case when session_date is not null and total_student_present > 0 and attendance_status = 'Absent' and session_type = 'Parent' then session_code end) `stud_absent_parent_type_sessions`,
+count(distinct case when session_date is not null and total_student_present > 0 and attendance_status = 'Absent' and session_type = 'Flexible' then session_code end) `stud_absent_flexible_type_sessions`,
+count(distinct case when session_date is not null and total_student_present > 0 and attendance_status = 'Absent' and session_type = 'Counseling' then session_code end) `stud_absent_counseling_type_sessions`
 
 FROM t1
-group by student_barcode, first_barcode, student_name, batch_no, batch_donor, school_partner, school_state, school_district, school_taluka, school_name, school_area, facilitator_name, facilitator_email, batch_academic_year, batch_grade, session_grade, batch_language,
+group by student_barcode, first_barcode, student_name, gender, batch_no, batch_donor, school_partner, school_state, school_district, school_taluka, school_name, school_area, facilitator_name, facilitator_email, batch_academic_year, batch_grade, session_grade, batch_language,
 g9_whatsapp_no, g10_whatsapp_no, g11_whatsapp_no, g12_whatsapp_no
 )
 
-select * from t2 
+select * from t2
 
 
 
