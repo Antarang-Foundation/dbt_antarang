@@ -1,1 +1,2 @@
-select * from {{ref('int_student_global_session_status')}}
+select * from
+{{ref('int_student_global_session_status')}}

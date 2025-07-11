@@ -46,8 +46,8 @@ count(distinct case when session_date is not null and total_student_present > 0 
 count(distinct case when session_date is not null and total_student_present > 0 and attendance_status = 'Absent' and session_type = 'Counseling' then session_code end) `stud_absent_counseling_type_sessions`
 
 FROM t1
-group by student_barcode, first_barcode, student_name, gender, batch_no, batch_donor, school_partner, school_state, school_district, school_taluka, school_name, school_area, facilitator_name, facilitator_email, batch_academic_year, batch_grade, session_grade, batch_language,
-g9_whatsapp_no, g10_whatsapp_no, g11_whatsapp_no, g12_whatsapp_no
+group by student_barcode, first_barcode, student_name, gender, batch_no, batch_donor, school_partner, school_state, school_district, school_taluka, school_name, school_area, facilitator_name, facilitator_email, 
+batch_academic_year, batch_grade, session_grade, batch_language, g9_whatsapp_no, g10_whatsapp_no, g11_whatsapp_no, g12_whatsapp_no
 )
 
 select * from t2
