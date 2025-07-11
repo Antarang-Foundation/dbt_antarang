@@ -21,7 +21,7 @@ t2 as (
     school_state, school_district, school_taluka, 
     gender, birth_year, no_of_students_facilitated, 
     (batch_academic_year - birth_year) AS student_age
-from {{ref('int_student_global')}}
+from {{ref('int_student_global_dcp')}}
 ),
 
 t3 as (

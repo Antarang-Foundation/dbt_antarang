@@ -19,3 +19,14 @@ total_parent_attended_parent_type_session, total_parent_attended_Counseling_type
 )
 
 select * from t1
+
+/*2023 2341006190 2301043188 2304000382
+2024 2403005686 2401072084 2401047330
+2025 2503010002 2503004455 2503005562*/
+
+
+/*select * from t1
+WHERE batch_academic_year IN (2023, 2024, 2025) AND student_barcode IN ('2341006190', '2301043188', '2304000382', '2403005686',
+'2401072084', '2401047330', '2503010002', '2503004455', '2503005562') 
+order by batch_academic_year, student_id*/
+

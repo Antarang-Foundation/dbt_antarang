@@ -1,0 +1,100 @@
+version: 2
+models:
+  - name: dev_fct_consolidated_stud_attendance
+    # description:
+    columns:
+      - name: student_barcode
+        description: "The primary key of this table"
+        tests:
+          - unique
+          - not_null
+
+  - name: dev_fct_student_global_session_combined
+    # description:
+    columns:
+      - name: student_barcode
+        description: "The primary key of this table"
+        tests:
+          - unique
+          - not_null
+
+  - name: dev_fct_global_session
+    # description:
+    columns:
+      - name: batch_id
+        description: "The primary key of this table"
+        tests:
+          - unique
+          - not_null
+
+  - name: dev_fct_student_global_session
+    # description:
+    columns:
+      - name: student_barcode
+        description: "The primary key of this table"
+        tests:
+          - unique
+          - not_null
+
+  - name: dev_fct_student_global
+    # description:
+    columns:
+      - name: student_barcode
+        description: "The primary key of this table"
+        tests:
+          - unique
+          - not_null
+
+  - name: dev_fct_student_global_cdm1_latest
+    # description:
+    columns:
+      - name: student_barcode
+        description: "The primary key of this table"
+        tests:
+          - unique
+          - not_null
+
+  - name: dev_fct_student_global_sar
+    # description:
+    columns:
+      - name: student_barcode
+        description: "The primary key of this table"
+        tests:
+          - unique
+          - not_null
+
+  - name: dev_fct_student_global_cdm2_latest
+    # description:
+    columns:
+      - name: student_barcode
+        description: "The primary key of this table"
+        tests:
+          - unique
+          - not_null
+
+  - name: dev_fct_student_global_cp_latest
+    # description:
+    columns:
+      - name: student_barcode
+        description: "The primary key of this table"
+        tests:
+          - unique
+          - not_null
+
+  - name: dev_fct_student_global_cs_latest
+    # description:
+    columns:
+      - name: student_barcode
+        description: "The primary key of this table"
+        tests:
+          - unique
+          - not_null
+
+  - name: dev_fct_student_global_fp_latest
+    # description:
+    columns:
+      - name: student_barcode
+        description: "The primary key of this table"
+        tests:
+          - unique
+          - not_null

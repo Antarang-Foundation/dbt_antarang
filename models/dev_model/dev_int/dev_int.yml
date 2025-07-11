@@ -1,0 +1,42 @@
+version: 2
+models:
+  - name: dev_int_global_dcp
+    description: "A student-grade level intermediate table with multiple grade rows for each student."
+    columns:
+      - name: batch_id
+        description: "The primary key for this table"
+        tests:
+          - unique
+          - not_null
+  - name: dev_int_studentwise_reach
+    description: "A student-reach level intermediate table with multiple grade rows for each student."
+    columns:
+      - name: batch_id
+        description: "The primary key for this table"
+        tests:
+          - unique
+          - not_null
+  - name: dev_int_sar_latest
+    description: "A student-reach level intermediate table with multiple grade rows for each student."
+    columns:
+      - name: batch_id
+        description: "The primary key for this table"
+        tests:
+          - unique
+          - not_null
+  - name: dev_int_studentwise_demographic
+    description: "A student-reach level intermediate table with multiple grade rows for each student."
+    columns:
+      - name: batch_id
+        description: "The primary key for this table"
+        tests:
+          - unique
+          - not_null
+  - name: dev_int_global_session
+    description: "A student-reach level intermediate table with multiple grade rows for each student."
+    columns:
+      - name: batch_id
+        description: "The primary key for this table"
+        tests:
+          - unique
+          - not_null

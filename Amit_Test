@@ -1,0 +1,4 @@
+WITH t0 AS (
+    SELECT * FROM {{ ref("stg_student") }}
+)
+SELECT * FROM t0;
