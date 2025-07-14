@@ -75,7 +75,7 @@ t3 as (
             then 1
             when t1.sar_no is not null then 0
             else null
-        end as sar_no_quiz_reality_status,
+        end as is_non_null, --sar_no_quiz_reality_status
 
         /*-- Flag 2: at least one quiz
         case
@@ -92,7 +92,7 @@ t3 as (
             then 1
             when t1.sar_no is not null then 0
             else null
-        end as sar_no_quiz_atleast_one,
+        end as sar_atleast_one_quiz, --sar_no_quiz_atleast_one
 
         /*-- Flag 3: at least one reality
         case
@@ -109,7 +109,7 @@ t3 as (
             then 1
             when t1.sar_no is not null then 0
             else null
-        end as sar_no_reality_atleast_one,
+        end as sar_atleast_one_reality, --sar_no_reality_atleast_one,
 
         -- Rest of the fields
         t1.assessment_grade, t1.assessment_academic_year, t1.assessment_batch_id, t1.q2_submitted, t1.reality_submitted, 
