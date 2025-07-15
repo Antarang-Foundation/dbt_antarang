@@ -279,3 +279,12 @@ models:
         tests:
           - accepted_values:
               values: ["Baseline"]
+
+  - name: dev_stg_hm_session
+    description: "A new HM session from SF Source Salesforce and HM_Session__c details of all HM attended"
+    columns:
+      - name: session_id
+        description: "The primary key for this table"
+        tests:
+          - unique
+          - not_null
