@@ -7,8 +7,7 @@ WITH t0 AS (
         school_district, 
         school_state, 
         session_no,  
-        total_student_present,
-        session_date
+        total_student_present
     FROM {{ref('int_global_session')}}
     WHERE school_district IN ('Nagaland', 'Palghar', 'Yamunanagar', 'RJ Model B')
 ),
@@ -31,7 +30,6 @@ renamed as (
         no_of_students_facilitated as no_of_students_facilitated,
         school_district as school_district,
         school_state as school_state,
-        session_date,
         _1 as total_student_present_s1,
         _2 as total_student_present_s2,
         _3 as total_student_present_s3,
