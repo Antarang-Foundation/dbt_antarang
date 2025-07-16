@@ -3,7 +3,7 @@ with t1 as (select * from
 where school_district In ('Nagaland', 'Palghar', 'RJ Model B','RJ Model C', 'RJ Model A')), 
 
 t2 as (select batch_no, batch_academic_year, batch_grade, batch_language, fac_start_date, facilitator_name, facilitator_email, school_name, school_academic_year, school_language, 
-school_taluka, school_ward, school_district, school_state, school_partner,school_area, batch_donor, 
+school_taluka, school_ward, school_district, school_state, school_partner,school_area, batch_donor,
 
 
 count(distinct student_barcode) `combined_sd`, 
@@ -43,7 +43,7 @@ stg_cp_sd, stg_cp_barcodes, bl_cp_raw, bl_cp_correct, el_cp_raw, el_cp_correct,
 stg_cs_sd, stg_cs_barcodes, bl_cs_raw, bl_cs_correct, el_cs_raw, el_cs_correct,
 stg_fp_sd, stg_fp_barcodes, bl_fp_raw, bl_fp_correct, el_fp_raw, el_fp_correct,
 stg_saf_sd, stg_saf_barcodes, bl_saf_raw, el_saf_raw, saf_correct, 
-stg_sar_sd, stg_sar_barcodes, bl_sar_raw, el_sar_raw, sar_correct, 
+stg_sar_sd, stg_sar_barcodes, bl_sar_raw, el_sar_raw, sar_correct,
 
 combined_sd, combined_barcodes from t1 full outer join t2 on t1.batch_no = t2.batch_no),
 
@@ -124,6 +124,7 @@ total_student_present_s5, total_student_present_s6, total_student_present_s7, to
 total_student_present_s9, total_student_present_s10, total_student_present_s11,
 total_student_present_s12, total_student_present_s13, total_student_present_s14)
 FROM t6
+
 
 
 
