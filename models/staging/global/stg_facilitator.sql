@@ -3,9 +3,17 @@ with source as (
 ),
 
 renamed as (
-    select
+    select 
         Id as facilitator_id,
         Name as facilitator_name,
+        Language__c as facilitator_language,
+        Facilitator_Work_Status__c as facilitator_work_status,
+        Payment_Type__c as payment_type,
+        Area_of_Operation__c as facilitator_area,
+        Cities_of_Operation__c as facilitator_city,
+        Trainer_Status__c as facilitator_shift,
+        npe01__WorkEmail__c as facilitator_email,
+        MobilePhone as facilitator_mobile,
         RecordTypeId as record_type_id,
         Academic_Year__c as facilitator_academic_year
     from source 
