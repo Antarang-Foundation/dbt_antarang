@@ -4,14 +4,14 @@ sources:
   - name: salesforce
     description: dataset consists of salesforce data on BigQuery
     database: antarang-dashboard
-    schema: 'dalgo_salesforce_sources'
+    schema: "dalgo_salesforce_sources"
     tables:
       - name: Contact
-        description: A Salesforce table with contact information of students, parents, and facilitators. 
+        description: A Salesforce table with contact information of students, parents, and facilitators.
       - name: Account
-        description: A Salesforce table with details of all schools and donors. 
+        description: A Salesforce table with details of all schools and donors.
       - name: Batch__c
-        description: A Salesforce table with details of all batches. 
+        description: A Salesforce table with details of all batches.
       - name: RecordType
         description: A Salesforce table with a mapping of record_type_id and record_type_name.
       - name: State_Govt_Body_Level__c
@@ -21,7 +21,7 @@ sources:
       - name: Ward_Master__c
         description: A Salesforce table with a mapping of school_ward_id and school_ward.
       - name: City_Master__c
-        description: A Salesforce table with a mapping of school_taluka_id and school_taluka.      
+        description: A Salesforce table with a mapping of school_taluka_id and school_taluka.
       - name: Session__c
         description: A Salesforce table with details of all sessions.
       - name: Session_OMR_Type__c
@@ -33,7 +33,7 @@ sources:
       - name: CDM2__c
         description: A Salesforce table with details of all CDM2 uploads.
       - name: Career_Planning__c
-        description: A Salesforce table with details of all CP uploads. 
+        description: A Salesforce table with details of all CP uploads.
       - name: Career_Skill__c
         description: A Salesforce table with details of all CS uploads.
       - name: Future_Planning__c
@@ -47,8 +47,6 @@ sources:
       - name: IARP_Master__c
         description: IARP details with profession name and details.
       - name: Opportunity__c
-        description:  this is opportunity records with details  
-
-      
-        
-  
+        description: this is opportunity records with details
+      - name: HM_Session__c
+        description: this is hm session recorded

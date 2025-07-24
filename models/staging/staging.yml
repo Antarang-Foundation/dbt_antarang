@@ -302,4 +302,13 @@ models:
 
   - name: stg_opportunity
     description: opportunity details of cr student
+
+  - name: stg_hm_session
+    description: "A new HM session from SF Source Salesforce and HM_Session__c details of all HM attended"
+    columns:
+      - name: hm_id
+        description: "The primary key for this table"
+        tests:
+          - unique
+          - not_null
   

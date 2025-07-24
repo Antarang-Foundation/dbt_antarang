@@ -1,0 +1,14 @@
+version: 2
+
+sources:
+  - name: kobo
+    description: dataset consists of kobo data on BigQuery
+    database: antarang-dashboard
+    schema: "dalgo_DBT_Antarang_Foundation"
+    tables:
+      - name: Post_Program_Orientation_form_table
+        description: "KOBO form responses for post-program orientation"
+      - name: Post_Program_Questionare_table
+        description: "KOBO questionnaire responses post-program"
+      - name: Pre_Program_Orientation_form_table
+        description: "KOBO questionnaire responses pre- program orientation"
