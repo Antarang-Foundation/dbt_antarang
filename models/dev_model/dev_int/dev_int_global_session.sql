@@ -4,8 +4,7 @@ with
     facilitator_email, batch_school_id, school_id, school_name, school_taluka, school_district, school_state,
     school_academic_year, school_language, enrolled_g9, enrolled_g10, enrolled_g11, enrolled_g12,
     tagged_for_counselling, school_partner, school_area, batch_donor_id, donor_id, batch_donor, student_name, first_barcode, gender,
-    current_barcode, current_batch_no, birth_year, birth_date, g9_whatsapp_no, g10_whatsapp_no, g11_whatsapp_no, g12_whatsapp_no, g9_alternate_no,
-    g10_alternate_no, g11_alternate_no, g12_alternate_no, religion, caste, father_education, father_occupation, mother_education, mother_occupation,
+    current_barcode, current_batch_no, birth_year, birth_date, g9_whatsapp_no, g10_whatsapp_no, g11_whatsapp_no, g12_whatsapp_no, religion, caste, father_education, father_occupation, mother_education, mother_occupation,
     student_details_2_submitted, school_ward  from {{ ref("dev_int_global_dcp") }}),
 
     t2 as (select session_id, session_batch_id, session_facilitator_id, session_code, session_name, session_type,
