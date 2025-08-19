@@ -40,3 +40,11 @@ models:
         tests:
           - unique
           - not_null
+  - name: dev_int_student_global_stg
+    description: "A student-reach level intermediate table with multiple grade rows for each student."
+    columns:
+      - name: student_id
+        description: "The primary key for this table"
+        tests:
+          - unique
+          - not_null
