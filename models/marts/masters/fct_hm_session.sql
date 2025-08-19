@@ -1,5 +1,5 @@
 with int_global_dcp as (
-    select 
+    select distinct
         batch_academic_year, 
         batch_language, 
         school_name, 
@@ -9,14 +9,15 @@ with int_global_dcp as (
         batch_donor, 
         school_area,
         school_partner,
-        school_id
+        school_id,
+        facilitator_name
     from {{ ref('dev_int_global_dcp') }}
 ),
 
 hm_session as (
     select 
         hm_session_name,
-        facilitator_name, 
+        hm_facilitator_name, 
         hm_session_date, 
         start_time, 
         scheduling_type, 
@@ -42,3 +43,6 @@ select
     hm_session_name, facilitator_name, hm_session_date, start_time, scheduling_type, rescheduled_counter, session_status, 
     hm_attended, session_lead, batch_academic_year, batch_language, school_name, school_taluka, school_district, school_state, 
     batch_donor, school_area, school_partner  from joined_source
+
+    
+    

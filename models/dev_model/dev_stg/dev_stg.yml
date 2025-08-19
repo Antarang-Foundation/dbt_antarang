@@ -288,3 +288,12 @@ models:
         tests:
           - unique
           - not_null
+
+  - name: dev_stg_overall_attendance
+    description: "A student-level staging table derived from SF Source Session_Attendance__c with session-wise attendance of all students."
+    columns:
+      - name: batch_no
+        description: "The primary key of this table"
+        tests:
+          - unique
+          - not_null

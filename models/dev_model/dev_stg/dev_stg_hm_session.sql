@@ -19,7 +19,7 @@ WITH source AS (
     Session_Lead__c AS session_lead,
     Session_Status__c AS session_status,
     Session_Name__c AS hm_session_name,
-    Name AS facilitator_name,
+    Name AS hm_facilitator_name,
     Start_Time__c AS start_time
   FROM {{ source('salesforce', 'HM_Session__c') }}
   WHERE IsDeleted = FALSE
