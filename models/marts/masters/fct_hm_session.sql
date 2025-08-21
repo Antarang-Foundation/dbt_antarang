@@ -1,5 +1,5 @@
 with int_global_dcp as (
-    select distinct
+    select 
         batch_language, 
         school_name, 
         school_taluka, 
@@ -47,7 +47,7 @@ joined_source as (
 select 
     hm_session_name, facilitator_name, hm_session_date, start_time, scheduling_type, rescheduled_counter, session_status, 
     hm_attended, session_lead, session_academic_year, batch_language, school_name, school_taluka, school_district, school_state, 
-    batch_donor, school_area, school_partner  from joined_source
+    school_area, school_partner  from joined_source
 
     
     
