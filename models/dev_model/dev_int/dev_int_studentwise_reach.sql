@@ -19,7 +19,7 @@ t2 AS (
 t3 AS (
     SELECT * 
     FROM t1 
-    INNER JOIN t2 ON t1.batch_no = t2.session_batch_no
+    LEFT JOIN t2 ON t1.batch_no = t2.session_batch_no
 ),
 
 t4 AS (
@@ -38,14 +38,40 @@ t5 AS (
 ),
 
 t6 AS (
-    SELECT *,
-        COUNT(CASE WHEN attendance_status = 'Present' THEN 1 END) OVER (PARTITION BY student_barcode, batch_no) AS `total_student_session_attended`,
-        COUNT(CASE WHEN attendance_status = 'Present' AND session_type = 'Student' THEN 1 END) OVER (PARTITION BY student_barcode, batch_no) AS `total_attended_student_type_session`,
-        COUNT(CASE WHEN attendance_status = 'Present' AND session_type = 'Parent' THEN 1 END) OVER (PARTITION BY student_barcode, batch_no) AS `total_attended_parent_type_session`,
-        COUNT(CASE WHEN attendance_status = 'Present' AND session_type = 'Counseling' THEN 1 END) OVER (PARTITION BY student_barcode, batch_no) AS `total_attended_counseling_type_session`,
-        COUNT(CASE WHEN guardian_attendance = 'Present' AND session_type = 'Parent' THEN 1 END) OVER (PARTITION BY student_barcode, batch_no) AS `total_parent_attended_parent_type_session`,
-        COUNT(CASE WHEN guardian_attendance = 'Present' AND session_type = 'Counseling' THEN 1 END) OVER (PARTITION BY student_barcode, batch_no) AS `total_parent_attended_Counseling_type_session`
+    SELECT student_id,
+        student_barcode,
+        batch_no,
+
+        MAX(gender) AS gender,
+        MAX(total_stud_have_report) AS total_stud_have_report,
+
+        MAX(batch_academic_year) AS batch_academic_year,
+        MAX(batch_grade) AS batch_grade,
+        MAX(batch_language) AS batch_language,
+        MAX(batch_donor) AS batch_donor,
+        MAX(facilitator_id) AS facilitator_id,
+        MAX(facilitator_name) AS facilitator_name,
+        MAX(school_name) AS school_name,
+        MAX(school_id) AS school_id,
+        MAX(school_state) AS school_state,
+        MAX(school_district) AS school_district,
+        MAX(school_taluka) AS school_taluka,
+        MAX(school_partner) AS school_partner,
+        MAX(school_area) AS school_area,
+
+        MAX(batch_expected_sessions) AS batch_expected_sessions,
+        MAX(batch_expected_student_type_session) AS batch_expected_student_type_session,
+        MAX(batch_scheduled_sessions) AS batch_scheduled_sessions,
+        MAX(batch_completed_sessions) AS batch_completed_sessions,
+
+        COUNTIF(attendance_status = 'Present') AS total_student_session_attended,
+        COUNTIF(attendance_status = 'Present' AND session_type = 'Student') AS total_attended_student_type_session,
+        COUNTIF(attendance_status = 'Present' AND session_type = 'Parent') AS total_attended_parent_type_session,
+        COUNTIF(attendance_status = 'Present' AND session_type = 'Counseling') AS total_attended_counseling_type_session,
+        COUNTIF(guardian_attendance = 'Present' AND session_type = 'Parent') AS total_parent_attended_parent_type_session,
+        COUNTIF(guardian_attendance = 'Present' AND session_type = 'Counseling') AS total_parent_attended_Counseling_type_session
     FROM t5
+    GROUP BY student_id, student_barcode, batch_no
 ),
 
 t7 AS (
@@ -65,4 +91,5 @@ t7 AS (
     FROM t6
 )
 
-SELECT * FROM t7
+SELECT * FROM t7 --5072487 --5073974 -454649 -454776
+

@@ -61,11 +61,11 @@ t1 AS (
         STRUCT('Grade 11', s.g11_barcode, s.g11_batch_id, s.g11_whatsapp_no, s.g11_alternate_no),
         STRUCT('Grade 12', s.g12_barcode, s.g12_batch_id, s.g12_whatsapp_no, s.g12_alternate_no)
     ]) AS g
-    WHERE g.student_barcode IS NOT NULL
-)
+    WHERE g.student_barcode IS NOT NULL OR g.student_batch_id IS NOT NULL
+),
 
 -- Step 4: Join with base_dcp to get batch, facilitator, and school info
-SELECT
+t2 as (SELECT
     dcp.*, 
     fs.student_id, fs.student_name, fs.student_grade, fs.student_barcode, fs.first_barcode, fs.gender, fs.birth_year, fs.birth_date, 
     fs.current_barcode, fs.student_batch_id, fs.current_batch_no, fs.whatsapp_no, fs.alternate_no, fs.g9_whatsapp_no, fs.g10_whatsapp_no, fs.g11_whatsapp_no, fs.g12_whatsapp_no,
@@ -98,8 +98,13 @@ SELECT
         ELSE 1
     END AS sar_atleast_one_reality,
 
-    (CAST(dcp.batch_academic_year AS INT) - CAST(fs.birth_year AS INT)) AS student_age
+    (CAST(dcp.batch_academic_year AS INT) - CAST(fs.birth_year AS INT)) AS student_age,
+
+    COALESCE(fs.student_batch_id, 'Unmapped') AS resolved_batch_id,
+    CASE WHEN dcp.batch_id IS NULL THEN 1 ELSE 0 END AS is_unmapped_student
 
 FROM t1 fs
-LEFT JOIN t0 dcp ON fs.student_batch_id = dcp.batch_id
-ORDER BY fs.student_id, fs.student_grade
+LEFT JOIN t0 dcp ON fs.student_batch_id = dcp.batch_id 
+ORDER BY fs.student_id, fs.student_grade)
+
+select * from t2

@@ -24,7 +24,7 @@ with
     t3 as (
         select *
         from t1
-        inner join t2 on t1.batch_id = t2.session_batch_id
+        left join t2 on t1.batch_id = t2.session_batch_id
     ),
 
     t4 as (
@@ -55,4 +55,6 @@ with
     )
 
 select *
-from t4 
+from t4 --5070423
+
+
