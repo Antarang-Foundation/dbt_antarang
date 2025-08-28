@@ -1,4 +1,5 @@
-select batch_id, batch_no, batch_academic_year, batch_grade, batch_language, no_of_students_facilitated,
+select distinct
+batch_id, batch_no, batch_academic_year, batch_grade, batch_language, no_of_students_facilitated,
 fac_start_date, fac_end_date, allocation_email_sent, facilitator_name, facilitator_email, school_name, school_state, school_district,
 school_taluka, enrolled_g9, enrolled_g10, enrolled_g11, enrolled_g12, tagged_for_counselling, school_partner, school_area,
 batch_donor, session_id, session_code, session_name, session_date, session_no, omr_required, omrs_received, total_student_present,
@@ -9,6 +10,7 @@ batch_flexible_type_scheduled_sessions, batch_counseling_type_scheduled_sessions
 batch_parent_type_completed_sessions, batch_flexible_type_completed_sessions, batch_Counseling_type_completed_sessions,
 batch_max_student_session_attendance, batch_max_session_parent_attendance, batch_max_session_flexible_attendance, batch_max_session_counseling_attendance,
 batch_indi_stud_attendance, batch_indi_parent_attendance, batch_indi_flexible_attendance, batch_indi_counseling_attendance,
-batch_max_overall_attendance, total_reached_parents, session_type, batch_status 
+batch_max_overall_attendance, total_reached_parents, session_type, batch_status
 from {{ref('dev_int_global_session')}}
-where batch_academic_year>=2023
+where batch_academic_year >= 2023 
+
