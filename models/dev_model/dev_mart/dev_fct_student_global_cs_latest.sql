@@ -25,7 +25,7 @@ facilitator_name, facilitator_email, school_name, school_taluka, school_ward, sc
 school_area, batch_donor from {{ ref("dev_int_global_dcp") }} where batch_academic_year >= 2023),
 
 t4 as (select t3.*, t2.* from t2    
-    INNER join t3 on t3.student_barcode = t2.assessment_barcode
+    LEFT join t3 on t3.student_barcode = t2.assessment_barcode
 )
 
 select * from t4

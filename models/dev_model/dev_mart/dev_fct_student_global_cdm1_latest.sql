@@ -30,7 +30,7 @@ t3 as (select student_barcode, gender, caste, batch_id, batch_no, batch_academic
     ),
 
 t4 as (select t3.*, t2.* from t2    
-    INNER join t3 on t3.student_barcode = t2.assessment_barcode
+    LEFT join t3 on t3.student_barcode = t2.assessment_barcode
 )
 
 select * from t4
