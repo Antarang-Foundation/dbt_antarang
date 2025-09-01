@@ -44,10 +44,10 @@ joined_source as (
     where rn = 1
 )
 
-select 
-    hm_session_name, facilitator_name, hm_session_date, start_time, scheduling_type, rescheduled_counter, session_status, 
+select hm_session_name, facilitator_name, hm_session_date, start_time, scheduling_type, rescheduled_counter, session_status, 
     hm_attended, session_lead, session_academic_year, batch_language, school_name, school_taluka, school_district, school_state, 
-    school_area, school_partner  from joined_source
+    school_area, school_partner  from joined_source 
+
 
     
     
