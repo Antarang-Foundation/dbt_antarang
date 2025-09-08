@@ -278,7 +278,6 @@ t2 AS (
     FROM t1 fs
     RIGHT JOIN t0 dcp 
       ON fs.student_batch_id = dcp.batch_id
-    WHERE fs.student_id IS NULL
 )
 
 SELECT * FROM t2
