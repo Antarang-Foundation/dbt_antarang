@@ -84,13 +84,15 @@ count(distinct case when saf_created_from_form = true then student_barcode end) 
 count(distinct case when saf_created_from_form = true then saf_assessment_barcode end) as stg_saf_barcodes, 
 count(distinct case when saf_created_from_form = true and saf_record_type = 'Baseline' then saf_no end) as bl_saf_raw, 
 count(distinct case when saf_created_from_form = true and saf_record_type = 'Endline' then saf_no end) as el_saf_raw,
+count(distinct case when saf_created_from_form = true and saf_record_type IN ('Baseline', 'Endline') then saf_no end) as saf_correct,
 
 
 MIN(sar_created_on) as sar_created_on,
 count(distinct case when sar_created_from_form = true then student_barcode end) as stg_sar_sd, 
 count(distinct case when sar_created_from_form = true then sar_assessment_barcode end) as stg_sar_barcodes, 
 count(distinct case when sar_created_from_form = true and sar_record_type = 'Baseline' then sar_no end) as bl_sar_raw, 
-count(distinct case when sar_created_from_form = true and sar_record_type = 'Endline' then sar_no end) as el_sar_raw
+count(distinct case when sar_created_from_form = true and sar_record_type = 'Endline' then sar_no end) as el_sar_raw,
+count(distinct case when sar_created_from_form = true and sar_record_type IN ('Baseline', 'Endline') then sar_no end) as sar_correct
 
 from int_global_dcp a
 
@@ -134,13 +136,13 @@ b.stg_fp_sd, b.stg_fp_barcodes, b.bl_fp_raw, b.el_fp_raw,
 COUNT(DISTINCT CASE WHEN fp.fp_record_type = 'Baseline' THEN fp.fp_no END) AS bl_fp_correct,
 COUNT(DISTINCT CASE WHEN fp.fp_record_type = 'Endline'  THEN fp.fp_no END) AS el_fp_correct,
 
-b.stg_saf_sd, b.stg_saf_barcodes, b.bl_saf_raw, b.el_saf_raw,
+b.stg_saf_sd, b.stg_saf_barcodes, b.bl_saf_raw, b.el_saf_raw, b.saf_correct,
 COUNT(DISTINCT CASE WHEN saf.saf_record_type = 'Baseline' THEN saf.saf_no END) AS bl_saf_correct,
 COUNT(DISTINCT CASE WHEN saf.saf_record_type = 'Endline'  THEN saf.saf_no END) AS el_saf_correct,
 
-b.stg_sar_sd, b.stg_sar_barcodes, b.bl_sar_raw, b.el_sar_raw,
+b.stg_sar_sd, b.stg_sar_barcodes, b.bl_sar_raw, b.el_sar_raw, b.sar_correct,
 COUNT(DISTINCT CASE WHEN sar.sar_record_type = 'Baseline' THEN sar.sar_no END) AS bl_sar_correct,
-COUNT(DISTINCT CASE WHEN sar.sar_record_type = 'Endline'  THEN sar.sar_no END) AS el_sar_correct
+COUNT(DISTINCT CASE WHEN sar.sar_record_type = 'Endline'  THEN sar.sar_no END) AS el_sar_correct,
 
 FROM assessment b
 LEFT JOIN int_global_dcp igd ON b.batch_no = igd.batch_no
@@ -161,7 +163,7 @@ b.stg_cdm1_sd, b.stg_cdm1_barcodes, b.bl_cdm1_raw, b.el_cdm1_raw, b.stg_cdm2_sd,
 b.stg_cp_sd, b.stg_cp_barcodes, b.bl_cp_raw, b.el_cp_raw, b.stg_cs_sd, b.stg_cs_barcodes, b.bl_cs_raw, b.el_cs_raw,
 b.stg_fp_sd, b.stg_fp_barcodes, b.bl_fp_raw, b.el_fp_raw, b.stg_saf_sd, b.stg_saf_barcodes, b.bl_saf_raw, b.el_saf_raw,
 b.stg_sar_sd, b.stg_sar_barcodes, b.bl_sar_raw, b.el_sar_raw, b.cdm1_created_on, b.cdm2_created_on, b.cp_created_on, 
-b.cs_created_on, b.fp_created_on, b.saf_created_on, b.sar_created_on),
+b.cs_created_on, b.fp_created_on, b.saf_created_on, b.sar_created_on, b.saf_correct, b.sar_correct),
 
 overall_attendance as (select 
 batch_no as session_batch_no,
@@ -181,7 +183,7 @@ c.stg_cp_sd, c.stg_cp_barcodes, c.bl_cp_raw, c.el_cp_raw, c.stg_cs_sd, c.stg_cs_
 c.stg_fp_sd, c.stg_fp_barcodes, c.bl_fp_raw, c.el_fp_raw, c.stg_saf_sd, c.stg_saf_barcodes, c.bl_saf_raw, c.el_saf_raw,
 c.stg_sar_sd, c.stg_sar_barcodes, c.bl_sar_raw, c.el_sar_raw, c.bl_cdm1_correct, c.el_cdm1_correct, c.bl_cdm2_correct, c.el_cdm2_correct,
 c.bl_cp_correct, c.el_cp_correct, c.bl_cs_correct, c.el_cs_correct, c.bl_fp_correct, c.el_fp_correct, c.bl_saf_correct, c.el_saf_correct,
-c.cdm1_created_on, c.cdm2_created_on, c.cp_created_on, c.cs_created_on, c.fp_created_on, c.saf_created_on, c.sar_created_on,
+c.cdm1_created_on, c.cdm2_created_on, c.cp_created_on, c.cs_created_on, c.fp_created_on, c.saf_created_on, c.sar_created_on, c.saf_correct, c.sar_correct,
 c.bl_sar_correct, c.el_sar_correct, oa.session_batch_no, oa.no_of_students_facilitated,
 oa.total_student_present_s1, oa.total_student_present_s2, oa.total_student_present_s3, oa.total_student_present_s4,
 oa.total_student_present_s5, oa.total_student_present_s6, oa.total_student_present_s7, oa.total_student_present_s8,
@@ -237,16 +239,15 @@ somrt as (
     
 )
 
-select e.batch_no, e.batch_academic_year, 
-e.school_academic_year, e.batch_grade, e.batch_language, e.fac_start_date, e.school_language, e.facilitator_name, e.facilitator_email, 
+select e.batch_no, e.batch_academic_year, e.batch_grade, e.batch_language, e.fac_start_date, e.facilitator_name, e.facilitator_email,
 e.school_name, e.school_taluka, e.school_ward, e.school_district, e.school_state, e.school_partner, e.school_area, e.batch_donor,
-e.stg_cdm1_sd, e.stg_cdm1_barcodes, e.bl_cdm1_raw, e.el_cdm1_raw, e.stg_cdm2_sd, e.stg_cdm2_barcodes, e.bl_cdm2_raw, e.el_cdm2_raw,
-e.stg_cp_sd, e.stg_cp_barcodes, e.bl_cp_raw, e.el_cp_raw, e.stg_cs_sd, e.stg_cs_barcodes, e.bl_cs_raw, e.el_cs_raw,
-e.stg_fp_sd, e.stg_fp_barcodes, e.bl_fp_raw, e.el_fp_raw, e.stg_saf_sd, e.stg_saf_barcodes, e.bl_saf_raw, e.el_saf_raw,
-e.stg_sar_sd, e.stg_sar_barcodes, e.bl_sar_raw, e.el_sar_raw, e.bl_cdm1_correct, e.el_cdm1_correct, e.bl_cdm2_correct, e.el_cdm2_correct,
-e.bl_cp_correct, e.el_cp_correct, e.bl_cs_correct, e.el_cs_correct, e.bl_fp_correct, e.el_fp_correct, e.bl_saf_correct, e.el_saf_correct,
-e.bl_sar_correct, e.el_sar_correct, e.session_batch_no, e.TSP_Baseline, e.TSP_Endline, e.TSP_SAF_Interest, e.TSP_SAF_Aptitude,
-e.TSP_SAF_QF, e.TSP_SAR_Reality, e.TSP_SAR_Quiz2, e.cdm1_created_on, e.cdm2_created_on, e.cp_created_on, e.cs_created_on,
+e.stg_cdm1_sd, e.stg_cdm1_barcodes, e.bl_cdm1_raw, e.bl_cdm1_correct, e.el_cdm1_raw, e.el_cdm1_correct, e.stg_cdm2_sd, e.stg_cdm2_barcodes,
+e.bl_cdm2_raw, e.bl_cdm2_correct, e.el_cdm2_raw, e.el_cdm2_correct, e.stg_cp_sd, e.stg_cp_barcodes, e.bl_cp_raw, e.bl_cp_correct,
+e.el_cp_raw, e.el_cp_correct, e.stg_cs_sd, e.stg_cs_barcodes, e.bl_cs_raw, e.bl_cs_correct, e.el_cs_raw, e.el_cs_correct,
+e.stg_fp_sd, e.stg_fp_barcodes, e.bl_fp_raw, e.bl_fp_correct, e.el_fp_raw, e.el_fp_correct, e.stg_saf_sd, e.stg_saf_barcodes,
+e.bl_saf_raw, e.el_saf_raw, e.saf_correct, e.stg_sar_sd, e.stg_sar_barcodes, e.bl_sar_raw, e.el_sar_raw, e.sar_correct, e.session_batch_no, e.no_of_students_facilitated, e.TSP_Baseline, e.TSP_Endline, e.TSP_SAF_Interest,
+e.TSP_SAF_Aptitude, e.TSP_SAF_QF, e.TSP_SAR_Reality,
+e.TSP_SAR_Quiz2, e.cdm1_created_on, e.cdm2_created_on, e.cp_created_on, e.cs_created_on,
 e.fp_created_on, e.saf_created_on, e.sar_created_on
 from somrt e
 WHERE e.batch_academic_year >= 2023
