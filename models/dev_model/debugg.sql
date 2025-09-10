@@ -1,67 +1,120 @@
-WITH 
-stg_session AS (
+WITH t1 AS (
     SELECT 
-        session_type, session_code, session_no, session_name, session_date, total_student_present, 
-        session_id, session_batch_id, batch_expected_sessions, batch_expected_student_type_session, 
-        batch_expected_parent_type_session, batch_expected_flexible_type_session, 
-        batch_expected_counseling_type_session, batch_scheduled_sessions, 
-        batch_flexible_type_completed_sessions, present_count, batch_indi_stud_attendance, 
-        batch_indi_counseling_attendance, batch_indi_flexible_attendance, batch_indi_parent_attendance, 
-        batch_max_overall_attendance, batch_max_student_session_attendance, 
-        batch_max_session_counseling_attendance, batch_max_session_flexible_attendance, 
-        batch_max_session_parent_attendance 
-    FROM {{ ref('dev_stg_session') }}
-),  
-
-stg_somrt AS (
-    SELECT 
-        omr_type, somrt_session_id, somrt_batch_id 
-    FROM {{ ref('dev_stg_somrt') }}
+        id AS career_id, 
+        name AS profession_name
+    FROM {{ source('salesforce', 'IARP_Master__c') }}
+    WHERE IsDeleted = false
 ),
 
-stg_attendance AS (
-    SELECT DISTINCT 
-        attendance_status, guardian_attendance, attendance_session_id 
-    FROM {{ ref('dev_stg_attendance') }}
+t2 AS (
+    SELECT 
+        student_id, student_name, student_barcode, batch_no, batch_academic_year, batch_grade, current_aspiration, possible_careers_1, 
+        possible_careers_2, possible_careers_3, followup_1_aspiration, followup_2_aspiration FROM {{ ref('dev_int_global_dcp') }}
 ),
 
-dev_int_global_dcp AS (
-    SELECT DISTINCT 
-        student_barcode, student_name, caste, school_name, school_area, school_district, 
-        school_partner, school_state, school_taluka, batch_academic_year, batch_donor, 
-        batch_grade, batch_language, batch_no, fac_start_date, facilitator_email, 
-        facilitator_name, gender, no_of_students_facilitated, student_batch_id, batch_id 
-    FROM {{ ref('dev_int_global_dcp') }}
-    WHERE batch_academic_year >= 2023
+t3 AS (
+    SELECT 
+        t2.student_id, t2.student_name, t2.student_barcode, t2.batch_no, t2.batch_academic_year, t2.batch_grade, t2.current_aspiration,
+        t1a.profession_name AS profession_1,
+        t1b.profession_name AS profession_2,
+        t1c.profession_name AS profession_3,
+        t2.followup_1_aspiration, t2.followup_2_aspiration
+    FROM t2
+    LEFT JOIN t1 AS t1a ON t2.possible_careers_1 = t1a.career_id
+    LEFT JOIN t1 AS t1b ON t2.possible_careers_2 = t1b.career_id
+    LEFT JOIN t1 AS t1c ON t2.possible_careers_3 = t1c.career_id
+),
+
+t4 AS (
+    SELECT 
+        d.assessment_barcode, d.record_type, d.cdm1_no, d.q4_1, d.q4_2, t3.*
+    FROM {{ ref('dev_stg_cdm1') }} d
+    LEFT JOIN t3 ON t3.student_barcode = d.assessment_barcode
 ),
 
 t5 AS (
     SELECT 
-        t1.session_name,
-        t1.session_date,
-        t1.session_type,
-        t2.omr_type,
-        t3.attendance_status,
-        t3.guardian_attendance,
+        t4.student_id, t4.student_name, t4.student_barcode, t4.batch_no, t4.batch_academic_year, t4.batch_grade, t4.current_aspiration,
+        t4.profession_1, t4.profession_2, t4.profession_3, t4.followup_1_aspiration, t4.followup_2_aspiration,
+        t4.assessment_barcode, t4.record_type, t4.cdm1_no, t4.q4_1, t4.q4_2,
 
-        -- Merge student info from either join
-        COALESCE(t4a.student_barcode, t4b.student_barcode) AS student_barcode,
-        COALESCE(t4a.student_name, t4b.student_name) AS student_name,
-        COALESCE(t4a.school_name, t4b.school_name) AS school_name,
-        COALESCE(t4a.batch_grade, t4b.batch_grade) AS batch_grade,
-        COALESCE(t4a.batch_language, t4b.batch_language) AS batch_language
+        MAX(CASE WHEN t4.record_type = 'Baseline' THEN t4.q4_1 END) AS bl_q4_1,
+        MAX(CASE WHEN t4.record_type = 'Endline'  THEN t4.q4_1 END) AS el_q4_1,
 
-    FROM stg_session t1
-    INNER JOIN stg_somrt t2 ON t1.session_id = t2.somrt_session_id
-    LEFT JOIN stg_attendance t3 ON t1.session_id = t3.attendance_session_id
+        MAX(CASE WHEN t4.record_type = 'Baseline' THEN t4.q4_2 END) AS bl_q4_2,
+        MAX(CASE WHEN t4.record_type = 'Endline'  THEN t4.q4_2 END) AS el_q4_2,
 
-    -- Two LEFT JOINs to fetch from both identifiers
-    LEFT JOIN dev_int_global_dcp t4a ON t4a.student_batch_id = t1.session_batch_id
-    LEFT JOIN dev_int_global_dcp t4b ON t4b.batch_id = t2.somrt_batch_id
+        MAX(CASE WHEN t4.record_type = 'Baseline' THEN t4.cdm1_no END) AS bl_cdm1_no,
+        MAX(CASE WHEN t4.record_type = 'Endline'  THEN t4.cdm1_no END) AS el_cdm1_no
+    FROM t4
+    GROUP BY 
+        t4.student_id, t4.student_name, t4.student_barcode, t4.batch_no, t4.batch_academic_year, t4.batch_grade, t4.current_aspiration,
+        t4.profession_1, t4.profession_2, t4.profession_3, t4.followup_1_aspiration, t4.followup_2_aspiration, t4.assessment_barcode,
+        t4.record_type, t4.cdm1_no, t4.q4_1, t4.q4_2
+),
+
+-- baseline unpivot fixed
+t6 AS (
+    SELECT 
+        student_id, student_name, student_barcode, batch_no, batch_academic_year, batch_grade, current_aspiration, profession_1,
+        profession_2, profession_3, CAST(bl_cdm1_no AS STRING) AS bl_cdm1_no,
+        CAST(NULL AS STRING) AS el_cdm1_no, followup_1_aspiration, followup_2_aspiration, assessment_barcode, 'Baseline' AS record_type,
+        cdm1_no, q4_1, q4_2, bl_aspiration AS aspiration_col, baseline_stud_aspiration AS stud_aspiration
+    FROM t5
+    UNPIVOT (
+        baseline_stud_aspiration FOR bl_aspiration IN (bl_q4_1, bl_q4_2)
+    ) AS unpvt1
+),
+
+-- endline unpivot
+t7 AS (
+    SELECT 
+        student_id, student_name, student_barcode, batch_no, batch_academic_year, batch_grade, current_aspiration, 
+        profession_1, profession_2, profession_3, CAST(NULL AS STRING) AS bl_cdm1_no,
+        CAST(el_cdm1_no AS STRING) AS el_cdm1_no, followup_1_aspiration, followup_2_aspiration, assessment_barcode,
+        'Endline' AS record_type, cdm1_no, q4_1, q4_2, el_aspiration AS aspiration_col, endline_stud_aspiration AS stud_aspiration
+    FROM t5
+    UNPIVOT (
+        endline_stud_aspiration FOR el_aspiration IN (el_q4_1, el_q4_2)
+    ) AS unpvt2
+),
+
+-- combine baseline + endline
+t8 AS (
+    SELECT * FROM t6
+    UNION ALL
+    SELECT * FROM t7
+),
+
+-- map aspiration column to q4_1 / q4_2
+t9 AS (
+    SELECT 
+        t8.*,
+        CASE 
+            WHEN aspiration_col IN ('bl_q4_1','el_q4_1') THEN 'q4_1'
+            WHEN aspiration_col IN ('bl_q4_2','el_q4_2') THEN 'q4_2'
+            ELSE 'DNA'
+        END AS aspiration_mapping
+    FROM t8
+),
+
+t10 AS (
+    SELECT
+        student_id, student_name, student_barcode, batch_no, batch_academic_year, batch_grade, current_aspiration, profession_1,
+        profession_2, profession_3, followup_1_aspiration, followup_2_aspiration, assessment_barcode, aspiration_mapping,
+        MAX(bl_cdm1_no) AS bl_cdm1_no,
+        MAX(el_cdm1_no) AS el_cdm1_no,
+        MAX(CASE WHEN record_type = 'Baseline' THEN stud_aspiration END) AS baseline_stud_aspiration,
+        MAX(CASE WHEN record_type = 'Endline'  THEN stud_aspiration END) AS endline_stud_aspiration
+    FROM t9
+    GROUP BY
+        student_id, student_name, student_barcode, batch_no, batch_academic_year, batch_grade, current_aspiration, profession_1,
+        profession_2, profession_3, followup_1_aspiration, followup_2_aspiration, assessment_barcode, aspiration_mapping
 )
 
--- Filter for your student here
 SELECT *
-FROM t5
-WHERE COALESCE(student_barcode, '') = 'YOUR_STUDENT_BARCODE_HERE'
-ORDER BY session_date
+FROM t10
+where student_barcode IN ('2401111310', '2401118642', '2401020073')
+order by student_barcode
+-- 2025 - 15481
+-- 2024 - 103273
