@@ -6,11 +6,9 @@ sources:
     database: antarang-dashboard
     schema: "dalgo_DBT_Antarang_Foundation"
     tables:
-      - name: Post_Orientation_Questionaire_form
-        description: "KOBO questionnaire responses post- program orientation"
-
-      - name: Post_Program_Questionaire_form
-        description: "KOBO questionnaire responses post- program questionair"
-
-      - name: Pre_Program_Questionaire_form
+      - name: pre_program_questionaire_form
         description: "KOBO questionnaire responses pre- program questionair"
+      - name: post_orientation_questionaire_form
+        description: "KOBO questionnaire responses post- orientation questionaire "
+      - name: post_program_questionaire_form
+        description: "KOBO questionnaire responses post- program questionaire form "
