@@ -48,3 +48,12 @@ models:
         tests:
           - unique
           - not_null
+
+  - name: dev_int_hm_session
+    # description:
+    columns:
+      - name: hm_id
+        description: "The primary key of this table"
+        tests:
+          - unique
+          - not_null

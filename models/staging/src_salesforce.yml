@@ -50,3 +50,5 @@ sources:
         description: this is opportunity records with details
       - name: HM_Session__c
         description: this is hm session recorded
+      - name: Headmaster_Pre_Program_Questionaire
+        description: this is pre program questionaire form

@@ -1,7 +1,7 @@
 with t0 AS (
     SELECT
         student_id, student_barcode, batch_no, batch_grade, batch_academic_year, school_state, school_district, school_taluka, 
-        school_partner, total_years_barcode_filled, gender, student_age, total_stud_have_report,
+        school_partner, gender, student_age,
         school_area, batch_donor, school_name, reality_1, reality_2, reality_3, reality_4, reality_5, reality_6, reality_7, 
         reality_8
       --sar_atleast_one_reality, total_years_barcode_filled, gender, student_age, total_stud_have_report
@@ -20,7 +20,7 @@ t2 AS (
     SELECT
         t0.student_id, t0.student_barcode, t0.batch_no, t0.batch_grade, t0.batch_academic_year,
         t0.school_state, t0.school_district, t0.school_taluka, t0.school_partner, 
-        t0.total_years_barcode_filled, t0.gender, t0.student_age, t0.total_stud_have_report,
+        t0.gender, t0.student_age,
         t0.school_area, t0.batch_donor, t0.school_name,
 
         COALESCE(t0.reality_1, t1.r1s1) AS reality_1,

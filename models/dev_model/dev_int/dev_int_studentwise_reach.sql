@@ -1,6 +1,6 @@
 WITH t1 AS (
     SELECT 
-        student_id, student_barcode, gender, batch_no, total_stud_have_report
+        student_id, student_barcode, gender, batch_no
     FROM {{ ref('dev_int_studentwise_demographic') }}
 ),
 
@@ -43,8 +43,6 @@ t6 AS (
         batch_no,
 
         MAX(gender) AS gender,
-        MAX(total_stud_have_report) AS total_stud_have_report,
-
         MAX(batch_academic_year) AS batch_academic_year,
         MAX(batch_grade) AS batch_grade,
         MAX(batch_language) AS batch_language,
