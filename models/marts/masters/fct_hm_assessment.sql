@@ -1,6 +1,6 @@
 with hm_session as (
     select 
-        hm_school_id, hm_session_name, facilitator_name, hm_facilitator_name, hm_session_date, start_time, 
+        hm_session_name, facilitator_name, hm_session_date, start_time, 
         scheduling_type, rescheduled_counter, session_status, hm_attended, 
         session_lead, session_academic_year, batch_language, school_name, 
         school_taluka, school_district, school_state, school_area, school_partner 
@@ -276,7 +276,7 @@ case when Q17_materials_that_apply like '%Counselling_Report%' then 1 else 0 end
 from source_joined s
 )
 
-select hm_school_id, school_name, hm_session_name, facilitator_name, hm_facilitator_name, hm_session_date, start_time, scheduling_type, rescheduled_counter,
+select school_name, hm_session_name, facilitator_name, hm_session_date, start_time, scheduling_type, rescheduled_counter,
 session_status, hm_attended, session_lead, session_academic_year, batch_language, school_taluka, school_district,
 school_state, school_area, school_partner, pre_start, pre_end, pre_date, pre_name, district_name, school_names, pre_school_nagaland,
 pre_school_goa, pre_school_rajasthan, pre_school_mumbai, pre_school_thane, pre_school_pune, pre_school_osmanabad,
@@ -473,4 +473,3 @@ Q20_thin_for_students,
 post_uuid,
 post_submission_time
 from expand_column
-
