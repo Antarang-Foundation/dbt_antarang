@@ -1,4 +1,4 @@
-select
+select distinct batch_no,
     student_barcode,
     student_name,
     caste,
@@ -12,7 +12,7 @@ select
     batch_donor,
     batch_grade,
     batch_language,
-    batch_no,
+    --batch_no,
     fac_start_date,
     facilitator_email,
     facilitator_name,
@@ -30,6 +30,7 @@ select
     batch_expected_parent_type_session,
     batch_expected_flexible_type_session,
     batch_expected_counseling_type_session,
+    batch_counseling_type_completed_sessions,
     batch_scheduled_sessions,
     batch_flexible_type_scheduled_sessions,
     batch_flexible_type_completed_sessions,

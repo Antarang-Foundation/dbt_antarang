@@ -1,6 +1,6 @@
 with t1 as (select * from  
 {{ref('fct_global_assessment_raw_uploads')}} ---total uploads
-where school_district In ('Nagaland', 'Palghar', 'RJ Model B','RJ Model C', 'RJ Model A')), 
+where school_district In ('Nagaland', 'Palghar', 'RJ Model B','RJ Model C', 'RJ Model A', 'Dungarpur')), 
 
 t2 as (select batch_no, batch_academic_year, batch_grade, batch_language, fac_start_date, facilitator_name, facilitator_email, school_name, school_academic_year, school_language, 
 school_taluka, school_ward, school_district, school_state, school_partner,school_area, batch_donor,
@@ -14,7 +14,7 @@ count(distinct bl_cp_no) `bl_cp_correct`, count(distinct el_cp_no) `el_cp_correc
 count(distinct el_cs_no) `el_cs_correct`, count(distinct bl_fp_no) `bl_fp_correct`, count(distinct el_fp_no) `el_fp_correct`, 
 count(distinct saf_no) `saf_correct`, count(distinct sar_no) `sar_correct` 
 from {{ref('fct_student_global_assessment_status')}}  ----correct upload
-WHERE school_district IN ('Nagaland', 'Palghar', 'RJ Model B','RJ Model C', 'RJ Model A')          
+WHERE school_district IN ('Nagaland', 'Palghar', 'RJ Model B','RJ Model C', 'RJ Model A', 'Dungarpur')          
 group by batch_no, batch_academic_year, batch_grade, batch_language, fac_start_date, facilitator_name, facilitator_email, school_name, school_academic_year, school_language, school_taluka, 
 school_ward, school_district, school_state, school_partner,school_area, batch_donor),
 
@@ -48,7 +48,7 @@ stg_sar_sd, stg_sar_barcodes, bl_sar_raw, el_sar_raw, sar_correct,
 combined_sd, combined_barcodes from t1 full outer join t2 on t1.batch_no = t2.batch_no),
 
 t4 as (
-    select 
+    select session_date,
         batch_no as session_batch_no,
         no_of_students_facilitated, --- this means total sd uploaded into batch by filling form on SF.
         total_student_present_s1,
@@ -64,7 +64,9 @@ t4 as (
         total_student_present_s11,
         total_student_present_s12,
         total_student_present_s13,
-        total_student_present_s14
+        total_student_present_s14,
+        total_student_present_s15,
+        total_student_present_s16
         from {{ref('stg_overall_attendance')}}
 ),
 
@@ -75,54 +77,110 @@ t5 as (
 t6 as (
     SELECT 
         *, 
-        total_student_present_s1 AS TSP_Baseline,
+        CASE
+    WHEN (school_district = 'Nagaland' 
+          OR school_district LIKE '%Model B%' 
+          OR school_district LIKE '%Model C%')
+         AND batch_grade IN ('Grade 9','Grade 10','Grade 11','Grade 12')
+    THEN total_student_present_s1
 
-        CASE 
-            WHEN school_district = 'Nagaland' AND batch_grade IN ('Grade 9', 'Grade 11') THEN total_student_present_s14
-            WHEN school_district = 'Nagaland' AND batch_grade IN ('Grade 10', 'Grade 12') THEN total_student_present_s6
-            WHEN (school_district LIKE '%Model B' OR school_district LIKE '%Model C') 
-                 AND batch_grade IN ('Grade 10', 'Grade 11', 'Grade 12') THEN total_student_present_s4
-            WHEN (school_district LIKE '%Model B' OR school_district LIKE '%Model C') 
-                 AND batch_grade = 'Grade 9' THEN total_student_present_s10
-        END AS TSP_Endline,
+    WHEN school_district = 'Dungarpur' AND batch_grade = 'Grade 9' 
+    THEN total_student_present_s3
 
-        CASE 
-            WHEN school_district = 'Nagaland' AND batch_grade IN ('Grade 9', 'Grade 11') THEN total_student_present_s2
-            WHEN (school_district LIKE '%Model B' OR school_district LIKE '%Model C') 
-                 AND batch_grade = 'Grade 9' THEN total_student_present_s2
-        END AS TSP_SAF_Interest,
+    WHEN school_district = 'Dungarpur' AND batch_grade IN ('Grade 10','Grade 11','Grade 12') 
+    THEN total_student_present_s1
+END AS TSP_Baseline,
 
-        CASE 
-            WHEN school_district = 'Nagaland' AND batch_grade IN ('Grade 9', 'Grade 11') THEN total_student_present_s4
-            WHEN (school_district LIKE '%Model B' OR school_district LIKE '%Model C') 
-                 AND batch_grade = 'Grade 9' THEN total_student_present_s4
-        END AS TSP_SAF_Aptitude,
 
-        CASE 
-            WHEN school_district = 'Nagaland' AND batch_grade IN ('Grade 9', 'Grade 11') THEN total_student_present_s5
-            WHEN school_district = 'Nagaland' AND batch_grade = 'Grade 10' THEN total_student_present_s3
-            WHEN school_district = 'Nagaland' AND batch_grade = 'Grade 12' THEN total_student_present_s4
-        END AS TSP_SAF_QF,
+CASE
+    WHEN school_district = 'Nagaland' AND batch_grade IN ('Grade 9','Grade 11') THEN total_student_present_s14
+    WHEN school_district = 'Nagaland' AND batch_grade IN ('Grade 10','Grade 12') THEN total_student_present_s6
+    WHEN school_district LIKE '%Model B%' AND batch_grade = 'Grade 12' THEN total_student_present_s6
+    WHEN (school_district LIKE '%Model B%' OR school_district LIKE '%Model C%') AND batch_grade = 'Grade 10'
+    THEN total_student_present_s11
+    WHEN (school_district LIKE '%Model B%' OR school_district LIKE '%Model C%' OR school_district LIKE '%Model A%')
+    AND batch_grade IN ('Grade 10','Grade 12') THEN total_student_present_s7
+    WHEN (school_district LIKE '%Model B%' OR school_district LIKE '%Model C%' OR school_district LIKE '%Model A%')
+         AND batch_grade = 'Grade 11' THEN total_student_present_s15
+    WHEN (school_district LIKE '%Model B%' OR school_district LIKE '%Model C%' OR school_district LIKE '%Model A%' 
+    OR school_district = 'Dungarpur') AND batch_grade IN ('Grade 9','Grade 11') THEN total_student_present_s16
+    WHEN school_district = 'Dungarpur' AND batch_grade IN ('Grade 10','Grade 12') THEN total_student_present_s8
+END AS TSP_Endline,
 
-        CASE 
-            WHEN school_district = 'Nagaland' AND batch_grade IN ('Grade 9', 'Grade 11') THEN total_student_present_s6
-            WHEN (school_district LIKE '%Model B' OR school_district LIKE '%Model C') 
-                 AND batch_grade = 'Grade 9' THEN total_student_present_s6
-        END AS TSP_SAR_Reality,
+CASE 
+    WHEN school_district = 'Nagaland' AND batch_grade IN ('Grade 9','Grade 11') THEN total_student_present_s2
+    WHEN (school_district LIKE '%Model B%' OR school_district LIKE '%Model C%' OR school_district LIKE '%Model A%'
+    OR school_district = 'Dungarpur') AND batch_grade = 'Grade 9' THEN total_student_present_s4
+    WHEN (school_district LIKE '%Model B%' OR school_district LIKE '%Model C%') AND batch_grade = 'Grade 9' 
+    THEN total_student_present_s5
+END AS TSP_SAF_Interest,
 
-        CASE 
-            WHEN school_district = 'Nagaland' AND batch_grade IN ('Grade 9', 'Grade 11') THEN total_student_present_s11
-        END AS TSP_SAR_Quiz2
+CASE 
+    WHEN school_district = 'Nagaland' AND batch_grade IN ('Grade 9','Grade 11')
+        THEN total_student_present_s4
+    WHEN (school_district LIKE '%Model B%' OR school_district LIKE '%Model C%' OR school_district = 'Dungarpur')
+         AND batch_grade = 'Grade 9'
+        THEN total_student_present_s5
+    WHEN (school_district LIKE '%Model B%' OR school_district LIKE '%Model C%') AND batch_grade = 'Grade 9'
+        THEN total_student_present_s7
+END AS TSP_SAF_Aptitude,
+
+CASE 
+    WHEN school_district = 'Nagaland' AND batch_grade IN ('Grade 9','Grade 11')
+        THEN total_student_present_s5
+    WHEN school_district = 'Nagaland' AND batch_grade = 'Grade 10'
+        THEN total_student_present_s3
+    WHEN school_district = 'Nagaland' AND batch_grade = 'Grade 12'
+        THEN total_student_present_s4
+    WHEN school_district LIKE '%Model B%' AND batch_grade = 'Grade 12'
+        THEN total_student_present_s4
+END AS TSP_SAF_QF,
+
+CASE 
+    WHEN school_district = 'Nagaland' AND batch_grade IN ('Grade 9','Grade 11') THEN total_student_present_s6
+    WHEN (school_district LIKE '%Model B%' OR school_district LIKE '%Model C%') AND batch_grade = 'Grade 9'
+        THEN total_student_present_s9
+    WHEN (school_district LIKE '%Model B%' OR school_district LIKE '%Model C%' OR school_district LIKE '%Model A%' OR
+    school_district = 'Dungarpur') AND batch_grade = 'Grade 9' THEN total_student_present_s11
+END AS TSP_SAR_Reality,
+
+CASE 
+    WHEN school_district = 'Nagaland' AND batch_grade IN ('Grade 9','Grade 11') THEN total_student_present_s11
+END AS TSP_SAR_Quiz2
+
+/*CASE 
+  WHEN session_date IS NOT NULL AND cdm1_created_on IS NOT NULL THEN DATE_DIFF(DATE(cdm1_created_on), session_date, DAY)
+END AS cdm1_TAT,
+
+CASE 
+  WHEN session_date IS NOT NULL AND cdm2_created_on IS NOT NULL THEN DATE_DIFF(DATE(cdm2_created_on), session_date, DAY)
+END AS cdm2_TAT,
+
+CASE 
+  WHEN session_date IS NOT NULL AND cp_created_on IS NOT NULL THEN DATE_DIFF(DATE(cp_created_on), session_date, DAY)
+END AS cp_TAT,
+
+CASE 
+  WHEN session_date IS NOT NULL AND cs_created_on IS NOT NULL THEN DATE_DIFF(DATE(cs_created_on), session_date, DAY)
+END AS cs_TAT,
+
+CASE 
+  WHEN session_date IS NOT NULL AND fp_created_on IS NOT NULL THEN DATE_DIFF(DATE(fp_created_on), session_date, DAY)
+END AS fp_TAT,
+
+CASE 
+  WHEN session_date IS NOT NULL AND saf_created_on IS NOT NULL THEN DATE_DIFF(DATE(saf_created_on), session_date, DAY)
+END AS saf_TAT,
+
+CASE 
+  WHEN session_date IS NOT NULL AND sar_created_on IS NOT NULL THEN DATE_DIFF(DATE(sar_created_on), session_date, DAY)
+END AS sar_TAT*/
 
     FROM t5 
     WHERE batch_academic_year >= 2023
 )
 
-SELECT * except (
-total_student_present_s1, total_student_present_s2, total_student_present_s3, total_student_present_s4,
-total_student_present_s5, total_student_present_s6, total_student_present_s7, total_student_present_s8,
-total_student_present_s9, total_student_present_s10, total_student_present_s11,
-total_student_present_s12, total_student_present_s13, total_student_present_s14)
+SELECT *
 FROM t6
 
 

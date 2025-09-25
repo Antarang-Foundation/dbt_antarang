@@ -7,9 +7,10 @@ WITH t0 AS (
         school_district, 
         school_state, 
         session_no,  
-        total_student_present
+        total_student_present,
+        session_date
     FROM {{ref('int_global_session')}}
-    WHERE school_district IN ('Nagaland', 'Palghar', 'Yamunanagar', 'RJ Model B')
+    WHERE school_district IN ('Nagaland', 'Palghar', 'Yamunanagar', 'RJ Model B', 'Dungarpur')
 ),
 
 t1 AS (
@@ -17,7 +18,7 @@ t1 AS (
     FROM t0
     PIVOT (
         MAX(total_student_present) 
-        FOR session_no IN (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14)
+        FOR session_no IN (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16)
     ) AS p
 ),
 
@@ -30,6 +31,7 @@ renamed as (
         no_of_students_facilitated as no_of_students_facilitated,
         school_district as school_district,
         school_state as school_state,
+        session_date as session_date,
         _1 as total_student_present_s1,
         _2 as total_student_present_s2,
         _3 as total_student_present_s3,
@@ -43,7 +45,9 @@ renamed as (
         _11 as total_student_present_s11,
         _12 as total_student_present_s12,
         _13 as total_student_present_s13,
-        _14 as total_student_present_s14
+        _14 as total_student_present_s14,
+        _15 as total_student_present_s15,
+        _16 as total_student_present_s16
   from t1  
 )
 
