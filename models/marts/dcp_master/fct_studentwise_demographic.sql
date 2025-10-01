@@ -58,8 +58,7 @@ t7 as (
     FROM t6
 )
 
-select 
-student_id,
+select student_id,
 stud_barcode as student_barcode,
 --student_barcode as assessment_barcode,
 assessment_barcode,
@@ -87,4 +86,9 @@ student_age,
 total_stud_have_report,
 sar_atleast_one_reality
 from t7
+
+--count(distinct student_barcode) = 234246
+--count(student_barcode) = 263033
+--count(distinct student_id) = 234147
+--count(student_id) = 263033
 

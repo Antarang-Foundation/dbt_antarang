@@ -48,26 +48,28 @@ stg_sar_sd, stg_sar_barcodes, bl_sar_raw, el_sar_raw, sar_correct,
 combined_sd, combined_barcodes from t1 full outer join t2 on t1.batch_no = t2.batch_no),
 
 t4 as (
-    select session_date,
+    select 
         batch_no as session_batch_no,
-        no_of_students_facilitated, --- this means total sd uploaded into batch by filling form on SF.
-        total_student_present_s1,
-        total_student_present_s2,
-        total_student_present_s3,
-        total_student_present_s4,
-        total_student_present_s5,
-        total_student_present_s6,
-        total_student_present_s7,
-        total_student_present_s8,
-        total_student_present_s9,
-        total_student_present_s10,
-        total_student_present_s11,
-        total_student_present_s12,
-        total_student_present_s13,
-        total_student_present_s14,
-        total_student_present_s15,
-        total_student_present_s16
+        MIN(session_date) as session_date,
+        no_of_students_facilitated,  -- or SUM/AVG depending on meaning
+        MAX(total_student_present_s1) as total_student_present_s1,
+        MAX(total_student_present_s2) as total_student_present_s2,
+        MAX(total_student_present_s3) as total_student_present_s3,
+        MAX(total_student_present_s4) as total_student_present_s4,
+        MAX(total_student_present_s5) as total_student_present_s5,
+        MAX(total_student_present_s6) as total_student_present_s6,
+        MAX(total_student_present_s7) as total_student_present_s7,
+        MAX(total_student_present_s8) as total_student_present_s8,
+        MAX(total_student_present_s9) as total_student_present_s9,
+        MAX(total_student_present_s10) as total_student_present_s10,
+        MAX(total_student_present_s11) as total_student_present_s11,
+        MAX(total_student_present_s12) as total_student_present_s12,
+        MAX(total_student_present_s13) as total_student_present_s13,
+        MAX(total_student_present_s14) as total_student_present_s14,
+        MAX(total_student_present_s15) as total_student_present_s15,
+        MAX(total_student_present_s16) as total_student_present_s16
         from {{ref('stg_overall_attendance')}}
+        GROUP BY batch_no, no_of_students_facilitated
 ),
 
 t5 as (

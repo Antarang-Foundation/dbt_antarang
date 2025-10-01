@@ -57,3 +57,21 @@ models:
         tests:
           - unique
           - not_null
+
+  - name: dev_int_aspiration
+    # description:
+    columns:
+      - name: student_id
+        description: "The primary key of this table"
+        tests:
+          - unique
+          - not_null
+
+  - name: dev_int_aspiration_before_2022
+    # description:
+    columns:
+      - name: student_id
+        description: "The primary key of this table"
+        tests:
+          - unique
+          - not_null
