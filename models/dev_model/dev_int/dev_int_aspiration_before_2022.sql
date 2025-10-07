@@ -36,17 +36,17 @@ grade9_t3 AS (
 grade9_t4 AS (
     -- PC1
     SELECT g3.*, profession_1 AS endline_stud_aspiration, 'PC1 and CA' AS aspiration_mapping
-    FROM grade9_t3 g3 WHERE profession_1 IS NOT NULL
+    FROM grade9_t3 g3 
 
     UNION ALL
     -- PC2
     SELECT g3.*, profession_2 AS endline_stud_aspiration, 'PC2' AS aspiration_mapping
-    FROM grade9_t3 g3 WHERE profession_2 IS NOT NULL
+    FROM grade9_t3 g3 
 
     UNION ALL
     -- PC3
     SELECT g3.*, profession_3 AS endline_stud_aspiration, 'PC3' AS aspiration_mapping
-    FROM grade9_t3 g3 WHERE profession_3 IS NOT NULL
+    FROM grade9_t3 g3 
 ),
 
 grade9_t5 AS (
