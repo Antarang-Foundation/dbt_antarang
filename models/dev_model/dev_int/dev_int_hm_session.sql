@@ -1,11 +1,17 @@
 with int_global_dcp as (
     select 
-        batch_language, school_name, school_taluka, school_district, school_state, school_area, school_partner, school_id,
+        batch_language, 
+        school_name, 
+        school_taluka, 
+        school_district, 
+        school_state, 
+        batch_donor, 
+        school_area,
+        school_partner,
+        school_id,
         facilitator_name,
-        ROW_NUMBER() OVER (
-      PARTITION BY school_id 
-      ORDER BY school_name DESC
-        ) AS rn
+        ROW_NUMBER() OVER (PARTITION BY school_id ORDER BY 
+        CASE WHEN facilitator_name IS NOT NULL THEN 0 ELSE 1 END, school_name DESC) AS rn
     from {{ ref('dev_int_global_dcp') }}
 ),
 

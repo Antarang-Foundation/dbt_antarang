@@ -9,12 +9,14 @@ WITH t1 AS (
 t2 AS (
     SELECT 
         student_id, student_name, student_barcode, batch_no, batch_academic_year, batch_grade, current_aspiration, possible_careers_1, 
-        possible_careers_2, possible_careers_3, followup_1_aspiration, followup_2_aspiration FROM {{ ref('dev_int_global_dcp') }}
+        possible_careers_2, possible_careers_3, followup_1_aspiration, followup_2_aspiration, batch_language, school_state,	
+school_district, school_taluka,	school_partner,	batch_donor, FROM {{ ref('dev_int_global_dcp') }}
 ),
 
 t3 AS (
     SELECT 
         t2.student_id, t2.student_name, t2.student_barcode, t2.batch_no, t2.batch_academic_year, t2.batch_grade, t2.current_aspiration,
+        t2.batch_language, t2.school_state, t2.school_district, t2.school_taluka, t2.school_partner, t2.batch_donor,
         t1a.profession_name AS profession_1,
         t1b.profession_name AS profession_2,
         t1c.profession_name AS profession_3,
@@ -35,7 +37,8 @@ t4 AS (
 t5 AS (
     SELECT 
         t4.student_id, t4.student_name, t4.student_barcode, t4.batch_no, t4.batch_academic_year, t4.batch_grade, t4.current_aspiration,
-        t4.profession_1, t4.profession_2, t4.profession_3, t4.followup_1_aspiration, t4.followup_2_aspiration,
+        t4.profession_1, t4.profession_2, t4.profession_3, t4.followup_1_aspiration, t4.followup_2_aspiration, t4.batch_language, t4.school_state,	
+t4.school_district, t4.school_taluka,	t4.school_partner,	t4.batch_donor,
         t4.assessment_barcode, t4.record_type, t4.cdm1_no, t4.q4_1, t4.q4_2,
 
         MAX(CASE WHEN t4.record_type = 'Baseline' THEN t4.q4_1 END) AS bl_q4_1,
@@ -50,14 +53,16 @@ t5 AS (
     GROUP BY 
         t4.student_id, t4.student_name, t4.student_barcode, t4.batch_no, t4.batch_academic_year, t4.batch_grade, t4.current_aspiration,
         t4.profession_1, t4.profession_2, t4.profession_3, t4.followup_1_aspiration, t4.followup_2_aspiration, t4.assessment_barcode,
-        t4.record_type, t4.cdm1_no, t4.q4_1, t4.q4_2
+        t4.record_type, t4.cdm1_no, t4.q4_1, t4.q4_2, t4.batch_language, t4.school_state,	
+t4.school_district, t4.school_taluka, t4.school_partner, t4.batch_donor
 ),
 
 -- baseline unpivot fixed
 t6 AS (
     SELECT 
         student_id, student_name, student_barcode, batch_no, batch_academic_year, batch_grade, current_aspiration, profession_1,
-        profession_2, profession_3, CAST(bl_cdm1_no AS STRING) AS bl_cdm1_no,
+        profession_2, profession_3, CAST(bl_cdm1_no AS STRING) AS bl_cdm1_no, batch_language, school_state,	
+school_district, school_taluka,	school_partner,	batch_donor,
         CAST(NULL AS STRING) AS el_cdm1_no, followup_1_aspiration, followup_2_aspiration, assessment_barcode, 'Baseline' AS record_type,
         cdm1_no, q4_1, q4_2, bl_aspiration AS aspiration_col, baseline_stud_aspiration AS stud_aspiration
     FROM t5
@@ -70,7 +75,8 @@ t6 AS (
 t7 AS (
     SELECT 
         student_id, student_name, student_barcode, batch_no, batch_academic_year, batch_grade, current_aspiration, 
-        profession_1, profession_2, profession_3, CAST(NULL AS STRING) AS bl_cdm1_no,
+        profession_1, profession_2, profession_3, CAST(NULL AS STRING) AS bl_cdm1_no, batch_language, school_state,	
+school_district, school_taluka,	school_partner,	batch_donor,
         CAST(el_cdm1_no AS STRING) AS el_cdm1_no, followup_1_aspiration, followup_2_aspiration, assessment_barcode,
         'Endline' AS record_type, cdm1_no, q4_1, q4_2, el_aspiration AS aspiration_col, endline_stud_aspiration AS stud_aspiration
     FROM t5
@@ -101,7 +107,8 @@ t9 AS (
 t10 AS (
     SELECT
         student_id, student_name, student_barcode, batch_no, batch_academic_year, batch_grade, current_aspiration, profession_1,
-        profession_2, profession_3, followup_1_aspiration, followup_2_aspiration, assessment_barcode, aspiration_mapping,
+        profession_2, profession_3, followup_1_aspiration, followup_2_aspiration, assessment_barcode, aspiration_mapping, batch_language, school_state,	
+school_district, school_taluka,	school_partner,	batch_donor,
         MAX(bl_cdm1_no) AS bl_cdm1_no,
         MAX(el_cdm1_no) AS el_cdm1_no,
         MAX(CASE WHEN record_type = 'Baseline' THEN stud_aspiration END) AS baseline_stud_aspiration,
@@ -109,7 +116,8 @@ t10 AS (
     FROM t9
     GROUP BY
         student_id, student_name, student_barcode, batch_no, batch_academic_year, batch_grade, current_aspiration, profession_1,
-        profession_2, profession_3, followup_1_aspiration, followup_2_aspiration, assessment_barcode, aspiration_mapping
+        profession_2, profession_3, followup_1_aspiration, followup_2_aspiration, assessment_barcode, aspiration_mapping, batch_language, school_state,	
+school_district, school_taluka,	school_partner,	batch_donor
 )
 
 SELECT *
