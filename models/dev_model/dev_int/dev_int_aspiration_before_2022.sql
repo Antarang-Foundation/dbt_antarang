@@ -7,7 +7,7 @@ WITH
 grade9_t1 AS (
     SELECT 
         student_id,
-        COALESCE(student_barcode, 'MISSING') AS student_barcode,
+        student_barcode,
         gender,
         batch_no,
         batch_academic_year,
@@ -108,7 +108,7 @@ grade9_final AS (
 grade10_t1 AS (
     SELECT 
         student_id,
-        COALESCE(student_barcode, 'MISSING') AS student_barcode,
+        student_barcode,
         gender,
         batch_no,
         batch_academic_year,
