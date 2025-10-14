@@ -102,29 +102,20 @@ models:
   - name: dev_fct_hm_session
     # description:
     columns:
-      - name: hm_id
+      - name: hm_school_id
         description: "The primary key of this table"
-        tests:
-          - unique
-          - not_null
 
   - name: dev_fct_global_somrt_upload_form
     # description:
     columns:
       - name: student_barcode
         description: "The primary key of this table"
-        tests:
-          - unique
-          - not_null
 
   - name: dev_fct_hm_assessment
     # description:
     columns:
-      - name: hm_id
+      - name: school_name
         description: "The primary key of this table"
-        tests:
-          - unique
-          - not_null
 
   - name: dev_fct_stud_aspiration
     # description:

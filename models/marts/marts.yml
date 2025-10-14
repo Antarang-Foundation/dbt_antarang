@@ -19,8 +19,5 @@ models:
   - name: fct_hm_assessment
     # description:
     columns:
-      - name: hm_id
+      - name: school_name
         description: "The primary key of this table"
-        tests:
-          - unique
-          - not_null

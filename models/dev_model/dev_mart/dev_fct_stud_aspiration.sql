@@ -40,5 +40,7 @@ final_aspiration AS (
 )
 
 select *  from final_aspiration
-Order by student_id, aspiration_mapping
+where student_barcode is not null
+
+--Order by student_id, aspiration_mapping
 

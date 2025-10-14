@@ -72,3 +72,4 @@ with
 
 select *
 from int_assessment
+where assessment_academic_year >= '2023'
