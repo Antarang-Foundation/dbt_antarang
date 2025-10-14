@@ -75,3 +75,9 @@ models:
         tests:
           - unique
           - not_null
+
+  - name: dev_int_hm_assessment
+    # description:
+    columns:
+      - name: student_name
+        description: "The primary key of this table"
