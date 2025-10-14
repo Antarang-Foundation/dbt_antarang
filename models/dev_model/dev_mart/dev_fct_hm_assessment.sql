@@ -1,258 +1,4 @@
-with hm_session as (
-    select 
-        hm_session_name, facilitator_name, hm_session_date, start_time, 
-        scheduling_type, rescheduled_counter, session_status, hm_attended, 
-        session_lead, session_academic_year, batch_language, school_name, 
-        school_taluka, school_district, school_state, school_area, school_partner 
-    from {{ ref('dev_int_hm_session') }}
-),
-
-pre_program as (
-    select 
-      pre_name,	pre_date, Q5_pre_option_1, Q5_pre_option_2, Q5_pre_option_3, Q7_pre_Other_Please_Specify, 
-      Q8_pre_Others_Please_Specify,	district_name, Q4_pre__years_in_this_school, Q5_pre_organisation_last_year,	
-      Q6_pre_heard_of_antarang,	Q7_pre_how_did_you_hear, Q8_pre_which_grade, Q9_pre_which_follow, Q10_pre_which_follow,	
-      Q11_pre_think_of_career,	Q12_pre_confident_in_career_program, Q13_pre_program_activities, Q14_pre_program_session, 
-      Q15_pre_important_secondary_students,	Q16A_pre_program_inc_tions_all_students, 
-      Q16C_pre_encouraging_students_choosing_careers, Q16B_pre_supporting_students_training_after_school, 
-      Q17_pre_one_thing_for_you_students, id as pre_id,	submission_time as pre_submission_time,	uuid as pre_uuid, pre_end, 
-      pre_start, school_name as pre_school_name, 
-      COALESCE (school_Rajasthan, school_Mumbai, school_Goa, school_Nagaland, school_Thane, school_Pune, school_Osmanabad, 
-      school_Yamuna_Nagar, school_name ) as pre_school_names
-    from {{ source('kobo', 'pre_program_questionaire_form') }}
-),
-
-post_program as (
-    select 
-        pp_date, pp_name, Q8_pp_others_please_specify as Q5_pp_others_please_specify, Q10_pp_answer_that_apply, 
-        Q11_pp_thin_for_career_program,	Q12_pp_confident, Q13_pp_program_activities, Q14_pp_program_sessions, 
-        Q15_pp_important_secondary_students, Q16_pp_career_decisions, Q17_pp_materials_that_apply, 
-        Q18A_pp_program_inc_of_all_students, Q18C_pp_encouraging_students_choosing_careers,	
-        Q18B_pp_supporting_students_raining_after_school, Q18D_pp_header, Q19_pp_leave_school, 
-        Q20_pp_thin_for_students,	Q4_pp_how_many_year_in_this_school,	Q5_pp_org_our_school_last_year,	
-        Q6_pp_heard_of_antarng,	Q7_pp_how_did_you_hear,	Q8_pp_in_which_grade, Q9_pp_which_of_the_following, pp_id, Q7_pp_other_please_specify,
-        submission_time as pp_submission_time, uuid as pp_uuid, post_end as pp_end, post_start as pp_start, school_name as pp_school_name,
-        COALESCE (school_Rajasthan, school_Mumbai, school_Goa, school_Nagaland, 
-        school_Thane, school_Pune, school_Osmanabad, school_Yamuna_Nagar, school_name) as pp_school_names
-    from {{ source('kobo', 'post_program_questionaire_form') }}
-),
-
-post_questionair as (
-    select 
-        po_date, po_name, Q5_po_others_please_specify, Q10_po_secondary_students, 
-        Q11A_po_program_inc_student, Q11C_po_encouraging_students_choosing_careers, 
-        Q11B_po_support_students_raining_after_school, Q11D_po_header, Q12_po_thin_for_students, 
-        Q13_po_big_rom_this_orientation, Q14_po_nex_after_this_orientation, Q4_po_heard_of_antarang, 
-        Q5_po_grade, Q6_po_which_follow, Q7_po_role, Q8_po_materials, Q9_po_confidence, id as po_id, submission_time as po_submission_time,
-        uuid as po_uuid, ques_end as po_end, ques_start as po_start, school_name as po_school_name,
-        COALESCE (school_Rajasthan, school_Mumbai, school_Goa, school_name, school_Nagaland, school_Thane, school_Pune, 
-        school_Osmanabad, school_Yamuna_Nagar) as po_school_names
-    from {{ source('kobo', 'post_orientation_questionaire_form') }}
-),
-
-source_joined as 
-(select 
-    h.*, 
-    pre.*, 
-    pp.*, 
-    po.*
-from hm_session h
-left join pre_program pre on h.school_name = pre.pre_school_names
-    left join post_program pp on h.school_name = pp.pp_school_names
-    left join post_questionair po on h.school_name = po.po_school_names
-),
-
-expand_column as 
-(select s.hm_session_name, s.facilitator_name, s.hm_session_date, s.start_time,
-  s.scheduling_type, s.rescheduled_counter, s.session_status, s.hm_attended,
-  s.session_lead, s.session_academic_year, s.batch_language, s.school_name,
-  s.school_taluka, s.school_district, s.school_state, s.school_area, s.school_partner,
-  
-  s.pre_name,	s.pre_date, s.Q5_pre_option_1, s.Q5_pre_option_2, s.Q5_pre_option_3, s.Q7_pre_Other_Please_Specify, 
-      s.Q8_pre_Others_Please_Specify,	s.district_name, s.Q4_pre__years_in_this_school, s.Q5_pre_organisation_last_year,	
-      s.Q6_pre_heard_of_antarang, s.Q7_pre_how_did_you_hear, s.Q8_pre_which_grade, s.Q9_pre_which_follow, s.Q10_pre_which_follow,	
-      s.Q11_pre_think_of_career, s.Q12_pre_confident_in_career_program, s.Q13_pre_program_activities, s.Q14_pre_program_session, 
-      s.Q15_pre_important_secondary_students, s.Q16A_pre_program_inc_tions_all_students, 
-      s.Q16C_pre_encouraging_students_choosing_careers, s.Q16B_pre_supporting_students_training_after_school, 
-      s.Q17_pre_one_thing_for_you_students, s.pre_id, s.pre_submission_time, s.pre_uuid, s.pre_end, 
-      s.pre_start, s.pre_school_names,
-      
-pp_date, pp_name, Q5_pp_others_please_specify, Q10_pp_answer_that_apply, 
-        Q11_pp_thin_for_career_program,	Q12_pp_confident, Q13_pp_program_activities, Q14_pp_program_sessions, 
-        Q15_pp_important_secondary_students, Q16_pp_career_decisions, Q17_pp_materials_that_apply, 
-        Q18A_pp_program_inc_of_all_students, Q18C_pp_encouraging_students_choosing_careers,	
-        Q18B_pp_supporting_students_raining_after_school, Q18D_pp_header, Q19_pp_leave_school, 
-        Q20_pp_thin_for_students,	Q4_pp_how_many_year_in_this_school,	Q5_pp_org_our_school_last_year,	
-        Q6_pp_heard_of_antarng,	Q7_pp_how_did_you_hear,	Q8_pp_in_which_grade, Q9_pp_which_of_the_following,
-        pp_submission_time, pp_uuid, pp_end, pp_start, pp_id,
-        pp_school_names, Q7_pp_other_please_specify,
-
-  po_date, po_name, Q5_po_others_please_specify, Q10_po_secondary_students, 
-        Q11A_po_program_inc_student, Q11C_po_encouraging_students_choosing_careers, 
-        Q11B_po_support_students_raining_after_school, Q11D_po_header, Q12_po_thin_for_students, 
-        Q13_po_big_rom_this_orientation, Q14_po_nex_after_this_orientation, Q4_po_heard_of_antarang, 
-        Q5_po_grade, Q6_po_which_follow, Q7_po_role, Q8_po_materials, Q9_po_confidence, po_id, po_submission_time,
-        po_uuid, po_end, po_start, po_school_names,
-        
-case when Q7_pre_how_did_you_hear like '%newspapers%' then 1 else 0 end as Q7a_newspapers,
-case when Q7_pre_how_did_you_hear like '%from_government_meetings___oth%' then 1 else 0 end as Q7c_pre_from_government_meetings___oth,
-case when Q7_pre_how_did_you_hear like '%social_media__facebook__linked%' then 1 else 0 end as Q7b_pre_social_media__facebook__linked,
-case when Q7_pre_how_did_you_hear like '%from_parents__students%' then 1 else 0 end as Q7d_pre_from_parents__students,
-case when Q7_pre_how_did_you_hear like '%search_engines___google_etc%' then 1 else 0 end as Q7e_pre_search_engines___google_etc,
-case when Q7_pre_how_did_you_hear like '%worked_with_them_in_the_past%' then 1 else 0 end as Q7f_pre_worked_with_them_in_the_past,
-case when Q7_pre_how_did_you_hear like '%workshops__training_sessions__%' then 1 else 0 end as Q7g_pre_workshops__training_sessions__,
-case when Q7_pre_how_did_you_hear like '%other__please_specify%' then 1 else 0 end as Q7h_pre_other__please_specify,
-case when Q7_pre_how_did_you_hear like '%not_applicable%' then 1 else 0 end as Q7i_pre_NA,
-
-case when Q8_pre_which_grade like '%grade_8%' then 1 else 0 end as Q8a_pre_grade_8,
-case when Q8_pre_which_grade like '%grade_9%' then 1 else 0 end as Q8b_pre_grade_9,
-case when Q8_pre_which_grade like '%grade_10%' then 1 else 0 end as Q8c_pre_grade_10,
-case when Q8_pre_which_grade like '%grade_11%' then 1 else 0 end as Q8d_pre_grade_11,
-case when Q8_pre_which_grade like '%grade_12%' then 1 else 0 end as Q8e_pre_grade_12,
-case when Q8_pre_which_grade like '%none_of_the_abovei_don_t_know__not_sure%' then 1 else 0 end as Q8f_pre_none_of_the_above,
-case when Q8_pre_which_grade like '%i_don_t_know__not_sure%' then 1 else 0 end as Q8g_pre_i_don_t_know__not_sure,
-case when Q8_pre_which_grade like '%other__please_specify%' then 1 else 0 end as Q8h_pre_other__please_specify,
-
-case when Q9_pre_which_follow like '%up__to__date_information_about_careers%' then 1 else 0 end as Q9a_pre_up__to__date_information_about_careers,
-case when Q9_pre_which_follow like '%parents__caregivers_sessions%' then 1 else 0 end as Q9b_pre_parents__caregivers_sessions,
-case when Q9_pre_which_follow like '%a_trained_career_teacher_in_school%' then 1 else 0 end as Q9c_pre_a_trained_career_teacher_in_school,
-case when Q9_pre_which_follow like '%records_of_students_career_plans%' then 1 else 0 end as Q9f_pre_records_of_students_career_plans,
-case when Q9_pre_which_follow like '%individual_counselling%' then 1 else 0 end as Q9d_pre_individual_counselling,
-case when Q9_pre_which_follow like '%psychometric_tests%' then 1 else 0 end as Q9e_pre_psychometric_tests,
-case when Q9_pre_which_follow like '%academic_subjects_teaching_careers%' then 1 else 0 end as Q9g_pre_academic_subjects_teaching_careers,
-case when Q9_pre_which_follow like '%information_on_education___training_path%' then 1 else 0 end as Q9h_pre_information_on_education___training_path,
-case when Q9_pre_which_follow like '%visits__talks_with_educational_instituti%' then 1 else 0 end as Q9i_pre_visits__talks_with_educational_instituti,
-case when Q9_pre_which_follow like '%records_of_student_learning_in_the_caree%' then 1 else 0 end as Q9j_pre_records_of_student_learning_in_the_caree,
-case when Q9_pre_which_follow like '%records_of_students_career_plans_after_c%' then 1 else 0 end as Q9k_pre_records_of_students_career_plans_after_c,
-case when Q9_pre_which_follow like '%i_don_t_know__not_sure%' then 1 else 0 end as Q9l_pre_i_don_t_know__not_sure,
-
-case when Q10_pre_which_follow like '%i_had_no_role_to_play_in_the_program%' then 1 else 0 end as Q10a_pre_i_had_no_role_to_play_in_the_program,
-case when Q10_pre_which_follow like '%provided_a_fixed_time_for_the_career_ses%' then 1 else 0 end as Q10b_pre_provided_a_fixed_time_for_the_career_ses,
-case when Q10_pre_which_follow like '%observe_career_sessions_regularly%' then 1 else 0 end as Q10c_pre_observe_career_sessions_regularly,
-case when Q10_pre_which_follow like '%ensured_students_attended_the_career_pro%' then 1 else 0 end as Q10d_pre_ensured_students_attended_the_career_pro,
-case when Q10_pre_which_follow like '%spoke_to_parents_about_the_career_progra%' then 1 else 0 end as Q10e_pre_spoke_to_parents_about_the_career_progra,
-case when Q10_pre_which_follow like '%shared_about_the_career_program_in_hm_me%' then 1 else 0 end as Q10f_pre_shared_about_the_career_program_in_hm_me,
-case when Q10_pre_which_follow like '%provided_feedback__suggestions_for_the_p%' then 1 else 0 end as Q10g_pre_provided_feedback__suggestions_for_the_p,
-case when Q10_pre_which_follow like '%provided_school_budget__money_for_the_ca%' then 1 else 0 end as Q10h_pre_provided_school_budget__money_for_the_ca,
-case when Q10_pre_which_follow like '%regularly_spoke_to_the_career_teacher_ab%' then 1 else 0 end as Q10i_pre_regularly_spoke_to_the_career_teacher_ab,
-case when Q10_pre_which_follow like '%ensured_the_program_started_and_ended_on%' then 1 else 0 end as Q10j_pre_ensured_the_program_started_and_ended_on,
-case when Q10_pre_which_follow like '%arranged_additional_career_activities_in%' then 1 else 0 end as Q10k_pre_arranged_additional_career_activities_in,
-case when Q10_pre_which_follow like '%spoke_to_my_school_alumni_to_see_how_the%' then 1 else 0 end as Q10l_pre_spoke_to_my_school_alumni_to_see_how_the,
-case when Q10_pre_which_follow like '%ensured_there_is_a_trained_career_teache%' then 1 else 0 end as Q10m_pre_ensured_there_is_a_trained_career_teache,
-case when Q10_pre_which_follow like '%i_do_not_know__not_sure%' then 1 else 0 end as Q10n_pre_i_do_not_know__not_sure,
-
-case when Q5_po_grade like '%grade_8%' then 1 else 0 end as Q5a_po_grade_8,
-case when Q5_po_grade like '%grade_9%' then 1 else 0 end as Q5b_po_grade_9,
-case when Q5_po_grade like '%grade_10%' then 1 else 0 end as Q5c_po_grade_10,
-case when Q5_po_grade like '%grade_11%' then 1 else 0 end as Q5d_po_grade_11,
-case when Q5_po_grade like '%grade_12%' then 1 else 0 end as Q5e_po_grade_12,
-case when Q5_po_grade like '%none_of_the_above%' then 1 else 0 end as Q5f_po_none_of_the_above,
-case when Q5_po_grade like '%i_don_t_know__not_sure%' then 1 else 0 end as Q5g_po_i_don_t_know__not_sure,
-case when Q5_po_grade like '%other__please_specify%' then 1 else 0 end as Q5h_po_other__please_specify,
-
-case when Q6_po_which_follow like '%i_had_no_role_to_play_in_the_program%' then 1 else 0 end as Q6a_po_i_had_no_role_to_play_in_the_program,
-case when Q6_po_which_follow like '%provided_a_fixed_time_for_the_career_ses%' then 1 else 0 end as Q6b_po_provided_a_fixed_time_for_the_career_ses,
-case when Q6_po_which_follow like '%observe_career_sessions_regularly%' then 1 else 0 end as Q6c_po_observe_career_sessions_regularly,
-case when Q6_po_which_follow like '%ensured_students_attended_the_career_pro%' then 1 else 0 end as Q6d_po_ensured_students_attended_the_career_pro,
-case when Q6_po_which_follow like '%spoke_to_parents_about_the_career_progra%' then 1 else 0 end as Q6e_po_spoke_to_parents_about_the_career_progra,
-case when Q6_po_which_follow like '%shared_about_the_career_program_in_hm_me%' then 1 else 0 end as Q6f_po_shared_about_the_career_program_in_hm_me,
-case when Q6_po_which_follow like '%provided_feedback__suggestions_for_the_p%' then 1 else 0 end as Q6g_po_provided_feedback__suggestions_for_the_p,
-case when Q6_po_which_follow like '%provided_school_budget__money_for_the_ca%' then 1 else 0 end as Q6h_po_provided_school_budget__money_for_the_ca,
-case when Q6_po_which_follow like '%regularly_spoke_to_the_career_teacher_ab%' then 1 else 0 end as Q6i_po_regularly_spoke_to_the_career_teacher_ab,
-case when Q6_po_which_follow like '%ensured_the_program_started_and_ended_on%' then 1 else 0 end as Q6j_po_ensured_the_program_started_and_ended_on,
-case when Q6_po_which_follow like '%arranged_additional_career_activities_in%' then 1 else 0 end as Q6k_po_arranged_additional_career_activities_in,
-case when Q6_po_which_follow like '%spoke_to_my_school_alumni_to_see_how_the%' then 1 else 0 end as Q6l_po_spoke_to_my_school_alumni_to_see_how_the,
-case when Q6_po_which_follow like '%ensured_there_is_a_trained_career_teache%' then 1 else 0 end as Q6m_po_ensured_there_is_a_trained_career_teache,
-case when Q6_po_which_follow like '%i_do_not_know__not_sure%' then 1 else 0 end as Q6n_po_i_do_not_know__not_sure,
-
-case when Q7_po_role like '%i_have_no_role_to_play%' then 1 else 0 end as Q7a_po_i_have_no_role_to_play,
-case when Q7_po_role like '%provide_a_fixed_time_for_the_career_sess%' then 1 else 0 end as Q7b_po_provide_a_fixed_time_for_the_career_sess,
-case when Q7_po_role like '%observe_career_sessions_regularly%' then 1 else 0 end as Q7c_po_observe_career_sessions_regularly,
-case when Q7_po_role like '%speak_to_parents_about_the_career_progra%' then 1 else 0 end as Q7d_po_speak_to_parents_about_the_career_progra,
-case when Q7_po_role like '%ensure_students_attended_the_career_prog%' then 1 else 0 end as Q7e_po_ensure_students_attended_the_career_prog,
-case when Q7_po_role like '%share_about_the_career_program_in_hm_mee%' then 1 else 0 end as Q7f_po_share_about_the_career_program_in_hm_mee,
-case when Q7_po_role like '%provide_feedback__suggestions_for_the_pr%' then 1 else 0 end as Q7g_po_provide_feedback__suggestions_for_the_pr,
-case when Q7_po_role like '%provide_school_budget__money_for_the_car%' then 1 else 0 end as Q7h_po_provide_school_budget__money_for_the_car,
-case when Q7_po_role like '%regularly_speak_to_the_career_teacher_ab%' then 1 else 0 end as Q7i_po_regularly_speak_to_the_career_teacher_ab,
-case when Q7_po_role like '%ensuredthe_program_starts_and_ends_on_ti%' then 1 else 0 end as Q7j_po_ensuredthe_program_starts_and_ends_on_ti,
-case when Q7_po_role like '%arrange_additional_career_activities_in_%' then 1 else 0 end as Q7k_po_arrange_additional_career_activities_in_,
-case when Q7_po_role like '%speak_to_my_school_alumni_to_see_how_the%' then 1 else 0 end as Q7l_po_speak_to_my_school_alumni_to_see_how_the,
-case when Q7_po_role like '%ensure_there_is_a_trained_career_teacher%' then 1 else 0 end as Q7m_po_ensure_there_is_a_trained_career_teacher,
-case when Q7_po_role like '%i_do_not_know__not_sure%' then 1 else 0 end as Q7n_po_i_do_not_know__not_sure,
-
-case when Q8_po_materials like '%a_student_book%' then 1 else 0 end as Q8a_po_a_student_book,
-case when Q8_po_materials like '%a_teacher_guide%' then 1 else 0 end as Q8b_po_a_teacher_guide,
-case when Q8_po_materials like '%school_poster%' then 1 else 0 end as Q8c_po_school_poster,
-case when Q8_po_materials like '%career_chatbot%' then 1 else 0 end as Q8d_po_career_chatbot,
-case when Q8_po_materials like '%student_certificates%' then 1 else 0 end as Q8e_po_student_certificates,
-case when Q8_po_materials like '%student_assessments%' then 1 else 0 end as Q8f_po_student_assessments,
-case when Q8_po_materials like '%career_videos%' then 1 else 0 end as Q8g_po_career_videos,
-case when Q8_po_materials like '%parent_handouts%' then 1 else 0 end as Q8h_po_parent_handouts,
-case when Q8_po_materials like '%counselling_report%' then 1 else 0 end as Q8i_po_counselling_report,
-
-case when Q7_pp_how_did_you_hear like '%Newspaper%' then 1 else 0 end as Q7a_pp_Newspaper,
-case when Q7_pp_how_did_you_hear like '%Social_media_(Facebook,_LinkedIn,_Instagram,_etc.)%' then 1 else 0 end as Q7b_pp_Social_media_Facebook_linkedin,
-case when Q7_pp_how_did_you_hear like '%From_government_meetings__other%' then 1 else 0 end as Q7c_pp_From_government_meetings__other,
-case when Q7_pp_how_did_you_hear like '%From_Parents_Students%' then 1 else 0 end as Q7d_pp_From_Parents_Students,
-case when Q7_pp_how_did_you_hear like '%Search_Engines_(_Google,etc)%' then 1 else 0 end as Q7e_pp_Search_Engines__Google_etc,
-case when Q7_pp_how_did_you_hear like '%Peer_HMsTeachers%' then 1 else 0 end as Q7f_pp_Peer_HMsTeachers,
-case when Q7_pp_how_did_you_hear like '%Conducted_career_education_program_in_my_school%' then 1 else 0 end as Q7g_pp_Conducted_career_education_program_in_my_school,
-case when Q7_pp_how_did_you_hear like '%Workshops,_training_sessions,_or_webinars%' then 1 else 0 end as Q7h_pp_Workshops_training_sessions_or_webinars,
-case when Q7_pp_how_did_you_hear like '%Word_of_mouth_from_alumni_or_beneficiaries%' then 1 else 0 end as Q7i_pp_Word_of_mouth_from_alumni_or_beneficiaries,
-case when Q7_pp_how_did_you_hear like '%Antarangs_website%' then 1 else 0 end as Q7j_pp_Antarangs_website,
-case when Q7_pp_how_did_you_hear like '%other__please_specify%' then 1 else 0 end as Q7k_pp_other__please_specify,
-
-case when Q8_pp_in_which_grade like '%grade_8%' then 1 else 0 end as Q8a_pp_grade_8,
-case when Q8_pp_in_which_grade like '%grade_9%' then 1 else 0 end as Q8b_pp_grade_9,
-case when Q8_pp_in_which_grade like '%grade_10%' then 1 else 0 end as Q8c_pp_grade_10,
-case when Q8_pp_in_which_grade like '%grade_11%' then 1 else 0 end as Q8d_pp_grade_11,
-case when Q8_pp_in_which_grade like '%grade_12%' then 1 else 0 end as Q8e_pp_grade_12,
-case when Q8_pp_in_which_grade like '%none_of_the_above%' then 1 else 0 end as Q8f_pp_none_of_the_above,
-case when Q8_pp_in_which_grade like '%i_don_t_know__not_sure%' then 1 else 0 end as Q8g_pp_i_don_t_know__not_sure,
-case when Q8_pp_in_which_grade like '%other__please_specify%' then 1 else 0 end as Q8h_pp_other__please_specify,
-
-case when Q9_pp_which_of_the_following like '%Up-to-date_info_about_careers%' then 1 else 0 end as Q9a_pp_Up_to_date_info_about_careers,
-case when Q9_pp_which_of_the_following like '%Sessions_for_parents_or_caregivers%' then 1 else 0 end as Q9b_pp_Sessions_for_parents_or_caregivers,
-case when Q9_pp_which_of_the_following like '%Trained_external_career_teacher_at_school%' then 1 else 0 end as Q9c_pp_Trained_external_career_teacher_at_school,
-case when Q9_pp_which_of_the_following like '%Trained_career_teacher_in_charge%' then 1 else 0 end as Q9d_pp_Trained_career_teacher_in_charge,
-case when Q9_pp_which_of_the_following like '%One-on-one_career_counselling%' then 1 else 0 end as Q9e_pp_One_on_one_career_counselling,
-case when Q9_pp_which_of_the_following like '%Interest_and_aptitude_tests%' then 1 else 0 end as Q9f_pp_Interest_and_aptitude_tests,
-case when Q9_pp_which_of_the_following like '%Record_of_students_career_plans%' then 1 else 0 end as Q9g_pp_Record_of_students_career_plans,
-case when Q9_pp_which_of_the_following like '%Info_on_education_or_training_after_school%' then 1 else 0 end as Q9h_pp_Info_on_education_or_training_after_school,
-case when Q9_pp_which_of_the_following like '%Career_expert_talks_during_subject_classes%' then 1 else 0 end as Q9i_pp_Career_expert_talks_during_subject_classes,
-case when Q9_pp_which_of_the_following like '%Talks_or_visits_to_colleges_and_workplaces%' then 1 else 0 end as Q9j_pp_Talks_or_visits_to_colleges_and_workplaces,
-case when Q9_pp_which_of_the_following like '%Data_collected_on_students_plans_after_school%' then 1 else 0 end as Q9k_pp_Data_collected_on_students_plans_after_school,
-case when Q9_pp_which_of_the_following like '%i_do_not_know__not_sure%' then 1 else 0 end as Q9l_pp_i_do_not_know__not_sure,
-
-case when Q10_pp_answer_that_apply like '%Fixed_a_regular_time_for_career_sessions%' then 1 else 0 end as Q10a_pp_Fixed_a_regular_time_for_career_sessions,
-case when Q10_pp_answer_that_apply like '%Visited_the_career_sessions%' then 1 else 0 end as Q10b_pp_Visited_the_career_sessions,
-case when Q10_pp_answer_that_apply like '%Made_sure_students_attended%' then 1 else 0 end as Q10c_pp_Made_sure_students_attended,
-case when Q10_pp_answer_that_apply like '%Spoke_to_parents_about_it%' then 1 else 0 end as Q10d_pp_Spoke_to_parents_about_it,
-case when Q10_pp_answer_that_apply like '%Shared_updates_in_meetings%' then 1 else 0 end as Q10e_pp_Shared_updates_in_meetings,
-case when Q10_pp_answer_that_apply like '%Gave_ideas_or_suggestions_to_the_career_teacher%' then 1 else 0 end as Q10f_pp_Gave_ideas_or_suggestions_to_the_career_teacher,
-case when Q10_pp_answer_that_apply like '%Shared_updates_in_meetings_or_reports%' then 1 else 0 end as Q10g_pp_Shared_updates_in_meetings_or_reports,
-case when Q10_pp_answer_that_apply like '%Utilised_school_funds_for_the_program%' then 1 else 0 end as Q10h_pp_Utilised_school_funds_for_the_program,
-case when Q10_pp_answer_that_apply like '%Talked_often_with_the_career_teacher%' then 1 else 0 end as Q10i_pp_Talked_often_with_the_career_teacher,
-case when Q10_pp_answer_that_apply like '%Started_and_ended_the_program_on_time%' then 1 else 0 end as Q10j_pp_Started_and_ended_the_program_on_time,
-case when Q10_pp_answer_that_apply like '%Arranged_extra_career_activities%' then 1 else 0 end as Q10k_pp_Arranged_extra_career_activities,
-case when Q10_pp_answer_that_apply like '%invited_ex-students_to_share_their_job_stories%' then 1 else 0 end as Q10l_pp_invited_ex_students_to_share_their_job_stories,
-case when Q10_pp_answer_that_apply like '%Fixed_a_regular_time_for_career_sessions%' then 1 else 0 end as Q10m_pp_Fixed_a_regular_time_for_career_sessions,
-case when Q10_pp_answer_that_apply like '%i_do_not_know__not_sure%' then 1 else 0 end as Q10n_pp_i_do_not_know__not_sure,
-
-
-case when Q17_pp_materials_that_apply like '%A_student_book%' then 1 else 0 end as Q17a_pp_A_student_book,
-case when Q17_pp_materials_that_apply like '%A_teacher_guide%' then 1 else 0 end as Q17b_pp_A_teacher_guide,
-case when Q17_pp_materials_that_apply like '%School_Poster%' then 1 else 0 end as Q17c_pp_School_Poster,
-case when Q17_pp_materials_that_apply like '%Career_Chatbot%' then 1 else 0 end as Q17d_pp_Career_Chatbot,
-case when Q17_pp_materials_that_apply like '%Student_Certificates%' then 1 else 0 end as Q17e_pp_Student_Certificates,
-case when Q17_pp_materials_that_apply like '%Student_Assessments%' then 1 else 0 end as Q17f_pp_Student_Assessments,
-case when Q17_pp_materials_that_apply like '%Career_Videos%' then 1 else 0 end as Q17g_pp_Career_Videos,
-case when Q17_pp_materials_that_apply like '%Parent_Handouts%' then 1 else 0 end as Q17h_pp_Parent_Handouts,
-case when Q17_pp_materials_that_apply like '%Counselling_Report%' then 1 else 0 end as Q17i_pp_Counselling_Report
-
-from source_joined s
-),
-
+with 
 final as (select school_name, session_academic_year, batch_language, school_taluka, school_district,
 school_state, school_area, school_partner, 
 
@@ -341,8 +87,8 @@ Q7_po_role,
 Q7a_po_i_have_no_role_to_play,
 Q7b_po_provide_a_fixed_time_for_the_career_sess,
 Q7c_po_observe_career_sessions_regularly,
-Q7d_po_speak_to_parents_about_the_career_progra,
-Q7e_po_ensure_students_attended_the_career_prog,
+Q7d_po_ensure_students_attended_the_career_prog,
+Q7e_po_speak_to_parents_about_the_career_progra,
 Q7f_po_share_about_the_career_program_in_hm_mee,
 Q7g_po_provide_feedback__suggestions_for_the_pr,
 Q7h_po_provide_school_budget__money_for_the_car,
@@ -364,8 +110,8 @@ Q8h_po_parent_handouts,
 Q8i_po_counselling_report,
 Q9_po_confidence,
 Q10_po_secondary_students,
-Q11A_po_program_inc_student,
-Q11B_po_support_students_raining_after_school,
+Q11A_po_orientation_session_covered,
+Q11B_po_content_was_easy_to_understand,
 Q11C_po_encouraging_students_choosing_careers,
 Q12_po_thin_for_students,
 Q13_po_big_rom_this_orientation,
@@ -403,6 +149,7 @@ Q8e_pp_grade_12,
 Q8f_pp_none_of_the_above,
 Q8g_pp_i_don_t_know__not_sure,
 Q8h_pp_other__please_specify,
+Q8_pp_Others_Please_Specify_001,
 Q9_pp_which_of_the_following,
 Q9a_pp_Up_to_date_info_about_careers,
 Q9b_pp_Sessions_for_parents_or_caregivers,
@@ -455,7 +202,7 @@ Q20_pp_thin_for_students,
 pp_id,
 pp_uuid,
 pp_submission_time
-from expand_column
+from {{ ref('dev_int_hm_assessment') }}
 )
 
 select * from final

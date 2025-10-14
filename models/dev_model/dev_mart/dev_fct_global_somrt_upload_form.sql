@@ -44,42 +44,48 @@ assessment as (SELECT a.batch_no, a.batch_academic_year,
 a.school_academic_year, a.batch_grade, a.batch_language, a.fac_start_date, a.school_language, a.facilitator_name, a.facilitator_email, 
 a.school_name, a.school_taluka, a.school_ward, a.school_district, a.school_state, a.school_partner, a.school_area, a.batch_donor,
 
-MIN(cdm1_created_on) as cdm1_created_on,
+MIN(CASE WHEN cdm1_record_type = 'Baseline' THEN cdm1_created_on END) AS cdm1_baseline_created_on,
+MIN(CASE WHEN cdm1_record_type = 'Endline' THEN cdm1_created_on END) AS cdm1_endline_created_on,
 count(distinct case when cdm1_created_from_form = true then student_barcode end) as stg_cdm1_sd, 
 count(distinct case when cdm1_created_from_form = true then cdm1_assessment_barcode end) as stg_cdm1_barcodes, 
 count(distinct case when cdm1_created_from_form = true and cdm1_record_type = 'Baseline' then cdm1_no end) as bl_cdm1_raw, 
 count(distinct case when cdm1_created_from_form = true and cdm1_record_type = 'Endline' then cdm1_no end) as el_cdm1_raw,
 
 
-MIN(cdm2_created_on) as cdm2_created_on,
+MIN(CASE WHEN cdm2_record_type = 'Baseline' THEN cdm2_created_on END) AS cdm2_baseline_created_on,
+MIN(CASE WHEN cdm2_record_type = 'Endline' THEN cdm2_created_on END) AS cdm2_endline_created_on,
 count(distinct case when cdm2_created_from_form = true then student_barcode end) as stg_cdm2_sd, 
 count(distinct case when cdm2_created_from_form = true then cdm2_assessment_barcode end) as stg_cdm2_barcodes, 
 count(distinct case when cdm2_created_from_form = true and cdm2_record_type = 'Baseline' then cdm2_no end) as bl_cdm2_raw, 
 count(distinct case when cdm2_created_from_form = true and cdm2_record_type = 'Endline' then cdm2_no end) as el_cdm2_raw,
 
 
-MIN(cp_created_on) as cp_created_on,
+MIN(CASE WHEN cp_record_type = 'Baseline' THEN cp_created_on END) AS cp_baseline_created_on,
+MIN(CASE WHEN cp_record_type = 'Endline' THEN cp_created_on END) AS cp_endline_created_on,
 count(distinct case when cp_created_from_form = true then student_barcode end) as stg_cp_sd, 
 count(distinct case when cp_created_from_form = true then cp_assessment_barcode end) as stg_cp_barcodes, 
 count(distinct case when cp_created_from_form = true and cp_record_type = 'Baseline' then cp_no end) as bl_cp_raw, 
 count(distinct case when cp_created_from_form = true and cp_record_type = 'Endline' then cp_no end) as el_cp_raw,
 
 
-MIN(cs_created_on) as cs_created_on,
+MIN(CASE WHEN cs_record_type = 'Baseline' THEN cs_created_on END) AS cs_baseline_created_on,
+MIN(CASE WHEN cs_record_type = 'Endline' THEN cs_created_on END) AS cs_endline_created_on,
 count(distinct case when cs_created_from_form = true then student_barcode end) as stg_cs_sd, 
 count(distinct case when cs_created_from_form = true then cs_assessment_barcode end) as stg_cs_barcodes, 
 count(distinct case when cs_created_from_form = true and cs_record_type = 'Baseline' then cs_no end) as bl_cs_raw, 
 count(distinct case when cs_created_from_form = true and cs_record_type = 'Endline' then cs_no end) as el_cs_raw,
 
 
-MIN(fp_created_on) as fp_created_on,
+MIN(CASE WHEN fp_record_type = 'Baseline' THEN fp_created_on END) AS fp_baseline_created_on,
+MIN(CASE WHEN fp_record_type = 'Endline' THEN fp_created_on END) AS fp_endline_created_on,
 count(distinct case when fp_created_from_form = true then student_barcode end) as stg_fp_sd, 
 count(distinct case when fp_created_from_form = true then fp_assessment_barcode end) as stg_fp_barcodes, 
 count(distinct case when fp_created_from_form = true and fp_record_type = 'Baseline' then fp_no end) as bl_fp_raw, 
 count(distinct case when fp_created_from_form = true and fp_record_type = 'Endline' then fp_no end) as el_fp_raw,
 
 
-MIN(saf_created_on) as saf_created_on,
+MIN(CASE WHEN saf_record_type = 'Baseline' THEN saf_created_on END) AS saf_baseline_created_on,
+MIN(CASE WHEN saf_record_type = 'Endline' THEN saf_created_on END) AS saf_endline_created_on,
 count(distinct case when saf_created_from_form = true then student_barcode end) as stg_saf_sd, 
 count(distinct case when saf_created_from_form = true then saf_assessment_barcode end) as stg_saf_barcodes, 
 count(distinct case when saf_created_from_form = true and saf_record_type = 'Baseline' then saf_no end) as bl_saf_raw, 
@@ -87,7 +93,8 @@ count(distinct case when saf_created_from_form = true and saf_record_type = 'End
 count(distinct case when saf_created_from_form = true and saf_record_type IN ('Baseline', 'Endline') then saf_no end) as saf_correct,
 
 
-MIN(sar_created_on) as sar_created_on,
+MIN(CASE WHEN sar_record_type = 'Baseline' THEN sar_created_on END) AS sar_baseline_created_on,
+MIN(CASE WHEN sar_record_type = 'Endline' THEN sar_created_on END) AS sar_endline_created_on,
 count(distinct case when sar_created_from_form = true then student_barcode end) as stg_sar_sd, 
 count(distinct case when sar_created_from_form = true then sar_assessment_barcode end) as stg_sar_barcodes, 
 count(distinct case when sar_created_from_form = true and sar_record_type = 'Baseline' then sar_no end) as bl_sar_raw, 
@@ -114,8 +121,9 @@ a.school_name, a.school_taluka, a.school_ward, a.school_district, a.school_state
 assessment_status as (SELECT b.batch_no, b.batch_academic_year, 
 b.school_academic_year, b.batch_grade, b.batch_language, b.fac_start_date, b.school_language, b.facilitator_name, b.facilitator_email, 
 b.school_name, b.school_taluka, b.school_ward, b.school_district, b.school_state, b.school_partner, b.school_area, b.batch_donor,
-b.stg_cdm1_sd, b.stg_cdm1_barcodes, b.bl_cdm1_raw, b.el_cdm1_raw, b.cdm1_created_on, b.cdm2_created_on, b.cp_created_on, 
-b.cs_created_on, b.fp_created_on, b.saf_created_on, b.sar_created_on,
+b.stg_cdm1_sd, b.stg_cdm1_barcodes, b.bl_cdm1_raw, b.el_cdm1_raw, b.cdm1_baseline_created_on, b.cdm1_endline_created_on, 
+b.cdm2_baseline_created_on, b.cdm2_endline_created_on, b.cp_baseline_created_on, b.cp_endline_created_on,
+b.cs_baseline_created_on, b.cs_endline_created_on, b.fp_baseline_created_on, b.fp_endline_created_on, b.saf_baseline_created_on, b.saf_endline_created_on, b.sar_baseline_created_on, b.sar_endline_created_on,
 
 COUNT(DISTINCT CASE WHEN cdm1.cdm1_record_type = 'Baseline' THEN cdm1.cdm1_no END) AS bl_cdm1_correct,
 COUNT(DISTINCT CASE WHEN cdm1.cdm1_record_type = 'Endline'  THEN cdm1.cdm1_no END) AS el_cdm1_correct,
@@ -142,7 +150,7 @@ COUNT(DISTINCT CASE WHEN saf.saf_record_type = 'Endline'  THEN saf.saf_no END) A
 
 b.stg_sar_sd, b.stg_sar_barcodes, b.bl_sar_raw, b.el_sar_raw, b.sar_correct,
 COUNT(DISTINCT CASE WHEN sar.sar_record_type = 'Baseline' THEN sar.sar_no END) AS bl_sar_correct,
-COUNT(DISTINCT CASE WHEN sar.sar_record_type = 'Endline'  THEN sar.sar_no END) AS el_sar_correct,
+COUNT(DISTINCT CASE WHEN sar.sar_record_type = 'Endline'  THEN sar.sar_no END) AS el_sar_correct
 
 FROM assessment b
 LEFT JOIN int_global_dcp igd ON b.batch_no = igd.batch_no
@@ -162,8 +170,9 @@ b.school_name, b.school_taluka, b.school_ward, b.school_district, b.school_state
 b.stg_cdm1_sd, b.stg_cdm1_barcodes, b.bl_cdm1_raw, b.el_cdm1_raw, b.stg_cdm2_sd, b.stg_cdm2_barcodes, b.bl_cdm2_raw, b.el_cdm2_raw,
 b.stg_cp_sd, b.stg_cp_barcodes, b.bl_cp_raw, b.el_cp_raw, b.stg_cs_sd, b.stg_cs_barcodes, b.bl_cs_raw, b.el_cs_raw,
 b.stg_fp_sd, b.stg_fp_barcodes, b.bl_fp_raw, b.el_fp_raw, b.stg_saf_sd, b.stg_saf_barcodes, b.bl_saf_raw, b.el_saf_raw,
-b.stg_sar_sd, b.stg_sar_barcodes, b.bl_sar_raw, b.el_sar_raw, b.cdm1_created_on, b.cdm2_created_on, b.cp_created_on, 
-b.cs_created_on, b.fp_created_on, b.saf_created_on, b.sar_created_on, b.saf_correct, b.sar_correct),
+b.stg_sar_sd, b.stg_sar_barcodes, b.bl_sar_raw, b.el_sar_raw, b.cdm1_baseline_created_on, b.cdm1_endline_created_on, 
+b.cdm2_baseline_created_on, b.cdm2_endline_created_on, b.cp_baseline_created_on, b.cp_endline_created_on,
+b.cs_baseline_created_on, b.cs_endline_created_on, b.fp_baseline_created_on, b.fp_endline_created_on, b.saf_baseline_created_on, b.saf_endline_created_on, b.sar_baseline_created_on, b.sar_endline_created_on, b.saf_correct, b.sar_correct),
 
 overall_attendance as (select 
 batch_no as session_batch_no,
@@ -197,7 +206,8 @@ c.stg_cp_sd, c.stg_cp_barcodes, c.bl_cp_raw, c.el_cp_raw, c.stg_cs_sd, c.stg_cs_
 c.stg_fp_sd, c.stg_fp_barcodes, c.bl_fp_raw, c.el_fp_raw, c.stg_saf_sd, c.stg_saf_barcodes, c.bl_saf_raw, c.el_saf_raw,
 c.stg_sar_sd, c.stg_sar_barcodes, c.bl_sar_raw, c.el_sar_raw, c.bl_cdm1_correct, c.el_cdm1_correct, c.bl_cdm2_correct, c.el_cdm2_correct,
 c.bl_cp_correct, c.el_cp_correct, c.bl_cs_correct, c.el_cs_correct, c.bl_fp_correct, c.el_fp_correct, c.bl_saf_correct, c.el_saf_correct,
-c.cdm1_created_on, c.cdm2_created_on, c.cp_created_on, c.cs_created_on, c.fp_created_on, c.saf_created_on, c.sar_created_on, c.saf_correct, c.sar_correct,
+c.cdm1_baseline_created_on, c.cdm1_endline_created_on, c.cdm2_baseline_created_on, c.cdm2_endline_created_on, c.cp_baseline_created_on, c.cp_endline_created_on, 
+c.cs_baseline_created_on, c.cs_endline_created_on, c.fp_baseline_created_on, c.fp_endline_created_on, c.saf_baseline_created_on, c.saf_endline_created_on, c.sar_baseline_created_on, c.sar_endline_created_on, c.saf_correct, c.sar_correct,
 c.bl_sar_correct, c.el_sar_correct, oa.session_batch_no, oa.no_of_students_facilitated,
 oa.total_student_present_s1, oa.total_student_present_s2, oa.total_student_present_s3, oa.total_student_present_s4,
 oa.total_student_present_s5, oa.total_student_present_s6, oa.total_student_present_s7, oa.total_student_present_s8,
@@ -282,33 +292,84 @@ CASE
     WHEN d.school_district = 'Nagaland' AND d.batch_grade IN ('Grade 9','Grade 11') THEN d.total_student_present_s11
 END AS TSP_SAR_Quiz2,
 
-CASE 
-  WHEN d.session_date IS NOT NULL AND d.cdm1_created_on IS NOT NULL THEN DATE_DIFF(DATE(d.cdm1_created_on), d.session_date, DAY)
-END AS cdm1_TAT,
+-- TAT for CDM1
+        CASE
+    WHEN d.session_date IS NOT NULL AND d.cdm1_baseline_created_on IS NOT NULL
+    THEN DATE_DIFF(DATE(d.cdm1_baseline_created_on), d.session_date, DAY)
+END AS cdm1_baseline_TAT,
 
-CASE 
-  WHEN d.session_date IS NOT NULL AND d.cdm2_created_on IS NOT NULL THEN DATE_DIFF(DATE(d.cdm2_created_on), d.session_date, DAY)
-END AS cdm2_TAT,
+CASE
+    WHEN d.session_date IS NOT NULL AND d.cdm1_endline_created_on IS NOT NULL
+    THEN DATE_DIFF(DATE(d.cdm1_endline_created_on), d.session_date, DAY)
+END AS cdm1_endline_TAT,
 
-CASE 
-  WHEN d.session_date IS NOT NULL AND d.cp_created_on IS NOT NULL THEN DATE_DIFF(DATE(d.cp_created_on), d.session_date, DAY)
-END AS cp_TAT,
+        -- TAT for CDM2
+CASE
+    WHEN d.session_date IS NOT NULL AND d.cdm2_baseline_created_on IS NOT NULL
+    THEN DATE_DIFF(DATE(d.cdm2_baseline_created_on), d.session_date, DAY)
+END AS cdm2_baseline_TAT,
 
-CASE 
-  WHEN d.session_date IS NOT NULL AND d.cs_created_on IS NOT NULL THEN DATE_DIFF(DATE(d.cs_created_on), d.session_date, DAY)
-END AS cs_TAT,
+CASE
+    WHEN d.session_date IS NOT NULL AND d.cdm2_endline_created_on IS NOT NULL
+    THEN DATE_DIFF(DATE(d.cdm2_endline_created_on), d.session_date, DAY)
+END AS cdm2_endline_TAT,
 
-CASE 
-  WHEN d.session_date IS NOT NULL AND d.fp_created_on IS NOT NULL THEN DATE_DIFF(DATE(d.fp_created_on), d.session_date, DAY)
-END AS fp_TAT,
+        -- TAT for CP
+CASE
+    WHEN d.session_date IS NOT NULL AND d.cp_baseline_created_on IS NOT NULL
+    THEN DATE_DIFF(DATE(d.cp_baseline_created_on), d.session_date, DAY)
+END AS cp_baseline_TAT,
 
-CASE 
-  WHEN d.session_date IS NOT NULL AND d.saf_created_on IS NOT NULL THEN DATE_DIFF(DATE(d.saf_created_on), d.session_date, DAY)
-END AS saf_TAT,
+CASE
+    WHEN d.session_date IS NOT NULL AND d.cp_endline_created_on IS NOT NULL
+    THEN DATE_DIFF(DATE(d.cp_endline_created_on), d.session_date, DAY)
+END AS cp_endline_TAT,
 
-CASE 
-  WHEN d.session_date IS NOT NULL AND d.sar_created_on IS NOT NULL THEN DATE_DIFF(DATE(d.sar_created_on), d.session_date, DAY)
-END AS sar_TAT,
+        -- TAT for CS
+CASE
+    WHEN d.session_date IS NOT NULL AND d.cs_baseline_created_on IS NOT NULL
+    THEN DATE_DIFF(DATE(d.cs_baseline_created_on), d.session_date, DAY)
+END AS cs_baseline_TAT,
+
+CASE
+    WHEN d.session_date IS NOT NULL AND d.cs_endline_created_on IS NOT NULL
+    THEN DATE_DIFF(DATE(d.cs_endline_created_on), d.session_date, DAY)
+END AS cs_endline_TAT,
+
+
+        -- TAT for FP
+CASE
+    WHEN d.session_date IS NOT NULL AND d.fp_baseline_created_on IS NOT NULL
+    THEN DATE_DIFF(DATE(d.fp_baseline_created_on), d.session_date, DAY)
+END AS fp_baseline_TAT,
+
+CASE
+    WHEN d.session_date IS NOT NULL AND d.fp_endline_created_on IS NOT NULL
+    THEN DATE_DIFF(DATE(d.fp_endline_created_on), d.session_date, DAY)
+END AS fp_endline_TAT,
+
+
+        -- TAT for SAF
+CASE
+    WHEN d.session_date IS NOT NULL AND d.saf_baseline_created_on IS NOT NULL
+    THEN DATE_DIFF(DATE(d.saf_baseline_created_on), d.session_date, DAY)
+END AS saf_baseline_TAT,
+
+CASE
+    WHEN d.session_date IS NOT NULL AND d.saf_endline_created_on IS NOT NULL
+    THEN DATE_DIFF(DATE(d.saf_endline_created_on), d.session_date, DAY)
+END AS saf_endline_TAT,
+
+        -- TAT for SAR
+CASE
+    WHEN d.session_date IS NOT NULL AND d.sar_baseline_created_on IS NOT NULL
+    THEN DATE_DIFF(DATE(d.sar_baseline_created_on), d.session_date, DAY)
+END AS sar_baseline_TAT,
+
+CASE
+    WHEN d.session_date IS NOT NULL AND d.sar_endline_created_on IS NOT NULL
+    THEN DATE_DIFF(DATE(d.sar_endline_created_on), d.session_date, DAY)
+END AS sar_endline_TAT
     FROM attendance_join d
     
 )
@@ -323,7 +384,12 @@ e.stg_fp_sd, e.stg_fp_barcodes, e.bl_fp_raw, e.bl_fp_correct, e.el_fp_raw, e.el_
 e.bl_saf_raw, e.el_saf_raw, e.saf_correct, e.stg_sar_sd, e.stg_sar_barcodes, e.bl_sar_raw, e.el_sar_raw, e.sar_correct, 
 e.session_batch_no, e.no_of_students_facilitated, e.TSP_Baseline, e.TSP_Endline,
 e.TSP_SAF_Interest, e.TSP_SAF_Aptitude, e.TSP_SAF_QF, e.TSP_SAR_Reality,
-e.TSP_SAR_Quiz2, e.cdm1_TAT, e.cdm2_TAT, e.cp_TAT, e.cs_TAT, e.fp_TAT,
-e.saf_TAT, e.sar_TAT
+e.TSP_SAR_Quiz2, e.session_date, e.cdm1_baseline_created_on, e.cdm1_endline_created_on,
+e.cdm1_baseline_TAT, e.cdm1_endline_TAT, e.cdm2_baseline_created_on, e.cdm2_endline_created_on, e.cdm2_baseline_TAT, 
+e.cdm2_endline_TAT, e.cp_baseline_created_on, e.cp_endline_created_on, e.cp_baseline_TAT, e.cp_endline_TAT, 
+e.cs_baseline_created_on, e.cs_endline_created_on, e.cs_baseline_TAT, e.cs_endline_TAT,
+e.fp_baseline_created_on, e.fp_endline_created_on, e.fp_baseline_TAT, e.fp_endline_TAT, 
+e.saf_baseline_created_on, e.saf_endline_created_on, e.saf_baseline_TAT, e.saf_endline_TAT, 
+e.sar_baseline_created_on, e.sar_endline_created_on, e.sar_baseline_TAT, e.sar_endline_TAT
 from somrt e
 WHERE e.batch_academic_year >= 2023
