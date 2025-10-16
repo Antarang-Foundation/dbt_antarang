@@ -236,7 +236,7 @@ case when Q10_pp_answer_that_apply like '%Talked_often_with_the_career_teacher%'
 case when Q10_pp_answer_that_apply like '%Started_and_ended_the_program_on_time%' then 1 else 0 end as Q10j_pp_Started_and_ended_the_program_on_time,
 case when Q10_pp_answer_that_apply like '%Arranged_extra_career_activities%' then 1 else 0 end as Q10k_pp_Arranged_extra_career_activities,
 case when Q10_pp_answer_that_apply like '%invited_ex-students_to_share_their_job_stories%' then 1 else 0 end as Q10l_pp_invited_ex_students_to_share_their_job_stories,
-case when Q10_pp_answer_that_apply like '%Fixed_a_regular_time_for_career_sessions%' then 1 else 0 end as Q10m_pp_Fixed_a_regular_time_for_career_sessions,
+case when Q10_pp_answer_that_apply like '%Made_sure_the_school_had_a_trained_career_teacher%' then 1 else 0 end as Q10m_pp_Made_sure_the_school_had_a_trained_career_teacher,
 case when Q10_pp_answer_that_apply like '%i_do_not_know__not_sure%' then 1 else 0 end as Q10n_pp_i_do_not_know__not_sure,
 
 
@@ -439,7 +439,7 @@ Q10i_pp_Talked_often_with_the_career_teacher,
 Q10j_pp_Started_and_ended_the_program_on_time,
 Q10k_pp_Arranged_extra_career_activities,
 Q10l_pp_invited_ex_students_to_share_their_job_stories,
-Q10m_pp_Fixed_a_regular_time_for_career_sessions,
+Q10m_pp_Made_sure_the_school_had_a_trained_career_teacher,
 Q10n_pp_i_do_not_know__not_sure,
 Q11_pp_thin_for_career_program,
 Q12_pp_confident,

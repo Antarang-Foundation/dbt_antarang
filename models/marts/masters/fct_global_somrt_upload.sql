@@ -56,9 +56,8 @@ t3 as (select session_id, session_facilitator_id, omr_required, omrs_received, t
 
 session_name, session_date, present_count from {{ref('stg_session')}}),
 
-t4 as (select * from t2 INNER JOIN t3 on t2.somrt_session_id = t3.session_id),
-t5 as (select * from t1 INNER JOIN t4 on t1.batch_id = t4.somrt_batch_id order by batch_id, omr_type), 
-
+t4 as (select * from t2 LEFT JOIN t3 on t2.somrt_session_id = t3.session_id),
+t5 as (select * from t1 LEFT JOIN t4 on t1.batch_id = t4.somrt_batch_id order by batch_id, omr_type),
 
 t6 as (select  batch_id , sum(distinct no_of_students_facilitated) as `total_students`, count(distinct bl_cdm1_no) `bl_cdm1`, count(distinct bl_cdm2_no) `bl_cdm2`, 
 count(distinct bl_cp_no) `bl_cp`, count(distinct bl_cs_no) `bl_cs`, count(distinct bl_fp_no) `bl_fp`, count(distinct el_cdm1_no) `el_cdm1`, 
@@ -102,4 +101,4 @@ end AS TAT3
 from t7
 )
 
-select * from t8
+select * from t5
