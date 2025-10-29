@@ -16,6 +16,7 @@ t1 AS (
         school_partner,
         batch_donor
     FROM {{ ref('dev_int_global_dcp') }}
+    WHERE batch_academic_year >= 2022 
 ),
 
 -- Step 2: Join CDM1 data with student data
@@ -32,7 +33,7 @@ t2 AS (
         ON t1.student_barcode = d.assessment_barcode
 ),
 
--- Step 3: Aggregate baseline and endline values
+-- Step 3: Aggregate baseline and endline values (keeping all cdm1_no)
 t3 AS (
     SELECT 
         t2.student_id,
@@ -49,19 +50,14 @@ t3 AS (
         t2.school_partner,
         t2.batch_donor,
         t2.assessment_barcode,
-        t2.record_type,
-        t2.cdm1_no,
-        t2.q4_1,
-        t2.q4_2,
+
+        MAX(CASE WHEN t2.record_type = 'Baseline' THEN t2.cdm1_no END) AS bl_cdm1_no,
+        MAX(CASE WHEN t2.record_type = 'Endline'  THEN t2.cdm1_no END) AS el_cdm1_no,
 
         MAX(CASE WHEN t2.record_type = 'Baseline' THEN t2.q4_1 END) AS bl_q4_1,
         MAX(CASE WHEN t2.record_type = 'Endline'  THEN t2.q4_1 END) AS el_q4_1,
-
         MAX(CASE WHEN t2.record_type = 'Baseline' THEN t2.q4_2 END) AS bl_q4_2,
-        MAX(CASE WHEN t2.record_type = 'Endline'  THEN t2.q4_2 END) AS el_q4_2,
-
-        MAX(CASE WHEN t2.record_type = 'Baseline' THEN t2.cdm1_no END) AS bl_cdm1_no,
-        MAX(CASE WHEN t2.record_type = 'Endline'  THEN t2.cdm1_no END) AS el_cdm1_no
+        MAX(CASE WHEN t2.record_type = 'Endline'  THEN t2.q4_2 END) AS el_q4_2
     FROM t2
     GROUP BY 
         t2.student_id,
@@ -77,14 +73,10 @@ t3 AS (
         t2.school_taluka,
         t2.school_partner,
         t2.batch_donor,
-        t2.assessment_barcode,
-        t2.record_type,
-        t2.cdm1_no,
-        t2.q4_1,
-        t2.q4_2
+        t2.assessment_barcode
 ),
 
--- Step 4: Baseline unpivot
+-- Step 4: Baseline unpivot (manual, keeps nulls)
 t4 AS (
     SELECT 
         student_id,
@@ -104,18 +96,34 @@ t4 AS (
         CAST(NULL AS STRING) AS el_cdm1_no,
         assessment_barcode,
         'Baseline' AS record_type,
-        cdm1_no,
-        q4_1,
-        q4_2,
-        bl_aspiration AS aspiration_col,
-        baseline_stud_aspiration AS stud_aspiration
+        'bl_q4_1' AS aspiration_col,
+        bl_q4_1 AS stud_aspiration
     FROM t3
-    UNPIVOT (
-        baseline_stud_aspiration FOR bl_aspiration IN (bl_q4_1, bl_q4_2)
-    ) AS unpvt1
+    UNION ALL
+    SELECT 
+        student_id,
+        student_name,
+        student_barcode,
+        batch_no,
+        batch_academic_year,
+        batch_grade,
+        current_aspiration,
+        batch_language,
+        school_state,
+        school_district,
+        school_taluka,
+        school_partner,
+        batch_donor,
+        CAST(bl_cdm1_no AS STRING) AS bl_cdm1_no,
+        CAST(NULL AS STRING) AS el_cdm1_no,
+        assessment_barcode,
+        'Baseline' AS record_type,
+        'bl_q4_2' AS aspiration_col,
+        bl_q4_2 AS stud_aspiration
+    FROM t3
 ),
 
--- Step 5: Endline unpivot
+-- Step 5: Endline unpivot (manual, keeps nulls)
 t5 AS (
     SELECT 
         student_id,
@@ -135,15 +143,31 @@ t5 AS (
         CAST(el_cdm1_no AS STRING) AS el_cdm1_no,
         assessment_barcode,
         'Endline' AS record_type,
-        cdm1_no,
-        q4_1,
-        q4_2,
-        el_aspiration AS aspiration_col,
-        endline_stud_aspiration AS stud_aspiration
+        'el_q4_1' AS aspiration_col,
+        el_q4_1 AS stud_aspiration
     FROM t3
-    UNPIVOT (
-        endline_stud_aspiration FOR el_aspiration IN (el_q4_1, el_q4_2)
-    ) AS unpvt2
+    UNION ALL
+    SELECT 
+        student_id,
+        student_name,
+        student_barcode,
+        batch_no,
+        batch_academic_year,
+        batch_grade,
+        current_aspiration,
+        batch_language,
+        school_state,
+        school_district,
+        school_taluka,
+        school_partner,
+        batch_donor,
+        CAST(NULL AS STRING) AS bl_cdm1_no,
+        CAST(el_cdm1_no AS STRING) AS el_cdm1_no,
+        assessment_barcode,
+        'Endline' AS record_type,
+        'el_q4_2' AS aspiration_col,
+        el_q4_2 AS stud_aspiration
+    FROM t3
 ),
 
 -- Step 6: Combine baseline and endline
@@ -209,3 +233,5 @@ t8 AS (
 -- Final Output
 SELECT *
 FROM t8
+
+
