@@ -1,10 +1,15 @@
-with hm_session as (
-    select 
-        hm_session_name, facilitator_name, hm_session_date, start_time, 
-        scheduling_type, rescheduled_counter, session_status, hm_attended, 
-        session_lead, session_academic_year, batch_language, school_name, 
-        school_taluka, school_district, school_state, school_area, school_partner 
-    from {{ ref('dev_int_hm_session') }}
+with 
+int_global as (
+    select school_name, batch_academic_year as session_academic_year, batch_language, school_taluka, school_district,
+school_state, school_area, school_partner, facilitator_name,
+ROW_NUMBER() OVER (
+            PARTITION BY school_id 
+            ORDER BY 
+                CASE WHEN facilitator_name IS NOT NULL THEN 0 ELSE 1 END, 
+                school_name DESC
+        ) AS rn 
+        from {{ ref('dev_int_global_dcp') }}
+where batch_academic_year >= 2025
 ),
 
 pre_program as (
@@ -56,17 +61,16 @@ source_joined as
     pre.*, 
     pp.*, 
     po.*
-from hm_session h
+from int_global h
 left join pre_program pre on h.school_name = pre.pre_school_names
     left join post_program pp on h.school_name = pp.pp_school_names
     left join post_questionair po on h.school_name = po.po_school_names
+where rn = 1
 ),
 
 expand_column as 
-(select s.hm_session_name, s.facilitator_name, s.hm_session_date, s.start_time,
-  s.scheduling_type, s.rescheduled_counter, s.session_status, s.hm_attended,
-  s.session_lead, s.session_academic_year, s.batch_language, s.school_name,
-  s.school_taluka, s.school_district, s.school_state, s.school_area, s.school_partner,
+(select  s.school_name, s.session_academic_year, s.batch_language, s.school_taluka, s.school_district,
+s.school_state, s.school_area, s.school_partner, s.facilitator_name,
   
   s.pre_name, pre_contact_number,	s.pre_date, s.Q5_pre_option_1, s.Q5_pre_option_2, s.Q5_pre_option_3, s.Q7_pre_Other_Please_Specify, 
       s.Q8_pre_Others_Please_Specify, s.Q3_pre_district_name, s.Q4_pre__years_in_this_school, s.Q5_pre_organisation_last_year,	
@@ -254,7 +258,7 @@ from source_joined s
 ),
 
 final as (select school_name, session_academic_year, batch_language, school_taluka, school_district,
-school_state, school_area, school_partner, 
+school_state, school_area, school_partner, facilitator_name,
 
 pre_name, pre_start, pre_end, pre_date, pre_school_names, Q3_pre_district_name, pre_contact_number,
 Q4_pre__years_in_this_school, Q5_pre_organisation_last_year, Q5_pre_option_1, Q5_pre_option_2,
@@ -470,4 +474,6 @@ from expand_column
 )
 
 select * from final
+
+
 
