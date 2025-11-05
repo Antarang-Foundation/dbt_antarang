@@ -23,10 +23,14 @@ int_session AS (
     SELECT 
         MIN(CASE WHEN fac_start_date IS NOT NULL THEN fac_start_date END) AS fac_start_date,
         MAX(CASE WHEN fac_end_date IS NOT NULL THEN fac_end_date END) AS fac_end_date, 
-        school_id 
+
+        MAX(CASE WHEN total_student_present IS NOT NULL THEN total_student_present END) AS total_student_present,
+        MAX(CASE WHEN total_parent_present IS NOT NULL THEN total_parent_present END) AS total_parent_present,
+        school_id,
+        session_type 
     FROM {{ ref('dev_int_global_session') }}
-    where batch_academic_year >=  2025
-    group by school_id, batch_academic_year
+    where batch_academic_year >=  2025 and session_type IN ('Parent', 'Student')
+    group by school_id, batch_academic_year, session_type
 ),
 
 hm_session AS (
@@ -60,6 +64,9 @@ joined_source AS (
         igd.facilitator_name,
         s.fac_start_date,
         s.fac_end_date,
+        s.total_student_present,
+        s.total_parent_present,
+        s.session_type,
         hms.hm_id,
         hms.hm_session_name,
         hms.hm_facilitator_name,
@@ -81,3 +88,4 @@ joined_source AS (
 )
 
 Select * from joined_source
+
