@@ -21,3 +21,9 @@ models:
     columns:
       - name: school_name
         description: "The primary key of this table"
+
+  - name: fct_hm_correlation
+    # description:
+    columns:
+      - name: school_name
+        description: "The primary key of this table"
