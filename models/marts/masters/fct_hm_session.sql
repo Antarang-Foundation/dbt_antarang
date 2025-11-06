@@ -28,7 +28,7 @@ WITH ranked_sessions AS (
     FROM {{ ref('dev_int_hm_session') }}
 )
 
-SELECT
+SELECT 
     hm_school_id,
     hm_session_name,
     facilitator_name,
@@ -51,3 +51,5 @@ SELECT
     school_partner,
     session_type
 FROM ranked_sessions
+WHERE rn = 1 
+
