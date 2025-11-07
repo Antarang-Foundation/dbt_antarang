@@ -1,6 +1,6 @@
 with 
 final as (select school_name, session_academic_year, batch_language, school_taluka, school_district,
-school_state, school_area, school_partner, facilitator_name,
+school_state, school_area, school_partner, facilitator_name, fac_start_date, fac_end_date,
 
 pre_start, pre_end, pre_date,
 Q4_pre__years_in_this_school, Q5_pre_organisation_last_year, Q5_pre_option_1, Q5_pre_option_2,
