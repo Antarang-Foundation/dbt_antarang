@@ -1,6 +1,6 @@
 with 
 int_global as (
-    select school_name, batch_academic_year as session_academic_year, batch_language, school_taluka, school_district,
+    select school_id, school_name, batch_academic_year as session_academic_year, batch_language, school_taluka, school_district,
 school_state, school_area, school_partner, facilitator_name,
 ROW_NUMBER() OVER (
             PARTITION BY school_id 
@@ -10,6 +10,15 @@ ROW_NUMBER() OVER (
         ) AS rn 
         from {{ ref('dev_int_global_dcp') }}
 where batch_academic_year >= 2025
+),
+
+int_global_session AS (
+    SELECT 
+        MIN(CASE WHEN fac_start_date IS NOT NULL THEN fac_start_date END) AS fac_start_date,
+        MIN(CASE WHEN fac_end_date IS NOT NULL THEN fac_end_date END) AS fac_end_date,
+        school_id FROM {{ ref('dev_int_global_session') }}
+        where batch_academic_year >= 2025
+        GROUP BY school_id
 ),
 
 pre_program as (
@@ -58,6 +67,7 @@ post_questionair as (
 source_joined as 
 (select 
     h.*, 
+    s.*,
     pre.*, 
     pp.*, 
     po.*
@@ -65,12 +75,13 @@ from int_global h
 left join pre_program pre on h.school_name = pre.pre_school_names
     left join post_program pp on h.school_name = pp.pp_school_names
     left join post_questionair po on h.school_name = po.po_school_names
+    left join int_global_session s on h.school_id = s.school_id
 where rn = 1
 ),
 
 expand_column as 
 (select  s.school_name, s.session_academic_year, s.batch_language, s.school_taluka, s.school_district,
-s.school_state, s.school_area, s.school_partner, s.facilitator_name,
+s.school_state, s.school_area, s.school_partner, s.facilitator_name, s.fac_start_date, s.fac_end_date,
   
   s.pre_name, pre_contact_number,	s.pre_date, s.Q5_pre_option_1, s.Q5_pre_option_2, s.Q5_pre_option_3, s.Q7_pre_Other_Please_Specify, 
       s.Q8_pre_Others_Please_Specify, s.Q3_pre_district_name, s.Q4_pre__years_in_this_school, s.Q5_pre_organisation_last_year,	
@@ -258,7 +269,7 @@ from source_joined s
 ),
 
 final as (select school_name, session_academic_year, batch_language, school_taluka, school_district,
-school_state, school_area, school_partner, facilitator_name,
+school_state, school_area, school_partner, facilitator_name, fac_start_date, fac_end_date,
 
 pre_name, pre_start, pre_end, pre_date, pre_school_names, Q3_pre_district_name, pre_contact_number,
 Q4_pre__years_in_this_school, Q5_pre_organisation_last_year, Q5_pre_option_1, Q5_pre_option_2,

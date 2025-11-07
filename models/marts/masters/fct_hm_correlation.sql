@@ -1,7 +1,7 @@
 WITH hm_session AS (
     SELECT 
-        hm_school_id, facilitator_name, session_academic_year, batch_language, fac_start_date, fac_end_date, school_name,
-        school_taluka, school_district, school_state, school_area, school_partner, batch_expected_sessions,
+        hm_school_id, facilitator_name, session_academic_year, batch_language, school_name,
+        school_taluka, school_district, school_state, school_area, school_partner, fac_start_date, fac_end_date, 
 
         COUNT(DISTINCT hm_id) AS total_hm_session_name,
         COUNT(DISTINCT CASE WHEN hm_session_date IS NOT NULL THEN hm_session_date END) AS total_hm_sessions_date,
@@ -11,9 +11,8 @@ WITH hm_session AS (
         COUNT(DISTINCT CASE WHEN LOWER(TRIM(session_type)) = 'year end' 
                   AND LOWER(TRIM(session_status)) IN ('complete', 'completed') THEN hm_id END) AS year_end_sessions_completed,
         SUM(CASE WHEN LOWER(TRIM(hm_attended)) = 'yes' THEN 1 ELSE 0 END) AS total_hm_attended,
-
         COUNT(*) AS total_sessions,
-
+        batch_expected_sessions,
         SUM(CASE WHEN hm_session_date IS NOT NULL 
                   AND total_student_present IS NOT NULL 
                   AND total_parent_present IS NOT NULL THEN 1 ELSE 0 END) AS completed_sessions,
@@ -117,7 +116,12 @@ from {{ ref('dev_int_hm_assessment') }}
 ),
 
 final as (
-    SELECT h.*, a.*
+    SELECT h.facilitator_name, h.session_academic_year, h.batch_language, h.school_name, h.school_taluka, h.school_district, 
+    h.school_state, h.school_area, h.school_partner, h.fac_start_date, h.fac_end_date, h.total_hm_session_name, 
+    h.total_hm_sessions_date, h.complete_session_status, h.year_end_sessions_completed, h.total_hm_attended, 
+    h.school_completion_status, h.batch_expected_sessions, h.expected_student_sessions, h.expected_parent_sessions, 
+    h.student_sessions_attended_by_hm, h.parent_sessions_attended_by_hm,
+a.*
     FROM hm_assessment a
 LEFT JOIN school_completion h ON a.ass_school_name = h.school_name
 

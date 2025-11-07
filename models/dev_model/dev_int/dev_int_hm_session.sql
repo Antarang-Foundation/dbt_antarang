@@ -22,7 +22,7 @@ WITH int_global_dcp AS (
 int_session AS (
     SELECT 
         MIN(CASE WHEN fac_start_date IS NOT NULL THEN fac_start_date END) AS fac_start_date,
-        MAX(CASE WHEN fac_end_date IS NOT NULL THEN fac_end_date END) AS fac_end_date, 
+        MIN(CASE WHEN fac_end_date IS NOT NULL THEN fac_end_date END) AS fac_end_date, 
         MAX(CASE WHEN batch_expected_sessions IS NOT NULL THEN batch_expected_sessions END) AS batch_expected_sessions,
         MAX(CASE WHEN total_student_present IS NOT NULL THEN total_student_present END) AS total_student_present,
         MAX(CASE WHEN total_parent_present IS NOT NULL THEN total_parent_present END) AS total_parent_present,
