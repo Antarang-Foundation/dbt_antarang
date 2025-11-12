@@ -81,7 +81,7 @@ student_expanded AS (
 batch_context AS (
     SELECT 
         b.batch_id, b.batch_no, CAST(b.batch_academic_year AS INT) AS batch_academic_year, b.batch_grade, b.batch_language, 
-        b.no_of_students_facilitated, b.fac_start_date, b.fac_end_date, b.allocation_email_sent, b.batch_facilitator_id, 
+        b.no_of_students_facilitated, b.fac_start_date, b.fac_end_date, b.allocation_email_sent, b.batch_facilitator_id, f.facilitator_academic_year,
         f.facilitator_id, f.facilitator_name, f.facilitator_email, b.batch_school_id, s.school_id, s.school_name, 
         s.school_taluka, s.school_ward, s.school_district, s.school_state, s.school_academic_year, s.school_language, 
         s.enrolled_g9, s.enrolled_g10, s.enrolled_g11, s.enrolled_g12, s.tagged_for_counselling, s.school_partner, 

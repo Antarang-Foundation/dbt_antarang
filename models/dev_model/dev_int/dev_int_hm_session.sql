@@ -17,6 +17,7 @@ WITH int_global_dcp AS (
                 school_name DESC
         ) AS rn
     FROM {{ ref('dev_int_global_dcp') }}
+    where facilitator_academic_year >= 2025 and batch_academic_year >= 2025
 ),
 
 int_session AS (
@@ -89,4 +90,6 @@ joined_source AS (
 )
 
 Select * from joined_source
+
+
 
