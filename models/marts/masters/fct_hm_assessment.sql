@@ -4,7 +4,7 @@ school_state, school_area, school_partner, facilitator_name, fac_start_date, fac
 
 pre_start, pre_end, pre_date,
 Q4_pre__years_in_this_school, Q5_pre_organisation_last_year, Q5_pre_option_1, Q5_pre_option_2,
-Q5_pre_option_3, Q6_pre_heard_of_antarang, Q7_pre_how_did_you_hear, Q7a_newspapers, Q7b_pre_social_media__facebook__linked, Q7c_pre_from_government_meetings___oth,
+Q5_pre_option_3, Q6_pre_heard_of_antarang, Q7_pre_how_did_you_hear, Q7a_pre_newspapers, Q7b_pre_social_media__facebook__linked, Q7c_pre_from_government_meetings___oth,
 Q7d_pre_from_parents__students, Q7e_pre_search_engines___google_etc, Q7f_pre_worked_with_them_in_the_past,
 Q7g_pre_workshops__training_sessions__, Q7h_pre_other__please_specify, Q7i_pre_NA, Q7_pre_Other_Please_Specify, 
 Q8_pre_which_grade, Q8a_pre_grade_8,
