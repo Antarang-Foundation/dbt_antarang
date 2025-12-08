@@ -24,9 +24,9 @@ int_session AS (
     SELECT 
         MIN(CASE WHEN fac_start_date IS NOT NULL THEN fac_start_date END) AS fac_start_date,
         MIN(CASE WHEN fac_end_date IS NOT NULL THEN fac_end_date END) AS fac_end_date, 
-        COUNT(CASE WHEN session_name IS NOT NULL THEN session_name END) AS batch_expected_sessions,
-        COUNT(CASE WHEN session_type = 'Student' THEN session_name END) AS total_student_present,
-        COUNT(CASE WHEN session_type = 'Parent' THEN session_name END) AS total_parent_present,
+        COUNT(DISTINCT CASE WHEN session_name IS NOT NULL THEN session_name END) AS batch_expected_sessions,
+        COUNT(DISTINCT CASE WHEN session_type = 'Student' THEN session_name END) AS total_student_present,
+        COUNT(DISTINCT CASE WHEN session_type = 'Parent' THEN session_name END) AS total_parent_present,
         school_id,
         session_type 
     FROM {{ ref('dev_int_global_session') }}
@@ -91,6 +91,7 @@ joined_source AS (
 
 Select * from joined_source
 
+--where hm_school_id = '0017F00000JeL7AQAV'
 
 
 
