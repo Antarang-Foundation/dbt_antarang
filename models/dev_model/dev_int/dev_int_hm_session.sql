@@ -24,11 +24,12 @@ int_session AS (
     SELECT 
         MIN(CASE WHEN fac_start_date IS NOT NULL THEN fac_start_date END) AS fac_start_date,
         MIN(CASE WHEN fac_end_date IS NOT NULL THEN fac_end_date END) AS fac_end_date, 
-        COUNT(DISTINCT CASE WHEN session_name IS NOT NULL THEN session_name END) AS batch_expected_sessions,
-        COUNT(DISTINCT CASE WHEN session_type = 'Student' THEN session_name END) AS total_student_present,
-        COUNT(DISTINCT CASE WHEN session_type = 'Parent' THEN session_name END) AS total_parent_present,
+        COUNT(DISTINCT CONCAT(session_name, '_', TRIM(batch_grade))) AS batch_expected_sessions,
+        COUNT(DISTINCT CASE WHEN session_type = 'Student' THEN CONCAT(session_name, '_', TRIM(batch_grade)) END) AS total_student_present,
+        COUNT(DISTINCT CASE WHEN session_type = 'Parent' THEN CONCAT(session_name, '_', TRIM(batch_grade)) END) AS total_parent_present,
+        MAX(CASE WHEN session_date IS NOT NULL THEN session_date END) AS session_date,
         school_id,
-        session_type 
+        session_type
     FROM {{ ref('dev_int_global_session') }}
     where batch_academic_year >=  2025 and session_type IN ('Parent', 'Student')
     group by school_id, batch_academic_year, session_type
@@ -69,6 +70,7 @@ joined_source AS (
         s.total_parent_present,
         s.batch_expected_sessions,
         s.session_type,
+        s.session_date,
         hms.hm_id,
         hms.hm_session_name,
         hms.hm_facilitator_name,
@@ -90,6 +92,8 @@ joined_source AS (
 )
 
 Select * from joined_source
+WHERE school_name = 'GHSS Zunheboto'
+--where school_name = 'GHSS Mon'
 
 --where hm_school_id = '0017F00000JeL7AQAV'
 

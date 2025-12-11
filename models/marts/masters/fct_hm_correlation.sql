@@ -1,4 +1,5 @@
-WITH base AS (
+WITH 
+base AS (
     SELECT 
         *,
         ROW_NUMBER() OVER (
@@ -8,70 +9,138 @@ WITH base AS (
     FROM {{ ref('dev_int_hm_session') }}
 ),
 
+-- Aggregate expected sessions BEFORE rn_last filter
+expected_sessions_agg AS (
+    SELECT 
+        hm_id,
+        SUM(CAST(batch_expected_sessions AS INT64)) AS total_expected_sessions
+    FROM {{ ref('dev_int_hm_session') }}
+    GROUP BY hm_id
+),
+
+-- Aggregate student + parent expected counts BEFORE rn_last
+attendance_agg AS (
+    SELECT
+        hm_id,
+        SUM(total_student_present) AS total_student_present_sum,
+        SUM(total_parent_present) AS total_parent_present_sum
+    FROM {{ ref('dev_int_hm_session') }}
+    GROUP BY hm_id
+),
+
+sess_attendance_agg AS (
+    SELECT
+        hm_id,
+        SUM(total_student_present) AS no_of_student_sessions_attended_by_hm,
+    FROM {{ ref('dev_int_hm_session') }}
+    where session_type = 'Student' AND session_date IS NOT NULL AND total_student_present IS NOT NULL
+    GROUP BY hm_id
+),
+
+sessions_attended_agg AS (
+    SELECT
+        hm_id,
+        SUM(total_parent_present) AS no_of_parent_sessions_attended_by_hm
+    FROM {{ ref('dev_int_hm_session') }}
+    where session_type = 'Student' AND session_date IS NOT NULL AND total_student_present IS NOT NULL
+    GROUP BY hm_id
+),
+
+-- Now get hm_session details using only the latest row per hm_id for static info
 hm_session AS (
     SELECT 
-        hm_school_id, facilitator_name, session_academic_year, batch_language, school_name,
-        school_taluka, school_district, school_state, school_area, school_partner, 
+        b.hm_school_id, 
+        b.facilitator_name, 
+        b.session_academic_year, 
+        b.batch_language, 
+        b.school_name,
+        b.school_taluka, 
+        b.school_district, 
+        b.school_state, 
+        b.school_area, 
+        b.school_partner, 
 
-        COUNT(DISTINCT hm_id) AS total_hm_session_name,
+        es.total_expected_sessions AS no_of_expected_sessions,
+
+        COUNT(DISTINCT b.hm_id) AS expected_sessions,
     
-        COUNT(DISTINCT CASE WHEN hm_session_date IS NOT NULL THEN hm_session_date END) AS total_hm_sessions_date,
+        COUNT(DISTINCT CASE 
+            WHEN b.hm_session_date IS NOT NULL THEN b.hm_session_date END
+        ) AS no_of_session_scheduled,
 
-        COUNT(DISTINCT CASE WHEN LOWER(TRIM(session_status)) IN ('complete', 'completed') THEN hm_id END) AS complete_session_status,
-    
-        --COUNT(DISTINCT CASE WHEN LOWER(TRIM(session_status)) IN ('complete', 'completed') THEN hm_id END) AS year_end_sessions_completed,
+        COUNT(DISTINCT CASE 
+            WHEN LOWER(TRIM(b.hm_session_name)) IN ('check-in 1','check-in 2','check-in 3','check-in 4')
+            AND LOWER(TRIM(b.session_status)) IN ('complete', 'completed')
+        THEN b.hm_id END) AS no_of_checkin_sessions_completed,
 
-        CASE 
-        WHEN COUNT(DISTINCT CASE 
-                WHEN LOWER(TRIM(session_status)) IN ('complete','completed')
-                THEN hm_id END
-        ) = 5
-        THEN 1 
-        ELSE 0 
-    END AS year_end_sessions_completed,
+        COUNT(DISTINCT CASE 
+            WHEN LOWER(TRIM(b.hm_session_name)) IN ('year end annual report')
+            AND LOWER(TRIM(b.session_status)) IN ('complete', 'completed')
+        THEN b.hm_id END) AS no_of_year_end_sessions_completed,
 
-        SUM(CASE WHEN LOWER(TRIM(hm_attended)) = 'yes' THEN 1 ELSE 0 END) AS total_hm_attended,
+        COUNT(DISTINCT CASE 
+            WHEN LOWER(TRIM(b.hm_session_name)) IN 
+                ('check-in 1','check-in 2','check-in 3','check-in 4','year end annual report')
+            AND LOWER(TRIM(b.hm_attended)) = 'yes'
+        THEN b.hm_id END) AS no_of_sessions_hm_attended,
+
         COUNT(*) AS total_sessions,
-        batch_expected_sessions,
-        SUM(CASE WHEN hm_session_date IS NOT NULL 
-                  AND total_student_present IS NOT NULL 
-                  AND total_parent_present IS NOT NULL THEN 1 ELSE 0 END) AS completed_sessions,
 
-        --COUNT(CASE WHEN LOWER(TRIM(session_type)) = 'student' THEN 1 END) 
-        total_student_present AS expected_student_sessions,
+        COUNT(CASE
+            WHEN b.session_date IS NOT NULL 
+            AND b.total_student_present IS NOT NULL 
+            AND b.total_parent_present IS NOT NULL THEN 1 END
+        ) AS completed_sessions,
 
-        --COUNT(CASE WHEN LOWER(TRIM(session_type)) = 'parent' THEN 1 END) 
-        total_parent_present AS expected_parent_sessions,
+        att.total_student_present_sum AS no_of_expected_student_sessions,
+        att.total_parent_present_sum AS no_of_expected_parent_sessions,
 
-        COUNT(CASE WHEN LOWER(TRIM(session_type)) = 'student' 
-                  AND hm_session_date IS NOT NULL 
-                  AND total_student_present IS NOT NULL 
-                  --AND total_parent_present IS NOT NULL need to verify
-                  THEN 1 ELSE 0 END) AS student_sessions_attended_by_hm,
+        -- Use pre-aggregated values from sessions_attended_agg
+        LEAST(sa.no_of_student_sessions_attended_by_hm, att.total_student_present_sum) AS no_of_student_sessions_attended_by_hm,
+        LEAST(ss.no_of_parent_sessions_attended_by_hm, att.total_parent_present_sum) AS no_of_parent_sessions_attended_by_hm
 
-        COUNT(CASE WHEN LOWER(TRIM(session_type)) = 'parent' 
-                  AND hm_session_date IS NOT NULL 
-                  AND total_student_present IS NOT NULL 
-                  AND total_parent_present IS NOT NULL THEN 1 ELSE 0 END) AS parent_sessions_attended_by_hm
-
-    FROM base
-    where rn_last = 1
-    --where hm_school_id = '0019C000003PjVdQAK'
-    --where hm_school_id IN  ('0019C000003PjVdQAK', '0019C000003PjIXQA0') and session_type = 'Student'
-    GROUP BY hm_school_id, facilitator_name,session_academic_year, batch_language, school_name,
-        school_taluka, school_district, school_state, school_area, school_partner, batch_expected_sessions, total_student_present,
-        total_parent_present
+    FROM base b
+    -- join pre-aggregated data
+    LEFT JOIN expected_sessions_agg es ON b.hm_id = es.hm_id
+    LEFT JOIN attendance_agg att ON b.hm_id = att.hm_id
+    LEFT join sess_attendance_agg sa ON b.hm_id = sa.hm_id
+    LEFT JOIN sessions_attended_agg ss ON b.hm_id = ss.hm_id
+    -- use only the latest row per hm_id for static info like school_name
+    WHERE b.rn_last = 1
+    GROUP BY 
+        b.hm_school_id, b.facilitator_name, b.session_academic_year, b.batch_language, 
+        b.school_name, b.school_taluka, b.school_district, b.school_state, b.school_area, 
+        b.school_partner, es.total_expected_sessions, 
+        att.total_student_present_sum, att.total_parent_present_sum,
+        sa.no_of_student_sessions_attended_by_hm,
+        ss.no_of_parent_sessions_attended_by_hm
 ),
 
 school_completion AS (
     SELECT 
-        hm_school_id, facilitator_name, session_academic_year, batch_language, school_name,
-        school_taluka, school_district, school_state, school_area, school_partner, total_hm_session_name, total_hm_sessions_date, 
-        complete_session_status, batch_expected_sessions,year_end_sessions_completed, total_hm_attended, expected_student_sessions, 
-        expected_parent_sessions, student_sessions_attended_by_hm, parent_sessions_attended_by_hm, completed_sessions, 
+        hm_school_id, 
+        facilitator_name, 
+        session_academic_year, 
+        batch_language, 
+        school_name,
+        school_taluka, 
+        school_district, 
+        school_state, 
+        school_area, 
+        school_partner, 
+        expected_sessions, 
+        no_of_session_scheduled, 
+        no_of_checkin_sessions_completed, 
+        no_of_expected_sessions,
+        no_of_year_end_sessions_completed, 
+        no_of_sessions_hm_attended, 
+        no_of_expected_student_sessions, 
+        no_of_expected_parent_sessions, 
+        no_of_student_sessions_attended_by_hm, 
+        no_of_parent_sessions_attended_by_hm, 
+        completed_sessions, 
         total_sessions,
 
-        -- ✅ Updated completion condition:
         CASE 
             WHEN completed_sessions = total_sessions THEN 'Yes'
             ELSE 'No'
@@ -121,69 +190,72 @@ pp_latest AS (
     WHERE rn_pp = 1
 ),
 
+
 hm_assessment AS (
     SELECT
-        COALESCE(school_name, school_name, school_name) AS ass_school_name,
+        p.school_name AS ass_school_name,
 
-pre_start, pre_end, pre_date, Q4_pre__years_in_this_school, Q5_pre_organisation_last_year, Q5_pre_option_1, Q5_pre_option_2,
-Q5_pre_option_3, Q6_pre_heard_of_antarang, Q7_pre_how_did_you_hear, Q7a_pre_newspapers, Q7b_pre_social_media__facebook__linked, 
-Q7c_pre_from_government_meetings___oth, Q7d_pre_from_parents__students, Q7e_pre_search_engines___google_etc, 
-Q7f_pre_worked_with_them_in_the_past, Q7g_pre_workshops__training_sessions__, Q7h_pre_other__please_specify, 
-Q7i_pre_NA, Q7_pre_Other_Please_Specify,  Q8_pre_which_grade, Q8a_pre_grade_8,
-Q8b_pre_grade_9, Q8c_pre_grade_10, Q8d_pre_grade_11, Q8e_pre_grade_12, Q8f_pre_none_of_the_above, Q8g_pre_i_don_t_know__not_sure, 
-Q8h_pre_other__please_specify, Q8_pre_Others_Please_Specify, Q9_pre_which_follow, Q9a_pre_up__to__date_information_about_careers,
-Q9b_pre_parents__caregivers_sessions, Q9c_pre_a_trained_career_teacher_in_school, Q9d_pre_individual_counselling,
-Q9e_pre_psychometric_tests, Q9f_pre_records_of_students_career_plans, Q9g_pre_academic_subjects_teaching_careers,
-Q9h_pre_information_on_education___training_path, Q9i_pre_visits__talks_with_educational_instituti,
-Q9j_pre_records_of_student_learning_in_the_caree, Q9k_pre_records_of_students_career_plans_after_c, Q9l_pre_i_don_t_know__not_sure,
-Q10_pre_which_follow, Q10a_pre_i_had_no_role_to_play_in_the_program, Q10b_pre_provided_a_fixed_time_for_the_career_ses,
-Q10c_pre_observe_career_sessions_regularly, Q10d_pre_ensured_students_attended_the_career_pro, Q10e_pre_spoke_to_parents_about_the_career_progra,
-Q10f_pre_shared_about_the_career_program_in_hm_me, Q10g_pre_provided_feedback__suggestions_for_the_p, Q10h_pre_provided_school_budget__money_for_the_ca,
-Q10i_pre_regularly_spoke_to_the_career_teacher_ab, Q10j_pre_ensured_the_program_started_and_ended_on, Q10k_pre_arranged_additional_career_activities_in,
-Q10l_pre_spoke_to_my_school_alumni_to_see_how_the, Q10m_pre_ensured_there_is_a_trained_career_teache, Q10n_pre_i_do_not_know__not_sure,
-Q11_pre_think_of_career, Q12_pre_confident_in_career_program, Q13_pre_program_activities, Q14_pre_program_session,
-Q15_pre_important_secondary_students, Q16A_pre_program_inc_tions_all_students, Q16B_pre_supporting_students_training_after_school,
-Q16C_pre_encouraging_students_choosing_careers, Q17_pre_one_thing_for_you_students, pre_id, pre_uuid, pre_submission_time,
+p.pre_start, p.pre_end, p.pre_date, p.Q4_pre__years_in_this_school, p.Q5_pre_organisation_last_year, p.Q5_pre_option_1, p.Q5_pre_option_2,
+p.Q5_pre_option_3, p.Q6_pre_heard_of_antarang, p.Q7_pre_how_did_you_hear, p.Q7a_pre_newspapers, p.Q7b_pre_social_media__facebook__linked, 
+p.Q7c_pre_from_government_meetings___oth, p.Q7d_pre_from_parents__students, p.Q7e_pre_search_engines___google_etc, 
+p.Q7f_pre_worked_with_them_in_the_past, p.Q7g_pre_workshops__training_sessions__, p.Q7h_pre_other__please_specify, 
+p.Q7i_pre_NA, p.Q7_pre_Other_Please_Specify,  p.Q8_pre_which_grade, p.Q8a_pre_grade_8,
+p.Q8b_pre_grade_9, p.Q8c_pre_grade_10, p.Q8d_pre_grade_11, p.Q8e_pre_grade_12, p.Q8f_pre_none_of_the_above, p.Q8g_pre_i_don_t_know__not_sure, 
+p.Q8h_pre_other__please_specify, p.Q8_pre_Others_Please_Specify, p.Q9_pre_which_follow, p.Q9a_pre_up__to__date_information_about_careers,
+p.Q9b_pre_parents__caregivers_sessions, p.Q9c_pre_a_trained_career_teacher_in_school, p.Q9d_pre_individual_counselling,
+p.Q9e_pre_psychometric_tests, p.Q9f_pre_records_of_students_career_plans, p.Q9g_pre_academic_subjects_teaching_careers,
+p.Q9h_pre_information_on_education___training_path, p.Q9i_pre_visits__talks_with_educational_instituti,
+p.Q9j_pre_records_of_student_learning_in_the_caree, p.Q9k_pre_records_of_students_career_plans_after_c, p.Q9l_pre_i_don_t_know__not_sure,
+p.Q10_pre_which_follow, p.Q10a_pre_i_had_no_role_to_play_in_the_program, p.Q10b_pre_provided_a_fixed_time_for_the_career_ses,
+p.Q10c_pre_observe_career_sessions_regularly, p.Q10d_pre_ensured_students_attended_the_career_pro, p.Q10e_pre_spoke_to_parents_about_the_career_progra,
+p.Q10f_pre_shared_about_the_career_program_in_hm_me, p.Q10g_pre_provided_feedback__suggestions_for_the_p, p.Q10h_pre_provided_school_budget__money_for_the_ca,
+p.Q10i_pre_regularly_spoke_to_the_career_teacher_ab, p.Q10j_pre_ensured_the_program_started_and_ended_on, p.Q10k_pre_arranged_additional_career_activities_in,
+p.Q10l_pre_spoke_to_my_school_alumni_to_see_how_the, p.Q10m_pre_ensured_there_is_a_trained_career_teache, p.Q10n_pre_i_do_not_know__not_sure,
+p.Q11_pre_think_of_career, p.Q12_pre_confident_in_career_program, p.Q13_pre_program_activities, p.Q14_pre_program_session,
+p.Q15_pre_important_secondary_students, p.Q16A_pre_program_inc_tions_all_students, p.Q16B_pre_supporting_students_training_after_school,
+p.Q16C_pre_encouraging_students_choosing_careers, p.Q17_pre_one_thing_for_you_students, p.pre_id, p.pre_uuid, p.pre_submission_time,
 
-po_start, po_end, po_date, Q4_po_heard_of_antarang, Q5_po_grade, Q5a_po_grade_8, Q5b_po_grade_9, Q5c_po_grade_10, Q5d_po_grade_11,
-Q5e_po_grade_12, Q5f_po_none_of_the_above, Q5g_po_i_don_t_know__not_sure, Q5h_po_other__please_specify, Q5_po_others_please_specify,
-Q6_po_which_follow, Q6a_po_i_had_no_role_to_play_in_the_program, Q6b_po_provided_a_fixed_time_for_the_career_ses,
-Q6c_po_observe_career_sessions_regularly, Q6d_po_ensured_students_attended_the_career_pro, Q6e_po_spoke_to_parents_about_the_career_progra,
-Q6f_po_shared_about_the_career_program_in_hm_me, Q6g_po_provided_feedback__suggestions_for_the_p, Q6h_po_provided_school_budget__money_for_the_ca,
-Q6i_po_regularly_spoke_to_the_career_teacher_ab, Q6j_po_ensured_the_program_started_and_ended_on, Q6k_po_arranged_additional_career_activities_in,
-Q6l_po_spoke_to_my_school_alumni_to_see_how_the, Q6m_po_ensured_there_is_a_trained_career_teache, Q6n_po_i_do_not_know__not_sure,
-Q7_po_role, Q7a_po_i_have_no_role_to_play, Q7b_po_provide_a_fixed_time_for_the_career_sess, Q7c_po_observe_career_sessions_regularly,
-Q7d_po_ensure_students_attended_the_career_prog, Q7e_po_speak_to_parents_about_the_career_progra, Q7f_po_share_about_the_career_program_in_hm_mee,
-Q7g_po_provide_feedback__suggestions_for_the_pr, Q7h_po_provide_school_budget__money_for_the_car, Q7i_po_regularly_speak_to_the_career_teacher_ab,
-Q7j_po_ensuredthe_program_starts_and_ends_on_ti, Q7k_po_arrange_additional_career_activities_in_, Q7l_po_speak_to_my_school_alumni_to_see_how_the,
-Q7m_po_ensure_there_is_a_trained_career_teacher, Q7n_po_i_do_not_know__not_sure, Q8_po_materials, Q8a_po_a_student_book,
-Q8b_po_a_teacher_guide, Q8c_po_school_poster, Q8d_po_career_chatbot, Q8e_po_student_certificates, Q8f_po_student_assessments,
-Q8g_po_career_videos, Q8h_po_parent_handouts, Q8i_po_counselling_report, Q9_po_confidence, Q10_po_secondary_students,
-Q11A_po_orientation_session_covered, Q11B_po_content_was_easy_to_understand, Q11C_po_encouraging_students_choosing_careers,
-Q12_po_thin_for_students, Q13_po_big_rom_this_orientation, Q14_po_nex_after_this_orientation, po_id, po_uuid, po_submission_time,
+po.po_start, po.po_end, po.po_date, po.Q4_po_heard_of_antarang, po.Q5_po_grade, po.Q5a_po_grade_8, po.Q5b_po_grade_9, po.Q5c_po_grade_10, po.Q5d_po_grade_11,
+po.Q5e_po_grade_12, po.Q5f_po_none_of_the_above, po.Q5g_po_i_don_t_know__not_sure, po.Q5h_po_other__please_specify, po.Q5_po_others_please_specify,
+po.Q6_po_which_follow, po.Q6a_po_i_had_no_role_to_play_in_the_program, po.Q6b_po_provided_a_fixed_time_for_the_career_ses,
+po.Q6c_po_observe_career_sessions_regularly, po.Q6d_po_ensured_students_attended_the_career_pro, po.Q6e_po_spoke_to_parents_about_the_career_progra,
+po.Q6f_po_shared_about_the_career_program_in_hm_me, po.Q6g_po_provided_feedback__suggestions_for_the_p, po.Q6h_po_provided_school_budget__money_for_the_ca,
+po.Q6i_po_regularly_spoke_to_the_career_teacher_ab, po.Q6j_po_ensured_the_program_started_and_ended_on, po.Q6k_po_arranged_additional_career_activities_in,
+po.Q6l_po_spoke_to_my_school_alumni_to_see_how_the, po.Q6m_po_ensured_there_is_a_trained_career_teache, po.Q6n_po_i_do_not_know__not_sure,
+po.Q7_po_role, po.Q7a_po_i_have_no_role_to_play, po.Q7b_po_provide_a_fixed_time_for_the_career_sess, po.Q7c_po_observe_career_sessions_regularly,
+po.Q7d_po_ensure_students_attended_the_career_prog, po.Q7e_po_speak_to_parents_about_the_career_progra, po.Q7f_po_share_about_the_career_program_in_hm_mee,
+po.Q7g_po_provide_feedback__suggestions_for_the_pr, po.Q7h_po_provide_school_budget__money_for_the_car, po.Q7i_po_regularly_speak_to_the_career_teacher_ab,
+po.Q7j_po_ensuredthe_program_starts_and_ends_on_ti, po.Q7k_po_arrange_additional_career_activities_in_, po.Q7l_po_speak_to_my_school_alumni_to_see_how_the,
+po.Q7m_po_ensure_there_is_a_trained_career_teacher, po.Q7n_po_i_do_not_know__not_sure, po.Q8_po_materials, po.Q8a_po_a_student_book,
+po.Q8b_po_a_teacher_guide, po.Q8c_po_school_poster, po.Q8d_po_career_chatbot, po.Q8e_po_student_certificates, po.Q8f_po_student_assessments,
+po.Q8g_po_career_videos, po.Q8h_po_parent_handouts, po.Q8i_po_counselling_report, po.Q9_po_confidence, po.Q10_po_secondary_students,
+po.Q11A_po_orientation_session_covered, po.Q11B_po_content_was_easy_to_understand, po.Q11C_po_encouraging_students_choosing_careers,
+po.Q12_po_thin_for_students, po.Q13_po_big_rom_this_orientation, po.Q14_po_nex_after_this_orientation, po.po_id, po.po_uuid, po.po_submission_time,
 
-pp_start, pp_end, pp_date, Q4_pp_how_many_year_in_this_school, Q5_pp_org_our_school_last_year, Q5_pp_others_please_specify,
-Q6_pp_heard_of_antarng, Q7_pp_how_did_you_hear, Q7a_pp_Newspaper, Q7b_pp_Social_media_Facebook_linkedin, Q7c_pp_From_government_meetings__other,
-Q7d_pp_From_Parents_Students, Q7e_pp_Search_Engines__Google_etc, Q7f_pp_Peer_HMsTeachers, Q7g_pp_Conducted_career_education_program_in_my_school,
-Q7h_pp_Workshops_training_sessions_or_webinars, Q7i_pp_Word_of_mouth_from_alumni_or_beneficiaries, Q7j_pp_Antarangs_website,
-Q7k_pp_other__please_specify, Q7_pp_other_please_specify, Q8_pp_in_which_grade, Q8a_pp_grade_8, Q8b_pp_grade_9, Q8c_pp_grade_10,
-Q8d_pp_grade_11, Q8e_pp_grade_12, Q8f_pp_none_of_the_above, Q8g_pp_i_don_t_know__not_sure, Q8h_pp_other__please_specify,
-Q8_pp_Others_Please_Specify_001, Q9_pp_which_of_the_following, Q9a_pp_Up_to_date_info_about_careers, Q9b_pp_Sessions_for_parents_or_caregivers,
-Q9c_pp_Trained_external_career_teacher_at_school, Q9d_pp_Trained_career_teacher_in_charge, Q9e_pp_One_on_one_career_counselling,
-Q9f_pp_Interest_and_aptitude_tests, Q9g_pp_Record_of_students_career_plans, Q9h_pp_Info_on_education_or_training_after_school,
-Q9i_pp_Career_expert_talks_during_subject_classes, Q9j_pp_Talks_or_visits_to_colleges_and_workplaces,
-Q9k_pp_Data_collected_on_students_plans_after_school, Q9l_pp_i_do_not_know__not_sure, Q10_pp_answer_that_apply,
-Q10a_pp_Fixed_a_regular_time_for_career_sessions, Q10b_pp_Visited_the_career_sessions, Q10c_pp_Made_sure_students_attended,
-Q10d_pp_Spoke_to_parents_about_it, Q10e_pp_Shared_updates_in_meetings, Q10f_pp_Gave_ideas_or_suggestions_to_the_career_teacher,
-Q10g_pp_Shared_updates_in_meetings_or_reports, Q10h_pp_Utilised_school_funds_for_the_program, Q10i_pp_Talked_often_with_the_career_teacher,
-Q10j_pp_Started_and_ended_the_program_on_time, Q10k_pp_Arranged_extra_career_activities, Q10l_pp_invited_ex_students_to_share_their_job_stories,
-Q10m_pp_Made_sure_the_school_had_a_trained_career_teacher, Q10n_pp_i_do_not_know__not_sure, Q11_pp_thin_for_career_program,
-Q12_pp_confident, Q13_pp_program_activities, Q14_pp_program_sessions, Q15_pp_important_secondary_students, Q16_pp_career_decisions,
-Q17_pp_materials_that_apply, Q17a_pp_A_student_book, Q17b_pp_A_teacher_guide, Q17c_pp_School_Poster, Q17d_pp_Career_Chatbot,
-Q17e_pp_Student_Certificates, Q17f_pp_Student_Assessments, Q17g_pp_Career_Videos, Q17h_pp_Parent_Handouts, Q17i_pp_Counselling_Report,
-Q18A_pp_program_inc_of_all_students, Q18B_pp_supporting_students_raining_after_school, Q18C_pp_encouraging_students_choosing_careers,
-Q19_pp_leave_school, Q20_pp_thin_for_students, pp_id, pp_uuid, pp_submission_time
-from {{ ref('dev_int_hm_assessment') }}
+pp.pp_start, pp.pp_end, pp.pp_date, pp.Q4_pp_how_many_year_in_this_school, pp.Q5_pp_org_our_school_last_year, pp.Q5_pp_others_please_specify,
+pp.Q6_pp_heard_of_antarng, pp.Q7_pp_how_did_you_hear, pp.Q7a_pp_Newspaper, pp.Q7b_pp_Social_media_Facebook_linkedin, pp.Q7c_pp_From_government_meetings__other,
+pp.Q7d_pp_From_Parents_Students, pp.Q7e_pp_Search_Engines__Google_etc, pp.Q7f_pp_Peer_HMsTeachers, pp.Q7g_pp_Conducted_career_education_program_in_my_school,
+pp.Q7h_pp_Workshops_training_sessions_or_webinars, pp.Q7i_pp_Word_of_mouth_from_alumni_or_beneficiaries, pp.Q7j_pp_Antarangs_website,
+pp.Q7k_pp_other__please_specify, pp.Q7_pp_other_please_specify, pp.Q8_pp_in_which_grade, pp.Q8a_pp_grade_8, pp.Q8b_pp_grade_9, pp.Q8c_pp_grade_10,
+pp.Q8d_pp_grade_11, pp.Q8e_pp_grade_12, pp.Q8f_pp_none_of_the_above, pp.Q8g_pp_i_don_t_know__not_sure, pp.Q8h_pp_other__please_specify,
+pp.Q8_pp_Others_Please_Specify_001, pp.Q9_pp_which_of_the_following, pp.Q9a_pp_Up_to_date_info_about_careers, pp.Q9b_pp_Sessions_for_parents_or_caregivers,
+pp.Q9c_pp_Trained_external_career_teacher_at_school, pp.Q9d_pp_Trained_career_teacher_in_charge, pp.Q9e_pp_One_on_one_career_counselling,
+pp.Q9f_pp_Interest_and_aptitude_tests, pp.Q9g_pp_Record_of_students_career_plans, pp.Q9h_pp_Info_on_education_or_training_after_school,
+pp.Q9i_pp_Career_expert_talks_during_subject_classes, pp.Q9j_pp_Talks_or_visits_to_colleges_and_workplaces,
+pp.Q9k_pp_Data_collected_on_students_plans_after_school, pp.Q9l_pp_i_do_not_know__not_sure, pp.Q10_pp_answer_that_apply,
+pp.Q10a_pp_Fixed_a_regular_time_for_career_sessions, pp.Q10b_pp_Visited_the_career_sessions, pp.Q10c_pp_Made_sure_students_attended,
+pp.Q10d_pp_Spoke_to_parents_about_it, pp.Q10e_pp_Shared_updates_in_meetings, pp.Q10f_pp_Gave_ideas_or_suggestions_to_the_career_teacher,
+pp.Q10g_pp_Shared_updates_in_meetings_or_reports, pp.Q10h_pp_Utilised_school_funds_for_the_program, pp.Q10i_pp_Talked_often_with_the_career_teacher,
+pp.Q10j_pp_Started_and_ended_the_program_on_time, pp.Q10k_pp_Arranged_extra_career_activities, pp.Q10l_pp_invited_ex_students_to_share_their_job_stories,
+pp.Q10m_pp_Made_sure_the_school_had_a_trained_career_teacher, pp.Q10n_pp_i_do_not_know__not_sure, pp.Q11_pp_thin_for_career_program,
+pp.Q12_pp_confident, pp.Q13_pp_program_activities, pp.Q14_pp_program_sessions, pp.Q15_pp_important_secondary_students, pp.Q16_pp_career_decisions,
+pp.Q17_pp_materials_that_apply, pp.Q17a_pp_A_student_book, pp.Q17b_pp_A_teacher_guide, pp.Q17c_pp_School_Poster, pp.Q17d_pp_Career_Chatbot,
+pp.Q17e_pp_Student_Certificates, pp.Q17f_pp_Student_Assessments, pp.Q17g_pp_Career_Videos, pp.Q17h_pp_Parent_Handouts, pp.Q17i_pp_Counselling_Report,
+pp.Q18A_pp_program_inc_of_all_students, pp.Q18B_pp_supporting_students_raining_after_school, pp.Q18C_pp_encouraging_students_choosing_careers,
+pp.Q19_pp_leave_school, pp.Q20_pp_thin_for_students, pp.pp_id, pp.pp_uuid, pp.pp_submission_time
+FROM pre_latest p
+    LEFT JOIN po_latest po ON p.school_name = po.school_name
+    LEFT JOIN pp_latest pp ON p.school_name = pp.school_name
 ),
 
 int_global_session AS (
@@ -195,13 +267,19 @@ int_global_session AS (
         GROUP BY school_id
 ),
 
+hm_orientation AS (SELECT date as orientation_date, state as hm_state, overall_attendance as orientation_attendance
+        from {{ source('salesforce', 'Attendace_sheet') }}
+        where year = '2025'
+),
+
 final as (
     SELECT h.hm_school_id, h.facilitator_name, h.session_academic_year, h.batch_language, h.school_name, h.school_taluka, h.school_district, 
-    h.school_state, h.school_area, h.school_partner, s.fac_start_date, s.fac_end_date, h.total_hm_session_name, 
-    h.total_hm_sessions_date, h.complete_session_status, h.year_end_sessions_completed, h.total_hm_attended, 
-    h.school_completion_status, h.batch_expected_sessions, h.expected_student_sessions, h.expected_parent_sessions, 
-    h.student_sessions_attended_by_hm, h.parent_sessions_attended_by_hm, 
-
+    h.school_state, h.school_area, h.school_partner, o.orientation_date, o.orientation_attendance, s.fac_start_date, s.fac_end_date, 
+    DATE_DIFF(DATE(fac_start_date), CAST(orientation_date AS DATE), DAY) AS TAT_1,
+    h.expected_sessions, 
+    h.no_of_session_scheduled, h.no_of_checkin_sessions_completed, h.no_of_year_end_sessions_completed, h.no_of_sessions_hm_attended, 
+    h.school_completion_status, h.no_of_expected_sessions, h.no_of_expected_student_sessions, h.no_of_expected_parent_sessions, 
+    h.no_of_student_sessions_attended_by_hm, h.no_of_parent_sessions_attended_by_hm, 
 
 a.pre_start, a.pre_end, a.pre_date, a.Q4_pre__years_in_this_school, a.Q5_pre_organisation_last_year, a.Q5_pre_option_1, a.Q5_pre_option_2,
 a.Q5_pre_option_3, a.Q6_pre_heard_of_antarang, a.Q7_pre_how_did_you_hear, a.Q7a_pre_newspapers, a.Q7b_pre_social_media__facebook__linked, 
@@ -261,12 +339,14 @@ a.Q17_pp_materials_that_apply, a.Q17a_pp_A_student_book, a.Q17b_pp_A_teacher_gui
 a.Q17e_pp_Student_Certificates, a.Q17f_pp_Student_Assessments, a.Q17g_pp_Career_Videos, a.Q17h_pp_Parent_Handouts, a.Q17i_pp_Counselling_Report,
 a.Q18A_pp_program_inc_of_all_students, a.Q18B_pp_supporting_students_raining_after_school, a.Q18C_pp_encouraging_students_choosing_careers,
 a.Q19_pp_leave_school, a.Q20_pp_thin_for_students, a.pp_id, a.pp_uuid, a.pp_submission_time
-    FROM hm_assessment a
+FROM hm_assessment a
 LEFT JOIN school_completion h ON a.ass_school_name = h.school_name
 LEFT JOIN int_global_session s ON h.hm_school_id = s.school_id
-
+LEFT JOIN hm_orientation o ON h.school_state = o.hm_state
 )
+
 select * from final
+
 --where complete_session_status >=5
 --where hm_school_id = '0017F00000JeL7AQAV'
 --where hm_school_id = '0019C000003PjIXQA0'
