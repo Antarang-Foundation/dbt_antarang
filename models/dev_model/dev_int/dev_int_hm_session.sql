@@ -92,7 +92,7 @@ joined_source AS (
 )
 
 Select * from joined_source
-WHERE school_name = 'GHSS Zunheboto'
+--WHERE school_name = 'GHSS Zunheboto'
 --where school_name = 'GHSS Mon'
 
 --where hm_school_id = '0017F00000JeL7AQAV'
