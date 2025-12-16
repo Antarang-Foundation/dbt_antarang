@@ -5,7 +5,12 @@ base AS (
         ROW_NUMBER() OVER (
             PARTITION BY hm_id
             ORDER BY hm_session_date DESC
-        ) AS rn_last
+        ) AS rn_last,
+        CASE
+            WHEN session_date IS NOT NULL 
+            AND total_student_present IS NOT NULL 
+            AND total_parent_present IS NOT NULL THEN 1 END
+         AS completed_sessions
     FROM {{ ref('dev_int_hm_session') }}
 ),
 
@@ -13,36 +18,19 @@ base AS (
 expected_sessions_agg AS (
     SELECT 
         hm_id,
-        SUM(CAST(batch_expected_sessions AS INT64)) AS total_expected_sessions
-    FROM {{ ref('dev_int_hm_session') }}
-    GROUP BY hm_id
-),
-
--- Aggregate student + parent expected counts BEFORE rn_last
-attendance_agg AS (
-    SELECT
-        hm_id,
+        SUM(CAST(batch_expected_sessions AS INT64)) AS total_expected_sessions,
         SUM(total_student_present) AS total_student_present_sum,
-        SUM(total_parent_present) AS total_parent_present_sum
-    FROM {{ ref('dev_int_hm_session') }}
-    GROUP BY hm_id
-),
+        SUM(total_parent_present) AS total_parent_present_sum,
+        SUM(CASE WHEN session_type = 'Student' AND session_date IS NOT NULL 
+            AND total_student_present IS NOT NULL 
+            THEN total_student_present
+        ELSE 0 END) AS no_of_student_sessions_attended_by_hm,
 
-sess_attendance_agg AS (
-    SELECT
-        hm_id,
-        SUM(total_student_present) AS no_of_student_sessions_attended_by_hm,
+        SUM(CASE WHEN session_type = 'Parent' AND session_date IS NOT NULL 
+            AND total_parent_present IS NOT NULL 
+            THEN total_parent_present
+        ELSE 0 END) AS no_of_parent_sessions_attended_by_hm
     FROM {{ ref('dev_int_hm_session') }}
-    where session_type = 'Student' AND session_date IS NOT NULL AND total_student_present IS NOT NULL
-    GROUP BY hm_id
-),
-
-sessions_attended_agg AS (
-    SELECT
-        hm_id,
-        SUM(total_parent_present) AS no_of_parent_sessions_attended_by_hm
-    FROM {{ ref('dev_int_hm_session') }}
-    where session_type = 'Student' AND session_date IS NOT NULL AND total_student_present IS NOT NULL
     GROUP BY hm_id
 ),
 
@@ -62,7 +50,7 @@ hm_session AS (
 
         es.total_expected_sessions AS no_of_expected_sessions,
 
-        COUNT(DISTINCT b.hm_id) AS expected_sessions,
+        COUNT(DISTINCT b.hm_id) AS no_of_expected_hm_sessions,
     
         COUNT(DISTINCT CASE 
             WHEN b.hm_session_date IS NOT NULL THEN b.hm_session_date END
@@ -86,67 +74,33 @@ hm_session AS (
 
         COUNT(*) AS total_sessions,
 
-        COUNT(CASE
-            WHEN b.session_date IS NOT NULL 
-            AND b.total_student_present IS NOT NULL 
-            AND b.total_parent_present IS NOT NULL THEN 1 END
-        ) AS completed_sessions,
+        SUM(b.completed_sessions) AS completed_sessions,
+        CASE 
+            WHEN SUM(b.completed_sessions) = COUNT(*) THEN 'Yes'
+            ELSE 'No'
+        END AS school_completion_status,
 
-        att.total_student_present_sum AS no_of_expected_student_sessions,
-        att.total_parent_present_sum AS no_of_expected_parent_sessions,
+        es.total_student_present_sum AS no_of_expected_student_sessions,
+        es.total_parent_present_sum AS no_of_expected_parent_sessions,
 
         -- Use pre-aggregated values from sessions_attended_agg
-        LEAST(sa.no_of_student_sessions_attended_by_hm, att.total_student_present_sum) AS no_of_student_sessions_attended_by_hm,
-        LEAST(ss.no_of_parent_sessions_attended_by_hm, att.total_parent_present_sum) AS no_of_parent_sessions_attended_by_hm
+        LEAST(es.no_of_student_sessions_attended_by_hm, es.total_student_present_sum) AS no_of_student_sessions_attended_by_hm,
+        LEAST(es.no_of_parent_sessions_attended_by_hm, es.total_parent_present_sum) AS no_of_parent_sessions_attended_by_hm
 
     FROM base b
     -- join pre-aggregated data
     LEFT JOIN expected_sessions_agg es ON b.hm_id = es.hm_id
-    LEFT JOIN attendance_agg att ON b.hm_id = att.hm_id
-    LEFT join sess_attendance_agg sa ON b.hm_id = sa.hm_id
-    LEFT JOIN sessions_attended_agg ss ON b.hm_id = ss.hm_id
     -- use only the latest row per hm_id for static info like school_name
     WHERE b.rn_last = 1
     GROUP BY 
         b.hm_school_id, b.facilitator_name, b.session_academic_year, b.batch_language, 
         b.school_name, b.school_taluka, b.school_district, b.school_state, b.school_area, 
         b.school_partner, es.total_expected_sessions, 
-        att.total_student_present_sum, att.total_parent_present_sum,
-        sa.no_of_student_sessions_attended_by_hm,
-        ss.no_of_parent_sessions_attended_by_hm
+        es.total_student_present_sum, es.total_parent_present_sum,
+        es.no_of_student_sessions_attended_by_hm,
+        es.no_of_parent_sessions_attended_by_hm
 ),
 
-school_completion AS (
-    SELECT 
-        hm_school_id, 
-        facilitator_name, 
-        session_academic_year, 
-        batch_language, 
-        school_name,
-        school_taluka, 
-        school_district, 
-        school_state, 
-        school_area, 
-        school_partner, 
-        expected_sessions, 
-        no_of_session_scheduled, 
-        no_of_checkin_sessions_completed, 
-        no_of_expected_sessions,
-        no_of_year_end_sessions_completed, 
-        no_of_sessions_hm_attended, 
-        no_of_expected_student_sessions, 
-        no_of_expected_parent_sessions, 
-        no_of_student_sessions_attended_by_hm, 
-        no_of_parent_sessions_attended_by_hm, 
-        completed_sessions, 
-        total_sessions,
-
-        CASE 
-            WHEN completed_sessions = total_sessions THEN 'Yes'
-            ELSE 'No'
-        END AS school_completion_status
-    FROM hm_session
-),
 
 pre_latest AS (
     SELECT *
@@ -159,7 +113,7 @@ pre_latest AS (
         FROM {{ ref('dev_int_hm_assessment') }}
         WHERE pre_id IS NOT NULL
     )
-    WHERE rn_pre = 1
+    WHERE rn_pre = 1 --Cleaning the latest entry only
 ),
 
 po_latest AS (
@@ -193,7 +147,7 @@ pp_latest AS (
 
 hm_assessment AS (
     SELECT
-        p.school_name AS ass_school_name,
+        COALESCE (p.school_name, pp.school_name, po.school_name) AS ass_school_name ,
 
 p.pre_start, p.pre_end, p.pre_date, p.Q4_pre__years_in_this_school, p.Q5_pre_organisation_last_year, p.Q5_pre_option_1, p.Q5_pre_option_2,
 p.Q5_pre_option_3, p.Q6_pre_heard_of_antarang, p.Q7_pre_how_did_you_hear, p.Q7a_pre_newspapers, p.Q7b_pre_social_media__facebook__linked, 
@@ -254,8 +208,8 @@ pp.Q17e_pp_Student_Certificates, pp.Q17f_pp_Student_Assessments, pp.Q17g_pp_Care
 pp.Q18A_pp_program_inc_of_all_students, pp.Q18B_pp_supporting_students_raining_after_school, pp.Q18C_pp_encouraging_students_choosing_careers,
 pp.Q19_pp_leave_school, pp.Q20_pp_thin_for_students, pp.pp_id, pp.pp_uuid, pp.pp_submission_time
 FROM pre_latest p
-    LEFT JOIN po_latest po ON p.school_name = po.school_name
-    LEFT JOIN pp_latest pp ON p.school_name = pp.school_name
+    FULL OUTER JOIN po_latest po ON p.school_name = po.school_name --Remove the latest join it should be 'A=B, A=C, A=D'
+    FULL OUTER JOIN pp_latest pp ON p.school_name = pp.school_name
 ),
 
 int_global_session AS (
@@ -273,10 +227,11 @@ hm_orientation AS (SELECT date as orientation_date, state as hm_state, overall_a
 ),
 
 final as (
-    SELECT h.hm_school_id, h.facilitator_name, h.session_academic_year, h.batch_language, h.school_name, h.school_taluka, h.school_district, 
+    SELECT h.hm_school_id, h.facilitator_name, h.session_academic_year, h.batch_language, --COALESCE (h.school_name, a.ass_school_name) AS school_name,
+    h.school_name, h.school_taluka, h.school_district, 
     h.school_state, h.school_area, h.school_partner, o.orientation_date, o.orientation_attendance, s.fac_start_date, s.fac_end_date, 
     DATE_DIFF(DATE(fac_start_date), CAST(orientation_date AS DATE), DAY) AS TAT_1,
-    h.expected_sessions, 
+    h.no_of_expected_hm_sessions, 
     h.no_of_session_scheduled, h.no_of_checkin_sessions_completed, h.no_of_year_end_sessions_completed, h.no_of_sessions_hm_attended, 
     h.school_completion_status, h.no_of_expected_sessions, h.no_of_expected_student_sessions, h.no_of_expected_parent_sessions, 
     h.no_of_student_sessions_attended_by_hm, h.no_of_parent_sessions_attended_by_hm, 
@@ -339,14 +294,16 @@ a.Q17_pp_materials_that_apply, a.Q17a_pp_A_student_book, a.Q17b_pp_A_teacher_gui
 a.Q17e_pp_Student_Certificates, a.Q17f_pp_Student_Assessments, a.Q17g_pp_Career_Videos, a.Q17h_pp_Parent_Handouts, a.Q17i_pp_Counselling_Report,
 a.Q18A_pp_program_inc_of_all_students, a.Q18B_pp_supporting_students_raining_after_school, a.Q18C_pp_encouraging_students_choosing_careers,
 a.Q19_pp_leave_school, a.Q20_pp_thin_for_students, a.pp_id, a.pp_uuid, a.pp_submission_time
-FROM hm_assessment a
-LEFT JOIN school_completion h ON a.ass_school_name = h.school_name
+FROM hm_session h
+FULL OUTER JOIN hm_assessment a ON a.ass_school_name = h.school_name
 LEFT JOIN int_global_session s ON h.hm_school_id = s.school_id
 LEFT JOIN hm_orientation o ON h.school_state = o.hm_state
 )
 
+--select count(distinct hm_school_id) AS total_school_count, SUM(CASE WHEN hm_school_id IS NULL THEN 1 ELSE 0 END) AS school_missing from final
 select * from final
-
+--where hm_school_id in ('0017F00000L5VXFQA3', '0017F00000L55KjQAJ', '0019C000003geeQQAQ')
+--order by hm_school_id
 --where complete_session_status >=5
 --where hm_school_id = '0017F00000JeL7AQAV'
 --where hm_school_id = '0019C000003PjIXQA0'
