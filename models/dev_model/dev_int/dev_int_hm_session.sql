@@ -27,11 +27,11 @@ int_session AS (
         COUNT(DISTINCT CONCAT(session_name, '_', TRIM(batch_grade))) AS batch_expected_sessions,
         COUNT(DISTINCT CASE WHEN session_type = 'Student' THEN CONCAT(session_name, '_', TRIM(batch_grade)) END) AS total_student_present,
         COUNT(DISTINCT CASE WHEN session_type = 'Parent' THEN CONCAT(session_name, '_', TRIM(batch_grade)) END) AS total_parent_present,
-        MAX(CASE WHEN session_date IS NOT NULL THEN session_date END) AS session_date,
+        MIN(CASE WHEN session_date IS NOT NULL THEN session_date END) AS session_date,
         school_id,
         session_type
     FROM {{ ref('dev_int_global_session') }}
-    where batch_academic_year >=  2025 and session_type IN ('Parent', 'Student')
+    where batch_academic_year >=  2025 --and session_type IN ('Parent', 'Student', '')
     group by school_id, batch_academic_year, session_type
 ),
 
@@ -92,6 +92,7 @@ joined_source AS (
 )
 
 Select * from joined_source
+--where hm_school_id = '0017F00000JeL7AQAV'
 --WHERE school_name = 'GHSS Zunheboto'
 --where school_name = 'GHSS Mon'
 
