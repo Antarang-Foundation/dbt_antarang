@@ -37,10 +37,13 @@ record_type as sar_record_type, created_from_form as sar_created_from_form, crea
 
 int_global_dcp as (select student_id, student_barcode, student_grade, student_batch_id, gender, batch_no, batch_academic_year, 
 school_academic_year, batch_grade, batch_language, fac_start_date, school_language, facilitator_name, facilitator_email, 
-school_name, school_taluka, school_ward, school_district, school_state, school_partner, school_area, batch_donor 
-from {{ ref("dev_int_global_dcp") }}),
+school_name, school_taluka, school_ward, school_district, school_state, school_partner, school_area, batch_donor,  
+Student_GRADE_COUNT, G9_Batch_Student_Flag, G10_Batch_Student_Flag, G11_Batch_Student_Flag, G12_Batch_Student_Flag 
+from {{ ref("dev_int_global_dcp") }})
+,
 
-assessment as (SELECT a.batch_no, a.batch_academic_year, 
+assessment as (
+    SELECT a.batch_no, a.batch_academic_year, 
 a.school_academic_year, a.batch_grade, a.batch_language, a.fac_start_date, a.school_language, a.facilitator_name, a.facilitator_email, 
 a.school_name, a.school_taluka, a.school_ward, a.school_district, a.school_state, a.school_partner, a.school_area, a.batch_donor,
 
@@ -99,7 +102,12 @@ count(distinct case when sar_created_from_form = true then student_barcode end) 
 count(distinct case when sar_created_from_form = true then sar_assessment_barcode end) as stg_sar_barcodes, 
 count(distinct case when sar_created_from_form = true and sar_record_type = 'Baseline' then sar_no end) as bl_sar_raw, 
 count(distinct case when sar_created_from_form = true and sar_record_type = 'Endline' then sar_no end) as el_sar_raw,
-count(distinct case when sar_created_from_form = true and sar_record_type IN ('Baseline', 'Endline') then sar_no end) as sar_correct
+count(distinct case when sar_created_from_form = true and sar_record_type IN ('Baseline', 'Endline') then sar_no end) as sar_correct,
+
+SUM(CASE WHEN batch_grade like '%9%' THEN G9_Batch_Student_Flag
+         WHEN batch_grade like '%10%' THEN G10_Batch_Student_Flag
+         WHEN batch_grade like '%11%' THEN G11_Batch_Student_Flag
+         WHEN batch_grade like '%12%' THEN G12_Batch_Student_Flag END) AS Batch_Student_SD2_Count --Sd2 new column
 
 from int_global_dcp a
 
@@ -112,7 +120,7 @@ LEFT JOIN saf ON a.student_barcode = saf.saf_assessment_barcode
 LEFT JOIN sar ON a.student_barcode = sar.sar_assessment_barcode
 
 WHERE a.school_district IN ('Nagaland', 'Palghar', 'RJ Model B','RJ Model C', 'RJ Model A', 'Dungarpur')
- 
+--and batch_no = '32416' 
 group by a.batch_no, a.batch_academic_year, 
 a.school_academic_year, a.batch_grade, a.batch_language, a.fac_start_date, a.school_language, a.facilitator_name, a.facilitator_email, 
 a.school_name, a.school_taluka, a.school_ward, a.school_district, a.school_state, a.school_partner, a.school_area, a.batch_donor
@@ -120,7 +128,7 @@ a.school_name, a.school_taluka, a.school_ward, a.school_district, a.school_state
 
 assessment_status as (SELECT b.batch_no, b.batch_academic_year, 
 b.school_academic_year, b.batch_grade, b.batch_language, b.fac_start_date, b.school_language, b.facilitator_name, b.facilitator_email, 
-b.school_name, b.school_taluka, b.school_ward, b.school_district, b.school_state, b.school_partner, b.school_area, b.batch_donor,
+b.school_name, b.school_taluka, b.school_ward, b.school_district, b.school_state, b.school_partner, b.school_area, b.batch_donor, 
 b.stg_cdm1_sd, b.stg_cdm1_barcodes, b.bl_cdm1_raw, b.el_cdm1_raw, b.cdm1_baseline_created_on, b.cdm1_endline_created_on, 
 b.cdm2_baseline_created_on, b.cdm2_endline_created_on, b.cp_baseline_created_on, b.cp_endline_created_on,
 b.cs_baseline_created_on, b.cs_endline_created_on, b.fp_baseline_created_on, b.fp_endline_created_on, b.saf_baseline_created_on, b.saf_endline_created_on, b.sar_baseline_created_on, b.sar_endline_created_on,
@@ -150,8 +158,9 @@ COUNT(DISTINCT CASE WHEN saf.saf_record_type = 'Endline'  THEN saf.saf_no END) A
 
 b.stg_sar_sd, b.stg_sar_barcodes, b.bl_sar_raw, b.el_sar_raw, b.sar_correct,
 COUNT(DISTINCT CASE WHEN sar.sar_record_type = 'Baseline' THEN sar.sar_no END) AS bl_sar_correct,
-COUNT(DISTINCT CASE WHEN sar.sar_record_type = 'Endline'  THEN sar.sar_no END) AS el_sar_correct
+COUNT(DISTINCT CASE WHEN sar.sar_record_type = 'Endline'  THEN sar.sar_no END) AS el_sar_correct,
 
+MAX(Batch_Student_SD2_Count) AS Batch_Student_SD2_Count
 FROM assessment b
 LEFT JOIN int_global_dcp igd ON b.batch_no = igd.batch_no
 LEFT JOIN cdm1 ON igd.student_barcode = cdm1.cdm1_assessment_barcode
@@ -200,7 +209,7 @@ GROUP BY batch_no, no_of_students_facilitated
 
 attendance_join as (select c.batch_no, c.batch_academic_year, 
 c.school_academic_year, c.batch_grade, c.batch_language, c.fac_start_date, c.school_language, c.facilitator_name, c.facilitator_email, 
-c.school_name, c.school_taluka, c.school_ward, c.school_district, c.school_state, c.school_partner, c.school_area, c.batch_donor,
+c.school_name, c.school_taluka, c.school_ward, c.school_district, c.school_state, c.school_partner, c.school_area, c.batch_donor, c.Batch_Student_SD2_Count,
 c.stg_cdm1_sd, c.stg_cdm1_barcodes, c.bl_cdm1_raw, c.el_cdm1_raw, c.stg_cdm2_sd, c.stg_cdm2_barcodes, c.bl_cdm2_raw, c.el_cdm2_raw,
 c.stg_cp_sd, c.stg_cp_barcodes, c.bl_cp_raw, c.el_cp_raw, c.stg_cs_sd, c.stg_cs_barcodes, c.bl_cs_raw, c.el_cs_raw,
 c.stg_fp_sd, c.stg_fp_barcodes, c.bl_fp_raw, c.el_fp_raw, c.stg_saf_sd, c.stg_saf_barcodes, c.bl_saf_raw, c.el_saf_raw,
@@ -376,7 +385,7 @@ END AS sar_endline_TAT
 
 
 select e.batch_no, e.batch_academic_year, e.batch_grade, e.batch_language, e.fac_start_date, e.facilitator_name, e.facilitator_email,
-e.school_name, e.school_taluka, e.school_ward, e.school_district, e.school_state, e.school_partner, e.school_area, e.batch_donor,
+e.school_name, e.school_taluka, e.school_ward, e.school_district, e.school_state, e.school_partner, e.school_area, e.batch_donor, e.Batch_Student_SD2_Count,
 e.stg_cdm1_sd, e.stg_cdm1_barcodes, e.bl_cdm1_raw, e.bl_cdm1_correct, e.el_cdm1_raw, e.el_cdm1_correct, e.stg_cdm2_sd, e.stg_cdm2_barcodes,
 e.bl_cdm2_raw, e.bl_cdm2_correct, e.el_cdm2_raw, e.el_cdm2_correct, e.stg_cp_sd, e.stg_cp_barcodes, e.bl_cp_raw, e.bl_cp_correct,
 e.el_cp_raw, e.el_cp_correct, e.stg_cs_sd, e.stg_cs_barcodes, e.bl_cs_raw, e.bl_cs_correct, e.el_cs_raw, e.el_cs_correct,
@@ -392,4 +401,5 @@ e.fp_baseline_created_on, e.fp_endline_created_on, e.fp_baseline_TAT, e.fp_endli
 e.saf_baseline_created_on, e.saf_endline_created_on, e.saf_baseline_TAT, e.saf_endline_TAT, 
 e.sar_baseline_created_on, e.sar_endline_created_on, e.sar_baseline_TAT, e.sar_endline_TAT
 from somrt e
-WHERE e.batch_academic_year >= 2023
+--WHERE e.batch_academic_year >= 2023 and 
+--where batch_no = '32416'

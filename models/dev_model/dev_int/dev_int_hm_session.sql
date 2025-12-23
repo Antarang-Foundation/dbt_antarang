@@ -10,6 +10,7 @@ WITH int_global_dcp AS (
         school_partner,
         school_id,
         facilitator_name,
+        facilitator_email,
         ROW_NUMBER() OVER (
             PARTITION BY school_id 
             ORDER BY 
@@ -64,6 +65,7 @@ joined_source AS (
         igd.school_partner,
         igd.school_id,
         igd.facilitator_name,
+        igd.facilitator_email,
         s.fac_start_date,
         s.fac_end_date,
         s.total_student_present,

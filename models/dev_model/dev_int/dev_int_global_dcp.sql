@@ -60,7 +60,8 @@ student_expanded AS (
         s.recommendation_report_status,
         s.student_details_2_submitted,
         s.g9_whatsapp_no, s.g10_whatsapp_no, s.g11_whatsapp_no, s.g12_whatsapp_no, s.g9_alternate_no, 
-        s.g10_alternate_no, s.g11_alternate_no, s.g12_alternate_no,
+        s.g10_alternate_no, s.g11_alternate_no, s.g12_alternate_no, s.student_details_2_grade, 
+s.Student_GRADE_COUNT, s.G9_Batch_Student_Flag, s.G10_Batch_Student_Flag, s.G11_Batch_Student_Flag, s.G12_Batch_Student_Flag,
         -- Counting number of non-null barcodes
         (
             CASE WHEN s.g9_barcode IS NOT NULL THEN 1 ELSE 0 END +
@@ -124,3 +125,5 @@ final AS (
 
 SELECT *
 FROM final
+--where student_details_2_grade is not null
+--where batch_no = '32416'
