@@ -1,7 +1,7 @@
 with 
 int_global as (
     select school_id, school_name, batch_academic_year as session_academic_year, batch_language, school_taluka, school_district,
-school_state, school_area, school_partner, facilitator_name,
+school_state, school_area, school_partner, facilitator_name, facilitator_email,
 ROW_NUMBER() OVER (
             PARTITION BY school_id 
             ORDER BY 
@@ -81,7 +81,7 @@ where rn = 1
 
 expand_column as 
 (select  s.school_name, s.session_academic_year, s.batch_language, s.school_taluka, s.school_district,
-s.school_state, s.school_area, s.school_partner, s.facilitator_name, s.fac_start_date, s.fac_end_date,
+s.school_state, s.school_area, s.school_partner, s.facilitator_name, s.facilitator_email, s.fac_start_date, s.fac_end_date,
   
   s.pre_name, pre_contact_number,	s.pre_date, s.Q5_pre_option_1, s.Q5_pre_option_2, s.Q5_pre_option_3, s.Q7_pre_Other_Please_Specify, 
       s.Q8_pre_Others_Please_Specify, s.Q3_pre_district_name, s.Q4_pre__years_in_this_school, s.Q5_pre_organisation_last_year,	
@@ -269,7 +269,7 @@ from source_joined s
 ),
 
 final as (select school_name, session_academic_year, batch_language, school_taluka, school_district,
-school_state, school_area, school_partner, facilitator_name, fac_start_date, fac_end_date,
+school_state, school_area, school_partner, facilitator_name, facilitator_email, fac_start_date, fac_end_date,
 
 pre_name, pre_start, pre_end, pre_date, pre_school_names, Q3_pre_district_name, pre_contact_number,
 Q4_pre__years_in_this_school, Q5_pre_organisation_last_year, Q5_pre_option_1, Q5_pre_option_2,
@@ -485,6 +485,7 @@ from expand_column
 )
 
 select * from final
+--where school_name = 'Mohd. Umer Rajjab Road Municipal Urdu'
 
 
 

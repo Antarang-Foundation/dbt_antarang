@@ -3,6 +3,7 @@ WITH ranked_sessions AS (
         hm_school_id,
         hm_session_name,
         facilitator_name,
+        facilitator_email,
         hm_session_date,
         start_time,
         scheduling_type,
@@ -32,6 +33,7 @@ SELECT
     hm_school_id,
     hm_session_name,
     facilitator_name,
+    facilitator_email,
     hm_session_date,
     start_time,
     scheduling_type,
@@ -52,4 +54,5 @@ SELECT
     session_type
 FROM ranked_sessions
 WHERE rn = 1 
+--and hm_school_id = '0017F00000L5CLgQAN'
 

@@ -72,7 +72,7 @@ with
             Followup2Aspiration__c as followup_2_aspiration,
             Student_Details_2__c as student_details_2_submitted,
             SD2_Grade__c as student_details_2_grade
-        from {{ source('salesforce', 'Contact') }} where IsDeleted = false and lower(Full_Name__c) not like '%test%'
+        from {{ source('salesforce', 'Contact') }} --where IsDeleted = false and lower(Full_Name__c) not like '%test%'
     ),
 
     recordtypes as (
@@ -89,7 +89,12 @@ with
         s.reality_1, s.reality_2, s.reality_3, s.reality_4, s.reality_5, s.reality_6, s.reality_7, s.reality_8, s.aspiration_1, 
         s.aspiration_2, s.aspiration_3, s.recommedation_status, s.recommendation_report_status, s.possible_career_report, 
         s.career_tracks, s.clarity_report, s.current_aspiration, s.possible_careers_1, s.possible_careers_2, s.possible_careers_3, 
-        s.followup_1_aspiration, s.followup_2_aspiration, s.student_details_2_submitted, s.student_details_2_grade
+        s.followup_1_aspiration, s.followup_2_aspiration, s.student_details_2_submitted, s.student_details_2_grade,
+        LENGTH(s.student_details_2_grade) - LENGTH(REPLACE(s.student_details_2_grade, ';', '')) + 1 AS Student_GRADE_COUNT,
+        Case when(s.g9_batch_id is not null and s.student_details_2_grade like '%9%') then 1 Else 0 END G9_Batch_Student_Flag,
+        Case when(s.g10_batch_id is not null and s.student_details_2_grade like '%10%') then 1 Else 0 END G10_Batch_Student_Flag,
+        Case when(s.g11_batch_id is not null and s.student_details_2_grade like '%11%') then 1 Else 0 END G11_Batch_Student_Flag,
+        Case when(s.g12_batch_id is not null and s.student_details_2_grade like '%12%') then 1 Else 0 END G12_Batch_Student_Flag
         from source s
         inner join recordtypes b ON s.record_type_id = b.record_type_id
         where s.first_barcode is not null
