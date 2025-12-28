@@ -19,7 +19,7 @@ expected_sessions_agg AS (
     SELECT 
         hm_id,
         
-        SUM(batch_expected_sessions) AS total_expected_sessions,
+        SUM(batch_expected_session) AS total_expected_sessions,
 
         SUM(total_student_present) AS total_student_present_sum,
 
@@ -69,12 +69,8 @@ hm_session AS (
         THEN b.hm_id END) AS no_of_sessions_hm_attended,
 
         COUNT(*) AS total_sessions,
-
-        SUM(b.completed_sessions) AS completed_sessions,
-        CASE 
-            WHEN SUM(b.completed_sessions) = COUNT(*) THEN 'Yes'
-            ELSE 'No'
-        END AS school_completion_status,
+ 
+        is_batch_fully_completed AS school_completion_status,
 
         es.total_student_present_sum AS no_of_expected_student_sessions,
         es.total_parent_present_sum AS no_of_expected_parent_sessions,
@@ -94,7 +90,7 @@ hm_session AS (
         b.school_partner, es.total_expected_sessions, 
         es.total_student_present_sum, es.total_parent_present_sum,
         es.no_of_student_sessions_attended_by_hm,
-        es.no_of_parent_sessions_attended_by_hm
+        es.no_of_parent_sessions_attended_by_hm, is_batch_fully_completed
 ),
 
 
@@ -316,6 +312,7 @@ LEFT JOIN hm_orientation o ON h.school_state = o.hm_state
 )
 
 select * from final
+--where school_name = 'GHSS Satakha' --'Bhagwan Mahavir Govt. High School, Honda'
 --where school_state = 'Nagaland'
 --select count(distinct hm_school_id) AS total_school_count, SUM(CASE WHEN hm_school_id IS NULL THEN 1 ELSE 0 END) AS school_missing from final
 --where hm_school_id in ('0017F00000L5VXFQA3', '0017F00000L55KjQAJ', '0019C000003geeQQAQ')

@@ -23,17 +23,20 @@ WITH int_global_dcp AS (
 
 int_session AS (
     SELECT 
+    batch_expected_sessions,
+    batch_completed_sessions,
         MIN(CASE WHEN fac_start_date IS NOT NULL THEN fac_start_date END) AS fac_start_date,
         MIN(CASE WHEN fac_end_date IS NOT NULL THEN fac_end_date END) AS fac_end_date, 
-        COUNT(DISTINCT CONCAT(session_name, '_', TRIM(batch_grade))) AS batch_expected_sessions,
-        COUNT(DISTINCT CASE WHEN session_type = 'Student' THEN CONCAT(session_name, '_', TRIM(batch_grade)) END) AS total_student_present,
-        COUNT(DISTINCT CASE WHEN session_type = 'Parent' THEN CONCAT(session_name, '_', TRIM(batch_grade)) END) AS total_parent_present,
+        COUNT(CONCAT(session_name, '_', TRIM(batch_grade))) AS batch_expected_session,
+        COUNT(CASE WHEN session_type = 'Student' THEN CONCAT(session_name, '_', TRIM(batch_grade)) END) AS total_student_present,
+        COUNT(CASE WHEN session_type = 'Parent' THEN CONCAT(session_name, '_', TRIM(batch_grade)) END) AS total_parent_present,
         MIN(CASE WHEN session_date IS NOT NULL THEN session_date END) AS session_date,
         school_id,
-        session_type
+        session_type,
+        case when batch_completed_sessions = batch_expected_sessions then 'Yes' else 'No' end as is_batch_fully_completed
     FROM {{ ref('dev_int_global_session') }}
     where batch_academic_year >=  2025 --and session_type IN ('Parent', 'Student', '')
-    group by school_id, batch_academic_year, session_type
+    group by school_id, batch_academic_year, session_type, batch_expected_sessions, batch_completed_sessions
 ),
 
 hm_session AS (
@@ -70,7 +73,10 @@ joined_source AS (
         s.fac_end_date,
         s.total_student_present,
         s.total_parent_present,
+        s.batch_expected_session,
         s.batch_expected_sessions,
+        s.batch_completed_sessions,
+        s.is_batch_fully_completed,
         s.session_type,
         s.session_date,
         hms.hm_id,
@@ -94,6 +100,7 @@ joined_source AS (
 )
 
 Select * from joined_source
+--where is_batch_fully_completed = 'Yes' and school_name = 'GHSS Satakha' --'Bhagwan Mahavir Govt. High School, Honda'
 --where hm_school_id = '0017F00000JeL7AQAV'
 --WHERE school_name = 'GHSS Zunheboto'
 --where school_name = 'GHSS Mon'
