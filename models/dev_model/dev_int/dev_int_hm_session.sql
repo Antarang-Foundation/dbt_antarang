@@ -18,13 +18,11 @@ WITH int_global_dcp AS (
                 school_name DESC
         ) AS rn
     FROM {{ ref('dev_int_global_dcp') }}
-    where facilitator_academic_year >= 2025 and batch_academic_year >= 2025
+    where facilitator_academic_year >= 2025 and batch_academic_year >= 2025 --AND school_name = 'Bhagwan Mahavir Govt. High School, Honda'
 ),
 
 int_session AS (
     SELECT 
-    batch_expected_sessions,
-    batch_completed_sessions,
         MIN(CASE WHEN fac_start_date IS NOT NULL THEN fac_start_date END) AS fac_start_date,
         MIN(CASE WHEN fac_end_date IS NOT NULL THEN fac_end_date END) AS fac_end_date, 
         COUNT(CONCAT(session_name, '_', TRIM(batch_grade))) AS batch_expected_session,
@@ -35,8 +33,8 @@ int_session AS (
         session_type,
         case when batch_completed_sessions = batch_expected_sessions then 'Yes' else 'No' end as is_batch_fully_completed
     FROM {{ ref('dev_int_global_session') }}
-    where batch_academic_year >=  2025 --and session_type IN ('Parent', 'Student', '')
-    group by school_id, batch_academic_year, session_type, batch_expected_sessions, batch_completed_sessions
+    where batch_academic_year >=  2025 --AND school_name = 'Bhagwan Mahavir Govt. High School, Honda' and session_type IN ( 'Student')
+    group by school_id, batch_academic_year, session_type, case when batch_completed_sessions = batch_expected_sessions then 'Yes' else 'No' end
 ),
 
 hm_session AS (
@@ -74,8 +72,6 @@ joined_source AS (
         s.total_student_present,
         s.total_parent_present,
         s.batch_expected_session,
-        s.batch_expected_sessions,
-        s.batch_completed_sessions,
         s.is_batch_fully_completed,
         s.session_type,
         s.session_date,
@@ -99,7 +95,11 @@ joined_source AS (
     WHERE igd.rn = 1
 )
 
-Select * from joined_source
+Select * --total_student_present, total_parent_present, session_type, hm_session_name, hm_attended 
+from joined_source
+--where school_name = 'GHS Yoruba' and session_type = 'Student'
+--WHERE school_name = 'Bhagwan Mahavir Govt. High School, Honda' and session_type = 'Student' --'Bhagwan Mahavir Govt. High School, Honda' and session_type = 'Student'
+--where hm_school_id = '0019C000003PjXCQA0' and session_type = 'Student' and total_student_present is not null and session_date is not null
 --where is_batch_fully_completed = 'Yes' and school_name = 'GHSS Satakha' --'Bhagwan Mahavir Govt. High School, Honda'
 --where hm_school_id = '0017F00000JeL7AQAV'
 --WHERE school_name = 'GHSS Zunheboto'
