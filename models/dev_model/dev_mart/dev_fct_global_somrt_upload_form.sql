@@ -401,5 +401,5 @@ e.fp_baseline_created_on, e.fp_endline_created_on, e.fp_baseline_TAT, e.fp_endli
 e.saf_baseline_created_on, e.saf_endline_created_on, e.saf_baseline_TAT, e.saf_endline_TAT, 
 e.sar_baseline_created_on, e.sar_endline_created_on, e.sar_baseline_TAT, e.sar_endline_TAT
 from somrt e
---WHERE e.batch_academic_year >= 2023 and 
+WHERE e.batch_academic_year >= 2023 
 --where batch_no = '32416'
