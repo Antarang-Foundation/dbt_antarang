@@ -72,7 +72,7 @@ with
             Followup2Aspiration__c as followup_2_aspiration,
             Student_Details_2__c as student_details_2_submitted,
             SD2_Grade__c as student_details_2_grade
-        from {{ source('salesforce', 'Contact') }} --where IsDeleted = false and lower(Full_Name__c) not like '%test%'
+        from {{ source('salesforce', 'Contact') }} where IsDeleted = false and lower(Full_Name__c) not like '%test%'
     ),
 
     recordtypes as (
@@ -103,6 +103,5 @@ with
 
 select *
 from dev_stg_student
---where student_details_2_grade is not null
 
 

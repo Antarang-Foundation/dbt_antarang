@@ -12,8 +12,8 @@ a as (
         date__c as attendance_date,
         Time__c as attendance_time,
         Guardian_Parent_Attendance__c as guardian_attendance,
-        Session_Grade__c as session_att_grade
-        
+        Session_Grade__c as session_att_grade,
+        Wrong_Batch__c as wrong_batch
     from source
 )
 
