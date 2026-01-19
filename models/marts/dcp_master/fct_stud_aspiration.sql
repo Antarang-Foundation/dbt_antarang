@@ -27,9 +27,10 @@ final_aspiration AS (
     SELECT 
         aspiration.*,
         CASE 
-            WHEN aspiration_mapping LIKE '%PC1 and CA%' 
+            WHEN /*aspiration_mapping LIKE '%PC1 and CA%' 
                  OR aspiration_mapping LIKE '%q4_1%' 
-                 OR aspiration_mapping LIKE '%q4_2%' 
+                 OR aspiration_mapping LIKE '%q4_2%'*/
+                 baseline_stud_aspiration IS NOT NULL 
             THEN student_barcode 
         END AS bl_assessment_barcode,
         CASE 
@@ -39,7 +40,7 @@ final_aspiration AS (
     FROM aspiration
 )
 
-select *  from final_aspiration
+select * from final_aspiration
 
 --Order by student_id, aspiration_mapping
 

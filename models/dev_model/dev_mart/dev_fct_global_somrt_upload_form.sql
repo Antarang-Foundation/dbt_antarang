@@ -51,48 +51,48 @@ MIN(CASE WHEN cdm1_record_type = 'Baseline' THEN cdm1_created_on END) AS cdm1_ba
 MIN(CASE WHEN cdm1_record_type = 'Endline' THEN cdm1_created_on END) AS cdm1_endline_created_on,
 count(distinct case when cdm1_created_from_form = true then student_barcode end) as stg_cdm1_sd, 
 count(distinct case when cdm1_created_from_form = true then cdm1_assessment_barcode end) as stg_cdm1_barcodes, 
-count(distinct case when cdm1_created_from_form = true and cdm1_record_type = 'Baseline' then cdm1_no end) as bl_cdm1_raw, 
-count(distinct case when cdm1_created_from_form = true and cdm1_record_type = 'Endline' then cdm1_no end) as el_cdm1_raw,
+count(distinct case when cdm1_record_type = 'Baseline' then cdm1_no end) as bl_cdm1_raw, 
+count(distinct case when cdm1_record_type = 'Endline' then cdm1_no end) as el_cdm1_raw,
 
 
 MIN(CASE WHEN cdm2_record_type = 'Baseline' THEN cdm2_created_on END) AS cdm2_baseline_created_on,
 MIN(CASE WHEN cdm2_record_type = 'Endline' THEN cdm2_created_on END) AS cdm2_endline_created_on,
 count(distinct case when cdm2_created_from_form = true then student_barcode end) as stg_cdm2_sd, 
 count(distinct case when cdm2_created_from_form = true then cdm2_assessment_barcode end) as stg_cdm2_barcodes, 
-count(distinct case when cdm2_created_from_form = true and cdm2_record_type = 'Baseline' then cdm2_no end) as bl_cdm2_raw, 
-count(distinct case when cdm2_created_from_form = true and cdm2_record_type = 'Endline' then cdm2_no end) as el_cdm2_raw,
+count(distinct case when cdm2_record_type = 'Baseline' then cdm2_no end) as bl_cdm2_raw, 
+count(distinct case when cdm2_record_type = 'Endline' then cdm2_no end) as el_cdm2_raw,
 
 
 MIN(CASE WHEN cp_record_type = 'Baseline' THEN cp_created_on END) AS cp_baseline_created_on,
 MIN(CASE WHEN cp_record_type = 'Endline' THEN cp_created_on END) AS cp_endline_created_on,
 count(distinct case when cp_created_from_form = true then student_barcode end) as stg_cp_sd, 
 count(distinct case when cp_created_from_form = true then cp_assessment_barcode end) as stg_cp_barcodes, 
-count(distinct case when cp_created_from_form = true and cp_record_type = 'Baseline' then cp_no end) as bl_cp_raw, 
-count(distinct case when cp_created_from_form = true and cp_record_type = 'Endline' then cp_no end) as el_cp_raw,
+count(distinct case when cp_record_type = 'Baseline' then cp_no end) as bl_cp_raw, 
+count(distinct case when cp_record_type = 'Endline' then cp_no end) as el_cp_raw,
 
 
 MIN(CASE WHEN cs_record_type = 'Baseline' THEN cs_created_on END) AS cs_baseline_created_on,
 MIN(CASE WHEN cs_record_type = 'Endline' THEN cs_created_on END) AS cs_endline_created_on,
 count(distinct case when cs_created_from_form = true then student_barcode end) as stg_cs_sd, 
 count(distinct case when cs_created_from_form = true then cs_assessment_barcode end) as stg_cs_barcodes, 
-count(distinct case when cs_created_from_form = true and cs_record_type = 'Baseline' then cs_no end) as bl_cs_raw, 
-count(distinct case when cs_created_from_form = true and cs_record_type = 'Endline' then cs_no end) as el_cs_raw,
+count(distinct case when cs_record_type = 'Baseline' then cs_no end) as bl_cs_raw, 
+count(distinct case when cs_record_type = 'Endline' then cs_no end) as el_cs_raw,
 
 
 MIN(CASE WHEN fp_record_type = 'Baseline' THEN fp_created_on END) AS fp_baseline_created_on,
 MIN(CASE WHEN fp_record_type = 'Endline' THEN fp_created_on END) AS fp_endline_created_on,
 count(distinct case when fp_created_from_form = true then student_barcode end) as stg_fp_sd, 
 count(distinct case when fp_created_from_form = true then fp_assessment_barcode end) as stg_fp_barcodes, 
-count(distinct case when fp_created_from_form = true and fp_record_type = 'Baseline' then fp_no end) as bl_fp_raw, 
-count(distinct case when fp_created_from_form = true and fp_record_type = 'Endline' then fp_no end) as el_fp_raw,
+count(distinct case when fp_record_type = 'Baseline' then fp_no end) as bl_fp_raw, 
+count(distinct case when fp_record_type = 'Endline' then fp_no end) as el_fp_raw,
 
 
 MIN(CASE WHEN saf_record_type = 'Baseline' THEN saf_created_on END) AS saf_baseline_created_on,
 MIN(CASE WHEN saf_record_type = 'Endline' THEN saf_created_on END) AS saf_endline_created_on,
 count(distinct case when saf_created_from_form = true then student_barcode end) as stg_saf_sd, 
 count(distinct case when saf_created_from_form = true then saf_assessment_barcode end) as stg_saf_barcodes, 
-count(distinct case when saf_created_from_form = true and saf_record_type = 'Baseline' then saf_no end) as bl_saf_raw, 
-count(distinct case when saf_created_from_form = true and saf_record_type = 'Endline' then saf_no end) as el_saf_raw,
+count(distinct case when saf_record_type = 'Baseline' then saf_no end) as bl_saf_raw, 
+count(distinct case when saf_record_type = 'Endline' then saf_no end) as el_saf_raw,
 count(distinct case when saf_created_from_form = true and saf_record_type IN ('Baseline', 'Endline') then saf_no end) as saf_correct,
 
 
@@ -100,8 +100,8 @@ MIN(CASE WHEN sar_record_type = 'Baseline' THEN sar_created_on END) AS sar_basel
 MIN(CASE WHEN sar_record_type = 'Endline' THEN sar_created_on END) AS sar_endline_created_on,
 count(distinct case when sar_created_from_form = true then student_barcode end) as stg_sar_sd, 
 count(distinct case when sar_created_from_form = true then sar_assessment_barcode end) as stg_sar_barcodes, 
-count(distinct case when sar_created_from_form = true and sar_record_type = 'Baseline' then sar_no end) as bl_sar_raw, 
-count(distinct case when sar_created_from_form = true and sar_record_type = 'Endline' then sar_no end) as el_sar_raw,
+count(distinct case when sar_record_type = 'Baseline' then sar_no end) as bl_sar_raw, 
+count(distinct case when sar_record_type = 'Endline' then sar_no end) as el_sar_raw,
 count(distinct case when sar_created_from_form = true and sar_record_type IN ('Baseline', 'Endline') then sar_no end) as sar_correct,
 
 SUM(CASE WHEN batch_grade like '%9%' THEN G9_Batch_Student_Flag
@@ -119,7 +119,7 @@ LEFT JOIN fp ON a.student_barcode = fp.fp_assessment_barcode
 LEFT JOIN saf ON a.student_barcode = saf.saf_assessment_barcode
 LEFT JOIN sar ON a.student_barcode = sar.sar_assessment_barcode
 
-WHERE a.school_district IN ('Nagaland', 'Palghar', 'RJ Model B','RJ Model C', 'RJ Model A', 'Dungarpur')
+WHERE a.school_district IN ('Nagaland', 'Palghar', 'RJ Model B','RJ Model C', 'RJ Model A', 'Dungarpur', 'Educate Girls', 'Masoom')
 --and batch_no = '32416' 
 group by a.batch_no, a.batch_academic_year, 
 a.school_academic_year, a.batch_grade, a.batch_language, a.fac_start_date, a.school_language, a.facilitator_name, a.facilitator_email, 
@@ -133,32 +133,32 @@ b.stg_cdm1_sd, b.stg_cdm1_barcodes, b.bl_cdm1_raw, b.el_cdm1_raw, b.cdm1_baselin
 b.cdm2_baseline_created_on, b.cdm2_endline_created_on, b.cp_baseline_created_on, b.cp_endline_created_on,
 b.cs_baseline_created_on, b.cs_endline_created_on, b.fp_baseline_created_on, b.fp_endline_created_on, b.saf_baseline_created_on, b.saf_endline_created_on, b.sar_baseline_created_on, b.sar_endline_created_on,
 
-COUNT(DISTINCT CASE WHEN cdm1.cdm1_record_type = 'Baseline' THEN cdm1.cdm1_no END) AS bl_cdm1_correct,
-COUNT(DISTINCT CASE WHEN cdm1.cdm1_record_type = 'Endline'  THEN cdm1.cdm1_no END) AS el_cdm1_correct,
+COUNT(DISTINCT CASE WHEN cdm1.cdm1_created_from_form = true and cdm1.cdm1_record_type = 'Baseline' THEN cdm1.cdm1_no END) AS bl_cdm1_correct,
+COUNT(DISTINCT CASE WHEN cdm1.cdm1_created_from_form = true and cdm1.cdm1_record_type = 'Endline'  THEN cdm1.cdm1_no END) AS el_cdm1_correct,
 
 b.stg_cdm2_sd, b.stg_cdm2_barcodes, b.bl_cdm2_raw, b.el_cdm2_raw,
-COUNT(DISTINCT CASE WHEN cdm2.cdm2_record_type = 'Baseline' THEN cdm2.cdm2_no END) AS bl_cdm2_correct,
-COUNT(DISTINCT CASE WHEN cdm2.cdm2_record_type = 'Endline'  THEN cdm2.cdm2_no END) AS el_cdm2_correct,
+COUNT(DISTINCT CASE WHEN cdm2.cdm2_created_from_form = true and cdm2.cdm2_record_type = 'Baseline' THEN cdm2.cdm2_no END) AS bl_cdm2_correct,
+COUNT(DISTINCT CASE WHEN cdm2.cdm2_created_from_form = true and cdm2.cdm2_record_type = 'Endline'  THEN cdm2.cdm2_no END) AS el_cdm2_correct,
 
 b.stg_cp_sd, b.stg_cp_barcodes, b.bl_cp_raw, b.el_cp_raw,
-COUNT(DISTINCT CASE WHEN cp.cp_record_type = 'Baseline' THEN cp.cp_no END) AS bl_cp_correct,
-COUNT(DISTINCT CASE WHEN cp.cp_record_type = 'Endline'  THEN cp.cp_no END) AS el_cp_correct,
+COUNT(DISTINCT CASE WHEN cp.cp_created_from_form = true and cp.cp_record_type = 'Baseline' THEN cp.cp_no END) AS bl_cp_correct,
+COUNT(DISTINCT CASE WHEN cp.cp_created_from_form = true and cp.cp_record_type = 'Endline'  THEN cp.cp_no END) AS el_cp_correct,
 
 b.stg_cs_sd, b.stg_cs_barcodes, b.bl_cs_raw, b.el_cs_raw,
-COUNT(DISTINCT CASE WHEN cs.cs_record_type = 'Baseline' THEN cs.cs_no END) AS bl_cs_correct,
-COUNT(DISTINCT CASE WHEN cs.cs_record_type = 'Endline'  THEN cs.cs_no END) AS el_cs_correct,
+COUNT(DISTINCT CASE WHEN cs.cs_created_from_form = true and cs.cs_record_type = 'Baseline' THEN cs.cs_no END) AS bl_cs_correct,
+COUNT(DISTINCT CASE WHEN cs.cs_created_from_form = true and cs.cs_record_type = 'Endline'  THEN cs.cs_no END) AS el_cs_correct,
 
 b.stg_fp_sd, b.stg_fp_barcodes, b.bl_fp_raw, b.el_fp_raw,
-COUNT(DISTINCT CASE WHEN fp.fp_record_type = 'Baseline' THEN fp.fp_no END) AS bl_fp_correct,
-COUNT(DISTINCT CASE WHEN fp.fp_record_type = 'Endline'  THEN fp.fp_no END) AS el_fp_correct,
+COUNT(DISTINCT CASE WHEN fp.fp_created_from_form = true and fp.fp_record_type = 'Baseline' THEN fp.fp_no END) AS bl_fp_correct,
+COUNT(DISTINCT CASE WHEN fp.fp_created_from_form = true and fp.fp_record_type = 'Endline'  THEN fp.fp_no END) AS el_fp_correct,
 
 b.stg_saf_sd, b.stg_saf_barcodes, b.bl_saf_raw, b.el_saf_raw, b.saf_correct,
-COUNT(DISTINCT CASE WHEN saf.saf_record_type = 'Baseline' THEN saf.saf_no END) AS bl_saf_correct,
-COUNT(DISTINCT CASE WHEN saf.saf_record_type = 'Endline'  THEN saf.saf_no END) AS el_saf_correct,
+COUNT(DISTINCT CASE WHEN saf.saf_created_from_form = true and saf.saf_record_type = 'Baseline' THEN saf.saf_no END) AS bl_saf_correct,
+COUNT(DISTINCT CASE WHEN saf.saf_created_from_form = true and saf.saf_record_type = 'Endline'  THEN saf.saf_no END) AS el_saf_correct,
 
 b.stg_sar_sd, b.stg_sar_barcodes, b.bl_sar_raw, b.el_sar_raw, b.sar_correct,
-COUNT(DISTINCT CASE WHEN sar.sar_record_type = 'Baseline' THEN sar.sar_no END) AS bl_sar_correct,
-COUNT(DISTINCT CASE WHEN sar.sar_record_type = 'Endline'  THEN sar.sar_no END) AS el_sar_correct,
+COUNT(DISTINCT CASE WHEN sar.sar_created_from_form = true and sar.sar_record_type = 'Baseline' THEN sar.sar_no END) AS bl_sar_correct,
+COUNT(DISTINCT CASE WHEN sar.sar_created_from_form = true and sar.sar_record_type = 'Endline'  THEN sar.sar_no END) AS el_sar_correct,
 
 MAX(Batch_Student_SD2_Count) AS Batch_Student_SD2_Count
 FROM assessment b
@@ -171,7 +171,7 @@ LEFT JOIN fp ON igd.student_barcode = fp.fp_assessment_barcode
 LEFT JOIN saf ON igd.student_barcode = saf.saf_assessment_barcode
 LEFT JOIN sar ON igd.student_barcode = sar.sar_assessment_barcode
 
-WHERE b.school_district IN ('Nagaland', 'Palghar', 'RJ Model B','RJ Model C', 'RJ Model A', 'Dungarpur') 
+WHERE b.school_district IN ('Nagaland', 'Palghar', 'RJ Model B','RJ Model C', 'RJ Model A', 'Dungarpur', 'Educate Girls', 'Masoom') 
  
 group by b.batch_no, b.batch_academic_year, 
 b.school_academic_year, b.batch_grade, b.batch_language, b.fac_start_date, b.school_language, b.facilitator_name, b.facilitator_email, 
@@ -303,84 +303,215 @@ END AS TSP_SAR_Quiz2,
 
 -- TAT for CDM1
         CASE
-    WHEN d.session_date IS NOT NULL AND d.cdm1_baseline_created_on IS NOT NULL
-    THEN DATE_DIFF(DATE(d.cdm1_baseline_created_on), d.session_date, DAY)
+  WHEN d.session_date IS NOT NULL 
+   AND d.cdm1_baseline_created_on IS NOT NULL
+  THEN (
+    SELECT COUNT(*)
+    FROM UNNEST(
+      GENERATE_DATE_ARRAY(
+        DATE_ADD(d.session_date, INTERVAL 1 DAY),   -- TAT starts from next day
+        DATE(d.cdm1_baseline_created_on)
+      )
+    ) AS dt
+    WHERE EXTRACT(DAYOFWEEK FROM dt) NOT IN (1, 7)   -- 1 = Sunday, 7 = Saturday
+  )
 END AS cdm1_baseline_TAT,
 
+-- CDM1 Endline
 CASE
-    WHEN d.session_date IS NOT NULL AND d.cdm1_endline_created_on IS NOT NULL
-    THEN DATE_DIFF(DATE(d.cdm1_endline_created_on), d.session_date, DAY)
+  WHEN d.session_date IS NOT NULL AND d.cdm1_endline_created_on IS NOT NULL
+  THEN (
+    SELECT COUNT(*)
+    FROM UNNEST(
+      GENERATE_DATE_ARRAY(
+        DATE_ADD(d.session_date, INTERVAL 1 DAY),
+        DATE(d.cdm1_endline_created_on)
+      )
+    ) dt
+    WHERE EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7)
+  )
 END AS cdm1_endline_TAT,
 
-        -- TAT for CDM2
+-- CDM2 Baseline
 CASE
-    WHEN d.session_date IS NOT NULL AND d.cdm2_baseline_created_on IS NOT NULL
-    THEN DATE_DIFF(DATE(d.cdm2_baseline_created_on), d.session_date, DAY)
+  WHEN d.session_date IS NOT NULL AND d.cdm2_baseline_created_on IS NOT NULL
+  THEN (
+    SELECT COUNT(*)
+    FROM UNNEST(
+      GENERATE_DATE_ARRAY(
+        DATE_ADD(d.session_date, INTERVAL 1 DAY),
+        DATE(d.cdm2_baseline_created_on)
+      )
+    ) dt
+    WHERE EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7)
+  )
 END AS cdm2_baseline_TAT,
 
+-- CDM2 Endline
 CASE
-    WHEN d.session_date IS NOT NULL AND d.cdm2_endline_created_on IS NOT NULL
-    THEN DATE_DIFF(DATE(d.cdm2_endline_created_on), d.session_date, DAY)
+  WHEN d.session_date IS NOT NULL AND d.cdm2_endline_created_on IS NOT NULL
+  THEN (
+    SELECT COUNT(*)
+    FROM UNNEST(
+      GENERATE_DATE_ARRAY(
+        DATE_ADD(d.session_date, INTERVAL 1 DAY),
+        DATE(d.cdm2_endline_created_on)
+      )
+    ) dt
+    WHERE EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7)
+  )
 END AS cdm2_endline_TAT,
 
-        -- TAT for CP
+-- CP Baseline
 CASE
-    WHEN d.session_date IS NOT NULL AND d.cp_baseline_created_on IS NOT NULL
-    THEN DATE_DIFF(DATE(d.cp_baseline_created_on), d.session_date, DAY)
+  WHEN d.session_date IS NOT NULL AND d.cp_baseline_created_on IS NOT NULL
+  THEN (
+    SELECT COUNT(*)
+    FROM UNNEST(
+      GENERATE_DATE_ARRAY(
+        DATE_ADD(d.session_date, INTERVAL 1 DAY),
+        DATE(d.cp_baseline_created_on)
+      )
+    ) dt
+    WHERE EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7)
+  )
 END AS cp_baseline_TAT,
 
+-- CP Endline
 CASE
-    WHEN d.session_date IS NOT NULL AND d.cp_endline_created_on IS NOT NULL
-    THEN DATE_DIFF(DATE(d.cp_endline_created_on), d.session_date, DAY)
+  WHEN d.session_date IS NOT NULL AND d.cp_endline_created_on IS NOT NULL
+  THEN (
+    SELECT COUNT(*)
+    FROM UNNEST(
+      GENERATE_DATE_ARRAY(
+        DATE_ADD(d.session_date, INTERVAL 1 DAY),
+        DATE(d.cp_endline_created_on)
+      )
+    ) dt
+    WHERE EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7)
+  )
 END AS cp_endline_TAT,
 
-        -- TAT for CS
+-- CS Baseline
 CASE
-    WHEN d.session_date IS NOT NULL AND d.cs_baseline_created_on IS NOT NULL
-    THEN DATE_DIFF(DATE(d.cs_baseline_created_on), d.session_date, DAY)
+  WHEN d.session_date IS NOT NULL AND d.cs_baseline_created_on IS NOT NULL
+  THEN (
+    SELECT COUNT(*)
+    FROM UNNEST(
+      GENERATE_DATE_ARRAY(
+        DATE_ADD(d.session_date, INTERVAL 1 DAY),
+        DATE(d.cs_baseline_created_on)
+      )
+    ) dt
+    WHERE EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7)
+  )
 END AS cs_baseline_TAT,
 
+-- CS Endline
 CASE
-    WHEN d.session_date IS NOT NULL AND d.cs_endline_created_on IS NOT NULL
-    THEN DATE_DIFF(DATE(d.cs_endline_created_on), d.session_date, DAY)
+  WHEN d.session_date IS NOT NULL AND d.cs_endline_created_on IS NOT NULL
+  THEN (
+    SELECT COUNT(*)
+    FROM UNNEST(
+      GENERATE_DATE_ARRAY(
+        DATE_ADD(d.session_date, INTERVAL 1 DAY),
+        DATE(d.cs_endline_created_on)
+      )
+    ) dt
+    WHERE EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7)
+  )
 END AS cs_endline_TAT,
 
-
-        -- TAT for FP
+-- FP Baseline
 CASE
-    WHEN d.session_date IS NOT NULL AND d.fp_baseline_created_on IS NOT NULL
-    THEN DATE_DIFF(DATE(d.fp_baseline_created_on), d.session_date, DAY)
+  WHEN d.session_date IS NOT NULL AND d.fp_baseline_created_on IS NOT NULL
+  THEN (
+    SELECT COUNT(*)
+    FROM UNNEST(
+      GENERATE_DATE_ARRAY(
+        DATE_ADD(d.session_date, INTERVAL 1 DAY),
+        DATE(d.fp_baseline_created_on)
+      )
+    ) dt
+    WHERE EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7)
+  )
 END AS fp_baseline_TAT,
 
+-- FP Endline
 CASE
-    WHEN d.session_date IS NOT NULL AND d.fp_endline_created_on IS NOT NULL
-    THEN DATE_DIFF(DATE(d.fp_endline_created_on), d.session_date, DAY)
+  WHEN d.session_date IS NOT NULL AND d.fp_endline_created_on IS NOT NULL
+  THEN (
+    SELECT COUNT(*)
+    FROM UNNEST(
+      GENERATE_DATE_ARRAY(
+        DATE_ADD(d.session_date, INTERVAL 1 DAY),
+        DATE(d.fp_endline_created_on)
+      )
+    ) dt
+    WHERE EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7)
+  )
 END AS fp_endline_TAT,
 
-
-        -- TAT for SAF
+-- SAF Baseline
 CASE
-    WHEN d.session_date IS NOT NULL AND d.saf_baseline_created_on IS NOT NULL
-    THEN DATE_DIFF(DATE(d.saf_baseline_created_on), d.session_date, DAY)
+  WHEN d.session_date IS NOT NULL AND d.saf_baseline_created_on IS NOT NULL
+  THEN (
+    SELECT COUNT(*)
+    FROM UNNEST(
+      GENERATE_DATE_ARRAY(
+        DATE_ADD(d.session_date, INTERVAL 1 DAY),
+        DATE(d.saf_baseline_created_on)
+      )
+    ) dt
+    WHERE EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7)
+  )
 END AS saf_baseline_TAT,
 
+-- SAF Endline
 CASE
-    WHEN d.session_date IS NOT NULL AND d.saf_endline_created_on IS NOT NULL
-    THEN DATE_DIFF(DATE(d.saf_endline_created_on), d.session_date, DAY)
+  WHEN d.session_date IS NOT NULL AND d.saf_endline_created_on IS NOT NULL
+  THEN (
+    SELECT COUNT(*)
+    FROM UNNEST(
+      GENERATE_DATE_ARRAY(
+        DATE_ADD(d.session_date, INTERVAL 1 DAY),
+        DATE(d.saf_endline_created_on)
+      )
+    ) dt
+    WHERE EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7)
+  )
 END AS saf_endline_TAT,
 
-        -- TAT for SAR
+-- SAR Baseline
 CASE
-    WHEN d.session_date IS NOT NULL AND d.sar_baseline_created_on IS NOT NULL
-    THEN DATE_DIFF(DATE(d.sar_baseline_created_on), d.session_date, DAY)
+  WHEN d.session_date IS NOT NULL AND d.sar_baseline_created_on IS NOT NULL
+  THEN (
+    SELECT COUNT(*)
+    FROM UNNEST(
+      GENERATE_DATE_ARRAY(
+        DATE_ADD(d.session_date, INTERVAL 1 DAY),
+        DATE(d.sar_baseline_created_on)
+      )
+    ) dt
+    WHERE EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7)
+  )
 END AS sar_baseline_TAT,
 
+-- SAR Endline
 CASE
-    WHEN d.session_date IS NOT NULL AND d.sar_endline_created_on IS NOT NULL
-    THEN DATE_DIFF(DATE(d.sar_endline_created_on), d.session_date, DAY)
+  WHEN d.session_date IS NOT NULL AND d.sar_endline_created_on IS NOT NULL
+  THEN (
+    SELECT COUNT(*)
+    FROM UNNEST(
+      GENERATE_DATE_ARRAY(
+        DATE_ADD(d.session_date, INTERVAL 1 DAY),
+        DATE(d.sar_endline_created_on)
+      )
+    ) dt
+    WHERE EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7)
+  )
 END AS sar_endline_TAT
-    FROM attendance_join d
-    
+FROM attendance_join d
 )
 
 
@@ -390,16 +521,17 @@ e.stg_cdm1_sd, e.stg_cdm1_barcodes, e.bl_cdm1_raw, e.bl_cdm1_correct, e.el_cdm1_
 e.bl_cdm2_raw, e.bl_cdm2_correct, e.el_cdm2_raw, e.el_cdm2_correct, e.stg_cp_sd, e.stg_cp_barcodes, e.bl_cp_raw, e.bl_cp_correct,
 e.el_cp_raw, e.el_cp_correct, e.stg_cs_sd, e.stg_cs_barcodes, e.bl_cs_raw, e.bl_cs_correct, e.el_cs_raw, e.el_cs_correct,
 e.stg_fp_sd, e.stg_fp_barcodes, e.bl_fp_raw, e.bl_fp_correct, e.el_fp_raw, e.el_fp_correct, e.stg_saf_sd, e.stg_saf_barcodes,
-e.bl_saf_raw, e.el_saf_raw, e.saf_correct, e.stg_sar_sd, e.stg_sar_barcodes, e.bl_sar_raw, e.el_sar_raw, e.sar_correct, 
-e.session_batch_no, e.no_of_students_facilitated, e.TSP_Baseline, e.TSP_Endline,
+e.bl_saf_raw, e.saf_correct, e.stg_sar_sd, e.stg_sar_barcodes, e.bl_sar_raw, e.sar_correct, 
+ e.no_of_students_facilitated, e.TSP_Baseline, e.TSP_Endline,
 e.TSP_SAF_Interest, e.TSP_SAF_Aptitude, e.TSP_SAF_QF, e.TSP_SAR_Reality,
 e.TSP_SAR_Quiz2, e.session_date, e.cdm1_baseline_created_on, e.cdm1_endline_created_on,
 e.cdm1_baseline_TAT, e.cdm1_endline_TAT, e.cdm2_baseline_created_on, e.cdm2_endline_created_on, e.cdm2_baseline_TAT, 
 e.cdm2_endline_TAT, e.cp_baseline_created_on, e.cp_endline_created_on, e.cp_baseline_TAT, e.cp_endline_TAT, 
 e.cs_baseline_created_on, e.cs_endline_created_on, e.cs_baseline_TAT, e.cs_endline_TAT,
 e.fp_baseline_created_on, e.fp_endline_created_on, e.fp_baseline_TAT, e.fp_endline_TAT, 
-e.saf_baseline_created_on, e.saf_endline_created_on, e.saf_baseline_TAT, e.saf_endline_TAT, 
-e.sar_baseline_created_on, e.sar_endline_created_on, e.sar_baseline_TAT, e.sar_endline_TAT
+e.saf_baseline_created_on, e.saf_baseline_TAT, 
+e.sar_baseline_created_on, e.sar_baseline_TAT
 from somrt e
-WHERE e.batch_academic_year >= 2023 
+
+
 --where batch_no = '32416'
