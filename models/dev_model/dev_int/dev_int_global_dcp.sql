@@ -56,11 +56,16 @@ student_expanded AS (
         s.g10_barcode,
         s.g11_barcode,
         s.g12_barcode,
+        s.g9_batch_id,
+        s.g10_batch_id,
+        s.g11_batch_id,
+        s.g12_batch_id,
         s.recommedation_status,
         s.recommendation_report_status,
         s.student_details_2_submitted,
         s.g9_whatsapp_no, s.g10_whatsapp_no, s.g11_whatsapp_no, s.g12_whatsapp_no, s.g9_alternate_no, 
-        s.g10_alternate_no, s.g11_alternate_no, s.g12_alternate_no, s.student_details_2_grade, 
+        s.g10_alternate_no, s.g11_alternate_no, s.g12_alternate_no,
+        s.student_details_2_grade, 
 s.Student_GRADE_COUNT, s.G9_Batch_Student_Flag, s.G10_Batch_Student_Flag, s.G11_Batch_Student_Flag, s.G12_Batch_Student_Flag,
         -- Counting number of non-null barcodes
         (
@@ -123,7 +128,34 @@ final AS (
     FROM student_batch sb
 )
 
-SELECT *
+SELECT student_id , student_name , gender , birth_year , birth_date , student_grade , student_barcode , 
+student_batch_id , whatsapp_no , alternate_no , first_barcode , current_barcode , current_batch_no , current_grade1 , 
+current_grade2 , religion , caste , father_education , father_occupation , mother_education , mother_occupation , 
+possible_career_report , career_tracks , clarity_report , current_aspiration , possible_careers_1 , possible_careers_2 , 
+possible_careers_3 , followup_1_aspiration , followup_2_aspiration , reality_1 , reality_2 , reality_3 , reality_4 , reality_5 , 
+reality_6 , reality_7 , reality_8 , g9_barcode , g10_barcode , g11_barcode , g12_barcode , recommedation_status , 
+recommendation_report_status , student_details_2_submitted , g9_whatsapp_no , g10_whatsapp_no , g11_whatsapp_no , g12_whatsapp_no , 
+g9_alternate_no , g10_alternate_no , g11_alternate_no , g12_alternate_no , 
+Case when(g9_batch_id is not null and student_details_2_grade like '%9%' and batch_grade = 'Grade 9') THEN 'Grade 9'
+        when(g10_batch_id is not null and student_details_2_grade like '%10%' and batch_grade = 'Grade 10') THEN 'Grade 10'
+        when(g11_batch_id is not null and student_details_2_grade like '%11%' and batch_grade = 'Grade 11') THEN 'Grade 11'
+        when(g12_batch_id is not null and student_details_2_grade like '%12%' and batch_grade = 'Grade 12') THEN 'Grade 12' 
+        ELSE 'N/A' END AS 
+        student_details_2_grade, 
+Student_GRADE_COUNT , G9_Batch_Student_Flag , G10_Batch_Student_Flag , G11_Batch_Student_Flag , G12_Batch_Student_Flag , 
+total_years_barcode_filled , batch_id , batch_no , batch_academic_year , batch_grade , batch_language , no_of_students_facilitated , 
+fac_start_date , fac_end_date , allocation_email_sent , batch_facilitator_id , facilitator_academic_year , facilitator_id , 
+facilitator_name , facilitator_email , batch_school_id , school_id , school_name , school_taluka , school_ward , school_district , 
+school_state , school_academic_year , school_language , enrolled_g9 , enrolled_g10 , enrolled_g11 , enrolled_g12 , 
+tagged_for_counselling , school_partner , school_area , batch_donor_id , donor_id , batch_donor , resolved_batch_id , student_age , 
+is_unmapped_student , total_stud_have_report , sar_atleast_one_reality
+
 FROM final
---where student_details_2_grade is not null
+
 --where batch_no = '32416'
+
+/*Case when(s.g9_batch_id is not null and s.student_details_2_grade like '%9%' and s.batch_grade = 'Grade 9') THEN 'Grade 9'
+        when(s.g10_batch_id is not null and s.student_details_2_grade like '%10%' and s.batch_grade = 'Grade 10') THEN 'Grade 10'
+        when(s.g11_batch_id is not null and s.student_details_2_grade like '%11%' and s.batch_grade = 'Grade 11') THEN 'Grade 11'
+        when(s.g12_batch_id is not null and s.student_details_2_grade like '%12%' and s.batch_grade = 'Grade 12') THEN 'Grade 12' END AS 
+        student_details_2_grade*/

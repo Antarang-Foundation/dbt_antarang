@@ -72,7 +72,9 @@ with
             Followup2Aspiration__c as followup_2_aspiration,
             Student_Details_2__c as student_details_2_submitted,
             SD2_Grade__c as student_details_2_grade
-        from {{ source('salesforce', 'Contact') }} where IsDeleted = false and lower(Full_Name__c) not like '%test%'
+        from {{ source('salesforce', 'Contact') }} where IsDeleted = false and 
+        (lower(Full_Name__c) not like '%test%' or Id in ('003OW00000NemiDYAR', '003OW00000S958SYAR'))
+
     ),
 
     recordtypes as (
@@ -103,5 +105,7 @@ with
 
 select *
 from dev_stg_student
+/*where first_barcode IN ('2503014777',
+'2503009554')*/
 
 

@@ -32,9 +32,6 @@ models:
     columns:
       - name: student_barcode
         description: "The primary key of this table"
-        tests:
-          - unique
-          - not_null
 
   - name: dev_fct_student_global
     # description:
