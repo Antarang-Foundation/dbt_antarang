@@ -142,6 +142,18 @@ Case when(g9_batch_id is not null and student_details_2_grade like '%9%' and bat
         when(g12_batch_id is not null and student_details_2_grade like '%12%' and batch_grade = 'Grade 12') THEN 'Grade 12' 
         ELSE 'N/A' END AS 
         student_details_2_grade, 
+Case 
+    When 
+        (Case 
+            When(g9_batch_id is not null and student_details_2_grade like '%9%' and batch_grade = 'Grade 9') Then 'Grade 9'
+            When(g10_batch_id is not null and student_details_2_grade like '%10%' and batch_grade = 'Grade 10') Then 'Grade 10'
+            When(g11_batch_id is not null and student_details_2_grade like '%11%' and batch_grade = 'Grade 11') Then 'Grade 11'
+            When(g12_batch_id is not null and student_details_2_grade like '%12%' and batch_grade = 'Grade 12') Then 'Grade 12' 
+            Else 'N/A' 
+        end) != 'N/A'
+    Then student_barcode
+    Else null
+end as sd2_student_barcode,
 Student_GRADE_COUNT , G9_Batch_Student_Flag , G10_Batch_Student_Flag , G11_Batch_Student_Flag , G12_Batch_Student_Flag , 
 total_years_barcode_filled , batch_id , batch_no , batch_academic_year , batch_grade , batch_language , no_of_students_facilitated , 
 fac_start_date , fac_end_date , allocation_email_sent , batch_facilitator_id , facilitator_academic_year , facilitator_id , 
@@ -152,7 +164,7 @@ is_unmapped_student , total_stud_have_report , sar_atleast_one_reality
 
 FROM final
 
---where batch_no = '32416'
+--where student_details_2_grade != 'N/A'
 
 /*Case when(s.g9_batch_id is not null and s.student_details_2_grade like '%9%' and s.batch_grade = 'Grade 9') THEN 'Grade 9'
         when(s.g10_batch_id is not null and s.student_details_2_grade like '%10%' and s.batch_grade = 'Grade 10') THEN 'Grade 10'

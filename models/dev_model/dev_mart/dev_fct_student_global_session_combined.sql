@@ -12,7 +12,7 @@ stg_session as (
         batch_max_overall_attendance, batch_max_student_session_attendance, batch_max_session_counseling_attendance, 
         batch_max_session_flexible_attendance, batch_max_session_parent_attendance 
     from {{ ref('dev_stg_session') }} 
-    where session_date >= '2023-01-01'
+    where session_date >= '2023-01-01' or session_date IS NULL
 ),  
 
 -- Deduplicate SOMRT (pick 1 row per session_id)
@@ -75,13 +75,14 @@ t5 as (
         on t1.session_id = t2.somrt_session_id
     left join stg_attendance_dedup t3 
         on coalesce(t1.session_id, t2.somrt_session_id) = t3.attendance_session_id
-    inner join dcp_students t4 
+    left join dcp_students t4 
         on t4.student_batch_id = t1.session_batch_id
-    where t4.student_barcode is not null
+    --where t4.student_barcode is not null
 )
 
 select *
 from t5
-
+--group by school_district, batch_academic_year
+--order by batch_academic_year, school_district
 --2994327
 --273884
