@@ -84,7 +84,21 @@ renamed as (
 recordtypes as (select record_type_id, record_type from {{ ref('seed_recordtype') }}),
     
     stg_student as (
-        select * except (record_type_id)
+        select student_id, student_name, first_barcode, gender, current_barcode, g9_barcode, g10_barcode, g11_barcode, 
+        g12_barcode, current_batch_no, g9_batch_id, g10_batch_id, g11_batch_id, g12_batch_id, current_grade1, 
+        current_grade2, birth_year, birth_date, currently_studying, g9_whatsapp_no, g10_whatsapp_no, 
+        g11_whatsapp_no, g12_whatsapp_no, g9_alternate_no, g10_alternate_no, g11_alternate_no, g12_alternate_no, 
+        religion, caste, father_education, father_occupation, mother_education, mother_occupation,
+        reality_1, reality_2, reality_3, reality_4, reality_5, reality_6, reality_7, reality_8, aspiration_1, 
+        aspiration_2, aspiration_3, recommedation_status, recommendation_report_status, possible_career_report, 
+        career_tracks, clarity_report, current_aspiration, possible_careers_1, possible_careers_2, possible_careers_3, 
+        followup_1_aspiration, followup_2_aspiration, student_details_2_submitted, student_details_2_grade,
+        LENGTH(student_details_2_grade) - LENGTH(REPLACE(student_details_2_grade, ';', '')) + 1 AS Student_GRADE_COUNT,
+        Case when(g9_batch_id is not null and student_details_2_grade like '%9%') then 1 Else 0 END G9_Batch_Student_Flag,
+        Case when(g10_batch_id is not null and student_details_2_grade like '%10%') then 1 Else 0 END G10_Batch_Student_Flag,
+        Case when(g11_batch_id is not null and student_details_2_grade like '%11%') then 1 Else 0 END G11_Batch_Student_Flag,
+        Case when(g12_batch_id is not null and student_details_2_grade like '%12%') then 1 Else 0 END G12_Batch_Student_Flag
+        
         from 
             renamed
             --left join recordtypes using (record_type_id) where record_type = 'CA Student' and first_barcode is not null
