@@ -347,7 +347,7 @@ FROM hm_session h
 --FULL OUTER JOIN hm_assessment a ON a.ass_school_name = h.school_name
 FULL OUTER JOIN hm_assessment_dedup a ON a.ass_school_name = h.school_name
 LEFT JOIN int_global_session s ON h.hm_school_id = s.school_id
-LEFT JOIN hm_orientation o ON h.school_state = o.hm_state
+LEFT JOIN hm_orientation o ON h.school_district = o.hm_state
 ),
 
 final_dedup AS (
