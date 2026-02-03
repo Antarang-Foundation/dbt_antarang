@@ -532,6 +532,7 @@ e.fp_baseline_created_on, e.fp_endline_created_on, e.fp_baseline_TAT, e.fp_endli
 e.saf_baseline_created_on, e.saf_baseline_TAT, 
 e.sar_baseline_created_on, e.sar_baseline_TAT
 from somrt e
+where batch_academic_year >= 2023
 
 
 --where batch_no = '32416'

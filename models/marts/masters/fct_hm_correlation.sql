@@ -24,16 +24,6 @@ expected_sessions_agg AS (
         SUM(total_student_present) AS total_student_present_sum,
 
         SUM(total_parent_present) AS total_parent_present_sum,
-
-        /*SUM(CASE WHEN session_type = 'Student' AND session_date IS NOT NULL 
-            AND total_student_present IS NOT NULL AND total_parent_present IS NOT NULL 
-            THEN total_student_present
-        ELSE 0 END) AS no_of_student_sessions_attended_by_hm,
-
-        SUM(CASE WHEN session_type = 'Parent' AND session_date IS NOT NULL 
-            AND total_parent_present IS NOT NULL AND total_student_present IS NOT NULL 
-            THEN total_parent_present
-        ELSE 0 END) AS no_of_parent_sessions_attended_by_hm*/
     FROM {{ ref('dev_int_hm_session') }}
     GROUP BY hm_id
 ),
@@ -347,7 +337,7 @@ FROM hm_session h
 --FULL OUTER JOIN hm_assessment a ON a.ass_school_name = h.school_name
 FULL OUTER JOIN hm_assessment_dedup a ON a.ass_school_name = h.school_name
 LEFT JOIN int_global_session s ON h.hm_school_id = s.school_id
-LEFT JOIN hm_orientation o ON h.school_district = o.hm_state
+LEFT JOIN hm_orientation o ON h.school_state = o.hm_state
 ),
 
 final_dedup AS (
@@ -364,15 +354,6 @@ final_dedup AS (
 )
 
 select * from final_dedup
---Where school_name in ('Bhagwan Mahavir Govt. High School, Honda', 'GHSS Satakha')
---where school_name = 'Bhagwan Mahavir Govt. High School, Honda' --'GHSS Satakha' --'Bhagwan Mahavir Govt. High School, Honda'
---where school_state = 'Nagaland'
---select count(distinct hm_school_id) AS total_school_count, SUM(CASE WHEN hm_school_id IS NULL THEN 1 ELSE 0 END) AS school_missing from final
---where hm_school_id in ('0017F00000L5VXFQA3', '0017F00000L55KjQAJ', '0019C000003geeQQAQ')
---order by hm_school_id
---where complete_session_status >=5
---where hm_school_id = '0017F00000JeL7AQAV'
---where hm_school_id = '0019C000003PjIXQA0'
---order by hm_school_id
+
 
 
