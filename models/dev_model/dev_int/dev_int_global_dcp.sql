@@ -126,9 +126,9 @@ final AS (
             ELSE 1 
         END AS sar_atleast_one_reality
     FROM student_batch sb
-)
+),
 
-SELECT student_id , student_name , gender , birth_year , birth_date , student_grade , student_barcode , 
+t1 as (SELECT student_id , student_name , gender , birth_year , birth_date , student_grade , student_barcode , 
 student_batch_id , whatsapp_no , alternate_no , first_barcode , current_barcode , current_batch_no , current_grade1 , 
 current_grade2 , religion , caste , father_education , father_occupation , mother_education , mother_occupation , 
 possible_career_report , career_tracks , clarity_report , current_aspiration , possible_careers_1 , possible_careers_2 , 
@@ -136,24 +136,23 @@ possible_careers_3 , followup_1_aspiration , followup_2_aspiration , reality_1 ,
 reality_6 , reality_7 , reality_8 , g9_barcode , g10_barcode , g11_barcode , g12_barcode , recommedation_status , 
 recommendation_report_status , student_details_2_submitted , g9_whatsapp_no , g10_whatsapp_no , g11_whatsapp_no , g12_whatsapp_no , 
 g9_alternate_no , g10_alternate_no , g11_alternate_no , g12_alternate_no , 
-Case when(g9_batch_id is not null and student_details_2_grade like '%9%' and batch_grade = 'Grade 9') THEN 'Grade 9'
-        when(g10_batch_id is not null and student_details_2_grade like '%10%' and batch_grade = 'Grade 10') THEN 'Grade 10'
-        when(g11_batch_id is not null and student_details_2_grade like '%11%' and batch_grade = 'Grade 11') THEN 'Grade 11'
-        when(g12_batch_id is not null and student_details_2_grade like '%12%' and batch_grade = 'Grade 12') THEN 'Grade 12' 
-        ELSE 'N/A' END AS 
-        student_details_2_grade, 
-Case 
-    When 
-        (Case 
-            When(g9_batch_id is not null and student_details_2_grade like '%9%' and batch_grade = 'Grade 9') Then 'Grade 9'
-            When(g10_batch_id is not null and student_details_2_grade like '%10%' and batch_grade = 'Grade 10') Then 'Grade 10'
-            When(g11_batch_id is not null and student_details_2_grade like '%11%' and batch_grade = 'Grade 11') Then 'Grade 11'
-            When(g12_batch_id is not null and student_details_2_grade like '%12%' and batch_grade = 'Grade 12') Then 'Grade 12' 
-            Else 'N/A' 
-        end) != 'N/A'
-    Then student_barcode
-    Else null
-end as sd2_student_barcode,
+CASE
+    WHEN student_details_2_grade IS NULL THEN 'N/A'
+    WHEN REGEXP_CONTAINS(student_details_2_grade, r'(9|IX)')
+         THEN 'Grade 9'
+    WHEN REGEXP_CONTAINS(student_details_2_grade, r'(10|X)')
+         THEN 'Grade 10'
+    WHEN REGEXP_CONTAINS(student_details_2_grade, r'(11|XI)')
+         THEN 'Grade 11'
+    WHEN REGEXP_CONTAINS(student_details_2_grade, r'(12|XII)')
+         THEN 'Grade 12'
+    ELSE 'N/A'
+END AS student_details_2_grade, 
+CASE 
+    WHEN student_details_2_grade != 'N/A'
+    THEN student_barcode
+    ELSE NULL
+END AS sd2_student_barcode,
 Student_GRADE_COUNT , G9_Batch_Student_Flag , G10_Batch_Student_Flag , G11_Batch_Student_Flag , G12_Batch_Student_Flag , 
 total_years_barcode_filled , batch_id , batch_no , batch_academic_year , batch_grade , batch_language , no_of_students_facilitated , 
 fac_start_date , fac_end_date , allocation_email_sent , batch_facilitator_id , facilitator_academic_year , facilitator_id , 
@@ -163,6 +162,10 @@ tagged_for_counselling , school_partner , school_area , batch_donor_id , donor_i
 is_unmapped_student , total_stud_have_report , sar_atleast_one_reality
 
 FROM final
+)
+
+select * from t1 
+
 
 --where student_details_2_grade != 'N/A'
 
