@@ -72,7 +72,7 @@ t5 as (
     left join stg_attendance_student t3
     on coalesce(t1.session_id, t2.somrt_session_id)
      = t3.attendance_session_id
-    left join dcp_students t4
+    full outer join dcp_students t4
     on t4.student_id = t3.attendance_student_id
     --where t4.student_barcode is not null
 )
