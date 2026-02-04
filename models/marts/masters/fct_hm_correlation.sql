@@ -259,16 +259,33 @@ int_global_session AS (
         GROUP BY school_id
 ),
 
-hm_orientation AS (SELECT date as orientation_date, state as hm_state, overall_attendance as orientation_attendance
+hm_orientation AS (SELECT SAFE_CAST(date AS DATE) AS orientation_date, state as hm_state, district as hm_district, overall_attendance as orientation_attendance, district_overall_attendance
         from {{ source('salesforce', 'Attendace_sheet') }}
         where year = '2025'
+),
+
+hm_orientation_district AS (
+    SELECT
+        hm_state,
+        hm_district,
+        orientation_date,
+        district_overall_attendance
+    FROM (
+        SELECT *,
+               ROW_NUMBER() OVER (
+                   PARTITION BY hm_state, hm_district
+                   ORDER BY orientation_date
+               ) AS rn
+        FROM hm_orientation
+    )
+    WHERE rn = 1
 ),
 
 final as (
     SELECT h.hm_school_id, h.facilitator_name, h.session_academic_year, h.batch_language, --COALESCE (h.school_name, a.ass_school_name) AS school_name,
     h.school_name, h.school_taluka, h.school_district, 
-    h.school_state, h.school_area, h.school_partner, o.orientation_date, o.orientation_attendance, s.fac_start_date, s.fac_end_date, 
-    DATE_DIFF(DATE(fac_start_date), CAST(orientation_date AS DATE), DAY) AS TAT_1,
+    h.school_state, h.school_area, h.school_partner, od.orientation_date, os.orientation_attendance, od.district_overall_attendance, s.fac_start_date, s.fac_end_date, 
+    DATE_DIFF(DATE(s.fac_start_date), od.orientation_date, DAY) AS TAT_1,
     h.no_of_expected_hm_sessions, 
     h.no_of_session_scheduled, h.no_of_checkin_sessions_completed, h.no_of_year_end_sessions_completed, h.no_of_sessions_hm_attended, 
     h.school_completion_status, h.no_of_expected_sessions, h.no_of_expected_student_sessions, h.no_of_expected_parent_sessions, 
@@ -337,7 +354,10 @@ FROM hm_session h
 --FULL OUTER JOIN hm_assessment a ON a.ass_school_name = h.school_name
 FULL OUTER JOIN hm_assessment_dedup a ON a.ass_school_name = h.school_name
 LEFT JOIN int_global_session s ON h.hm_school_id = s.school_id
-LEFT JOIN hm_orientation o ON h.school_state = o.hm_state
+LEFT JOIN hm_orientation_district od ON h.school_state = od.hm_state AND h.school_district = od.hm_district
+-- STATE-LEVEL join (keeps ALL overall_attendance rows)
+LEFT JOIN hm_orientation os ON h.school_state = os.hm_state
+
 ),
 
 final_dedup AS (
