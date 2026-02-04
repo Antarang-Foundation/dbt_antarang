@@ -16,29 +16,25 @@ stg_session as (
 ),  
 
 -- Deduplicate SOMRT (pick 1 row per session_id)
-stg_somrt_dedup as (
-    select 
-        somrt_session_id,
-        somrt_batch_id,
-        max(omr_type) as omr_type
+stg_somrt as (
+    select *
     from {{ ref('dev_stg_somrt') }}
-    group by somrt_session_id, somrt_batch_id
 ),
 
 -- Deduplicate attendance (pick 1 row per session_id)
-stg_attendance_dedup as (
+stg_attendance_student as (
     select
         attendance_session_id,
-        max(attendance_status) as attendance_status,
-        max(guardian_attendance) as guardian_attendance
+        attendance_student_id,
+        attendance_status,
+        guardian_attendance
     from {{ ref('dev_stg_attendance') }}
-    group by attendance_session_id
 ),
 
 -- Flattened student data
 dcp_students as (
     select distinct 
-        student_barcode, student_name, caste, school_name, school_area, school_district, 
+        student_id, student_barcode, student_name, caste, school_name, school_area, school_district, 
         school_partner, school_state, school_taluka, batch_academic_year, batch_donor, 
         batch_grade, batch_language, batch_no, fac_start_date, facilitator_email, 
         facilitator_name, gender, no_of_students_facilitated, student_batch_id, batch_id
@@ -62,7 +58,7 @@ t5 as (
         t1.batch_max_session_parent_attendance, 
 
         t2.omr_type, t2.somrt_session_id, t2.somrt_batch_id,
-        t3.attendance_status, t3.guardian_attendance, t3.attendance_session_id,
+        t3.attendance_status, t3.guardian_attendance, t3.attendance_session_id, t3.attendance_student_id,
 
         t4.student_barcode, t4.student_name, t4.caste, t4.school_name, t4.school_area, 
         t4.school_district, t4.school_partner, t4.school_state, t4.school_taluka, 
@@ -71,12 +67,13 @@ t5 as (
         t4.gender, t4.no_of_students_facilitated, t4.student_batch_id, t4.batch_id
 
     from stg_session t1
-    left join stg_somrt_dedup t2 
-        on t1.session_id = t2.somrt_session_id
-    left join stg_attendance_dedup t3 
-        on coalesce(t1.session_id, t2.somrt_session_id) = t3.attendance_session_id
-    left join dcp_students t4 
-        on t4.student_batch_id = t1.session_batch_id
+    left join stg_somrt t2
+  on t1.session_id = t2.somrt_session_id
+    left join stg_attendance_student t3
+    on coalesce(t1.session_id, t2.somrt_session_id)
+     = t3.attendance_session_id
+    left join dcp_students t4
+    on t4.student_id = t3.attendance_student_id
     --where t4.student_barcode is not null
 )
 
