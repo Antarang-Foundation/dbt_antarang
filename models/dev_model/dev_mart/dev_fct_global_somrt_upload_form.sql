@@ -119,7 +119,7 @@ LEFT JOIN fp ON a.student_barcode = fp.fp_assessment_barcode
 LEFT JOIN saf ON a.student_barcode = saf.saf_assessment_barcode
 LEFT JOIN sar ON a.student_barcode = sar.sar_assessment_barcode
 
-WHERE a.school_district IN ('Nagaland', 'Palghar', 'RJ Model B','RJ Model C', 'RJ Model A', 'Dungarpur', 'Educate Girls', 'Masoom')
+WHERE a.school_partner NOT IN ('KMCT', 'Learning Links Foundation', 'Akanksha Foundation', 'Masoom', 'Educate Girls')
 --and batch_no = '32416' 
 group by a.batch_no, a.batch_academic_year, 
 a.school_academic_year, a.batch_grade, a.batch_language, a.fac_start_date, a.school_language, a.facilitator_name, a.facilitator_email, 
@@ -171,7 +171,7 @@ LEFT JOIN fp ON igd.student_barcode = fp.fp_assessment_barcode
 LEFT JOIN saf ON igd.student_barcode = saf.saf_assessment_barcode
 LEFT JOIN sar ON igd.student_barcode = sar.sar_assessment_barcode
 
-WHERE b.school_district IN ('Nagaland', 'Palghar', 'RJ Model B','RJ Model C', 'RJ Model A', 'Dungarpur', 'Educate Girls', 'Masoom') 
+WHERE b.school_partner NOT IN ('KMCT', 'Learning Links Foundation', 'Akanksha Foundation', 'Masoom', 'Educate Girls') 
  
 group by b.batch_no, b.batch_academic_year, 
 b.school_academic_year, b.batch_grade, b.batch_language, b.fac_start_date, b.school_language, b.facilitator_name, b.facilitator_email, 
@@ -512,10 +512,10 @@ CASE
   )
 END AS sar_endline_TAT
 FROM attendance_join d
-)
+),
 
 
-select e.batch_no, e.batch_academic_year, e.batch_grade, e.batch_language, e.fac_start_date, e.facilitator_name, e.facilitator_email,
+final as (select e.batch_no, e.batch_academic_year, e.batch_grade, e.batch_language, e.fac_start_date, e.facilitator_name, e.facilitator_email,
 e.school_name, e.school_taluka, e.school_ward, e.school_district, e.school_state, e.school_partner, e.school_area, e.batch_donor, e.Batch_Student_SD2_Count,
 e.stg_cdm1_sd, e.stg_cdm1_barcodes, e.bl_cdm1_raw, e.bl_cdm1_correct, e.el_cdm1_raw, e.el_cdm1_correct, e.stg_cdm2_sd, e.stg_cdm2_barcodes,
 e.bl_cdm2_raw, e.bl_cdm2_correct, e.el_cdm2_raw, e.el_cdm2_correct, e.stg_cp_sd, e.stg_cp_barcodes, e.bl_cp_raw, e.bl_cp_correct,
@@ -532,7 +532,10 @@ e.fp_baseline_created_on, e.fp_endline_created_on, e.fp_baseline_TAT, e.fp_endli
 e.saf_baseline_created_on, e.saf_baseline_TAT, 
 e.sar_baseline_created_on, e.sar_baseline_TAT
 from somrt e
-where batch_academic_year >= 2023
+where batch_academic_year >= 2023 
+)
+
+select * from final
 
 
 --where batch_no = '32416'
