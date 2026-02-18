@@ -60,7 +60,7 @@ sessions_attended_agg AS (
 -- Now get hm_session details using only the latest row per hm_id for static info
 hm_session AS (
     SELECT 
-        b.hm_school_id, b.facilitator_name, b.session_academic_year, b.batch_language, 
+        b.hm_school_id, b.facilitator_name, b.facilitator_email, b.session_academic_year, b.batch_language, 
         b.school_name, b.school_taluka, b.school_district, b.school_state, 
         b.school_area, b.school_partner, 
 
@@ -109,7 +109,7 @@ hm_session AS (
         ON b.hm_id = sa.hm_id
     WHERE b.rn_last = 1
     GROUP BY 
-        b.hm_school_id, b.facilitator_name, b.session_academic_year, b.batch_language, 
+        b.hm_school_id, b.facilitator_name, b.facilitator_email, b.session_academic_year, b.batch_language, 
         b.school_name, b.school_taluka, b.school_district, b.school_state, 
         b.school_area, b.school_partner, 
         es.total_expected_sessions, 
@@ -282,7 +282,7 @@ hm_orientation_district AS (
 ),
 
 final as (
-    SELECT h.hm_school_id, h.facilitator_name, h.session_academic_year, h.batch_language, --COALESCE (h.school_name, a.ass_school_name) AS school_name,
+    SELECT h.hm_school_id, h.facilitator_name, h.facilitator_email, h.session_academic_year, h.batch_language, --COALESCE (h.school_name, a.ass_school_name) AS school_name,
     h.school_name, h.school_taluka, h.school_district, 
     h.school_state, h.school_area, h.school_partner, od.orientation_date, os.orientation_attendance, od.district_overall_attendance, s.fac_start_date, s.fac_end_date, 
     DATE_DIFF(DATE(s.fac_start_date), od.orientation_date, DAY) AS TAT_1,

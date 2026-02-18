@@ -27,7 +27,7 @@ CASE
     WHEN sd2_grade != 'N/A'
     THEN student_barcode
     ELSE NULL
-END AS sd2_student_barcode
+END AS sd2_barcode
 from t3
     where batch_academic_year>=2023 
     order by student_id, student_grade

@@ -93,28 +93,127 @@ t8 AS (
 
     -- TAT1: Session → OMR received
     CASE 
-      WHEN total_student_present IS NOT NULL AND session_date IS NOT NULL AND omr_received_date IS NOT NULL 
-      THEN (SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM d) NOT IN (1, 7)) FROM UNNEST(GENERATE_DATE_ARRAY( 
-        DATE_ADD(session_date, INTERVAL 1 DAY),omr_received_date)) AS d)
-        WHEN total_student_present IS NOT NULL AND session_date IS NOT NULL AND omr_received_date IS NULL THEN (
-        SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM d) NOT IN (1, 7))FROM UNNEST(GENERATE_DATE_ARRAY(DATE_ADD(session_date, INTERVAL 1 DAY),
-        CURRENT_DATE())) AS d)END AS TAT1,
+WHEN total_student_present IS NOT NULL
+  AND session_date IS NOT NULL
+  AND omr_received_date IS NOT NULL
+THEN (
+  CASE 
+    WHEN omr_received_date >= session_date THEN
+      (
+        SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM d) NOT IN (1,7))
+        FROM UNNEST(
+          GENERATE_DATE_ARRAY(
+            DATE_ADD(session_date, INTERVAL 1 DAY),
+            omr_received_date
+          )
+        ) d
+      )
+    ELSE
+      -(
+        SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM d) NOT IN (1,7))
+        FROM UNNEST(
+          GENERATE_DATE_ARRAY(
+            DATE_ADD(omr_received_date, INTERVAL 1 DAY),
+            session_date
+          )
+        ) d
+      )
+  END
+)
+END AS TAT1,
 
     -- TAT2: OMR received → First upload
-    CASE WHEN total_student_present IS NOT NULL AND omr_received_date IS NOT NULL AND first_omr_upload_date IS NOT NULL 
-      THEN (SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM d) NOT IN (1, 7))FROM UNNEST(GENERATE_DATE_ARRAY(DATE_ADD(omr_received_date, INTERVAL 1 DAY),first_omr_upload_date
-    )) AS d)
-    WHEN total_student_present IS NOT NULL AND omr_received_date IS NOT NULL AND first_omr_upload_date IS NOT NULL THEN (
-    SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM d) NOT IN (1, 7)) FROM UNNEST(GENERATE_DATE_ARRAY(DATE_ADD(omr_received_date, INTERVAL 1 DAY),
-    CURRENT_DATE())) AS d)END AS TAT2,
+    CASE 
+WHEN total_student_present IS NOT NULL 
+  AND omr_received_date IS NOT NULL 
+  AND first_omr_upload_date IS NOT NULL 
+THEN (
+  CASE 
+    WHEN first_omr_upload_date >= omr_received_date THEN
+      (
+        SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM d) NOT IN (1,7))
+        FROM UNNEST(
+          GENERATE_DATE_ARRAY(
+            DATE_ADD(omr_received_date, INTERVAL 1 DAY),
+            first_omr_upload_date
+          )
+        ) d
+      )
+    ELSE
+      -(
+        SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM d) NOT IN (1,7))
+        FROM UNNEST(
+          GENERATE_DATE_ARRAY(
+            DATE_ADD(first_omr_upload_date, INTERVAL 1 DAY),
+            omr_received_date
+          )
+        ) d
+      )
+  END
+)
+
+WHEN total_student_present IS NOT NULL 
+  AND omr_received_date IS NOT NULL 
+  AND first_omr_upload_date IS NULL
+THEN (
+  SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM d) NOT IN (1,7))
+  FROM UNNEST(
+    GENERATE_DATE_ARRAY(
+      DATE_ADD(omr_received_date, INTERVAL 1 DAY),
+      CURRENT_DATE()
+    )
+  ) d
+)
+
+END AS TAT2,
 
     -- TAT3: Session → First upload
-    CASE WHEN total_student_present IS NOT NULL AND session_date IS NOT NULL AND first_omr_upload_date IS NOT NULL THEN (
-        SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM d) NOT IN (1, 7))FROM UNNEST(GENERATE_DATE_ARRAY(DATE_ADD(session_date, INTERVAL 1 DAY),
-    first_omr_upload_date)) AS d) WHEN total_student_present IS NOT NULL AND session_date IS NOT NULL AND first_omr_upload_date IS NOT NULL 
-      THEN (SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM d) NOT IN (1, 7))FROM UNNEST(GENERATE_DATE_ARRAY(DATE_ADD(session_date, INTERVAL 1 DAY),
-    CURRENT_DATE())) AS d)END AS TAT3
+    CASE 
+WHEN total_student_present IS NOT NULL 
+  AND session_date IS NOT NULL 
+  AND first_omr_upload_date IS NOT NULL 
+THEN (
+  CASE 
+    WHEN first_omr_upload_date >= session_date THEN
+      (
+        SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM d) NOT IN (1,7))
+        FROM UNNEST(
+          GENERATE_DATE_ARRAY(
+            DATE_ADD(session_date, INTERVAL 1 DAY),
+            first_omr_upload_date
+          )
+        ) d
+      )
+    ELSE
+      -(
+        SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM d) NOT IN (1,7))
+        FROM UNNEST(
+          GENERATE_DATE_ARRAY(
+            DATE_ADD(first_omr_upload_date, INTERVAL 1 DAY),
+            session_date
+          )
+        ) d
+      )
+  END
+)
+
+WHEN total_student_present IS NOT NULL 
+  AND session_date IS NOT NULL 
+  AND first_omr_upload_date IS NULL
+THEN (
+  SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM d) NOT IN (1,7))
+  FROM UNNEST(
+    GENERATE_DATE_ARRAY(
+      DATE_ADD(session_date, INTERVAL 1 DAY),
+      CURRENT_DATE()
+    )
+  ) d
+)
+
+END AS TAT3
   FROM t7
+  WHERE school_partner not in ('KMCT', 'Learning Links Foundation', 'Akanksha Foundation') --108 entries excluded
 )
 
 select * from t8
+--WHERE school_partner in ('KMCT', 'Learning Links Foundation', 'Akanksha Foundation')

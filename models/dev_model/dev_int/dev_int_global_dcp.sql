@@ -164,7 +164,7 @@ is_unmapped_student , total_stud_have_report , sar_atleast_one_reality
 FROM final
 )
 
-select * from t1 
+select * from t1
 
 
 --where student_details_2_grade != 'N/A'
