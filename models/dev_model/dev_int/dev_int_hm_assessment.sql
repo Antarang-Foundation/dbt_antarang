@@ -24,11 +24,15 @@ int_global_session AS (
 pre_program as (
     select 
       pre_name,	pre_date, pre_contact_number, Q5_pre_option_1, Q5_pre_option_2, Q5_pre_option_3, Q7_pre_Other_Please_Specify, 
-      Q8_pre_Others_Please_Specify,	district_name as Q3_pre_district_name, Q4_pre__years_in_this_school, Q5_pre_organisation_last_year,	
-      Q6_pre_heard_of_antarang,	Q7_pre_how_did_you_hear, Q8_pre_which_grade, Q9_pre_which_follow, Q10_pre_which_follow,	
-      Q11_pre_think_of_career,	Q12_pre_confident_in_career_program, Q13_pre_program_activities, Q14_pre_program_session, 
-      Q15_pre_important_secondary_students,	Q16A_pre_program_inc_tions_all_students, 
-      Q16C_pre_encouraging_students_choosing_careers, Q16B_pre_supporting_students_training_after_school, 
+      Q8_pre_Others_Please_Specify,	district_name as Q3_pre_district_name, {{ clean_survey_column('Q4_pre__years_in_this_school') }} as Q4_pre__years_in_this_school, 
+      {{ clean_survey_column('Q5_pre_organisation_last_year') }} as Q5_pre_organisation_last_year,	
+      Q6_pre_heard_of_antarang,	Q7_pre_how_did_you_hear, {{ clean_survey_column('Q8_pre_which_grade') }} as Q8_pre_which_grade, Q9_pre_which_follow, Q10_pre_which_follow,	
+      Q11_pre_think_of_career, {{ clean_survey_column('Q12_pre_confident_in_career_program') }} as	Q12_pre_confident_in_career_program, {{ clean_survey_column('Q13_pre_program_activities') }} as Q13_pre_program_activities, 
+      {{ clean_survey_column('Q14_pre_program_session') }} as Q14_pre_program_session, 
+      {{ clean_survey_column('Q15_pre_important_secondary_students') }} as Q15_pre_important_secondary_students, 
+      {{ clean_survey_column('Q16A_pre_program_inc_tions_all_students') }} as Q16A_pre_program_inc_tions_all_students, 
+      {{ clean_survey_column('Q16C_pre_encouraging_students_choosing_careers') }} as Q16C_pre_encouraging_students_choosing_careers, 
+      {{ clean_survey_column('Q16B_pre_supporting_students_training_after_school') }} as Q16B_pre_supporting_students_training_after_school, 
       Q17_pre_one_thing_for_you_students, pre_id, pre_submission_time, pre_uuid, pre_end, 
       pre_start, school_name as pre_school_name, 
       COALESCE (school_Rajasthan, school_Mumbai, school_Goa, school_Nagaland, school_Thane, school_Pune, school_Osmanabad, 
@@ -39,28 +43,37 @@ pre_program as (
 post_program as (
     select 
         pp_date, pp_name, Q5_pp_others_please_specify, Q10_pp_answer_that_apply, 
-        Q11_pp_thin_for_career_program,	Q12_pp_confident, Q13_pp_program_activities, Q14_pp_program_sessions, 
-        Q15_pp_important_secondary_students, Q16_pp_career_decisions, Q17_pp_materials_that_apply, 
-        Q18A_pp_program_inc_of_all_students, Q18C_pp_encouraging_students_choosing_careers,	
-        Q18B_pp_supporting_students_raining_after_school, Q18D_pp_header, Q19_pp_leave_school, 
-        Q20_pp_thin_for_students,	Q4_pp_how_many_year_in_this_school,	Q5_pp_org_our_school_last_year,	
-        Q6_pp_heard_of_antarng,	Q7_pp_how_did_you_hear,	Q8_pp_in_which_grade, Q9_pp_which_of_the_following, pp_id, Q7_pp_other_please_specify,
+        {{ clean_survey_column('Q11_pp_thin_for_career_program') }} as Q11_pp_thin_for_career_program, {{ clean_survey_column('Q12_pp_confident') }} as Q12_pp_confident, 
+        {{ clean_survey_column('Q13_pp_program_activities') }} as Q13_pp_program_activities, {{ clean_survey_column('Q14_pp_program_sessions') }} as Q14_pp_program_sessions, 
+        {{ clean_survey_column('Q15_pp_important_secondary_students') }} as Q15_pp_important_secondary_students, 
+        {{ clean_survey_column('Q15_pp_important_secondary_students') }} as Q16_pp_career_decisions, Q17_pp_materials_that_apply, 
+        {{ clean_survey_column('Q18A_pp_program_inc_of_all_students') }} as Q18A_pp_program_inc_of_all_students, 
+        {{ clean_survey_column('Q18C_pp_encouraging_students_choosing_careers') }} as Q18C_pp_encouraging_students_choosing_careers,	
+        {{ clean_survey_column('Q18B_pp_supporting_students_raining_after_school') }} as Q18B_pp_supporting_students_raining_after_school, 
+        {{ clean_survey_column('Q18D_pp_header') }} as Q18D_pp_header, Q19_pp_leave_school, 
+        Q20_pp_thin_for_students, {{ clean_survey_column('Q4_pp_how_many_year_in_this_school') }} as	Q4_pp_how_many_year_in_this_school,	
+        {{ clean_survey_column('Q5_pp_org_our_school_last_year') }} as Q5_pp_org_our_school_last_year,	
+        Q6_pp_heard_of_antarng,	Q7_pp_how_did_you_hear, {{ clean_survey_column('Q8_pp_in_which_grade') }} as Q8_pp_in_which_grade, Q9_pp_which_of_the_following, pp_id, Q7_pp_other_please_specify,
         pp_submission_time, pp_uuid, pp_end, pp_start, school_name as pp_school_name, Q8_pp_Others_Please_Specify_001, Q3_district_name as Q3_pp_district_name, contact_number as pp_contact_number,
         COALESCE (school_Rajasthan, school_Mumbai, school_Goa, school_Nagaland, 
         school_Thane, school_Pune, school_Osmanabad, school_Yamuna_Nagar, school_name) as pp_school_names
+
     from {{ source('kobo', 'post_program_questionaire_form') }}
 ),
 
 post_questionair as (
     select 
-        po_date, po_name, Q5_po_others_please_specify, Q10_po_secondary_students, 
-        Q11A_po_orientation_session_covered, Q11C_po_encouraging_students_choosing_careers, 
-        Q11B_po_content_was_easy_to_understand, Q11D_po_header, Q12_po_thin_for_students, 
+        po_date, po_name, Q5_po_others_please_specify, {{ clean_survey_column('Q10_po_secondary_students') }} as Q10_po_secondary_students, 
+        {{ clean_survey_column('Q11A_po_orientation_session_covered') }} as Q11A_po_orientation_session_covered, 
+        {{ clean_survey_column('Q11C_po_encouraging_students_choosing_careers') }} as Q11C_po_encouraging_students_choosing_careers, 
+        {{ clean_survey_column('Q11B_po_content_was_easy_to_understand') }} as Q11B_po_content_was_easy_to_understand, 
+        {{ clean_survey_column('Q11D_po_header') }} as Q11D_po_header, Q12_po_thin_for_students, 
         Q13_po_big_rom_this_orientation, Q14_po_nex_after_this_orientation, Q4_po_heard_of_antarang, 
-        Q5_po_grade, Q6_po_which_follow, Q7_po_role, Q8_po_materials, Q9_po_confidence, po_id, po_submission_time,
+        {{ clean_survey_column('Q5_po_grade') }} as Q5_po_grade, Q6_po_which_follow, Q7_po_role, Q8_po_materials, 
+        {{ clean_survey_column('Q9_po_confidence') }} as Q9_po_confidence, po_id, po_submission_time,
         po_uuid, po_end, po_start, school_name as po_school_name,
         COALESCE (school_Rajasthan, school_Mumbai, school_Goa, school_name, school_Nagaland, school_Thane, school_Pune, 
-        school_Osmanabad, school_Yamuna_Nagar) as po_school_names, Q3_district_name as Q3_po_district_name, contact_number as po_contact_number, 
+        school_Osmanabad, school_Yamuna_Nagar) as po_school_names, Q3_district_name as Q3_po_district_name, contact_number as po_contact_number 
     from {{ source('kobo', 'post_orientation_questionaire_form') }}
 ),
 
