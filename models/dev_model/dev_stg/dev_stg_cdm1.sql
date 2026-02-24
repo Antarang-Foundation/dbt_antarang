@@ -22,11 +22,17 @@ WITH source AS (
         Career_Choice_2__c AS q4_2,
         Career_Choice_2_Marks__c AS q4_2_marks,
         Career_Choice_Total_Marks__c AS q4_marks,
-        (X1_A_good_career_plan_has_the_following__c + Interest_Marks__c + Aptitude_Marks__c + Career_Choice_Total_Marks__c) AS cdm1_total_marks,
+        (X1_A_good_career_plan_has_the_following__c 
+            + Interest_Marks__c 
+            + Aptitude_Marks__c 
+            + Career_Choice_Total_Marks__c) AS cdm1_total_marks,
         Error_Status__c AS error_status, 
         Data_Clean_up__c AS data_cleanup,
         Marks_Recalculated__c AS marks_recalculated,
-        Student_Linked__c AS student_linked 
+        Student_Linked__c AS student_linked,
+        Q4_7__c, Q4_10__c, Q4_16__c, Q4_36__c, Q4_38__c,
+        Q4_45__c, Q4_46__c, Q4_43__c, Q4_6__c,
+        Q4_47__c, Q4_48__c, Q4_49__c, Q4_50__c, Q4_29__c
     FROM {{ source('salesforce', 'OMR_Assessment__c') }} 
     WHERE IsDeleted = false
 ),
@@ -57,14 +63,49 @@ t2 AS (
         cdm1_no,
 
         CASE 
-            WHEN cdm1_no IS NOT NULL AND (q1 IS NOT NULL OR q2_1 IS NOT NULL OR q2_2 IS NOT NULL OR q3_1 IS NOT NULL OR q3_2 IS NOT NULL OR q4_1 IS NOT NULL OR q4_2 IS NOT NULL) 
-                THEN 1 
-            WHEN cdm1_no IS NOT NULL AND (q1 IS NULL AND q2_1 IS NULL AND q2_2 IS NULL AND q3_1 IS NULL AND q3_2 IS NULL AND q4_1 IS NULL AND q4_2 IS NULL) 
-                THEN 0 
+            WHEN cdm1_no IS NOT NULL AND (
+                q1 IS NOT NULL OR q2_1 IS NOT NULL OR q2_2 IS NOT NULL 
+                OR q3_1 IS NOT NULL OR q3_2 IS NOT NULL 
+                OR q4_1 IS NOT NULL OR q4_2 IS NOT NULL
+            ) THEN 1 
+            WHEN cdm1_no IS NOT NULL AND (
+                q1 IS NULL AND q2_1 IS NULL AND q2_2 IS NULL 
+                AND q3_1 IS NULL AND q3_2 IS NULL 
+                AND q4_1 IS NULL AND q4_2 IS NULL
+            ) THEN 0 
         END AS is_non_null,
 
-       assessment_grade, assessment_academic_year, assessment_batch_id, q1,	q1_marks, q2_1,	q2_2, q2_marks, q3_1, q3_2, q3_marks,
-       q4_1, q4_1_marks, q4_2, q4_2_marks, q4_marks, cdm1_total_marks, error_status, data_cleanup, marks_recalculated, student_linked
+        assessment_grade,
+        assessment_academic_year,
+        assessment_batch_id,
+        q1, q1_marks,
+        q2_1, q2_2, q2_marks,
+        q3_1, q3_2, q3_marks,
+        q4_1, q4_1_marks,
+        q4_2, q4_2_marks,
+        q4_marks,
+        cdm1_total_marks,
+        error_status,
+        data_cleanup,
+        marks_recalculated,
+        student_linked,
+
+        -- Q4 fields (ONLY ONCE)
+        Q4_7__c,
+        Q4_10__c,
+        Q4_16__c,
+        Q4_36__c,
+        Q4_38__c,
+        Q4_45__c,
+        Q4_46__c,
+        Q4_43__c,
+        Q4_6__c,
+        Q4_47__c,
+        Q4_48__c,
+        Q4_49__c,
+        Q4_50__c,
+        Q4_29__c
+
     FROM joined_source
 )
 
