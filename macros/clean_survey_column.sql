@@ -6,17 +6,25 @@ NULLIF(
       REGEXP_REPLACE(
         REGEXP_REPLACE(
           REGEXP_REPLACE(
-            LOWER({{ column_name }}),
-            r'_+', ' '              -- underscores → space
+            REGEXP_REPLACE(
+              REGEXP_REPLACE(
+                LOWER({{ column_name }}),
+
+                r'(\d+)_+(\d+)', r'\1-\2'   -- numeric ranges
+
+              ),
+              r'_+', ' '                    -- underscores → space
+            ),
+            r'\bdon t\b', "don't"           -- ✅ fix don't
           ),
-          r'\s{2,}', ', '           -- multiple spaces → comma
+          r'\s{2,}', ', '                   -- multi-space → comma
         ),
-        r'\s+,', ','                -- cleanup accidental commas
+        r'\s+,', ','                        -- cleanup commas
       ),
-      r',\s*$', ''                  -- ✅ remove trailing comma
+      r',\s*$', ''                          -- remove trailing comma
     )
   ),
-''                                   -- ✅ convert empty → NULL
+''                                          -- empty → NULL
 )
 
 {% endmacro %}
