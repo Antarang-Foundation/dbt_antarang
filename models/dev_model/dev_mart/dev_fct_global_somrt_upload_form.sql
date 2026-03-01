@@ -125,7 +125,10 @@ LEFT JOIN fp ON a.student_barcode = fp.fp_assessment_barcode
 LEFT JOIN saf ON a.student_barcode = saf.saf_assessment_barcode
 LEFT JOIN sar ON a.student_barcode = sar.sar_assessment_barcode
 
-WHERE a.school_partner NOT IN ('KMCT', 'Learning Links Foundation', 'Akanksha Foundation', 'Masoom', 'Educate Girls')
+WHERE a.school_partner NOT IN ('KMCT', 'Learning Links Foundation', 'Akanksha Foundation', 'Masoom', 'Educate Girls',
+'Ambernath Municipal Corporation', 'Bhivandi Municipal Corporation', 'GOG', 'Govt. of Haryana', 'Kalyan Dombivali Municipal Corporation',
+'Mira Bhayander Municipal Corporation', 'Municipal Corporation of Greater Mumbai', 'Navi Mumbai Municipal Corporation', 'Pimpri-Chinchwad Municipal Corporation',
+'Private', 'Private (New Module)', 'Pune Municipal Corporation', 'Social Welfare Depatment', 'Zilla Parishad', 'Thane Municipal Corporation')
 --and batch_no = '32416' 
 group by a.batch_no, a.batch_academic_year, 
 a.school_academic_year, a.batch_grade, a.batch_language, a.fac_start_date, a.school_language, a.facilitator_name, a.facilitator_email, 
@@ -177,7 +180,10 @@ LEFT JOIN fp ON igd.student_barcode = fp.fp_assessment_barcode
 LEFT JOIN saf ON igd.student_barcode = saf.saf_assessment_barcode
 LEFT JOIN sar ON igd.student_barcode = sar.sar_assessment_barcode
 
-WHERE b.school_partner NOT IN ('KMCT', 'Learning Links Foundation', 'Akanksha Foundation', 'Masoom', 'Educate Girls') 
+WHERE b.school_partner NOT IN ('KMCT', 'Learning Links Foundation', 'Akanksha Foundation', 'Masoom', 'Educate Girls',
+'Ambernath Municipal Corporation', 'Bhivandi Municipal Corporation', 'GOG', 'Govt. of Haryana', 'Kalyan Dombivali Municipal Corporation',
+'Mira Bhayander Municipal Corporation', 'Municipal Corporation of Greater Mumbai', 'Navi Mumbai Municipal Corporation', 'Pimpri-Chinchwad Municipal Corporation',
+'Private', 'Private (New Module)', 'Pune Municipal Corporation', 'Social Welfare Depatment', 'Zilla Parishad', 'Thane Municipal Corporation') 
  
 group by b.batch_no, b.batch_academic_year, 
 b.school_academic_year, b.batch_grade, b.batch_language, b.fac_start_date, b.school_language, b.facilitator_name, b.facilitator_email, 
