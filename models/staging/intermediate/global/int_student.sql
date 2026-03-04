@@ -14,6 +14,6 @@ with
     union all (select g12_barcode as student_barcode, g12_batch_id as student_batch_id, 'Grade 12' as `student_grade`, * from t0 where g12_barcode is not null or g12_batch_id is not null))
 
     select student_id, student_name, first_barcode, student_grade, student_barcode, student_batch_id,  
-    * except (student_id, first_barcode, student_name, student_grade, student_barcode, student_batch_id, g9_barcode, g10_barcode, g11_barcode, g12_barcode)  
+    * except (student_id, first_barcode, student_name, student_grade, student_barcode, student_batch_id)  
 
     from t1 order by student_id, student_grade 

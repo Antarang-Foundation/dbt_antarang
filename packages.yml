@@ -6,4 +6,4 @@ packages:
   - package: tnightengale/dbt_meta_testing
     version: 0.3.6
   - package: elementary-data/elementary
-    version: 0.15.2
+    version: 0.22.0
