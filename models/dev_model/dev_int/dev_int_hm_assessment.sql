@@ -1,6 +1,6 @@
 with 
 int_global as (
-    select school_id, school_name, batch_academic_year as session_academic_year, batch_language, school_taluka, school_district,
+    select school_id, school_name, batch_academic_year, batch_language, school_taluka, school_district,
 school_state, school_area, school_partner, facilitator_name, facilitator_email,
 ROW_NUMBER() OVER (
             PARTITION BY school_id 
@@ -26,7 +26,7 @@ pre_program as (
       pre_name,	pre_date, pre_contact_number, Q5_pre_option_1, Q5_pre_option_2, Q5_pre_option_3, Q7_pre_Other_Please_Specify, 
       Q8_pre_Others_Please_Specify,	district_name as Q3_pre_district_name, {{ clean_survey_column('Q4_pre__years_in_this_school') }} as Q4_pre__years_in_this_school, 
       {{ clean_survey_column('Q5_pre_organisation_last_year') }} as Q5_pre_organisation_last_year,	
-      {{ clean_survey_column('Q6_pre_heard_of_antarang') }} as Q6_pre_heard_of_antarang, {{ clean_kobo_text('Q7_pre_how_did_you_hear') }} AS Q7_pre_how_did_you_hear, {{ clean_survey_column('Q8_pre_which_grade') }} as Q8_pre_which_grade, 
+      {{ clean_survey_column('Q6_pre_heard_of_antarang') }} as Q6_pre_heard_of_antarang, {{ clean_kobo_text('Q7_pre_how_did_you_hear') }} AS Q7_pre_how_did_you_hear, {{ clean_kobo_text('Q8_pre_which_grade') }} AS Q8_pre_which_grade, 
       {{ clean_kobo_text('Q9_pre_which_follow') }} AS Q9_pre_which_follow, {{ clean_kobo_text('Q10_pre_which_follow') }} AS Q10_pre_which_follow,	
       {{ clean_survey_column('Q11_pre_think_of_career') }} as Q11_pre_think_of_career, {{ clean_survey_column('Q12_pre_confident_in_career_program') }} as	Q12_pre_confident_in_career_program, {{ clean_survey_column('Q13_pre_program_activities') }} as Q13_pre_program_activities, 
       {{ clean_survey_column('Q14_pre_program_session') }} as Q14_pre_program_session, 
@@ -54,7 +54,7 @@ post_program as (
         {{ clean_survey_column('Q18D_pp_header') }} as Q18D_pp_header, Q19_pp_leave_school, 
         Q20_pp_thin_for_students, {{ clean_survey_column('Q4_pp_how_many_year_in_this_school') }} as	Q4_pp_how_many_year_in_this_school,	
         {{ clean_survey_column('Q5_pp_org_our_school_last_year') }} as Q5_pp_org_our_school_last_year,	
-        Q6_pp_heard_of_antarng,	{{ clean_kobo_text('Q7_pp_how_did_you_hear') }} AS Q7_pp_how_did_you_hear, {{ clean_survey_column('Q8_pp_in_which_grade') }} as Q8_pp_in_which_grade, 
+        Q6_pp_heard_of_antarng,	{{ clean_kobo_text('Q7_pp_how_did_you_hear') }} AS Q7_pp_how_did_you_hear, {{ clean_kobo_text('Q8_pp_in_which_grade') }} AS Q8_pp_in_which_grade, 
         {{ clean_kobo_text('Q9_pp_which_of_the_following') }} AS Q9_pp_which_of_the_following, pp_id, Q7_pp_other_please_specify,
         pp_submission_time, pp_uuid, pp_end, pp_start, school_name as pp_school_name, Q8_pp_Others_Please_Specify_001, Q3_district_name as Q3_pp_district_name, contact_number as pp_contact_number,
         COALESCE (school_Rajasthan, school_Mumbai, school_Goa, school_Nagaland, 
@@ -71,12 +71,15 @@ post_questionair as (
         {{ clean_survey_column('Q11B_po_content_was_easy_to_understand') }} as Q11B_po_content_was_easy_to_understand, 
         {{ clean_survey_column('Q11D_po_header') }} as Q11D_po_header, Q12_po_thin_for_students, 
         Q13_po_big_rom_this_orientation, Q14_po_nex_after_this_orientation, Q4_po_heard_of_antarang, 
-        {{ clean_survey_column('Q5_po_grade') }} as Q5_po_grade, {{ clean_kobo_text('Q6_po_which_follow') }} AS Q6_po_which_follow, {{ clean_kobo_text('Q7_po_role') }} AS Q7_po_role, {{ clean_kobo_text('Q8_po_materials') }} AS Q8_po_materials, 
+        {{ clean_kobo_text('Q5_po_grade') }} AS Q5_po_grade, {{ clean_kobo_text('Q6_po_which_follow') }} AS Q6_po_which_follow, {{ clean_kobo_text('Q7_po_role') }} AS Q7_po_role, {{ clean_kobo_text('Q8_po_materials') }} AS Q8_po_materials, 
         {{ clean_survey_column('Q9_po_confidence') }} as Q9_po_confidence, po_id, po_submission_time,
         po_uuid, po_end, po_start, school_name as po_school_name,
         COALESCE (school_Rajasthan, school_Mumbai, school_Goa, school_name, school_Nagaland, school_Thane, school_Pune, 
         school_Osmanabad, school_Yamuna_Nagar) as po_school_names, Q3_district_name as Q3_po_district_name, contact_number as po_contact_number 
     from {{ source('kobo', 'post_orientation_questionaire_form') }}
+),
+
+hm_session as (select distinct hm_school_id, session_academic_year from {{ ref('dev_stg_hm_session') }}
 ),
 
 source_joined as 
@@ -85,18 +88,20 @@ source_joined as
     s.*,
     pre.*, 
     pp.*, 
-    po.*
+    po.*,
+    a.*,
 from int_global h
 left join pre_program pre on h.school_name = pre.pre_school_names
     left join post_program pp on h.school_name = pp.pp_school_names
     left join post_questionair po on h.school_name = po.po_school_names
     left join int_global_session s on h.school_id = s.school_id
+    left join hm_session a on h.school_id = a.hm_school_id
 where rn = 1
 ),
 
 expand_column as 
-(select  s.school_name, s.session_academic_year, s.batch_language, s.school_taluka, s.school_district,
-s.school_state, s.school_area, s.school_partner, s.facilitator_name, s.facilitator_email, s.fac_start_date, s.fac_end_date,
+(select  s.school_name, s.batch_language, s.school_taluka, s.school_district,
+s.school_state, s.school_area, s.school_partner, s.facilitator_name, s.facilitator_email, s.fac_start_date, s.fac_end_date, s.session_academic_year, s.hm_school_id,
   
   s.pre_name, pre_contact_number,	s.pre_date, s.Q5_pre_option_1, s.Q5_pre_option_2, s.Q5_pre_option_3, s.Q7_pre_Other_Please_Specify, 
       s.Q8_pre_Others_Please_Specify, s.Q3_pre_district_name, s.Q4_pre__years_in_this_school, s.Q5_pre_organisation_last_year,	
@@ -283,8 +288,8 @@ case when Q17_pp_materials_that_apply like '%Counselling_Report%' then 1 else 0 
 from source_joined s
 ),
 
-final as (select school_name, session_academic_year, batch_language, school_taluka, school_district,
-school_state, school_area, school_partner, facilitator_name, facilitator_email, fac_start_date, fac_end_date,
+final as (select school_name, batch_language, school_taluka, school_district,
+school_state, school_area, school_partner, facilitator_name, facilitator_email, fac_start_date, fac_end_date, session_academic_year, hm_school_id,
 
 pre_name, pre_start, pre_end, pre_date, pre_school_names, Q3_pre_district_name, pre_contact_number,
 Q4_pre__years_in_this_school, Q5_pre_organisation_last_year, Q5_pre_option_1, Q5_pre_option_2,
@@ -500,6 +505,8 @@ from expand_column
 )
 
 select * from final
+where session_academic_year is not null
+
 --where school_name = 'Mohd. Umer Rajjab Road Municipal Urdu'
 
 
