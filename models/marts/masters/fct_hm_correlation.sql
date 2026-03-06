@@ -1,4 +1,5 @@
 WITH 
+
 base AS (
     SELECT 
         *,
@@ -8,22 +9,25 @@ base AS (
         ) AS rn_last,
         CASE
             WHEN session_date IS NOT NULL 
-            AND total_student_present IS NOT NULL 
-            AND total_parent_present IS NOT NULL THEN 1 END
-         AS completed_sessions
+             AND total_student_present IS NOT NULL 
+             AND total_parent_present IS NOT NULL 
+            THEN 1 
+        END AS completed_sessions
     FROM {{ ref('dev_int_hm_session') }}
 ),
 
--- Aggregate expected sessions BEFORE rn_last filter
+latest_base AS (
+    SELECT *
+    FROM base
+    WHERE rn_last = 1
+),
+
 expected_sessions_agg AS (
     SELECT 
         hm_id,
-        
         SUM(batch_expected_session) AS total_expected_sessions,
-
         SUM(total_student_present) AS total_student_present_sum,
-
-        SUM(total_parent_present) AS total_parent_present_sum,
+        SUM(total_parent_present) AS total_parent_present_sum
     FROM {{ ref('dev_int_hm_session') }}
     GROUP BY hm_id
 ),
@@ -57,69 +61,140 @@ sessions_attended_agg AS (
     FROM {{ ref('dev_int_hm_session') }}
     GROUP BY hm_id
 ),
--- Now get hm_session details using only the latest row per hm_id for static info
-hm_session AS (
-    SELECT 
-        b.hm_school_id, b.facilitator_name, b.facilitator_email, b.session_academic_year, b.batch_language, 
-        b.school_name, b.school_taluka, b.school_district, b.school_state, 
-        b.school_area, b.school_partner, 
 
-        es.total_expected_sessions AS no_of_expected_sessions,
+expected_hm_sessions_agg AS (
 
-        COUNT(DISTINCT b.hm_id) AS no_of_expected_hm_sessions,
-    
-        COUNT(DISTINCT CASE 
-            WHEN b.hm_session_date IS NOT NULL THEN b.hm_session_date 
-        END) AS no_of_session_scheduled,
+SELECT
+    hm_school_id,
 
-        COUNT(DISTINCT CASE 
-            WHEN LOWER(TRIM(b.hm_session_name)) IN ('check-in 1','check-in 2','check-in 3','check-in 4')
-             AND LOWER(TRIM(b.session_status)) IN ('complete', 'completed')
-            THEN b.hm_id 
-        END) AS no_of_checkin_sessions_completed,
+    COUNT(DISTINCT LOWER(TRIM(hm_session_name))) 
+        AS no_of_expected_hm_sessions
 
-        COUNT(DISTINCT CASE 
-            WHEN LOWER(TRIM(b.hm_session_name)) = 'year end annual report'
-             AND LOWER(TRIM(b.session_status)) IN ('complete', 'completed')
-            THEN b.hm_id 
-        END) AS no_of_year_end_sessions_completed,
+FROM {{ ref('dev_int_hm_session') }}
 
-        COUNT(DISTINCT CASE 
-            WHEN LOWER(TRIM(b.hm_session_name)) IN 
-                ('check-in 1','check-in 2','check-in 3','check-in 4','year end annual report')
-             AND LOWER(TRIM(b.hm_attended)) = 'yes'
-            THEN b.hm_id 
-        END) AS no_of_sessions_hm_attended,
+WHERE LOWER(TRIM(hm_session_name)) IN (
+    'check-in 1',
+    'check-in 2',
+    'check-in 3',
+    'check-in 4',
+    'year end annual report'
+)
 
-        COUNT(*) AS total_sessions,
- 
-        is_batch_fully_completed AS school_completion_status,
+GROUP BY hm_school_id
 
-        es.total_student_present_sum AS no_of_expected_student_sessions,
-        es.total_parent_present_sum AS no_of_expected_parent_sessions,
-
-        -- ✅ FIXED VALUES (correct & stable)
-        sa.no_of_student_sessions_attended_by_hm,
-        sa.no_of_parent_sessions_attended_by_hm
-
-    FROM base b
-    LEFT JOIN expected_sessions_agg es 
-        ON b.hm_id = es.hm_id
-    LEFT JOIN sessions_attended_agg sa
-        ON b.hm_id = sa.hm_id
-    WHERE b.rn_last = 1
-    GROUP BY 
-        b.hm_school_id, b.facilitator_name, b.facilitator_email, b.session_academic_year, b.batch_language, 
-        b.school_name, b.school_taluka, b.school_district, b.school_state, 
-        b.school_area, b.school_partner, 
-        es.total_expected_sessions, 
-        es.total_student_present_sum, 
-        es.total_parent_present_sum, 
-        sa.no_of_student_sessions_attended_by_hm,
-        sa.no_of_parent_sessions_attended_by_hm,
-        is_batch_fully_completed
 ),
 
+session_scheduled_agg AS (
+
+SELECT
+    hm_school_id,
+    COUNT(DISTINCT hm_session_date) AS no_of_session_scheduled
+
+FROM {{ ref('dev_int_hm_session') }}
+
+WHERE hm_session_date IS NOT NULL
+
+GROUP BY hm_school_id
+
+),
+checkin_sessions_completed_agg AS (
+    SELECT
+        hm_school_id,
+        COUNT(DISTINCT hm_session_date) AS no_of_checkin_sessions_completed
+    FROM {{ ref('dev_int_hm_session') }}
+    WHERE LOWER(TRIM(hm_session_name)) IN ('check-in 1','check-in 2','check-in 3','check-in 4')
+      AND LOWER(TRIM(session_status)) IN ('complete','completed')
+    GROUP BY hm_school_id
+),
+hm_session AS (
+
+SELECT 
+    lb.hm_school_id,
+    lb.facilitator_name,
+    lb.facilitator_email,
+    lb.session_academic_year,
+    lb.batch_language,
+    lb.school_name,
+    lb.school_taluka,
+    lb.school_district,
+    lb.school_state,
+    lb.school_area,
+    lb.school_partner,
+
+    es.total_expected_sessions AS no_of_expected_sessions,
+
+    eh.no_of_expected_hm_sessions,
+
+    -- ✅ FIXED SESSION COUNT
+   ss.no_of_session_scheduled,
+
+    cs.no_of_checkin_sessions_completed,
+
+    COUNT(DISTINCT CASE 
+        WHEN LOWER(TRIM(b.hm_session_name)) = 'year end annual report'
+         AND LOWER(TRIM(b.session_status)) IN ('complete','completed')
+        THEN CONCAT(b.hm_id,'_',b.hm_session_name)
+    END) AS no_of_year_end_sessions_completed,
+
+    COUNT(DISTINCT CASE 
+        WHEN LOWER(TRIM(b.hm_session_name)) 
+             IN ('check-in 1','check-in 2','check-in 3','check-in 4','year end annual report')
+         AND LOWER(TRIM(b.hm_attended)) = 'yes'
+        THEN CONCAT(b.hm_id,'_',b.hm_session_name)
+    END) AS no_of_sessions_hm_attended,
+
+    COUNT(DISTINCT LOWER(TRIM(b.hm_session_name))) AS total_sessions,
+
+    lb.is_batch_fully_completed AS school_completion_status,
+
+    es.total_student_present_sum AS no_of_expected_student_sessions,
+    es.total_parent_present_sum AS no_of_expected_parent_sessions,
+
+    sa.no_of_student_sessions_attended_by_hm,
+    sa.no_of_parent_sessions_attended_by_hm
+
+FROM base b
+
+JOIN latest_base lb
+    ON b.hm_id = lb.hm_id
+
+LEFT JOIN expected_sessions_agg es
+    ON b.hm_id = es.hm_id
+
+LEFT JOIN sessions_attended_agg sa
+    ON b.hm_id = sa.hm_id
+
+LEFT JOIN expected_hm_sessions_agg eh
+    ON lb.hm_school_id = eh.hm_school_id
+
+LEFT JOIN session_scheduled_agg ss
+ON lb.hm_school_id = ss.hm_school_id
+
+LEFT JOIN checkin_sessions_completed_agg cs
+  ON lb.hm_school_id = cs.hm_school_id
+
+GROUP BY 
+    lb.hm_school_id,
+    lb.facilitator_name,
+    lb.facilitator_email,
+    lb.session_academic_year,
+    lb.batch_language,
+    lb.school_name,
+    lb.school_taluka,
+    lb.school_district,
+    lb.school_state,
+    lb.school_area,
+    lb.school_partner,
+    es.total_expected_sessions,
+    es.total_student_present_sum,
+    es.total_parent_present_sum,
+    sa.no_of_student_sessions_attended_by_hm,
+    sa.no_of_parent_sessions_attended_by_hm,
+    lb.is_batch_fully_completed,
+    eh.no_of_expected_hm_sessions,
+    ss.no_of_session_scheduled,
+    cs.no_of_checkin_sessions_completed
+),
 
 
 pre_latest AS (
@@ -374,7 +449,7 @@ final_dedup AS (
 )
 
 select * from final_dedup
-
-
+--where school_name = 'GHS Chessor'
+--no_of_expected_hm_sessions < 5
 
 
