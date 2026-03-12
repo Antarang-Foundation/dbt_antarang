@@ -8,7 +8,6 @@ with
 
     t3 as (select *,
     CASE
-    WHEN student_details_2_grade IS NULL THEN 'N/A'
     WHEN REGEXP_CONTAINS(student_details_2_grade, r'(9|IX)')
          THEN 'Grade 9'
     WHEN REGEXP_CONTAINS(student_details_2_grade, r'(10|X)')
@@ -17,14 +16,13 @@ with
          THEN 'Grade 11'
     WHEN REGEXP_CONTAINS(student_details_2_grade, r'(12|XII)')
          THEN 'Grade 12'
-    ELSE 'N/A'
 END AS sd2_grade
 from t2
 ),
 
 t4 as (select *,
 CASE 
-    WHEN sd2_grade != 'N/A'
+    WHEN sd2_grade IS NOT NULL
     THEN student_barcode
     ELSE NULL
 END AS sd2_barcode
@@ -34,3 +32,4 @@ from t3
 )
 
 select * from t4
+
