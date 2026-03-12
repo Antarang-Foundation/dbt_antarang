@@ -137,7 +137,6 @@ reality_6 , reality_7 , reality_8 , g9_barcode , g10_barcode , g11_barcode , g12
 recommendation_report_status , student_details_2_submitted , g9_whatsapp_no , g10_whatsapp_no , g11_whatsapp_no , g12_whatsapp_no , 
 g9_alternate_no , g10_alternate_no , g11_alternate_no , g12_alternate_no , 
 CASE
-    WHEN student_details_2_grade IS NULL THEN 'N/A'
     WHEN REGEXP_CONTAINS(student_details_2_grade, r'(9|IX)')
          THEN 'Grade 9'
     WHEN REGEXP_CONTAINS(student_details_2_grade, r'(10|X)')
@@ -146,10 +145,9 @@ CASE
          THEN 'Grade 11'
     WHEN REGEXP_CONTAINS(student_details_2_grade, r'(12|XII)')
          THEN 'Grade 12'
-    ELSE 'N/A'
 END AS student_details_2_grade, 
 CASE 
-    WHEN student_details_2_grade != 'N/A'
+    WHEN student_details_2_grade IS NOT NULL
     THEN student_barcode
     ELSE NULL
 END AS sd2_student_barcode,
