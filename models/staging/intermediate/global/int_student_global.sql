@@ -8,14 +8,10 @@ with
 
     t3 as (select *,
     CASE
-    WHEN REGEXP_CONTAINS(student_details_2_grade, r'(9|IX)')
-         THEN 'Grade 9'
-    WHEN REGEXP_CONTAINS(student_details_2_grade, r'(10|X)')
-         THEN 'Grade 10'
-    WHEN REGEXP_CONTAINS(student_details_2_grade, r'(11|XI)')
-         THEN 'Grade 11'
-    WHEN REGEXP_CONTAINS(student_details_2_grade, r'(12|XII)')
-         THEN 'Grade 12'
+    WHEN student_barcode = g9_barcode  AND student_details_2_grade = 'Grade 9'  THEN 'Grade 9'
+    WHEN student_barcode = g10_barcode AND student_details_2_grade = 'Grade 10' THEN 'Grade 10'
+    WHEN student_barcode = g11_barcode AND student_details_2_grade = 'Grade 11' THEN 'Grade 11'
+    WHEN student_barcode = g12_barcode AND student_details_2_grade = 'Grade 12' THEN 'Grade 12'
 END AS sd2_grade
 from t2
 ),
@@ -32,4 +28,5 @@ from t3
 )
 
 select * from t4
+
 
