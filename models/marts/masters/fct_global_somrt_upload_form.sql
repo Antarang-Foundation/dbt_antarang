@@ -1,6 +1,7 @@
 with t1 as (select * from  
 {{ref('fct_global_assessment_raw_uploads')}} ---total uploads
-where school_district In ('Nagaland', 'Palghar', 'RJ Model B','RJ Model C', 'RJ Model A', 'Dungarpur')), 
+where school_partner IN ('DUNGARPUR DEO', 'Udaipur District Education Office', 'Yuwaah', 'UNICEF') or school_state = 'Nagaland'
+), 
 
 t2 as (select batch_no, batch_academic_year, batch_grade, batch_language, fac_start_date, facilitator_name, facilitator_email, school_name, school_academic_year, school_language, 
 school_taluka, school_ward, school_district, school_state, school_partner,school_area, batch_donor,
@@ -12,9 +13,10 @@ count(distinct bl_cdm1_no) `bl_cdm1_correct`,
 count(distinct el_cdm1_no) `el_cdm1_correct`, count(distinct bl_cdm2_no) `bl_cdm2_correct`, count(distinct el_cdm2_no) `el_cdm2_correct`, 
 count(distinct bl_cp_no) `bl_cp_correct`, count(distinct el_cp_no) `el_cp_correct`, count(distinct bl_cs_no) `bl_cs_correct`, 
 count(distinct el_cs_no) `el_cs_correct`, count(distinct bl_fp_no) `bl_fp_correct`, count(distinct el_fp_no) `el_fp_correct`, 
-count(distinct saf_no) `saf_correct`, count(distinct sar_no) `sar_correct` 
+count(distinct saf_no) `saf_correct`, count(distinct sar_no) `sar_correct` ,
+COUNT(DISTINCT CASE WHEN sd2_grade IN ('Grade 9', 'Grade 10', 'Grade 11', 'Grade 12')THEN student_id END) AS stg_sd2
 from {{ref('fct_student_global_assessment_status')}}  ----correct upload
-WHERE school_district IN ('Nagaland', 'Palghar', 'RJ Model B','RJ Model C', 'RJ Model A', 'Dungarpur')          
+WHERE school_partner IN ('DUNGARPUR DEO', 'Udaipur District Education Office', 'Yuwaah', 'UNICEF') or school_state = 'Nagaland'          
 group by batch_no, batch_academic_year, batch_grade, batch_language, fac_start_date, facilitator_name, facilitator_email, school_name, school_academic_year, school_language, school_taluka, 
 school_ward, school_district, school_state, school_partner,school_area, batch_donor),
 
@@ -43,14 +45,16 @@ stg_cp_sd, stg_cp_barcodes, bl_cp_raw, bl_cp_correct, el_cp_raw, el_cp_correct,
 stg_cs_sd, stg_cs_barcodes, bl_cs_raw, bl_cs_correct, el_cs_raw, el_cs_correct,
 stg_fp_sd, stg_fp_barcodes, bl_fp_raw, bl_fp_correct, el_fp_raw, el_fp_correct,
 stg_saf_sd, stg_saf_barcodes, bl_saf_raw, el_saf_raw, saf_correct, 
-stg_sar_sd, stg_sar_barcodes, bl_sar_raw, el_sar_raw, sar_correct,
+stg_sar_sd, stg_sar_barcodes, bl_sar_raw, el_sar_raw, sar_correct, stg_sd2, cdm1_baseline_created_on, cdm1_endline_created_on,
+cdm2_baseline_created_on, cdm2_endline_created_on, cp_baseline_created_on, cp_endline_created_on, cs_baseline_created_on,
+cs_endline_created_on, fp_baseline_created_on, fp_endline_created_on, saf_baseline_created_on, saf_endline_created_on,
+sar_baseline_created_on, sar_endline_created_on, 
 
 combined_sd, combined_barcodes from t1 full outer join t2 on t1.batch_no = t2.batch_no),
 
 t4 as (
     select 
         batch_no as session_batch_no,
-        MIN(session_date) as session_date,
         no_of_students_facilitated,  -- or SUM/AVG depending on meaning
         MAX(total_student_present_s1) as total_student_present_s1,
         MAX(total_student_present_s2) as total_student_present_s2,
@@ -67,7 +71,8 @@ t4 as (
         MAX(total_student_present_s13) as total_student_present_s13,
         MAX(total_student_present_s14) as total_student_present_s14,
         MAX(total_student_present_s15) as total_student_present_s15,
-        MAX(total_student_present_s16) as total_student_present_s16
+        MAX(total_student_present_s16) as total_student_present_s16,
+        MIN(session_date) AS session_date
         from {{ref('stg_overall_attendance')}}
         GROUP BY batch_no, no_of_students_facilitated
 ),
@@ -148,42 +153,436 @@ END AS TSP_SAR_Reality,
 
 CASE 
     WHEN school_district = 'Nagaland' AND batch_grade IN ('Grade 9','Grade 11') THEN total_student_present_s11
-END AS TSP_SAR_Quiz2
+END AS TSP_SAR_Quiz2,
 
-/*CASE 
-  WHEN session_date IS NOT NULL AND cdm1_created_on IS NOT NULL THEN DATE_DIFF(DATE(cdm1_created_on), session_date, DAY)
-END AS cdm1_TAT,
+-- TAT for CDM1
+        CASE 
+WHEN session_date IS NOT NULL
+  AND cdm1_baseline_created_on IS NOT NULL
+THEN (
+  CASE 
+    WHEN COALESCE(DATE(cdm1_baseline_created_on), CURRENT_DATE()) >= session_date THEN
+      (
+        SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7))
+        FROM UNNEST(
+          GENERATE_DATE_ARRAY(
+            DATE_ADD(session_date, INTERVAL 1 DAY),
+            COALESCE(DATE(cdm1_baseline_created_on), CURRENT_DATE())
+          )
+        ) dt
+      )
+    ELSE
+      -(
+        SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7))
+        FROM UNNEST(
+          GENERATE_DATE_ARRAY(
+            DATE_ADD(COALESCE(DATE(cdm1_baseline_created_on), CURRENT_DATE()), INTERVAL 1 DAY),
+            session_date
+          )
+        ) dt
+      )
+  END
+)
+END AS cdm1_baseline_TAT,
 
+-- CDM1 Endline
 CASE 
-  WHEN session_date IS NOT NULL AND cdm2_created_on IS NOT NULL THEN DATE_DIFF(DATE(cdm2_created_on), session_date, DAY)
-END AS cdm2_TAT,
+WHEN session_date IS NOT NULL
+  AND cdm1_endline_created_on IS NOT NULL
+THEN (
+  CASE 
+    WHEN COALESCE(DATE(cdm1_endline_created_on), CURRENT_DATE()) >= session_date THEN
+      (
+        SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7))
+        FROM UNNEST(
+          GENERATE_DATE_ARRAY(
+            DATE_ADD(session_date, INTERVAL 1 DAY),
+            COALESCE(DATE(cdm1_endline_created_on), CURRENT_DATE())
+          )
+        ) dt
+      )
+    ELSE
+      -(
+        SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7))
+        FROM UNNEST(
+          GENERATE_DATE_ARRAY(
+            DATE_ADD(COALESCE(DATE(cdm1_endline_created_on), CURRENT_DATE()), INTERVAL 1 DAY),
+            session_date
+          )
+        ) dt
+      )
+  END
+)
+END AS cdm1_endline_TAT,
 
+-- CDM2 Baseline
 CASE 
-  WHEN session_date IS NOT NULL AND cp_created_on IS NOT NULL THEN DATE_DIFF(DATE(cp_created_on), session_date, DAY)
-END AS cp_TAT,
+WHEN session_date IS NOT NULL
+  AND cdm2_baseline_created_on IS NOT NULL
+THEN (
+  CASE 
+    WHEN COALESCE(DATE(cdm2_baseline_created_on), CURRENT_DATE()) >= session_date THEN
+      (
+        SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7))
+        FROM UNNEST(
+          GENERATE_DATE_ARRAY(
+            DATE_ADD(session_date, INTERVAL 1 DAY),
+            COALESCE(DATE(cdm2_baseline_created_on), CURRENT_DATE())
+          )
+        ) dt
+      )
+    ELSE
+      -(
+        SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7))
+        FROM UNNEST(
+          GENERATE_DATE_ARRAY(
+            DATE_ADD(COALESCE(DATE(cdm2_baseline_created_on), CURRENT_DATE()), INTERVAL 1 DAY),
+            session_date
+          )
+        ) dt
+      )
+  END
+)
+END AS cdm2_baseline_TAT,
 
+-- CDM2 Endline
 CASE 
-  WHEN session_date IS NOT NULL AND cs_created_on IS NOT NULL THEN DATE_DIFF(DATE(cs_created_on), session_date, DAY)
-END AS cs_TAT,
+WHEN session_date IS NOT NULL
+  AND cdm2_endline_created_on IS NOT NULL
+THEN (
+  CASE 
+    WHEN COALESCE(DATE(cdm2_endline_created_on), CURRENT_DATE()) >= session_date THEN
+      (
+        SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7))
+        FROM UNNEST(
+          GENERATE_DATE_ARRAY(
+            DATE_ADD(session_date, INTERVAL 1 DAY),
+            COALESCE(DATE(cdm2_endline_created_on), CURRENT_DATE())
+          )
+        ) dt
+      )
+    ELSE
+      -(
+        SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7))
+        FROM UNNEST(
+          GENERATE_DATE_ARRAY(
+            DATE_ADD(COALESCE(DATE(cdm2_endline_created_on), CURRENT_DATE()), INTERVAL 1 DAY),
+            session_date
+          )
+        ) dt
+      )
+  END
+)
+END AS cdm2_endline_TAT,
 
+-- CP Baseline
 CASE 
-  WHEN session_date IS NOT NULL AND fp_created_on IS NOT NULL THEN DATE_DIFF(DATE(fp_created_on), session_date, DAY)
-END AS fp_TAT,
+WHEN session_date IS NOT NULL
+  AND cp_baseline_created_on IS NOT NULL
+THEN (
+  CASE 
+    WHEN COALESCE(DATE(cp_baseline_created_on), CURRENT_DATE()) >= session_date THEN
+      (
+        SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7))
+        FROM UNNEST(
+          GENERATE_DATE_ARRAY(
+            DATE_ADD(session_date, INTERVAL 1 DAY),
+            COALESCE(DATE(cp_baseline_created_on), CURRENT_DATE())
+          )
+        ) dt
+      )
+    ELSE
+      -(
+        SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7))
+        FROM UNNEST(
+          GENERATE_DATE_ARRAY(
+            DATE_ADD(COALESCE(DATE(cp_baseline_created_on), CURRENT_DATE()), INTERVAL 1 DAY),
+            session_date
+          )
+        ) dt
+      )
+  END
+)
+END AS cp_baseline_TAT,
 
+-- CP Endline
 CASE 
-  WHEN session_date IS NOT NULL AND saf_created_on IS NOT NULL THEN DATE_DIFF(DATE(saf_created_on), session_date, DAY)
-END AS saf_TAT,
+WHEN session_date IS NOT NULL
+  AND cp_endline_created_on IS NOT NULL
+THEN (
+  CASE 
+    WHEN COALESCE(DATE(cp_endline_created_on), CURRENT_DATE()) >= session_date THEN
+      (
+        SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7))
+        FROM UNNEST(
+          GENERATE_DATE_ARRAY(
+            DATE_ADD(session_date, INTERVAL 1 DAY),
+            COALESCE(DATE(cp_endline_created_on), CURRENT_DATE())
+          )
+        ) dt
+      )
+    ELSE
+      -(
+        SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7))
+        FROM UNNEST(
+          GENERATE_DATE_ARRAY(
+            DATE_ADD(COALESCE(DATE(cp_endline_created_on), CURRENT_DATE()), INTERVAL 1 DAY),
+            session_date
+          )
+        ) dt
+      )
+  END
+)
+END AS cp_endline_TAT,
 
+-- CS Baseline
 CASE 
-  WHEN session_date IS NOT NULL AND sar_created_on IS NOT NULL THEN DATE_DIFF(DATE(sar_created_on), session_date, DAY)
-END AS sar_TAT*/
+WHEN session_date IS NOT NULL
+  AND cs_baseline_created_on IS NOT NULL
+THEN (
+  CASE 
+    WHEN COALESCE(DATE(cs_baseline_created_on), CURRENT_DATE()) >= session_date THEN
+      (
+        SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7))
+        FROM UNNEST(
+          GENERATE_DATE_ARRAY(
+            DATE_ADD(session_date, INTERVAL 1 DAY),
+            COALESCE(DATE(cs_baseline_created_on), CURRENT_DATE())
+          )
+        ) dt
+      )
+    ELSE
+      -(
+        SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7))
+        FROM UNNEST(
+          GENERATE_DATE_ARRAY(
+            DATE_ADD(COALESCE(DATE(cs_baseline_created_on), CURRENT_DATE()), INTERVAL 1 DAY),
+            session_date
+          )
+        ) dt
+      )
+  END
+)
+END AS cs_baseline_TAT,
+
+-- CS Endline
+CASE 
+WHEN session_date IS NOT NULL
+  AND cs_endline_created_on IS NOT NULL
+THEN (
+  CASE 
+    WHEN COALESCE(DATE(cs_endline_created_on), CURRENT_DATE()) >= session_date THEN
+      (
+        SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7))
+        FROM UNNEST(
+          GENERATE_DATE_ARRAY(
+            DATE_ADD(session_date, INTERVAL 1 DAY),
+            COALESCE(DATE(cs_endline_created_on), CURRENT_DATE())
+          )
+        ) dt
+      )
+    ELSE
+      -(
+        SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7))
+        FROM UNNEST(
+          GENERATE_DATE_ARRAY(
+            DATE_ADD(COALESCE(DATE(cs_endline_created_on), CURRENT_DATE()), INTERVAL 1 DAY),
+            session_date
+          )
+        ) dt
+      )
+  END
+)
+END AS cs_endline_TAT,
+
+-- FP Baseline
+CASE 
+WHEN session_date IS NOT NULL
+  AND fp_baseline_created_on IS NOT NULL
+THEN (
+  CASE 
+    WHEN COALESCE(DATE(fp_baseline_created_on), CURRENT_DATE()) >= session_date THEN
+      (
+        SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7))
+        FROM UNNEST(
+          GENERATE_DATE_ARRAY(
+            DATE_ADD(session_date, INTERVAL 1 DAY),
+            COALESCE(DATE(fp_baseline_created_on), CURRENT_DATE())
+          )
+        ) dt
+      )
+    ELSE
+      -(
+        SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7))
+        FROM UNNEST(
+          GENERATE_DATE_ARRAY(
+            DATE_ADD(COALESCE(DATE(fp_baseline_created_on), CURRENT_DATE()), INTERVAL 1 DAY),
+            session_date
+          )
+        ) dt
+      )
+  END
+)
+END AS fp_baseline_TAT,
+
+-- FP Endline
+CASE 
+WHEN session_date IS NOT NULL
+  AND fp_endline_created_on IS NOT NULL
+THEN (
+  CASE 
+    WHEN COALESCE(DATE(fp_endline_created_on), CURRENT_DATE()) >= session_date THEN
+      (
+        SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7))
+        FROM UNNEST(
+          GENERATE_DATE_ARRAY(
+            DATE_ADD(session_date, INTERVAL 1 DAY),
+            COALESCE(DATE(fp_endline_created_on), CURRENT_DATE())
+          )
+        ) dt
+      )
+    ELSE
+      -(
+        SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7))
+        FROM UNNEST(
+          GENERATE_DATE_ARRAY(
+            DATE_ADD(COALESCE(DATE(fp_endline_created_on), CURRENT_DATE()), INTERVAL 1 DAY),
+            session_date
+          )
+        ) dt
+      )
+  END
+)
+END AS fp_endline_TAT,
+
+-- SAF Baseline
+CASE 
+WHEN session_date IS NOT NULL
+  AND saf_baseline_created_on IS NOT NULL
+THEN (
+  CASE 
+    WHEN COALESCE(DATE(saf_baseline_created_on), CURRENT_DATE()) >= session_date THEN
+      (
+        SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7))
+        FROM UNNEST(
+          GENERATE_DATE_ARRAY(
+            DATE_ADD(session_date, INTERVAL 1 DAY),
+            COALESCE(DATE(saf_baseline_created_on), CURRENT_DATE())
+          )
+        ) dt
+      )
+    ELSE
+      -(
+        SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7))
+        FROM UNNEST(
+          GENERATE_DATE_ARRAY(
+            DATE_ADD(COALESCE(DATE(saf_baseline_created_on), CURRENT_DATE()), INTERVAL 1 DAY),
+            session_date
+          )
+        ) dt
+      )
+  END
+)
+END AS saf_baseline_TAT,
+
+-- SAF Endline
+CASE 
+WHEN session_date IS NOT NULL
+  AND saf_endline_created_on IS NOT NULL
+THEN (
+  CASE 
+    WHEN COALESCE(DATE(saf_endline_created_on), CURRENT_DATE()) >= session_date THEN
+      (
+        SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7))
+        FROM UNNEST(
+          GENERATE_DATE_ARRAY(
+            DATE_ADD(session_date, INTERVAL 1 DAY),
+            COALESCE(DATE(saf_endline_created_on), CURRENT_DATE())
+          )
+        ) dt
+      )
+    ELSE
+      -(
+        SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7))
+        FROM UNNEST(
+          GENERATE_DATE_ARRAY(
+            DATE_ADD(COALESCE(DATE(saf_endline_created_on), CURRENT_DATE()), INTERVAL 1 DAY),
+            session_date
+          )
+        ) dt
+      )
+  END
+)
+END AS saf_endline_TAT,
+
+-- SAR Baseline
+CASE 
+WHEN session_date IS NOT NULL
+  AND sar_baseline_created_on IS NOT NULL
+THEN (
+  CASE 
+    WHEN COALESCE(DATE(sar_baseline_created_on), CURRENT_DATE()) >= session_date THEN
+      (
+        SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7))
+        FROM UNNEST(
+          GENERATE_DATE_ARRAY(
+            DATE_ADD(session_date, INTERVAL 1 DAY),
+            COALESCE(DATE(sar_baseline_created_on), CURRENT_DATE())
+          )
+        ) dt
+      )
+    ELSE
+      -(
+        SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7))
+        FROM UNNEST(
+          GENERATE_DATE_ARRAY(
+            DATE_ADD(COALESCE(DATE(sar_baseline_created_on), CURRENT_DATE()), INTERVAL 1 DAY),
+            session_date
+          )
+        ) dt
+      )
+  END
+)
+END AS sar_baseline_TAT,
+
+-- SAR Endline
+CASE 
+WHEN session_date IS NOT NULL
+  AND sar_endline_created_on IS NOT NULL
+THEN (
+  CASE 
+    WHEN COALESCE(DATE(sar_endline_created_on), CURRENT_DATE()) >= session_date THEN
+      (
+        SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7))
+        FROM UNNEST(
+          GENERATE_DATE_ARRAY(
+            DATE_ADD(session_date, INTERVAL 1 DAY),
+            COALESCE(DATE(sar_endline_created_on), CURRENT_DATE())
+          )
+        ) dt
+      )
+    ELSE
+      -(
+        SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7))
+        FROM UNNEST(
+          GENERATE_DATE_ARRAY(
+            DATE_ADD(COALESCE(DATE(sar_endline_created_on), CURRENT_DATE()), INTERVAL 1 DAY),
+            session_date
+          )
+        ) dt
+      )
+  END
+)
+END AS sar_endline_TAT
 
     FROM t5 
-    WHERE batch_academic_year >= 2023
+    --WHERE batch_academic_year >= 2023
 )
 
 SELECT *
 FROM t6
+
+
 
 
 

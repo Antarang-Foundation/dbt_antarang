@@ -3,7 +3,8 @@ with
 cdm1 as (select batch_no, batch_academic_year, batch_grade, batch_language, fac_start_date, facilitator_name,facilitator_email, school_name, school_academic_year, school_language, 
 school_taluka, school_ward, school_district, school_state, school_partner,school_area, batch_donor, count(distinct student_barcode) `stg_cdm1_sd`, 
 count(distinct assessment_barcode) `stg_cdm1_barcodes`, count(distinct case when record_type = 'Baseline' then cdm1_no end) `bl_cdm1_raw`, 
-count(distinct case when record_type = 'Endline' then cdm1_no end) `el_cdm1_raw`
+count(distinct case when record_type = 'Endline' then cdm1_no end) `el_cdm1_raw`, MIN(CASE WHEN record_type = 'Baseline' THEN created_on END) AS cdm1_baseline_created_on, 
+MIN(CASE WHEN record_type = 'Endline' THEN created_on END) AS cdm1_endline_created_on
  from {{ref('int_student_global_stg_cdm1')}} where created_from_form=True 
  group by batch_no, batch_academic_year, batch_grade, batch_language, fac_start_date, facilitator_name, facilitator_email,school_name, school_academic_year, school_language, school_taluka, 
  school_ward, school_district, school_state, school_partner,school_area, batch_donor),
@@ -11,7 +12,8 @@ count(distinct case when record_type = 'Endline' then cdm1_no end) `el_cdm1_raw`
 cdm2 as (select batch_no, batch_academic_year, batch_grade, batch_language, fac_start_date, facilitator_name, facilitator_email, school_name, school_academic_year, school_language, 
 school_taluka, school_ward, school_district, school_state, school_partner, school_area, batch_donor, count(distinct student_barcode) `stg_cdm2_sd`, 
 count(distinct assessment_barcode) `stg_cdm2_barcodes`, count(distinct case when record_type = 'Baseline' then cdm2_no end) `bl_cdm2_raw`, 
-count(distinct case when record_type = 'Endline' then cdm2_no end) `el_cdm2_raw`
+count(distinct case when record_type = 'Endline' then cdm2_no end) `el_cdm2_raw`, MIN(CASE WHEN record_type = 'Baseline' THEN created_on END) AS cdm2_baseline_created_on,
+MIN(CASE WHEN record_type = 'Endline' THEN created_on END) AS cdm2_endline_created_on
  from {{ref('int_student_global_stg_cdm2')}} where created_from_form=True 
  group by batch_no, batch_academic_year, batch_grade, batch_language, fac_start_date, facilitator_name,facilitator_email, school_name, school_academic_year, school_language, school_taluka, 
  school_ward, school_district, school_state, school_partner,school_area, batch_donor),
@@ -19,7 +21,8 @@ count(distinct case when record_type = 'Endline' then cdm2_no end) `el_cdm2_raw`
 cp as (select batch_no, batch_academic_year, batch_grade, batch_language, fac_start_date, facilitator_name, facilitator_email, school_name, school_academic_year, school_language, 
 school_taluka, school_ward, school_district, school_state, school_partner, school_area, batch_donor, count(distinct student_barcode) `stg_cp_sd`, 
 count(distinct assessment_barcode) `stg_cp_barcodes`, count(distinct case when record_type = 'Baseline' then cp_no end) `bl_cp_raw`, 
-count(distinct case when record_type = 'Endline' then cp_no end) `el_cp_raw`
+count(distinct case when record_type = 'Endline' then cp_no end) `el_cp_raw`, MIN(CASE WHEN record_type = 'Baseline' THEN created_on END) AS cp_baseline_created_on,
+MIN(CASE WHEN record_type = 'Endline' THEN created_on END) AS cp_endline_created_on
  from {{ref('int_student_global_stg_cp')}} where created_from_form=True 
  group by batch_no, batch_academic_year, batch_grade, batch_language, fac_start_date, facilitator_name, facilitator_email, school_name, school_academic_year, school_language, school_taluka, 
  school_ward, school_district, school_state, school_partner, school_area, batch_donor),
@@ -27,7 +30,8 @@ count(distinct case when record_type = 'Endline' then cp_no end) `el_cp_raw`
 cs as (select batch_no, batch_academic_year, batch_grade, batch_language, fac_start_date, facilitator_name, facilitator_email, school_name, school_academic_year, school_language, 
 school_taluka, school_ward, school_district, school_state, school_partner, school_area, batch_donor, count(distinct student_barcode) `stg_cs_sd`, 
 count(distinct assessment_barcode) `stg_cs_barcodes`, count(distinct case when record_type = 'Baseline' then cs_no end) `bl_cs_raw`, 
-count(distinct case when record_type = 'Endline' then cs_no end) `el_cs_raw`
+count(distinct case when record_type = 'Endline' then cs_no end) `el_cs_raw`, MIN(CASE WHEN record_type = 'Baseline' THEN created_on END) AS cs_baseline_created_on,
+MIN(CASE WHEN record_type = 'Endline' THEN created_on END) AS cs_endline_created_on
  from {{ref('int_student_global_stg_cs')}} where created_from_form=True 
  group by batch_no, batch_academic_year, batch_grade, batch_language, fac_start_date, facilitator_name, facilitator_email, school_name, school_academic_year, school_language, school_taluka, 
  school_ward, school_district, school_state, school_partner, school_area, batch_donor),
@@ -35,7 +39,8 @@ count(distinct case when record_type = 'Endline' then cs_no end) `el_cs_raw`
 fp as (select batch_no, batch_academic_year, batch_grade, batch_language, fac_start_date, facilitator_name, facilitator_email, school_name, school_academic_year, school_language, 
 school_taluka, school_ward, school_district, school_state, school_partner, school_area, batch_donor, count(distinct student_barcode) `stg_fp_sd`, 
 count(distinct assessment_barcode) `stg_fp_barcodes`, count(distinct case when record_type = 'Baseline' then fp_no end) `bl_fp_raw`, 
-count(distinct case when record_type = 'Endline' then fp_no end) `el_fp_raw`
+count(distinct case when record_type = 'Endline' then fp_no end) `el_fp_raw`, MIN(CASE WHEN record_type = 'Baseline' THEN created_on END) AS fp_baseline_created_on,
+MIN(CASE WHEN record_type = 'Endline' THEN created_on END) AS fp_endline_created_on
  from {{ref('int_student_global_stg_fp')}} where created_from_form=True 
  group by batch_no, batch_academic_year, batch_grade, batch_language, fac_start_date, facilitator_name, facilitator_email, school_name, school_academic_year, school_language, school_taluka, 
  school_ward, school_district, school_state, school_partner, school_area, batch_donor),
@@ -43,7 +48,8 @@ count(distinct case when record_type = 'Endline' then fp_no end) `el_fp_raw`
 saf as (select batch_no, batch_academic_year, batch_grade, batch_language, fac_start_date, facilitator_name, facilitator_email, school_name, school_academic_year, school_language, 
 school_taluka, school_ward, school_district, school_state, school_partner, school_area,batch_donor, count(distinct student_barcode) `stg_saf_sd`, 
 count(distinct assessment_barcode) `stg_saf_barcodes`, count(distinct case when record_type = 'Baseline' then saf_no end) `bl_saf_raw`, 
-count(distinct case when record_type = 'Endline' then saf_no end) `el_saf_raw`
+count(distinct case when record_type = 'Endline' then saf_no end) `el_saf_raw`, MIN(CASE WHEN record_type = 'Baseline' THEN created_on END) AS saf_baseline_created_on,
+MIN(CASE WHEN record_type = 'Endline' THEN created_on END) AS saf_endline_created_on
  from {{ref('int_student_global_stg_saf')}} where created_from_form=True 
  group by batch_no, batch_academic_year, batch_grade, batch_language, fac_start_date, facilitator_name, facilitator_email, school_name, school_academic_year, school_language, school_taluka, 
  school_ward, school_district, school_state, school_partner, school_area, batch_donor),
@@ -51,7 +57,8 @@ count(distinct case when record_type = 'Endline' then saf_no end) `el_saf_raw`
 sar as (select batch_no, batch_academic_year, batch_grade, batch_language, fac_start_date, facilitator_name, facilitator_email, school_name, school_academic_year, school_language, 
 school_taluka, school_ward, school_district, school_state, school_partner,school_area, batch_donor, count(distinct student_barcode) `stg_sar_sd`, 
 count(distinct assessment_barcode) `stg_sar_barcodes`, count(distinct case when record_type = 'Baseline' then sar_no end) `bl_sar_raw`, 
-count(distinct case when record_type = 'Endline' then sar_no end) `el_sar_raw`
+count(distinct case when record_type = 'Endline' then sar_no end) `el_sar_raw`, MIN(CASE WHEN record_type = 'Baseline' THEN created_on END) AS sar_baseline_created_on,
+MIN(CASE WHEN record_type = 'Endline' THEN created_on END) AS sar_endline_created_on
  from {{ref('int_student_global_stg_sar')}} where created_from_form=True 
  group by batch_no, batch_academic_year, batch_grade, batch_language, fac_start_date, facilitator_name, facilitator_email, school_name, school_academic_year, school_language, school_taluka, 
  school_ward, school_district, school_state, school_partner, school_area, batch_donor),

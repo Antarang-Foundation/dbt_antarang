@@ -10,7 +10,7 @@ WITH t0 AS (
         total_student_present,
         session_date
     FROM {{ref('int_global_session')}}
-    WHERE school_district IN ('Nagaland', 'Palghar', 'Yamunanagar', 'RJ Model B', 'Dungarpur')
+    where school_partner IN ('DUNGARPUR DEO', 'Udaipur District Education Office', 'Yuwaah', 'UNICEF') or school_state = 'Nagaland' 
 ),
 
 t1 AS (

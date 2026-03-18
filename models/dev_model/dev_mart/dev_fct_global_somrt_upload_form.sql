@@ -308,214 +308,423 @@ CASE
 END AS TSP_SAR_Quiz2,
 
 -- TAT for CDM1
-        CASE
-  WHEN d.session_date IS NOT NULL 
-   AND d.cdm1_baseline_created_on IS NOT NULL
-  THEN (
-    SELECT COUNT(*)
-    FROM UNNEST(
-      GENERATE_DATE_ARRAY(
-        DATE_ADD(d.session_date, INTERVAL 1 DAY),   -- TAT starts from next day
-        DATE(d.cdm1_baseline_created_on)
+        CASE 
+WHEN d.session_date IS NOT NULL
+  AND d.cdm1_baseline_created_on IS NOT NULL
+THEN (
+  CASE 
+    WHEN COALESCE(DATE(d.cdm1_baseline_created_on), CURRENT_DATE()) >= d.session_date THEN
+      (
+        SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7))
+        FROM UNNEST(
+          GENERATE_DATE_ARRAY(
+            DATE_ADD(d.session_date, INTERVAL 1 DAY),
+            COALESCE(DATE(d.cdm1_baseline_created_on), CURRENT_DATE())
+          )
+        ) dt
       )
-    ) AS dt
-    WHERE EXTRACT(DAYOFWEEK FROM dt) NOT IN (1, 7)   -- 1 = Sunday, 7 = Saturday
-  )
+    ELSE
+      -(
+        SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7))
+        FROM UNNEST(
+          GENERATE_DATE_ARRAY(
+            DATE_ADD(COALESCE(DATE(d.cdm1_baseline_created_on), CURRENT_DATE()), INTERVAL 1 DAY),
+            d.session_date
+          )
+        ) dt
+      )
+  END
+)
 END AS cdm1_baseline_TAT,
 
 -- CDM1 Endline
-CASE
-  WHEN d.session_date IS NOT NULL AND d.cdm1_endline_created_on IS NOT NULL
-  THEN (
-    SELECT COUNT(*)
-    FROM UNNEST(
-      GENERATE_DATE_ARRAY(
-        DATE_ADD(d.session_date, INTERVAL 1 DAY),
-        DATE(d.cdm1_endline_created_on)
+CASE 
+WHEN d.session_date IS NOT NULL
+  AND d.cdm1_endline_created_on IS NOT NULL
+THEN (
+  CASE 
+    WHEN COALESCE(DATE(d.cdm1_endline_created_on), CURRENT_DATE()) >= d.session_date THEN
+      (
+        SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7))
+        FROM UNNEST(
+          GENERATE_DATE_ARRAY(
+            DATE_ADD(d.session_date, INTERVAL 1 DAY),
+            COALESCE(DATE(d.cdm1_endline_created_on), CURRENT_DATE())
+          )
+        ) dt
       )
-    ) dt
-    WHERE EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7)
-  )
+    ELSE
+      -(
+        SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7))
+        FROM UNNEST(
+          GENERATE_DATE_ARRAY(
+            DATE_ADD(COALESCE(DATE(d.cdm1_endline_created_on), CURRENT_DATE()), INTERVAL 1 DAY),
+            d.session_date
+          )
+        ) dt
+      )
+  END
+)
 END AS cdm1_endline_TAT,
 
 -- CDM2 Baseline
-CASE
-  WHEN d.session_date IS NOT NULL AND d.cdm2_baseline_created_on IS NOT NULL
-  THEN (
-    SELECT COUNT(*)
-    FROM UNNEST(
-      GENERATE_DATE_ARRAY(
-        DATE_ADD(d.session_date, INTERVAL 1 DAY),
-        DATE(d.cdm2_baseline_created_on)
+CASE 
+WHEN d.session_date IS NOT NULL
+  AND d.cdm2_baseline_created_on IS NOT NULL
+THEN (
+  CASE 
+    WHEN COALESCE(DATE(d.cdm2_baseline_created_on), CURRENT_DATE()) >= d.session_date THEN
+      (
+        SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7))
+        FROM UNNEST(
+          GENERATE_DATE_ARRAY(
+            DATE_ADD(d.session_date, INTERVAL 1 DAY),
+            COALESCE(DATE(d.cdm2_baseline_created_on), CURRENT_DATE())
+          )
+        ) dt
       )
-    ) dt
-    WHERE EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7)
-  )
+    ELSE
+      -(
+        SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7))
+        FROM UNNEST(
+          GENERATE_DATE_ARRAY(
+            DATE_ADD(COALESCE(DATE(d.cdm2_baseline_created_on), CURRENT_DATE()), INTERVAL 1 DAY),
+            d.session_date
+          )
+        ) dt
+      )
+  END
+)
 END AS cdm2_baseline_TAT,
 
 -- CDM2 Endline
-CASE
-  WHEN d.session_date IS NOT NULL AND d.cdm2_endline_created_on IS NOT NULL
-  THEN (
-    SELECT COUNT(*)
-    FROM UNNEST(
-      GENERATE_DATE_ARRAY(
-        DATE_ADD(d.session_date, INTERVAL 1 DAY),
-        DATE(d.cdm2_endline_created_on)
+CASE 
+WHEN d.session_date IS NOT NULL
+  AND d.cdm2_endline_created_on IS NOT NULL
+THEN (
+  CASE 
+    WHEN COALESCE(DATE(d.cdm2_endline_created_on), CURRENT_DATE()) >= d.session_date THEN
+      (
+        SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7))
+        FROM UNNEST(
+          GENERATE_DATE_ARRAY(
+            DATE_ADD(d.session_date, INTERVAL 1 DAY),
+            COALESCE(DATE(d.cdm2_endline_created_on), CURRENT_DATE())
+          )
+        ) dt
       )
-    ) dt
-    WHERE EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7)
-  )
+    ELSE
+      -(
+        SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7))
+        FROM UNNEST(
+          GENERATE_DATE_ARRAY(
+            DATE_ADD(COALESCE(DATE(d.cdm2_endline_created_on), CURRENT_DATE()), INTERVAL 1 DAY),
+            d.session_date
+          )
+        ) dt
+      )
+  END
+)
 END AS cdm2_endline_TAT,
 
 -- CP Baseline
-CASE
-  WHEN d.session_date IS NOT NULL AND d.cp_baseline_created_on IS NOT NULL
-  THEN (
-    SELECT COUNT(*)
-    FROM UNNEST(
-      GENERATE_DATE_ARRAY(
-        DATE_ADD(d.session_date, INTERVAL 1 DAY),
-        DATE(d.cp_baseline_created_on)
+CASE 
+WHEN d.session_date IS NOT NULL
+  AND d.cp_baseline_created_on IS NOT NULL
+THEN (
+  CASE 
+    WHEN COALESCE(DATE(d.cp_baseline_created_on), CURRENT_DATE()) >= d.session_date THEN
+      (
+        SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7))
+        FROM UNNEST(
+          GENERATE_DATE_ARRAY(
+            DATE_ADD(d.session_date, INTERVAL 1 DAY),
+            COALESCE(DATE(d.cp_baseline_created_on), CURRENT_DATE())
+          )
+        ) dt
       )
-    ) dt
-    WHERE EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7)
-  )
+    ELSE
+      -(
+        SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7))
+        FROM UNNEST(
+          GENERATE_DATE_ARRAY(
+            DATE_ADD(COALESCE(DATE(d.cp_baseline_created_on), CURRENT_DATE()), INTERVAL 1 DAY),
+            d.session_date
+          )
+        ) dt
+      )
+  END
+)
 END AS cp_baseline_TAT,
 
 -- CP Endline
-CASE
-  WHEN d.session_date IS NOT NULL AND d.cp_endline_created_on IS NOT NULL
-  THEN (
-    SELECT COUNT(*)
-    FROM UNNEST(
-      GENERATE_DATE_ARRAY(
-        DATE_ADD(d.session_date, INTERVAL 1 DAY),
-        DATE(d.cp_endline_created_on)
+CASE 
+WHEN d.session_date IS NOT NULL
+  AND d.cp_endline_created_on IS NOT NULL
+THEN (
+  CASE 
+    WHEN COALESCE(DATE(d.cp_endline_created_on), CURRENT_DATE()) >= d.session_date THEN
+      (
+        SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7))
+        FROM UNNEST(
+          GENERATE_DATE_ARRAY(
+            DATE_ADD(d.session_date, INTERVAL 1 DAY),
+            COALESCE(DATE(d.cp_endline_created_on), CURRENT_DATE())
+          )
+        ) dt
       )
-    ) dt
-    WHERE EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7)
-  )
+    ELSE
+      -(
+        SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7))
+        FROM UNNEST(
+          GENERATE_DATE_ARRAY(
+            DATE_ADD(COALESCE(DATE(d.cp_endline_created_on), CURRENT_DATE()), INTERVAL 1 DAY),
+            d.session_date
+          )
+        ) dt
+      )
+  END
+)
 END AS cp_endline_TAT,
 
 -- CS Baseline
-CASE
-  WHEN d.session_date IS NOT NULL AND d.cs_baseline_created_on IS NOT NULL
-  THEN (
-    SELECT COUNT(*)
-    FROM UNNEST(
-      GENERATE_DATE_ARRAY(
-        DATE_ADD(d.session_date, INTERVAL 1 DAY),
-        DATE(d.cs_baseline_created_on)
+CASE 
+WHEN d.session_date IS NOT NULL
+  AND d.cs_baseline_created_on IS NOT NULL
+THEN (
+  CASE 
+    WHEN COALESCE(DATE(d.cs_baseline_created_on), CURRENT_DATE()) >= d.session_date THEN
+      (
+        SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7))
+        FROM UNNEST(
+          GENERATE_DATE_ARRAY(
+            DATE_ADD(d.session_date, INTERVAL 1 DAY),
+            COALESCE(DATE(d.cs_baseline_created_on), CURRENT_DATE())
+          )
+        ) dt
       )
-    ) dt
-    WHERE EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7)
-  )
+    ELSE
+      -(
+        SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7))
+        FROM UNNEST(
+          GENERATE_DATE_ARRAY(
+            DATE_ADD(COALESCE(DATE(d.cs_baseline_created_on), CURRENT_DATE()), INTERVAL 1 DAY),
+            d.session_date
+          )
+        ) dt
+      )
+  END
+)
 END AS cs_baseline_TAT,
 
 -- CS Endline
-CASE
-  WHEN d.session_date IS NOT NULL AND d.cs_endline_created_on IS NOT NULL
-  THEN (
-    SELECT COUNT(*)
-    FROM UNNEST(
-      GENERATE_DATE_ARRAY(
-        DATE_ADD(d.session_date, INTERVAL 1 DAY),
-        DATE(d.cs_endline_created_on)
+CASE 
+WHEN d.session_date IS NOT NULL
+  AND d.cs_endline_created_on IS NOT NULL
+THEN (
+  CASE 
+    WHEN COALESCE(DATE(d.cs_endline_created_on), CURRENT_DATE()) >= d.session_date THEN
+      (
+        SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7))
+        FROM UNNEST(
+          GENERATE_DATE_ARRAY(
+            DATE_ADD(d.session_date, INTERVAL 1 DAY),
+            COALESCE(DATE(d.cs_endline_created_on), CURRENT_DATE())
+          )
+        ) dt
       )
-    ) dt
-    WHERE EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7)
-  )
+    ELSE
+      -(
+        SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7))
+        FROM UNNEST(
+          GENERATE_DATE_ARRAY(
+            DATE_ADD(COALESCE(DATE(d.cs_endline_created_on), CURRENT_DATE()), INTERVAL 1 DAY),
+            d.session_date
+          )
+        ) dt
+      )
+  END
+)
 END AS cs_endline_TAT,
 
 -- FP Baseline
-CASE
-  WHEN d.session_date IS NOT NULL AND d.fp_baseline_created_on IS NOT NULL
-  THEN (
-    SELECT COUNT(*)
-    FROM UNNEST(
-      GENERATE_DATE_ARRAY(
-        DATE_ADD(d.session_date, INTERVAL 1 DAY),
-        DATE(d.fp_baseline_created_on)
+CASE 
+WHEN d.session_date IS NOT NULL
+  AND d.fp_baseline_created_on IS NOT NULL
+THEN (
+  CASE 
+    WHEN COALESCE(DATE(d.fp_baseline_created_on), CURRENT_DATE()) >= d.session_date THEN
+      (
+        SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7))
+        FROM UNNEST(
+          GENERATE_DATE_ARRAY(
+            DATE_ADD(d.session_date, INTERVAL 1 DAY),
+            COALESCE(DATE(d.fp_baseline_created_on), CURRENT_DATE())
+          )
+        ) dt
       )
-    ) dt
-    WHERE EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7)
-  )
+    ELSE
+      -(
+        SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7))
+        FROM UNNEST(
+          GENERATE_DATE_ARRAY(
+            DATE_ADD(COALESCE(DATE(d.fp_baseline_created_on), CURRENT_DATE()), INTERVAL 1 DAY),
+            d.session_date
+          )
+        ) dt
+      )
+  END
+)
 END AS fp_baseline_TAT,
 
 -- FP Endline
-CASE
-  WHEN d.session_date IS NOT NULL AND d.fp_endline_created_on IS NOT NULL
-  THEN (
-    SELECT COUNT(*)
-    FROM UNNEST(
-      GENERATE_DATE_ARRAY(
-        DATE_ADD(d.session_date, INTERVAL 1 DAY),
-        DATE(d.fp_endline_created_on)
+CASE 
+WHEN d.session_date IS NOT NULL
+  AND d.fp_endline_created_on IS NOT NULL
+THEN (
+  CASE 
+    WHEN COALESCE(DATE(d.fp_endline_created_on), CURRENT_DATE()) >= d.session_date THEN
+      (
+        SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7))
+        FROM UNNEST(
+          GENERATE_DATE_ARRAY(
+            DATE_ADD(d.session_date, INTERVAL 1 DAY),
+            COALESCE(DATE(d.fp_endline_created_on), CURRENT_DATE())
+          )
+        ) dt
       )
-    ) dt
-    WHERE EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7)
-  )
+    ELSE
+      -(
+        SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7))
+        FROM UNNEST(
+          GENERATE_DATE_ARRAY(
+            DATE_ADD(COALESCE(DATE(d.fp_endline_created_on), CURRENT_DATE()), INTERVAL 1 DAY),
+            d.session_date
+          )
+        ) dt
+      )
+  END
+)
 END AS fp_endline_TAT,
 
 -- SAF Baseline
-CASE
-  WHEN d.session_date IS NOT NULL AND d.saf_baseline_created_on IS NOT NULL
-  THEN (
-    SELECT COUNT(*)
-    FROM UNNEST(
-      GENERATE_DATE_ARRAY(
-        DATE_ADD(d.session_date, INTERVAL 1 DAY),
-        DATE(d.saf_baseline_created_on)
+CASE 
+WHEN d.session_date IS NOT NULL
+  AND d.saf_baseline_created_on IS NOT NULL
+THEN (
+  CASE 
+    WHEN COALESCE(DATE(d.saf_baseline_created_on), CURRENT_DATE()) >= d.session_date THEN
+      (
+        SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7))
+        FROM UNNEST(
+          GENERATE_DATE_ARRAY(
+            DATE_ADD(d.session_date, INTERVAL 1 DAY),
+            COALESCE(DATE(d.saf_baseline_created_on), CURRENT_DATE())
+          )
+        ) dt
       )
-    ) dt
-    WHERE EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7)
-  )
+    ELSE
+      -(
+        SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7))
+        FROM UNNEST(
+          GENERATE_DATE_ARRAY(
+            DATE_ADD(COALESCE(DATE(d.saf_baseline_created_on), CURRENT_DATE()), INTERVAL 1 DAY),
+            d.session_date
+          )
+        ) dt
+      )
+  END
+)
 END AS saf_baseline_TAT,
 
 -- SAF Endline
-CASE
-  WHEN d.session_date IS NOT NULL AND d.saf_endline_created_on IS NOT NULL
-  THEN (
-    SELECT COUNT(*)
-    FROM UNNEST(
-      GENERATE_DATE_ARRAY(
-        DATE_ADD(d.session_date, INTERVAL 1 DAY),
-        DATE(d.saf_endline_created_on)
+CASE 
+WHEN d.session_date IS NOT NULL
+  AND d.saf_endline_created_on IS NOT NULL
+THEN (
+  CASE 
+    WHEN COALESCE(DATE(d.saf_endline_created_on), CURRENT_DATE()) >= d.session_date THEN
+      (
+        SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7))
+        FROM UNNEST(
+          GENERATE_DATE_ARRAY(
+            DATE_ADD(d.session_date, INTERVAL 1 DAY),
+            COALESCE(DATE(d.saf_endline_created_on), CURRENT_DATE())
+          )
+        ) dt
       )
-    ) dt
-    WHERE EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7)
-  )
+    ELSE
+      -(
+        SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7))
+        FROM UNNEST(
+          GENERATE_DATE_ARRAY(
+            DATE_ADD(COALESCE(DATE(d.saf_endline_created_on), CURRENT_DATE()), INTERVAL 1 DAY),
+            d.session_date
+          )
+        ) dt
+      )
+  END
+)
 END AS saf_endline_TAT,
 
 -- SAR Baseline
-CASE
-  WHEN d.session_date IS NOT NULL AND d.sar_baseline_created_on IS NOT NULL
-  THEN (
-    SELECT COUNT(*)
-    FROM UNNEST(
-      GENERATE_DATE_ARRAY(
-        DATE_ADD(d.session_date, INTERVAL 1 DAY),
-        DATE(d.sar_baseline_created_on)
+CASE 
+WHEN d.session_date IS NOT NULL
+  AND d.sar_baseline_created_on IS NOT NULL
+THEN (
+  CASE 
+    WHEN COALESCE(DATE(d.sar_baseline_created_on), CURRENT_DATE()) >= d.session_date THEN
+      (
+        SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7))
+        FROM UNNEST(
+          GENERATE_DATE_ARRAY(
+            DATE_ADD(d.session_date, INTERVAL 1 DAY),
+            COALESCE(DATE(d.sar_baseline_created_on), CURRENT_DATE())
+          )
+        ) dt
       )
-    ) dt
-    WHERE EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7)
-  )
+    ELSE
+      -(
+        SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7))
+        FROM UNNEST(
+          GENERATE_DATE_ARRAY(
+            DATE_ADD(COALESCE(DATE(d.sar_baseline_created_on), CURRENT_DATE()), INTERVAL 1 DAY),
+            d.session_date
+          )
+        ) dt
+      )
+  END
+)
 END AS sar_baseline_TAT,
 
 -- SAR Endline
-CASE
-  WHEN d.session_date IS NOT NULL AND d.sar_endline_created_on IS NOT NULL
-  THEN (
-    SELECT COUNT(*)
-    FROM UNNEST(
-      GENERATE_DATE_ARRAY(
-        DATE_ADD(d.session_date, INTERVAL 1 DAY),
-        DATE(d.sar_endline_created_on)
+CASE 
+WHEN d.session_date IS NOT NULL
+  AND d.sar_endline_created_on IS NOT NULL
+THEN (
+  CASE 
+    WHEN COALESCE(DATE(d.sar_endline_created_on), CURRENT_DATE()) >= d.session_date THEN
+      (
+        SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7))
+        FROM UNNEST(
+          GENERATE_DATE_ARRAY(
+            DATE_ADD(d.session_date, INTERVAL 1 DAY),
+            COALESCE(DATE(d.sar_endline_created_on), CURRENT_DATE())
+          )
+        ) dt
       )
-    ) dt
-    WHERE EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7)
-  )
+    ELSE
+      -(
+        SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM dt) NOT IN (1,7))
+        FROM UNNEST(
+          GENERATE_DATE_ARRAY(
+            DATE_ADD(COALESCE(DATE(d.sar_endline_created_on), CURRENT_DATE()), INTERVAL 1 DAY),
+            d.session_date
+          )
+        ) dt
+      )
+  END
+)
 END AS sar_endline_TAT
 FROM attendance_join d
 ),
