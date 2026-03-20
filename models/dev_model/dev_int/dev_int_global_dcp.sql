@@ -141,12 +141,7 @@ CASE
     WHEN student_barcode = g10_barcode AND student_details_2_grade = 'Grade 10' THEN 'Grade 10'
     WHEN student_barcode = g11_barcode AND student_details_2_grade = 'Grade 11' THEN 'Grade 11'
     WHEN student_barcode = g12_barcode AND student_details_2_grade = 'Grade 12' THEN 'Grade 12'
-END AS student_details_2_grade, 
-CASE 
-    WHEN student_details_2_grade IS NOT NULL
-    THEN student_barcode
-    ELSE NULL
-END AS sd2_student_barcode,
+END AS student_details_2,
 Student_GRADE_COUNT , G9_Batch_Student_Flag , G10_Batch_Student_Flag , G11_Batch_Student_Flag , G12_Batch_Student_Flag , 
 total_years_barcode_filled , batch_id , batch_no , batch_academic_year , batch_grade , batch_language , no_of_students_facilitated , 
 fac_start_date , fac_end_date , allocation_email_sent , batch_facilitator_id , facilitator_academic_year , facilitator_id , 
@@ -156,9 +151,19 @@ tagged_for_counselling , school_partner , school_area , batch_donor_id , donor_i
 is_unmapped_student , total_stud_have_report , sar_atleast_one_reality
 
 FROM final
+),
+
+sd2_barcode as (select *,
+CASE 
+    WHEN student_details_2 IS NOT NULL
+    THEN student_barcode
+    ELSE NULL
+END AS sd2_student_barcode
+ from t1
 )
 
-select * from t1
+select * from sd2_barcode
+
 
 
 --where student_details_2_grade != 'N/A'

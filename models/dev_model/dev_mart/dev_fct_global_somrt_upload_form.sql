@@ -38,7 +38,7 @@ record_type as sar_record_type, created_from_form as sar_created_from_form, crea
 int_global_dcp as (select student_id, student_barcode, student_grade, student_batch_id, gender, batch_no, batch_academic_year, 
 school_academic_year, batch_grade, batch_language, fac_start_date, school_language, facilitator_name, facilitator_email, 
 school_name, school_taluka, school_ward, school_district, school_state, school_partner, school_area, batch_donor,  
-Student_GRADE_COUNT, G9_Batch_Student_Flag, G10_Batch_Student_Flag, G11_Batch_Student_Flag, G12_Batch_Student_Flag, student_details_2_grade 
+Student_GRADE_COUNT, G9_Batch_Student_Flag, G10_Batch_Student_Flag, G11_Batch_Student_Flag, G12_Batch_Student_Flag, student_details_2
 from {{ ref("dev_int_global_dcp") }})
 ,
 
@@ -105,7 +105,7 @@ count(distinct case when sar_record_type = 'Endline' then sar_no end) as el_sar_
 count(distinct case when sar_created_from_form = true and sar_record_type IN ('Baseline', 'Endline') then sar_no end) as sar_correct,
 
 COUNT(DISTINCT CASE
-    WHEN student_details_2_grade IN (
+    WHEN student_details_2 IN (
         'Grade 9',
         'Grade 10',
         'Grade 11',
