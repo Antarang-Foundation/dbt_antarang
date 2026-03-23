@@ -23,13 +23,13 @@ WITH ranked_sessions AS (
         school_partner,
         session_type,
         ROW_NUMBER() OVER (
-            PARTITION BY hm_school_id, hm_session_name
+            PARTITION BY hm_school_id, hm_session_name, session_academic_year
             ORDER BY hm_session_date DESC
         ) AS rn
     FROM {{ ref('dev_int_hm_session') }}
-)
+),
 
-SELECT 
+t1 as (SELECT 
     hm_school_id,
     hm_session_name,
     facilitator_name,
@@ -53,6 +53,9 @@ SELECT
     school_partner,
     session_type
 FROM ranked_sessions
-WHERE rn = 1 
+WHERE rn = 1
+)
+
+select * from t1
 --and hm_school_id = '0017F00000L5CLgQAN'
 
