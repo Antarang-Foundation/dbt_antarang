@@ -3,7 +3,7 @@ int_global as (
     select school_id, school_name, batch_academic_year, batch_language, school_taluka, school_district,
 school_state, school_area, school_partner, facilitator_name, facilitator_email,
 ROW_NUMBER() OVER (
-            PARTITION BY school_id 
+            PARTITION BY school_id, batch_academic_year 
             ORDER BY 
                 CASE WHEN facilitator_name IS NOT NULL THEN 0 ELSE 1 END, 
                 school_name DESC
@@ -82,20 +82,42 @@ post_questionair as (
 hm_session as (select distinct hm_school_id, session_academic_year from {{ ref('dev_stg_hm_session') }}
 ),
 
-source_joined as 
-(select 
+source_joined as (
+select 
     h.*, 
     s.*,
     pre.*, 
     pp.*, 
     po.*,
-    a.*,
+    a.*
+
 from int_global h
-left join pre_program pre on h.school_name = pre.pre_school_names
-    left join post_program pp on h.school_name = pp.pp_school_names
-    left join post_questionair po on h.school_name = po.po_school_names
-    left join int_global_session s on h.school_id = s.school_id
-    left join hm_session a on h.school_id = a.hm_school_id
+
+-- ✅ 1. Join hm_session FIRST
+left join hm_session a 
+    on h.school_id = a.hm_school_id
+    and CAST(h.batch_academic_year AS STRING) = CAST(a.session_academic_year AS STRING)
+
+-- ✅ 2. Pre program (use RANGE instead of strict match)
+-- ✅ Pre program (STRICT match)
+left join pre_program pre 
+    on h.school_name = pre.pre_school_names
+    and EXTRACT(YEAR FROM DATE(pre.pre_date)) = CAST(a.session_academic_year AS INT64)
+
+-- ✅ Post program
+left join post_program pp 
+    on h.school_name = pp.pp_school_names
+    and EXTRACT(YEAR FROM DATE(pp.pp_date)) = CAST(a.session_academic_year AS INT64)
+
+-- ✅ Post questionnaire
+left join post_questionair po 
+    on h.school_name = po.po_school_names
+    and EXTRACT(YEAR FROM DATE(po.po_date)) = CAST(a.session_academic_year AS INT64)
+
+-- ✅ 5. Session table
+left join int_global_session s 
+    on h.school_id = s.school_id
+
 where rn = 1
 ),
 
@@ -505,7 +527,6 @@ from expand_column
 )
 
 select * from final
-where session_academic_year is not null
 
 --where school_name = 'Mohd. Umer Rajjab Road Municipal Urdu'
 
