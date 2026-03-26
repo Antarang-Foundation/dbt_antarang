@@ -4,7 +4,7 @@ base AS (
     SELECT 
         *,
         ROW_NUMBER() OVER (
-            PARTITION BY hm_id
+            PARTITION BY hm_id, session_academic_year
             ORDER BY hm_session_date DESC
         ) AS rn_last,
         CASE
@@ -202,7 +202,7 @@ pre_latest AS (
     FROM (
         SELECT *,
             ROW_NUMBER() OVER (
-                PARTITION BY school_name
+                PARTITION BY school_name, batch_academic_year
                 ORDER BY pre_submission_time DESC
             ) AS rn_pre
         FROM {{ ref('dev_int_hm_assessment') }}
@@ -216,7 +216,7 @@ po_latest AS (
     FROM (
         SELECT *,
             ROW_NUMBER() OVER (
-                PARTITION BY school_name
+                PARTITION BY school_name, batch_academic_year
                 ORDER BY po_submission_time DESC
             ) AS rn_po
         FROM {{ ref('dev_int_hm_assessment') }}
@@ -230,7 +230,7 @@ pp_latest AS (
     FROM (
         SELECT *,
             ROW_NUMBER() OVER (
-                PARTITION BY school_name
+                PARTITION BY school_name, batch_academic_year
                 ORDER BY pp_submission_time DESC
             ) AS rn_pp
         FROM {{ ref('dev_int_hm_assessment') }}
@@ -243,6 +243,8 @@ pp_latest AS (
 hm_assessment AS (
     SELECT
         COALESCE (p.school_name, pp.school_name, po.school_name) AS ass_school_name ,
+        COALESCE(p.batch_academic_year, po.batch_academic_year, pp.batch_academic_year) 
+    AS ass_academic_year,
 
 p.pre_start, p.pre_end, p.pre_date, p.Q4_pre__years_in_this_school, p.Q5_pre_organisation_last_year, p.Q5_pre_option_1, p.Q5_pre_option_2,
 p.Q5_pre_option_3, p.Q6_pre_heard_of_antarang, p.Q7_pre_how_did_you_hear, p.Q7a_pre_newspapers, p.Q7b_pre_social_media__facebook__linked, 
@@ -312,7 +314,7 @@ hm_assessment_dedup AS (
     FROM (
         SELECT *,
                ROW_NUMBER() OVER (
-                   PARTITION BY ass_school_name
+                   PARTITION BY ass_school_name, ass_academic_year
                    ORDER BY
                        GREATEST(
                            pre_submission_time,
@@ -427,7 +429,7 @@ a.Q18A_pp_program_inc_of_all_students, a.Q18B_pp_supporting_students_raining_aft
 a.Q19_pp_leave_school, a.Q20_pp_thin_for_students, a.pp_id, a.pp_uuid, a.pp_submission_time
 FROM hm_session h
 --FULL OUTER JOIN hm_assessment a ON a.ass_school_name = h.school_name
-FULL OUTER JOIN hm_assessment_dedup a ON a.ass_school_name = h.school_name
+LEFT JOIN hm_assessment_dedup a ON a.ass_school_name = h.school_name AND CAST(a.ass_academic_year AS STRING) = CAST(h.session_academic_year AS STRING)
 LEFT JOIN int_global_session s ON h.hm_school_id = s.school_id
 LEFT JOIN hm_orientation_district od ON h.school_state = od.hm_state AND h.school_district = od.hm_district
 -- STATE-LEVEL join (keeps ALL overall_attendance rows)
@@ -440,7 +442,7 @@ final_dedup AS (
     FROM (
         SELECT *,
                ROW_NUMBER() OVER (
-                   PARTITION BY hm_school_id
+                   PARTITION BY hm_school_id, session_academic_year
                    ORDER BY session_academic_year DESC
                ) AS rn
         FROM final
@@ -449,6 +451,7 @@ final_dedup AS (
 )
 
 select * from final_dedup
+
 --where school_name = 'GHS Chessor'
 --no_of_expected_hm_sessions < 5
 
