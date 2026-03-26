@@ -122,7 +122,7 @@ where rn = 1
 ),
 
 expand_column as 
-(select  s.school_name, s.batch_language, s.school_taluka, s.school_district,
+(select  s.school_name, s.batch_language, s.school_taluka, s.school_district, s.batch_academic_year,
 s.school_state, s.school_area, s.school_partner, s.facilitator_name, s.facilitator_email, s.fac_start_date, s.fac_end_date, s.session_academic_year, s.hm_school_id,
   
   s.pre_name, pre_contact_number,	s.pre_date, s.Q5_pre_option_1, s.Q5_pre_option_2, s.Q5_pre_option_3, s.Q7_pre_Other_Please_Specify, 
@@ -311,7 +311,7 @@ from source_joined s
 ),
 
 final as (select school_name, batch_language, school_taluka, school_district,
-school_state, school_area, school_partner, facilitator_name, facilitator_email, fac_start_date, fac_end_date, session_academic_year, hm_school_id,
+school_state, school_area, school_partner, facilitator_name, facilitator_email, fac_start_date, fac_end_date, batch_academic_year, session_academic_year, hm_school_id,
 
 pre_name, pre_start, pre_end, pre_date, pre_school_names, Q3_pre_district_name, pre_contact_number,
 Q4_pre__years_in_this_school, Q5_pre_organisation_last_year, Q5_pre_option_1, Q5_pre_option_2,
