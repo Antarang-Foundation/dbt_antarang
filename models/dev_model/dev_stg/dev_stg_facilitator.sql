@@ -11,7 +11,8 @@ with source as (
         npe01__WorkEmail__c as facilitator_email,
         MobilePhone as facilitator_mobile,
         RecordTypeId as record_type_id,
-        Academic_Year__c as facilitator_academic_year 
+        Academic_Year__c as facilitator_academic_year,
+        Gender__c as facilitator_gender
     from {{ source('salesforce', 'Contact') }} 
     where IsDeleted = false and lower(name) not like '%test%'
 ),
@@ -25,7 +26,8 @@ recordtypes as (
 dev_stg_facilitator as (
     select 
         a.facilitator_id,
-        a.facilitator_name, 
+        a.facilitator_name,
+        a.facilitator_gender, 
         a.facilitator_language, 
         a.facilitator_work_status, 
         a.payment_type, 

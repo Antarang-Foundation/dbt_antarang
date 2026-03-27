@@ -14,7 +14,3 @@ t4 AS (
 
 SELECT * 
 FROM t4
-
-
-
-
