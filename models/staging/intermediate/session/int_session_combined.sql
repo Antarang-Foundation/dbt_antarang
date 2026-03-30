@@ -1,7 +1,18 @@
 WITH 
 t1 AS (SELECT * FROM {{ref('stg_session')}}),  
 t2 AS (SELECT * FROM {{ref('stg_somrt')}}),
-t3 AS (SELECT * FROM {{ref('stg_attendance')}}),
+t3 as (
+    select *
+    from (
+        select *,
+            row_number() over (
+                partition by attendance_student_id, attendance_session_id
+                order by attendance_date desc, attendance_time desc
+            ) as rn
+        from {{ ref('stg_attendance') }} 
+    )
+    where rn = 1
+),
 
 t4 AS (
     SELECT *
