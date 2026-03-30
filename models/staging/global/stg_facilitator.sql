@@ -15,7 +15,8 @@ renamed as (
         npe01__WorkEmail__c as facilitator_email,
         MobilePhone as facilitator_mobile,
         RecordTypeId as record_type_id,
-        Academic_Year__c as facilitator_academic_year
+        Academic_Year__c as facilitator_academic_year,
+        Gender__c as facilitator_gender
     from source 
 ),
 

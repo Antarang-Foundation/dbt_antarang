@@ -158,7 +158,6 @@ END AS TSP_SAR_Quiz2,
 -- TAT for CDM1
         CASE 
 WHEN session_date IS NOT NULL
-  AND cdm1_baseline_created_on IS NOT NULL
 THEN (
   CASE 
     WHEN COALESCE(DATE(cdm1_baseline_created_on), CURRENT_DATE()) >= session_date THEN
@@ -188,7 +187,6 @@ END AS cdm1_baseline_TAT,
 -- CDM1 Endline
 CASE 
 WHEN session_date IS NOT NULL
-  AND cdm1_endline_created_on IS NOT NULL
 THEN (
   CASE 
     WHEN COALESCE(DATE(cdm1_endline_created_on), CURRENT_DATE()) >= session_date THEN
@@ -218,7 +216,6 @@ END AS cdm1_endline_TAT,
 -- CDM2 Baseline
 CASE 
 WHEN session_date IS NOT NULL
-  AND cdm2_baseline_created_on IS NOT NULL
 THEN (
   CASE 
     WHEN COALESCE(DATE(cdm2_baseline_created_on), CURRENT_DATE()) >= session_date THEN
@@ -248,7 +245,6 @@ END AS cdm2_baseline_TAT,
 -- CDM2 Endline
 CASE 
 WHEN session_date IS NOT NULL
-  AND cdm2_endline_created_on IS NOT NULL
 THEN (
   CASE 
     WHEN COALESCE(DATE(cdm2_endline_created_on), CURRENT_DATE()) >= session_date THEN
@@ -278,7 +274,6 @@ END AS cdm2_endline_TAT,
 -- CP Baseline
 CASE 
 WHEN session_date IS NOT NULL
-  AND cp_baseline_created_on IS NOT NULL
 THEN (
   CASE 
     WHEN COALESCE(DATE(cp_baseline_created_on), CURRENT_DATE()) >= session_date THEN
@@ -308,7 +303,6 @@ END AS cp_baseline_TAT,
 -- CP Endline
 CASE 
 WHEN session_date IS NOT NULL
-  AND cp_endline_created_on IS NOT NULL
 THEN (
   CASE 
     WHEN COALESCE(DATE(cp_endline_created_on), CURRENT_DATE()) >= session_date THEN
@@ -338,7 +332,6 @@ END AS cp_endline_TAT,
 -- CS Baseline
 CASE 
 WHEN session_date IS NOT NULL
-  AND cs_baseline_created_on IS NOT NULL
 THEN (
   CASE 
     WHEN COALESCE(DATE(cs_baseline_created_on), CURRENT_DATE()) >= session_date THEN
@@ -368,7 +361,6 @@ END AS cs_baseline_TAT,
 -- CS Endline
 CASE 
 WHEN session_date IS NOT NULL
-  AND cs_endline_created_on IS NOT NULL
 THEN (
   CASE 
     WHEN COALESCE(DATE(cs_endline_created_on), CURRENT_DATE()) >= session_date THEN
@@ -398,7 +390,6 @@ END AS cs_endline_TAT,
 -- FP Baseline
 CASE 
 WHEN session_date IS NOT NULL
-  AND fp_baseline_created_on IS NOT NULL
 THEN (
   CASE 
     WHEN COALESCE(DATE(fp_baseline_created_on), CURRENT_DATE()) >= session_date THEN
@@ -428,7 +419,6 @@ END AS fp_baseline_TAT,
 -- FP Endline
 CASE 
 WHEN session_date IS NOT NULL
-  AND fp_endline_created_on IS NOT NULL
 THEN (
   CASE 
     WHEN COALESCE(DATE(fp_endline_created_on), CURRENT_DATE()) >= session_date THEN
@@ -458,7 +448,6 @@ END AS fp_endline_TAT,
 -- SAF Baseline
 CASE 
 WHEN session_date IS NOT NULL
-  AND saf_baseline_created_on IS NOT NULL
 THEN (
   CASE 
     WHEN COALESCE(DATE(saf_baseline_created_on), CURRENT_DATE()) >= session_date THEN
@@ -488,7 +477,6 @@ END AS saf_baseline_TAT,
 -- SAF Endline
 CASE 
 WHEN session_date IS NOT NULL
-  AND saf_endline_created_on IS NOT NULL
 THEN (
   CASE 
     WHEN COALESCE(DATE(saf_endline_created_on), CURRENT_DATE()) >= session_date THEN
@@ -518,7 +506,6 @@ END AS saf_endline_TAT,
 -- SAR Baseline
 CASE 
 WHEN session_date IS NOT NULL
-  AND sar_baseline_created_on IS NOT NULL
 THEN (
   CASE 
     WHEN COALESCE(DATE(sar_baseline_created_on), CURRENT_DATE()) >= session_date THEN
@@ -548,7 +535,6 @@ END AS sar_baseline_TAT,
 -- SAR Endline
 CASE 
 WHEN session_date IS NOT NULL
-  AND sar_endline_created_on IS NOT NULL
 THEN (
   CASE 
     WHEN COALESCE(DATE(sar_endline_created_on), CURRENT_DATE()) >= session_date THEN
