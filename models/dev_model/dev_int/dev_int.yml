@@ -79,3 +79,9 @@ models:
     columns:
       - name: student_name
         description: "The primary key of this table"
+
+  - name: dev_int_student_global_diagnostics
+    # description:
+    columns:
+      - name: diagnostics_id
+        description: "The primary key of this table"
