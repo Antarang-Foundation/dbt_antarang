@@ -29,7 +29,8 @@ with
             Number_of_Sessions_No_of_Units__c as no_of_sessions_no_of_units,
             Total_Amount__c as total_amount,
             Guardian_Parent_Count__c as parent_present_count,
-            Session_Mode__c as session_mode
+            Session_Mode__c as session_mode,
+            Session_Status__c as session_status
         from t0
         
     ),

@@ -54,6 +54,5 @@ sources:
         description: this is pre program questionaire form
       - name: Attendace_sheet
         description: this is hm_orientation attendance data
-
-      - name: Stage_
-        description: this is student_diagnostics stage data
+      - name: Student_Diagnostic__c
+        description: this is student_diagnostics stg data

@@ -621,3 +621,9 @@ models:
     columns:
       - name: attendance_student_id
         description: "The primary key of this table"
+
+  - name: int_student_diagnostic
+    description: "Added global filters along with stg_diagnostic"
+    columns:
+      - name: diagnostics_id
+        description: "The primary key of this table"

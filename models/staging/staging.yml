@@ -161,7 +161,6 @@ models:
         tests:
           - not_null
 
-
   - name: stg_attendance
     description: "A student-level staging table derived from SF Source Session_Attendance__c with session-wise attendance of all students."
     columns:
@@ -178,7 +177,6 @@ models:
         description: "A foreign key in the table linking with student details."
         tests:
           - not_null
-        
 
   - name: stg_cdm1
     description: "A student-level staging table derived from SF Source OMR_Assessment__c with details of all CDM1 uploads."
@@ -192,8 +190,8 @@ models:
         description: "The secondary key for this table"
         tests:
           - unique
-          - not_null   
-          
+          - not_null
+
   - name: stg_cdm2
     description: "A student-level staging table derived from SF Source CDM2__c with details of all CDM2 uploads."
     columns:
@@ -267,7 +265,7 @@ models:
         description: "The secondary key for this table"
         tests:
           - accepted_values:
-              values: ['Baseline']
+              values: ["Baseline"]
 
   - name: stg_sar
     description: "A student-level staging table derived from SF Source Self_Awareness_Realities__c with details of all SAR uploads."
@@ -286,7 +284,7 @@ models:
         description: "The secondary key for this table"
         tests:
           - accepted_values:
-              values: ['Baseline']
+              values: ["Baseline"]
 
   - name: stg_assessment_marks
     description: A table consists student with their assessment_marks object data with all global filters
@@ -296,7 +294,7 @@ models:
 
   - name: stg_iarp_master
     description: IARP details with profession
-    columns: 
+    columns:
       - name: Id
       - name: profession_name
 
@@ -311,4 +309,8 @@ models:
         tests:
           - unique
           - not_null
-  
+  - name: stg_student_diagnostic
+    description: "A student diagnostic assessment table"
+    columns:
+      - name: diagnostics_id
+        description: "The primary key for this table"

@@ -297,8 +297,4 @@ models:
         tests:
           - unique
           - not_null
-  - name: dev_stg_diagnostics
-    description: "A student-level staging table to calculate the marks of the students."
-    columns:
-      - name: diagnostics_id
-        description: "The primary key of this table"
+
