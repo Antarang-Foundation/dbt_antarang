@@ -40,7 +40,7 @@ with
     batch_school_id, school_id, school_name, school_taluka, school_district, school_state,
     school_academic_year, school_language, enrolled_g9, enrolled_g10, enrolled_g11, enrolled_g12,
     tagged_for_counselling, school_partner, school_area, batch_donor_id, donor_id, batch_donor,
-    session_id, session_batch_id, session_facilitator_id, session_code, session_name,
+    session_id, session_batch_id, session_facilitator_id, session_code, session_name, session_status,
     session_date, session_start_time, session_grade, session_no,
     omr_required, omrs_received, total_student_present, total_parent_present, log_reason, attendance_submitted, present_count, attendance_count,
     payment_status, parent_present_count, session_mode,
