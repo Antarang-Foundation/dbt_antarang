@@ -15,16 +15,16 @@ student_diagnostics AS (
         -- ✅ diagnostics columns
         a.created_by_date, a.created_from_form, a.diagnostics_id, a.diagnostics_name, a.record_type_id, a.assessment_barcode, a.assessment_grade,
 
-        COALESCE(a.a_q1, a.b_q1) AS q1,
-        COALESCE(a.a_q2, a.b_q2) AS q2,
-        COALESCE(a.a_q3, a.b_q3) AS q3,
-        COALESCE(a.a_q4, a.b_q4) AS q4,
-        COALESCE(a.a_q5, a.b_q5) AS q5,
-        COALESCE(a.a_q6, a.b_q6) AS q6,
-        COALESCE(a.a_q7, a.b_q7) AS q7,
-        COALESCE(a.a_q8, a.b_q8) AS q8,
-        COALESCE(a.a_q9, a.b_q9) AS q9,
-        COALESCE(a.a_q10, a.b_q10) AS q10
+        COALESCE(a.a_q1_marks, a.b_q1_marks) AS q1,
+        COALESCE(a.a_q2_marks, a.b_q2_marks) AS q2,
+        COALESCE(a.a_q3_marks, a.b_q3_marks) AS q3,
+        COALESCE(a.a_q4_marks, a.b_q4_marks) AS q4,
+        COALESCE(a.a_q5_marks, a.b_q5_marks) AS q5,
+        COALESCE(a.a_q6_marks, a.b_q6_marks) AS q6,
+        COALESCE(a.a_q7_marks, a.b_q7_marks) AS q7,
+        COALESCE(a.a_q8_marks, a.b_q8_marks) AS q8,
+        COALESCE(a.a_q9_marks, a.b_q9_marks) AS q9,
+        COALESCE(a.a_q10_marks, a.b_q10_marks) AS q10
 
     FROM {{ ref('stg_student_diagnostic') }} a
     LEFT JOIN int_student_global b

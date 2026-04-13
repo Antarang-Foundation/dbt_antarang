@@ -93,8 +93,7 @@ t8 AS (
 
     -- TAT1: Session → OMR received
     CASE 
-WHEN total_student_present IS NOT NULL
-  AND session_date IS NOT NULL
+WHEN omr_received_date IS NOT NULL
 THEN (
   CASE 
     WHEN COALESCE(omr_received_date, CURRENT_DATE()) >= session_date THEN
@@ -123,8 +122,7 @@ END AS TAT1,
 
     -- TAT2: OMR received → First upload
 CASE 
-WHEN total_student_present IS NOT NULL 
-  AND omr_received_date IS NOT NULL
+WHEN omr_received_date IS NOT NULL
 THEN (
   CASE 
     WHEN COALESCE(first_omr_upload_date, CURRENT_DATE()) >= omr_received_date THEN
@@ -132,8 +130,8 @@ THEN (
         SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM d) NOT IN (1,7))
         FROM UNNEST(
           GENERATE_DATE_ARRAY(
-            DATE_ADD(omr_received_date, INTERVAL 1 DAY),
-            COALESCE(first_omr_upload_date, CURRENT_DATE())
+            DATE_ADD(first_omr_upload_date, INTERVAL 1 DAY),
+            COALESCE(omr_received_date, CURRENT_DATE())
           )
         ) d
       )
@@ -153,8 +151,7 @@ END AS TAT2,
 
     -- TAT3: Session → First upload
     CASE 
-WHEN total_student_present IS NOT NULL 
-  AND session_date IS NOT NULL
+WHEN first_omr_upload_date IS NOT NULL
 THEN (
   CASE 
     WHEN COALESCE(first_omr_upload_date, CURRENT_DATE()) >= session_date THEN
