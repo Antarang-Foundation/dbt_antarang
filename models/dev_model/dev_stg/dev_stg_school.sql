@@ -16,7 +16,8 @@ with t0 as (
         Enrolled_Grade_11__c as enrolled_g11,
         Enrolled_Grade_12__c as enrolled_g12,
         Tagged_for_Counselling__c as tagged_for_counselling,
-        School_Area__c as school_area
+        School_Area__c as school_area,
+        Address__c as school_address
         --Tagged_for_Experiential_Learning__c as Tagged_for_Experiential_Learning,
         --Tagged_for_Digital_Learning__c as Tagged_for_Digital_Learning__c
     from {{ source('salesforce', 'Account') }} 
@@ -43,6 +44,7 @@ t2 as (
         t0.enrolled_g12, 
         t0.tagged_for_counselling, 
         t0.school_area, 
+        t0.school_address,
         t1.record_type,
         t0.school_state_id,
         t0.school_district_id,
