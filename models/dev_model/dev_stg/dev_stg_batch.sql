@@ -17,7 +17,8 @@ a as (
         Date_of_facilitation_completion__c as fac_end_date,
         Allocation_Email_Sent__c as allocation_email_sent,
         Donor_Name__c as batch_donor_id,
-        Number_of_students_facilitated__c as no_of_students_facilitated
+        Number_of_students_facilitated__c as no_of_students_facilitated,
+        CreatedDate as batch_created_date
 
     from source
      
