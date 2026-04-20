@@ -102,29 +102,25 @@ left join hm_session a
 
 -- ✅ 2. Pre program (use RANGE instead of strict match)
 -- ✅ Pre program (STRICT match)
-left join pre_program pre 
-    on LOWER(TRIM(h.school_name)) = LOWER(TRIM(pre.pre_school_names))
-    and (
-        EXTRACT(YEAR FROM DATE(pre.pre_date)) 
-        - CASE 
-            WHEN EXTRACT(MONTH FROM DATE(pre.pre_date)) < 4 THEN 1 
-            ELSE 0 
-          END
-    ) = CAST(a.session_academic_year AS INT64)
+LEFT JOIN pre_program pre 
+ON LOWER(TRIM(h.school_name)) = LOWER(TRIM(pre.pre_school_names))
+AND DATE(pre.pre_date) BETWEEN 
+    DATE(CONCAT(CAST(a.session_academic_year AS STRING), '-03-01'))
+    AND DATE(CONCAT(CAST(CAST(a.session_academic_year AS INT64) + 1 AS STRING), '-03-31'))
 
 -- ✅ Post program
-left join post_program pp 
-    on LOWER(TRIM(h.school_name)) = LOWER(TRIM(pp.pp_school_names))
-    and DATE(pp.pp_date) BETWEEN 
-        DATE(CONCAT(a.session_academic_year, '-04-01'))
-        AND DATE(CONCAT(CAST(CAST(a.session_academic_year AS INT64) + 1 AS STRING), '-03-31'))
+LEFT JOIN post_program pp 
+ON LOWER(TRIM(h.school_name)) = LOWER(TRIM(pp.pp_school_names))
+AND DATE(pp.pp_date) BETWEEN 
+    DATE(CONCAT(CAST(a.session_academic_year AS STRING), '-04-01'))
+    AND DATE(CONCAT(CAST(CAST(a.session_academic_year AS INT64) + 1 AS STRING), '-03-31'))
 
 -- ✅ Post questionnaire
-left join post_questionair po 
-    on LOWER(TRIM(h.school_name)) = LOWER(TRIM(po.po_school_names))
-    and DATE(po.po_date) BETWEEN 
-        DATE(CONCAT(a.session_academic_year, '-04-01'))
-        AND DATE(CONCAT(CAST(CAST(a.session_academic_year AS INT64) + 1 AS STRING), '-03-31'))
+LEFT JOIN post_questionair po 
+ON LOWER(TRIM(h.school_name)) = LOWER(TRIM(po.po_school_names))
+AND DATE(po.po_date) BETWEEN 
+    DATE(CONCAT(CAST(a.session_academic_year AS STRING), '-04-01'))
+    AND DATE(CONCAT(CAST(CAST(a.session_academic_year AS INT64) + 1 AS STRING), '-03-31'))
 
 -- ✅ 5. Session table
 left join int_global_session s 

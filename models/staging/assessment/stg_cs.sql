@@ -30,7 +30,7 @@ t1 as (
             Q_16__c as q16, Q_16_Ans__c as q16_marks,
 
             (Q_11_Ans__c + Q_12_Ans__c + Q_13_Ans__c + Q_14_Ans__c + Q_15_Ans__c + Q_16_Ans__c) as cs_total_marks,
-
+            Q_11_10__c as q11_10, 
             Error_Status__c as error_status, 
             Data_Clean_up__c as data_cleanup,
             Marks_Recalculated__c as marks_recalculated,
@@ -46,7 +46,7 @@ t3 as (select cs_id, assessment_barcode, record_type, created_on, created_from_f
 (case 
 
 when cs_no is not null and (q11_1 is not null or q11_2 is not null or q11_3 is not null or q11_4 is not null or q11_5 is not null or q11_6 is not null or 
-q11_7 is not null or q11_8 is not null or q11_9 is not null or q12_1 is not null or q12_2 is not null or q12_3 is not null or q12_4 is not null or 
+q11_7 is not null or q11_8 is not null or q11_9 is not null or q11_10 is not null or q12_1 is not null or q12_2 is not null or q12_3 is not null or q12_4 is not null or 
 q13 is not null or q14 is not null or q15_1 is not null or q15_2 is not null or q15_3 is not null or q15_4 is not null or q15_5 is not null or 
 q15_6 is not null or q15_7 is not null or q15_8 is not null or q15_9 is not null or q16 is not null) then 1 
 
