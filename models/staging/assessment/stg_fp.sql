@@ -29,7 +29,11 @@ t1 as (
         (Q_17_Ans__c + Q_18_Ans__c + Q_19_Ans__c + Q_20_Ans__c + Q_21_Ans__c + Q_22_Ans__c) as fp_total_marks,
         
         F_1__c as f1, F_2__c as f2, F_3__c as f3, F_4__c as f4, F_5__c as f5, F_6__c as f6, F_7__c as f7, F_8__c as f8, F_9__c as f9, F_10__c as f10, 
-        F_11__c as f11, F_12__c as f12,
+        F_11__c as f11, F_12__c as f12, 
+
+        F_1_Marks__c, F_2_Marks__c,	F_3_Marks__c, F_4_Marks__c,	F_5_Marks__c, F_6_Marks__c,	F_7_Marks__c, F_8_Marks__c,	
+        F_9_Marks__c,
+
 
         Error_Status__c as error_status, 
         Data_Clean_up__c as data_cleanup,
