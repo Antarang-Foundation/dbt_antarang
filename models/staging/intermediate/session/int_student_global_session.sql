@@ -12,7 +12,11 @@ t4 AS (
             WHEN t3.session_mode = 'Any' AND t3.school_district = 'RJ Model B' 
             THEN 'HW Session'
             ELSE t3.session_type
-        END)updated_session_type
+        END)updated_session_type,
+        case 
+            when lower(session_name) like '%endline%' 
+            then session_date 
+        end as fac_end_date
     FROM t3
 )
 

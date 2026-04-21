@@ -17,7 +17,9 @@ with t0 as (
         Enrolled_Grade_12__c as enrolled_g12,
         Tagged_for_Counselling__c as tagged_for_counselling,
         School_Area__c as school_area,
-        Address__c as school_address
+        Address__c as school_address,
+        Principal_Name__c as principal_name,
+        Phone as phone
         --Tagged_for_Experiential_Learning__c as Tagged_for_Experiential_Learning,
         --Tagged_for_Digital_Learning__c as Tagged_for_Digital_Learning__c
     from {{ source('salesforce', 'Account') }} 
@@ -49,7 +51,9 @@ t2 as (
         t0.school_state_id,
         t0.school_district_id,
         t0.school_ward_id,
-        t0.school_taluka_id
+        t0.school_taluka_id,
+        t0.principal_name,
+        t0.Phone
     from t0
     inner join t1 
     on t0.record_type_id = t1.record_type_id
@@ -76,4 +80,5 @@ t7 as (
 
 select *
 from t7
+
     
