@@ -2,14 +2,14 @@ with
     t1 as (
     select
         batch_id, batch_no, batch_academic_year, batch_grade, batch_language, no_of_students_facilitated, fac_start_date,
-        fac_end_date, allocation_email_sent, batch_facilitator_id, facilitator_id, facilitator_name, facilitator_email,
+        allocation_email_sent, batch_facilitator_id, facilitator_id, facilitator_name, facilitator_email,
         batch_school_id, school_id, school_name, school_taluka, school_district, school_state, school_academic_year,
         school_language, enrolled_g9, enrolled_g10, enrolled_g11, enrolled_g12, tagged_for_counselling, school_partner,
         school_area, batch_donor_id, donor_id, batch_donor, school_ward
     from {{ ref("dev_int_global_dcp") }}
     group by
         batch_id, batch_no, batch_academic_year, batch_grade, batch_language, no_of_students_facilitated, fac_start_date,
-        fac_end_date, allocation_email_sent, batch_facilitator_id, facilitator_id, facilitator_name, facilitator_email,
+        allocation_email_sent, batch_facilitator_id, facilitator_id, facilitator_name, facilitator_email,
         batch_school_id, school_id, school_name, school_taluka, school_district, school_state, school_academic_year,
         school_language, enrolled_g9, enrolled_g10, enrolled_g11, enrolled_g12, tagged_for_counselling, school_partner,
         school_area, batch_donor_id, donor_id, batch_donor, school_ward
@@ -58,7 +58,11 @@ with
                         and session_date is not null
                     then 'Batch Started'
                 end
-            ) batch_status
+            ) batch_status,
+            case 
+        when lower(session_name) like '%endline%' 
+        then session_date 
+    end as fac_end_date
         from t3
     )
 

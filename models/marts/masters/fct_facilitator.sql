@@ -10,7 +10,7 @@ stg_school AS (
 ),
 
 stg_donor AS (
-    SELECT donor_id, donor_name FROM {{ ref('dev_stg_donor') }}
+    SELECT donor_id, donor_name as batch_donor FROM {{ ref('dev_stg_donor') }}
 ),
 
 stg_batch AS (
@@ -22,7 +22,7 @@ final AS (
     SELECT facilitator_id, facilitator_name, facilitator_gender, facilitator_language, facilitator_work_status, facilitator_area, 
     facilitator_academic_year, batch_no, batch_school_id, batch_academic_year, batch_grade, batch_completed, 
     batch_language, batch_facilitator_id, no_of_students_facilitated, school_id, school_name, school_language, 
-    school_academic_year, school_state, school_district, school_partner, school_ward, school_taluka, donor_name
+    school_academic_year, school_state, school_district, school_partner, school_ward, school_taluka, batch_donor
     FROM stg_batch b
     LEFT JOIN stg_facilitator f ON b.batch_facilitator_id = f.facilitator_id
     LEFT JOIN stg_school s ON b.batch_school_id = s.school_id
