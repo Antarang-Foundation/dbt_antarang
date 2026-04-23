@@ -13,11 +13,15 @@ t4 AS (
             THEN 'HW Session'
             ELSE t3.session_type
         END)updated_session_type,
-        case 
-            when lower(session_name) like '%endline%' 
-            then session_date 
-        end as fac_end_date
+        MAX(
+        CASE 
+            WHEN LOWER(session_name) LIKE '%endline%' 
+            THEN session_date 
+        END
+    ) OVER (PARTITION BY batch_no) AS fac_end_date
+        
     FROM t3
 )
 
-SELECT * FROM t4 where batch_academic_year >= 2023 and facilitator_name is not null
+SELECT * FROM t4 
+where batch_academic_year >= 2023 and facilitator_name is not null
