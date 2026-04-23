@@ -59,10 +59,13 @@ with
                     then 'Batch Started'
                 end
             ) batch_status,
-            case 
-        when lower(session_name) like '%endline%' 
-        then session_date 
-    end as fac_end_date
+            
+             MAX(
+        CASE 
+            WHEN LOWER(session_name) LIKE '%endline%' 
+            THEN session_date 
+        END
+    ) OVER (PARTITION BY batch_no) AS fac_end_date
         from t3
     )
 
