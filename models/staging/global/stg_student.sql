@@ -92,7 +92,7 @@ recordtypes as (select record_type_id, record_type from {{ ref('seed_recordtype'
         reality_1, reality_2, reality_3, reality_4, reality_5, reality_6, reality_7, reality_8, aspiration_1, 
         aspiration_2, aspiration_3, recommedation_status, recommendation_report_status, possible_career_report, 
         career_tracks, clarity_report, current_aspiration, possible_careers_1, possible_careers_2, possible_careers_3, 
-        followup_1_aspiration, followup_2_aspiration, student_details_2_submitted, student_details_2_grade,
+        followup_1_aspiration, followup_2_aspiration, student_details_2_submitted, student_details_2_grade, currently_studying,
         LENGTH(student_details_2_grade) - LENGTH(REPLACE(student_details_2_grade, ';', '')) + 1 AS Student_GRADE_COUNT,
         Case when(g9_batch_id is not null and student_details_2_grade like '%9%') then 1 Else 0 END G9_Batch_Student_Flag,
         Case when(g10_batch_id is not null and student_details_2_grade like '%10%') then 1 Else 0 END G10_Batch_Student_Flag,
