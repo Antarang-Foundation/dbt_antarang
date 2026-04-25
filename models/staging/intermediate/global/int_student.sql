@@ -5,7 +5,7 @@ with
     g9_batch_id, g10_batch_id, g11_batch_id, g12_batch_id, current_grade1, 
     current_grade2, possible_career_report, career_tracks, clarity_report, current_aspiration, 
     possible_careers_1, possible_careers_2, possible_careers_3, followup_1_aspiration, followup_2_aspiration, 
-    student_details_2_submitted, student_details_2_grade
+    student_details_2_submitted, student_details_2_grade, currently_studying
     from {{ ref("stg_student") }}),
 
     t1 as ((select g9_barcode as student_barcode, g9_batch_id as student_batch_id, 'Grade 9' as `student_grade`, * from t0 where g9_barcode is not null or g9_batch_id is not null) 
