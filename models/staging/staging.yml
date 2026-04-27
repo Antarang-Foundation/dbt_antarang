@@ -306,3 +306,9 @@ models:
     columns:
       - name: diagnostics_id
         description: "The primary key for this table"
+
+  - name: stg_ca
+    description: "A Career Awareness stg table"
+    columns:
+      - name: cdm3_id
+        description: "The primary key for this table"

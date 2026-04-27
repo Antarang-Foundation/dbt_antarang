@@ -56,3 +56,5 @@ sources:
         description: this is hm_orientation attendance data
       - name: Student_Diagnostic__c
         description: this is student_diagnostics stg data
+      - name: CA_Stage
+        description: this is Career Awareness Mock stg data
