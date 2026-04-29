@@ -16,7 +16,8 @@ renamed as (
         MobilePhone as facilitator_mobile,
         RecordTypeId as record_type_id,
         Academic_Year__c as facilitator_academic_year,
-        Gender__c as facilitator_gender
+        Gender__c as facilitator_gender,
+        Date_of_Joining__c as joining_date
     from source 
 ),
 
