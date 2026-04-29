@@ -51,3 +51,4 @@ FROM exploded e
 
 LEFT JOIN seed s
     ON s.industry = e.industry AND s.option = e.correct_options
+WHERE s.career_type IS NOT NULL

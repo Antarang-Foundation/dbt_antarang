@@ -30,7 +30,10 @@ aggregated AS (
         COUNTIF(career_type = 'Steady') AS steady_count,
         COUNTIF(career_type = 'Emerging') AS emerging_count,
 
-        SUM(weight) AS industry_wise_weightage
+        -- ✅ Final weight logic
+        COALESCE(COUNTIF(career_type = 'Steady'), 0) * 0.3 +
+        COALESCE(COUNTIF(career_type = 'Emerging'), 0) * 0.7
+        AS industry_wise_weightage
 
     FROM joined
     GROUP BY 1,2,3
