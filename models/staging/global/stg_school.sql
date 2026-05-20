@@ -37,7 +37,10 @@ t4 as (select * from {{ ref('seed_district') }}),
 t5 as (select * from {{ ref('seed_ward') }}),
 t6 as (select * from {{ ref('seed_taluka') }}),
 
-t7 as (select * except (school_state_id, state_id, state_name, state_code, school_district_id, district_id, district_name, school_ward_id, ward_id, ward_name, school_taluka_id, taluka_id, taluka_name), state_name as school_state, district_name as school_district, ward_name as school_ward, taluka_name as school_taluka
+t7 as (select * except (school_state_id, state_id, state_name, state_code, school_district_id, district_id, district_name, school_ward_id, ward_id, ward_name, school_taluka_id, taluka_id, taluka_name), state_name as school_state, 
+taluka_name as school_district,
+ward_name as school_taluka,
+ward_name as school_ward
 
 from t2 
 
