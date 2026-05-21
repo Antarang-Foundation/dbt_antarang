@@ -68,9 +68,9 @@ t7 as (
     select 
         t2.*, 
         t3.state_name as school_state, 
-        t6.taluka_name as school_district, 
-        t5.ward_name as school_taluka,
-        t5.ward_name as school_ward
+        t4.district_name as school_district, 
+        t5.ward_name as school_ward, 
+        t6.taluka_name as school_taluka
     from t2 
     left join t3 on t2.school_state_id = t3.state_id 
     left join t4 on t2.school_district_id = t4.district_id 
