@@ -11,7 +11,6 @@ t_sessions AS (
     SELECT DISTINCT
         session_id,
         session_batch_id,
-        session_status,
         somrt_batch_id,
         session_facilitator_id,
         session_code,
