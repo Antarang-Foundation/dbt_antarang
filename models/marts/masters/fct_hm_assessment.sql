@@ -1,5 +1,5 @@
 with 
-final as (select school_name, session_academic_year, batch_language, school_taluka, school_district,
+final as (select school_name, session_academic_year, batch_language, school_taluka, school_ward, school_district,
 school_state, school_area, school_partner, facilitator_name, facilitator_email, fac_start_date, fac_end_date,
 
 pre_start, pre_end, pre_date,

@@ -116,6 +116,7 @@ SELECT
     lb.batch_language,
     lb.school_name,
     lb.school_taluka,
+    lb.school_ward,
     lb.school_district,
     lb.school_state,
     lb.school_area,
@@ -181,6 +182,7 @@ GROUP BY
     lb.batch_language,
     lb.school_name,
     lb.school_taluka,
+    lb.school_ward,
     lb.school_district,
     lb.school_state,
     lb.school_area,
@@ -360,7 +362,7 @@ hm_orientation_district AS (
 
 final as (
     SELECT h.hm_school_id, h.facilitator_name, h.facilitator_email, h.session_academic_year, h.batch_language, --COALESCE (h.school_name, a.ass_school_name) AS school_name,
-    h.school_name, h.school_taluka, h.school_district, 
+    h.school_name, h.school_taluka, h.school_ward, h.school_district, 
     h.school_state, h.school_area, h.school_partner, od.orientation_date, os.orientation_attendance, od.district_overall_attendance, s.fac_start_date, s.fac_end_date, 
     DATE_DIFF(DATE(s.fac_start_date), od.orientation_date, DAY) AS TAT_1,
     h.no_of_expected_hm_sessions, 

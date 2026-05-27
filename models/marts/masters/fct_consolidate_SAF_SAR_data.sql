@@ -10,6 +10,7 @@ with t1 as (
             batch_language,
             school_area,
             school_taluka,
+            school_ward,
             school_partner,
             a.stg_saf_sd,
             a.bl_saf_raw,
@@ -41,6 +42,7 @@ with t1 as (
                     batch_language,
                     school_area,
                     school_taluka,
+                    school_ward,
                     school_partner,
                     sum(stg_saf_sd) stg_saf_sd,
                     sum(bl_saf_raw) bl_saf_raw,
@@ -66,6 +68,7 @@ with t1 as (
                     batch_language,
                     school_area,
                     school_taluka,
+                    school_ward,
                     school_partner
             ) a
         left join

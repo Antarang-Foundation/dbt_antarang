@@ -13,6 +13,7 @@ t1 AS (
         school_state,
         school_district,
         school_taluka,
+        school_ward,
         school_partner,
         batch_donor, gender
     FROM {{ ref('dev_int_global_dcp') }}
@@ -48,6 +49,7 @@ t3 AS (
         t2.school_state,
         t2.school_district,
         t2.school_taluka,
+        t2.school_ward,
         t2.school_partner,
         t2.batch_donor,
         t2.assessment_barcode,
@@ -73,6 +75,7 @@ t3 AS (
         t2.school_state,
         t2.school_district,
         t2.school_taluka,
+        t2.school_ward,
         t2.school_partner,
         t2.batch_donor,
         t2.assessment_barcode
@@ -93,6 +96,7 @@ t4 AS (
         school_state,
         school_district,
         school_taluka,
+        school_ward,
         school_partner,
         batch_donor,
         CAST(bl_cdm1_no AS STRING) AS bl_cdm1_no,
@@ -116,6 +120,7 @@ t4 AS (
         school_state,
         school_district,
         school_taluka,
+        school_ward,
         school_partner,
         batch_donor,
         CAST(bl_cdm1_no AS STRING) AS bl_cdm1_no,
@@ -142,6 +147,7 @@ t5 AS (
         school_state,
         school_district,
         school_taluka,
+        school_ward,
         school_partner,
         batch_donor,
         CAST(NULL AS STRING) AS bl_cdm1_no,
@@ -165,6 +171,7 @@ t5 AS (
         school_state,
         school_district,
         school_taluka,
+        school_ward,
         school_partner,
         batch_donor,
         CAST(NULL AS STRING) AS bl_cdm1_no,
@@ -212,6 +219,7 @@ t8 AS (
         school_state,
         school_district,
         school_taluka,
+        school_ward,
         school_partner,
         batch_donor,
         MAX(bl_cdm1_no) AS bl_cdm1_no,
@@ -234,6 +242,7 @@ t8 AS (
         school_state,
         school_district,
         school_taluka,
+        school_ward,
         school_partner,
         batch_donor
 )
