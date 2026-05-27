@@ -9,7 +9,7 @@ t2 AS (
         session_batch_id, 
         batch_no AS session_batch_no,
         batch_academic_year, batch_grade, batch_language, batch_donor, facilitator_id, facilitator_name,
-        school_name, school_id, school_state, school_district, school_taluka, school_partner, school_area,
+        school_name, school_id, school_state, school_district, school_taluka, school_ward, school_partner, school_area,
         session_id, session_type, session_no, attendance_submitted, 
         batch_expected_sessions, batch_expected_student_type_session, 
         batch_scheduled_sessions, batch_completed_sessions
@@ -54,6 +54,7 @@ t6 AS (
         MAX(school_state) AS school_state,
         MAX(school_district) AS school_district,
         MAX(school_taluka) AS school_taluka,
+        MAX(school_ward) AS school_ward,
         MAX(school_partner) AS school_partner,
         MAX(school_area) AS school_area,
 

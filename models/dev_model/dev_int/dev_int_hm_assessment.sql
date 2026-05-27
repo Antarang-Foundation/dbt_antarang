@@ -1,6 +1,6 @@
 with 
 int_global as (
-    select school_id, school_name, batch_academic_year, batch_language, school_taluka, school_district,
+    select school_id, school_name, batch_academic_year, batch_language, school_taluka, school_ward, school_district,
 school_state, school_area, school_partner, facilitator_name, facilitator_email,
 ROW_NUMBER() OVER (
             PARTITION BY school_id, batch_academic_year 
@@ -130,7 +130,7 @@ where rn = 1
 ),
 
 expand_column as 
-(select  s.school_name, s.batch_language, s.school_taluka, s.school_district, s.batch_academic_year,
+(select  s.school_name, s.batch_language, s.school_taluka, s.school_ward, s.school_district, s.batch_academic_year,
 s.school_state, s.school_area, s.school_partner, s.facilitator_name, s.facilitator_email, s.fac_start_date, s.fac_end_date, s.session_academic_year, s.hm_school_id,
   
   s.pre_name, pre_contact_number,	s.pre_date, s.Q5_pre_option_1, s.Q5_pre_option_2, s.Q5_pre_option_3, s.Q7_pre_Other_Please_Specify, 
@@ -347,7 +347,7 @@ case when Q17_pp_materials_that_apply like '%Counselling_Report%' then 1 else 0 
 from source_joined s
 ),
 
-final as (select school_name, batch_language, school_taluka, school_district,
+final as (select school_name, batch_language, school_taluka, school_ward, school_district,
 school_state, school_area, school_partner, facilitator_name, facilitator_email, fac_start_date, fac_end_date, batch_academic_year, session_academic_year, hm_school_id,
 
 pre_name, pre_start, pre_end, pre_date, pre_school_names, Q3_pre_district_name, pre_contact_number,

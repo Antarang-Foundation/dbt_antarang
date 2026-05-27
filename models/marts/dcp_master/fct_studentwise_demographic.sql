@@ -1,7 +1,7 @@
 WITH t1 AS (
     SELECT 
         student_id, student_barcode, batch_no, batch_grade, batch_academic_year, 
-        school_state, school_district, school_taluka, school_partner, school_area, 
+        school_state, school_district, school_taluka, school_ward, school_partner, school_area, 
         batch_donor, school_name, reality_1, reality_2, reality_3, reality_5, 
         reality_6, reality_4, reality_7, reality_8 
         --sar_atleast_one_reality, total_years_barcode_filled, gender, student_age, total_stud_have_report
@@ -11,7 +11,7 @@ WITH t1 AS (
 t2 AS (
     SELECT 
         student_id, assessment_barcode as student_barcode, batch_no, batch_grade, batch_academic_year, 
-        school_state, school_district, school_taluka, school_partner, school_area, 
+        school_state, school_district, school_taluka, school_ward, school_partner, school_area, 
         batch_donor, school_name, 
         r1s1 AS reality_1, 
         r2s2 AS reality_2, 
@@ -68,6 +68,7 @@ batch_academic_year,
 school_state,
 school_district,
 school_taluka,
+school_ward,
 school_partner,
 school_area,
 batch_donor,
