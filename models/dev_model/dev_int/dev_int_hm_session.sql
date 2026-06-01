@@ -1,6 +1,7 @@
 WITH int_global_dcp AS (
     SELECT 
         batch_language,
+        batch_academic_year,
         school_name,
         school_taluka,
         school_ward,
@@ -13,7 +14,7 @@ WITH int_global_dcp AS (
         facilitator_name,
         facilitator_email,
         ROW_NUMBER() OVER (
-            PARTITION BY school_id 
+            PARTITION BY school_id, batch_academic_year 
             ORDER BY 
                 CASE WHEN facilitator_name IS NOT NULL THEN 0 ELSE 1 END, 
                 school_name DESC
@@ -32,6 +33,7 @@ int_session AS (
         MIN(CASE WHEN session_date IS NOT NULL THEN session_date END) AS session_date,
         school_id,
         session_type,
+        batch_academic_year,
         case when batch_completed_sessions = batch_expected_sessions then 'Yes' else 'No' end as is_batch_fully_completed
     FROM {{ ref('dev_int_global_session') }}
     where batch_academic_year >=  2025 --AND school_name = 'Bhagwan Mahavir Govt. High School, Honda' and session_type IN ( 'Student')
@@ -58,6 +60,7 @@ hm_session AS (
 joined_source AS (
     SELECT 
         igd.batch_language,
+        igd.batch_academic_year,
         igd.school_name,
         igd.school_taluka,
         igd.school_ward,
@@ -93,21 +96,14 @@ joined_source AS (
     INNER JOIN int_global_dcp igd 
         ON hms.hm_school_id = igd.school_id
     LEFT JOIN int_session s 
-        ON hms.hm_school_id = s.school_id
+        ON hms.hm_school_id = s.school_id AND CAST(hms.session_academic_year AS INT64) = s.batch_academic_year
     WHERE igd.rn = 1
 )
 
-Select * --total_student_present, total_parent_present, session_type, hm_session_name, hm_attended 
+Select *
 from joined_source
---where school_name = 'GHS Yoruba' and session_type = 'Student'
---WHERE school_name = 'Bhagwan Mahavir Govt. High School, Honda' and session_type = 'Student' --'Bhagwan Mahavir Govt. High School, Honda' and session_type = 'Student'
---where hm_school_id = '0019C000003PjXCQA0' and session_type = 'Student' and total_student_present is not null and session_date is not null
---where is_batch_fully_completed = 'Yes' and school_name = 'GHSS Satakha' --'Bhagwan Mahavir Govt. High School, Honda'
---where hm_school_id = '0017F00000JeL7AQAV'
---WHERE school_name = 'GHSS Zunheboto'
---where school_name = 'GHSS Mon'
 
---where hm_school_id = '0017F00000JeL7AQAV'
+
 
 
 

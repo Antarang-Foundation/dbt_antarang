@@ -330,12 +330,14 @@ hm_assessment_dedup AS (
 ),
 
 int_global_session AS (
-    SELECT 
-        MIN(CASE WHEN fac_start_date IS NOT NULL THEN fac_start_date END) AS fac_start_date,
-        MIN(CASE WHEN fac_end_date IS NOT NULL THEN fac_end_date END) AS fac_end_date,
-        school_id FROM {{ ref('dev_int_global_session') }}
-        where batch_academic_year >= 2025
-        GROUP BY school_id
+    SELECT
+        school_id,
+        batch_academic_year,
+        MIN(fac_start_date) AS fac_start_date,
+        MIN(fac_end_date) AS fac_end_date
+    FROM {{ ref('dev_int_global_session') }}
+    WHERE batch_academic_year >= 2025
+    GROUP BY school_id, batch_academic_year
 ),
 
 hm_orientation AS (SELECT SAFE_CAST(date AS DATE) AS orientation_date, state as hm_state, district as hm_district, overall_attendance as orientation_attendance, district_overall_attendance
@@ -432,7 +434,7 @@ a.Q19_pp_leave_school, a.Q20_pp_thin_for_students, a.pp_id, a.pp_uuid, a.pp_subm
 FROM hm_session h
 --FULL OUTER JOIN hm_assessment a ON a.ass_school_name = h.school_name
 LEFT JOIN hm_assessment_dedup a ON a.ass_school_name = h.school_name AND CAST(a.ass_academic_year AS STRING) = CAST(h.session_academic_year AS STRING)
-LEFT JOIN int_global_session s ON h.hm_school_id = s.school_id
+LEFT JOIN int_global_session s ON h.hm_school_id = s.school_id AND CAST(h.session_academic_year AS INT64) = s.batch_academic_year 
 LEFT JOIN hm_orientation_district od ON h.school_state = od.hm_state AND h.school_district = od.hm_district
 -- STATE-LEVEL join (keeps ALL overall_attendance rows)
 LEFT JOIN hm_orientation os ON h.school_state = os.hm_state

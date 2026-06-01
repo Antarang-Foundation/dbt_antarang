@@ -236,5 +236,3 @@ from {{ ref('dev_int_hm_assessment') }}
 
 select * from final
 
-
-

@@ -16,9 +16,9 @@ int_global_session AS (
     SELECT 
         MIN(CASE WHEN fac_start_date IS NOT NULL THEN fac_start_date END) AS fac_start_date,
         MIN(CASE WHEN fac_end_date IS NOT NULL THEN fac_end_date END) AS fac_end_date,
-        school_id FROM {{ ref('dev_int_global_session') }}
+        school_id, batch_academic_year FROM {{ ref('dev_int_global_session') }}
         where batch_academic_year >= 2025
-        GROUP BY school_id
+        GROUP BY school_id, batch_academic_year
 ),
 
 pre_program as (
@@ -87,7 +87,7 @@ hm_session as (select distinct hm_school_id, session_academic_year from {{ ref('
 source_joined as (
 select 
     h.*, 
-    s.*,
+    s.fac_start_date, s.fac_end_date,
     pre.*, 
     pp.*, 
     po.*,
@@ -97,7 +97,7 @@ from int_global h
 
 -- ✅ 1. Join hm_session FIRST
 left join hm_session a 
-    on h.school_id = a.hm_school_id
+    on h.school_id = a.hm_school_id 
     and CAST(h.batch_academic_year AS STRING) = CAST(a.session_academic_year AS STRING)
 
 -- ✅ 2. Pre program (use RANGE instead of strict match)
@@ -124,7 +124,7 @@ AND DATE(po.po_date) BETWEEN
 
 -- ✅ 5. Session table
 left join int_global_session s 
-    on h.school_id = s.school_id
+    on h.school_id = s.school_id and h.batch_academic_year = s.batch_academic_year
 
 where rn = 1
 ),
@@ -592,5 +592,6 @@ from expand_column
 )
 
 select * from final
+
 
 
