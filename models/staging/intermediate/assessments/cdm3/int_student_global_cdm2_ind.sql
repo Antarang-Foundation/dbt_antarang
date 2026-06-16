@@ -1,74 +1,67 @@
-WITH t0 AS (
+WITH baseline AS (
 
     SELECT *
     FROM (
 
         SELECT
-            cdm2_id,
             assessment_barcode,
-            record_type,
             created_on,
-            created_from_form,
             cdm2_no,
-            is_non_null,
-            assessment_grade,
-            assessment_academic_year,
-            assessment_batch_id,
-
-            q5,
-            SAFE_CAST(q5_marks AS NUMERIC) AS q5_marks,
 
             q6_1,
-            SAFE_CAST(q6_1_marks AS NUMERIC) AS q6_1_marks,
-
             q6_2,
-            SAFE_CAST(q6_2_marks AS NUMERIC) AS q6_2_marks,
-
             q6_3,
-            SAFE_CAST(q6_3_marks AS NUMERIC) AS q6_3_marks,
-
             q6_4,
-            SAFE_CAST(q6_4_marks AS NUMERIC) AS q6_4_marks,
-
             q6_5,
-            SAFE_CAST(q6_5_marks AS NUMERIC) AS q6_5_marks,
-
             q6_6,
-            SAFE_CAST(q6_6_marks AS NUMERIC) AS q6_6_marks,
-
             q6_7,
-            SAFE_CAST(q6_7_marks AS NUMERIC) AS q6_7_marks,
-
             q6_8,
-            SAFE_CAST(q6_8_marks AS NUMERIC) AS q6_8_marks,
-
             q6_9,
-            SAFE_CAST(q6_9_marks AS NUMERIC) AS q6_9_marks,
-
-            q6_10,
-            SAFE_CAST(q6_10_marks AS NUMERIC) AS q6_10_marks,
-
-            q6_11,
-            SAFE_CAST(q6_11_marks AS NUMERIC) AS q6_11_marks,
-
-            q6_12,
-            SAFE_CAST(q6_12_marks AS NUMERIC) AS q6_12_marks,
-
-            SAFE_CAST(q6_total_marks AS NUMERIC) AS q6_total_marks,
-            SAFE_CAST(cdm2_total_marks AS NUMERIC) AS cdm2_total_marks,
-
-            error_status,
-            data_cleanup,
-            marks_recalculated,
-            student_linked,
+            q6_10, 
+            q6_1_marks, q6_2_marks, q6_3_marks, q6_4_marks, q6_5_marks, q6_6_marks, q6_7_marks, q6_8_marks, q6_9_marks, q6_10_marks,
 
             ROW_NUMBER() OVER (
                 PARTITION BY assessment_barcode
                 ORDER BY created_on DESC, cdm2_id DESC
-            ) AS rn
+            ) rn
 
         FROM {{ ref('stg_cdm2') }}
-        WHERE SAFE_CAST(assessment_academic_year AS INT64) >= 2026
+        WHERE LOWER(record_type) = 'baseline' AND SAFE_CAST(assessment_academic_year AS INT64) >= 2026
+
+    )
+    WHERE rn = 1
+
+),
+
+endline AS (
+
+    SELECT *
+    FROM (
+
+        SELECT
+            assessment_barcode,
+            created_on,
+            cdm2_no,
+
+            q6_1,
+            q6_2,
+            q6_3,
+            q6_4,
+            q6_5,
+            q6_6,
+            q6_7,
+            q6_8,
+            q6_9,
+            q6_10,
+            q6_1_marks, q6_2_marks, q6_3_marks, q6_4_marks, q6_5_marks, q6_6_marks, q6_7_marks, q6_8_marks, q6_9_marks, q6_10_marks,
+
+            ROW_NUMBER() OVER (
+                PARTITION BY assessment_barcode
+                ORDER BY created_on DESC, cdm2_id DESC
+            ) rn
+
+        FROM {{ ref('stg_cdm2') }}
+        WHERE LOWER(record_type) = 'endline' AND SAFE_CAST(assessment_academic_year AS INT64) >= 2026
 
     )
     WHERE rn = 1
@@ -81,14 +74,6 @@ dcp AS (
         student_id,
         student_barcode,
         gender,
-        birth_date,
-        student_age,
-        religion,
-        caste,
-        father_education,
-        father_occupation,
-        mother_education,
-        mother_occupation,
         batch_no,
         batch_academic_year,
         batch_language,
@@ -106,7 +91,6 @@ dcp AS (
         donor_id,
         batch_donor,
         batch_grade
-
     FROM {{ ref('dev_int_global_dcp') }}
     WHERE SAFE_CAST(batch_academic_year AS INT64) >= 2026
 
@@ -114,45 +98,83 @@ dcp AS (
 
 SELECT
 
-    dcp.*,
+    dcp.student_id,
+    dcp.student_barcode,
+    dcp.gender,
+    dcp.batch_no,
+    dcp.batch_academic_year,
+    dcp.batch_language,
+    dcp.facilitator_id,
+    dcp.facilitator_name,
+    dcp.facilitator_email,
+    dcp.school_id,
+    dcp.school_name,
+    dcp.school_taluka,
+    dcp.school_ward,
+    dcp.school_district,
+    dcp.school_state,
+    dcp.school_partner,
+    dcp.school_area,
+    dcp.donor_id,
+    dcp.batch_donor,
+    dcp.batch_grade,
 
-    t0.cdm2_id,
-    t0.assessment_barcode,
-    t0.record_type,
-    t0.created_on,
-    t0.created_from_form,
-    t0.cdm2_no,
-    t0.assessment_grade,
-    t0.assessment_academic_year,
+    COALESCE(baseline.assessment_barcode, endline.assessment_barcode)
+        AS assessment_barcode,
 
-    CASE
-        WHEN t0.q5_marks >= 80 THEN 'High'
-        WHEN t0.q5_marks >= 50 THEN 'Medium'
-        WHEN t0.q5_marks IS NOT NULL THEN 'Low'
-    END AS q5_category,
+    baseline.created_on AS bl_createddate,
+    baseline.cdm2_no AS bl_ca2_no,
 
-    CASE WHEN t0.q6_1_marks >= 1 THEN 'Selected' ELSE 'Not Selected' END AS q6_1_category,
-    CASE WHEN t0.q6_2_marks >= 1 THEN 'Selected' ELSE 'Not Selected' END AS q6_2_category,
-    CASE WHEN t0.q6_3_marks >= 1 THEN 'Selected' ELSE 'Not Selected' END AS q6_3_category,
-    CASE WHEN t0.q6_4_marks >= 1 THEN 'Selected' ELSE 'Not Selected' END AS q6_4_category,
-    CASE WHEN t0.q6_5_marks >= 1 THEN 'Selected' ELSE 'Not Selected' END AS q6_5_category,
-    CASE WHEN t0.q6_6_marks >= 1 THEN 'Selected' ELSE 'Not Selected' END AS q6_6_category,
-    CASE WHEN t0.q6_7_marks >= 1 THEN 'Selected' ELSE 'Not Selected' END AS q6_7_category,
-    CASE WHEN t0.q6_8_marks >= 1 THEN 'Selected' ELSE 'Not Selected' END AS q6_8_category,
-    CASE WHEN t0.q6_9_marks >= 1 THEN 'Selected' ELSE 'Not Selected' END AS q6_9_category,
-    CASE WHEN t0.q6_10_marks >= 1 THEN 'Selected' ELSE 'Not Selected' END AS q6_10_category,
-    CASE WHEN t0.q6_11_marks >= 1 THEN 'Selected' ELSE 'Not Selected' END AS q6_11_category,
-    CASE WHEN t0.q6_12_marks >= 1 THEN 'Selected' ELSE 'Not Selected' END AS q6_12_category,
+    baseline.q6_1  AS bl_q3_1,
+    baseline.q6_2  AS bl_q3_2,
+    baseline.q6_3  AS bl_q3_3,
+    baseline.q6_4  AS bl_q3_4,
+    baseline.q6_5  AS bl_q3_5,
+    baseline.q6_6  AS bl_q3_6,
+    baseline.q6_7  AS bl_q3_7,
+    baseline.q6_8  AS bl_q3_8,
+    baseline.q6_9  AS bl_q3_9,
+    baseline.q6_10 AS bl_q3_10,
 
-    CASE
-        WHEN t0.cdm2_total_marks >= 80 THEN 'Excellent'
-        WHEN t0.cdm2_total_marks >= 60 THEN 'Good'
-        WHEN t0.cdm2_total_marks >= 40 THEN 'Average'
-        WHEN t0.cdm2_total_marks IS NOT NULL THEN 'Needs Support'
-    END AS overall_bucket,
+    baseline.q6_1_marks  AS bl_q3_1_marks,
+    baseline.q6_2_marks  AS bl_q3_2_marks,
+    baseline.q6_3_marks  AS bl_q3_3_marks,
+    baseline.q6_4_marks  AS bl_q3_4_marks,
+    baseline.q6_5_marks  AS bl_q3_5_marks,
+    baseline.q6_6_marks  AS bl_q3_6_marks,
+    baseline.q6_7_marks  AS bl_q3_7_marks,
+    baseline.q6_8_marks  AS bl_q3_8_marks,
+    baseline.q6_9_marks  AS bl_q3_9_marks,
+    baseline.q6_10_marks AS bl_q3_10_marks,
 
-    t0.cdm2_total_marks
+    endline.created_on AS el_createddate,
+    endline.cdm2_no AS el_ca2_no,
 
+    endline.q6_1  AS el_q3_1,
+    endline.q6_2  AS el_q3_2,
+    endline.q6_3  AS el_q3_3,
+    endline.q6_4  AS el_q3_4,
+    endline.q6_5  AS el_q3_5,
+    endline.q6_6  AS el_q3_6,
+    endline.q6_7  AS el_q3_7,
+    endline.q6_8  AS el_q3_8,
+    endline.q6_9  AS el_q3_9,
+    endline.q6_10 AS el_q3_10,
+
+    endline.q6_1_marks  AS el_q3_1_marks,
+    endline.q6_2_marks  AS el_q3_2_marks,
+    endline.q6_3_marks  AS el_q3_3_marks,
+    endline.q6_4_marks  AS el_q3_4_marks,
+    endline.q6_5_marks  AS el_q3_5_marks,
+    endline.q6_6_marks  AS el_q3_6_marks,
+    endline.q6_7_marks  AS el_q3_7_marks,
+    endline.q6_8_marks  AS el_q3_8_marks,
+    endline.q6_9_marks  AS el_q3_9_marks,
+    endline.q6_10_marks AS el_q3_10_marks
 FROM dcp
-LEFT JOIN t0
-    ON dcp.student_barcode = t0.assessment_barcode
+
+LEFT JOIN baseline
+    ON dcp.student_barcode = baseline.assessment_barcode
+
+LEFT JOIN endline
+    ON dcp.student_barcode = endline.assessment_barcode
