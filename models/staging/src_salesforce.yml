@@ -54,5 +54,5 @@ sources:
         description: this is pre program questionaire form
       - name: Student_Diagnostic__c
         description: this is student_diagnostics stg data
-      - name: Attendance_sheet
+      - name: Attendace_sheet
         description: this is attendance sheet
