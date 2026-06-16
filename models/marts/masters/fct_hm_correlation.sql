@@ -342,7 +342,7 @@ int_global_session AS (
 
 hm_orientation AS (SELECT SAFE_CAST(date AS DATE) AS orientation_date, state as hm_state, district as hm_district, overall_attendance as orientation_attendance, district_overall_attendance
         from {{ source('salesforce', 'Attendace_sheet') }}
-        where year = '2025'
+        where Academic_year = '2025'
 ),
 
 hm_orientation_district AS (
