@@ -20,6 +20,7 @@ WITH assessments AS (
         q11_8,
         q11_9,
         q11_10,
+        q11_marks,
 
         q15_1,
         q15_2,
@@ -29,7 +30,8 @@ WITH assessments AS (
         q15_6,
         q15_7,
         q15_8,
-        q15_9
+        q15_9,
+        q15_marks
 
     FROM {{ ref('stg_cs') }}
 
@@ -121,16 +123,18 @@ el AS (
 
     WHERE rn = 1
 
-),
+)
 
-final as (SELECT
+SELECT
 
     s.student_id,
     s.student_barcode,
     s.gender,
+
     s.batch_no,
     s.batch_academic_year,
     s.batch_language,
+
     s.facilitator_id,
     s.facilitator_name,
     s.facilitator_email,
@@ -141,8 +145,10 @@ final as (SELECT
     s.school_ward,
     s.school_district,
     s.school_state,
+
     s.school_partner,
     s.school_area,
+
     s.donor_id,
     s.batch_donor,
     s.batch_grade,
@@ -165,6 +171,7 @@ final as (SELECT
     bl.q11_8 AS bl_q4_8,
     bl.q11_9 AS bl_q4_9,
     bl.q11_10 AS bl_q4_10,
+    bl.q11_marks AS bl_q4_marks,
 
     bl.q15_1 AS bl_q5_1,
     bl.q15_2 AS bl_q5_2,
@@ -175,6 +182,7 @@ final as (SELECT
     bl.q15_7 AS bl_q5_7,
     bl.q15_8 AS bl_q5_8,
     bl.q15_9 AS bl_q5_9,
+    bl.q15_marks AS bl_q5_marks,
 
     --------------------------------------------------
     -- ENDLINE
@@ -193,6 +201,7 @@ final as (SELECT
     el.q11_8 AS el_q4_8,
     el.q11_9 AS el_q4_9,
     el.q11_10 AS el_q4_10,
+    el.q11_marks AS el_q4_marks,
 
     el.q15_1 AS el_q5_1,
     el.q15_2 AS el_q5_2,
@@ -202,7 +211,8 @@ final as (SELECT
     el.q15_6 AS el_q5_6,
     el.q15_7 AS el_q5_7,
     el.q15_8 AS el_q5_8,
-    el.q15_9 AS el_q5_9
+    el.q15_9 AS el_q5_9,
+    el.q15_marks AS el_q5_marks
 
 FROM students s
 
@@ -215,9 +225,3 @@ LEFT JOIN el
     ON s.student_barcode = el.assessment_barcode
    AND SAFE_CAST(s.batch_academic_year AS INT64)
        = SAFE_CAST(el.assessment_academic_year AS INT64)
-
-)
-
-select * from final
-
-
