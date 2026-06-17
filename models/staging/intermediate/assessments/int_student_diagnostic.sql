@@ -330,6 +330,27 @@ SELECT
     COALESCE(bl.batch_academic_year, el.batch_academic_year) AS batch_academic_year,
     COALESCE(bl.batch_language, el.batch_language) AS batch_language,
 
+    COALESCE(bl.facilitator_id, el.facilitator_id) AS facilitator_id,
+COALESCE(bl.facilitator_name, el.facilitator_name) AS facilitator_name,
+COALESCE(bl.facilitator_email, el.facilitator_email) AS facilitator_email,
+
+COALESCE(bl.school_id, el.school_id) AS school_id,
+COALESCE(bl.school_name, el.school_name) AS school_name,
+COALESCE(bl.school_taluka, el.school_taluka) AS school_taluka,
+COALESCE(bl.school_ward, el.school_ward) AS school_ward,
+COALESCE(bl.school_district, el.school_district) AS school_district,
+COALESCE(bl.school_state, el.school_state) AS school_state,
+
+COALESCE(bl.school_partner, el.school_partner) AS school_partner,
+
+COALESCE(bl.school_area, el.school_area) AS school_area,
+
+COALESCE(bl.donor_id, el.donor_id) AS donor_id,
+COALESCE(bl.batch_donor, el.batch_donor) AS batch_donor,
+
+COALESCE(bl.batch_grade, el.batch_grade) AS batch_grade,
+COALESCE(bl.assessment_barcode, el.assessment_barcode) AS assessment_barcode,
+
     ------------------------------------------------
     -- BASELINE
     ------------------------------------------------
