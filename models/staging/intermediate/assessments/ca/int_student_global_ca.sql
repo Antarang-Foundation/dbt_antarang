@@ -70,8 +70,8 @@ el AS (
 
     WHERE rn = 1
 
-)
-SELECT
+),
+final as (SELECT
 
     s.student_id,
     s.student_barcode,
@@ -100,6 +100,8 @@ SELECT
 
     bl.created_on AS bl_createddate,
     bl.ca1_no AS bl_ca1_no,
+    bl.q2_a_marks AS bl_q2_a_marks,
+    bl.q2_b_marks AS bl_q2_b_marks,
 
     CASE WHEN REGEXP_CONTAINS(bl.q2_a, r'(^|,)A(,|$)') THEN 1 END AS bl_2a_a,
     CASE WHEN REGEXP_CONTAINS(bl.q2_a, r'(^|,)B(,|$)') THEN 1 END AS bl_2a_b,
@@ -122,6 +124,8 @@ SELECT
 
     el.created_on AS el_createddate,
     el.ca1_no AS el_ca1_no,
+    el.q2_a_marks AS el_q2_a_marks,
+    el.q2_b_marks AS el_q2_b_marks,
 
     CASE WHEN REGEXP_CONTAINS(el.q2_a, r'(^|,)A(,|$)') THEN 1 END AS el_q2_a_a,
     CASE WHEN REGEXP_CONTAINS(el.q2_a, r'(^|,)B(,|$)') THEN 1 END AS el_q2_a_b,
@@ -149,3 +153,6 @@ LEFT JOIN el
     ON s.student_id = el.assessment_student_id
 
 WHERE s.batch_academic_year >= 2026
+)
+
+select * from final

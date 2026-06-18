@@ -94,9 +94,9 @@ dcp AS (
     FROM {{ ref('dev_int_global_dcp') }}
     WHERE SAFE_CAST(batch_academic_year AS INT64) >= 2026
 
-)
+),
 
-SELECT
+final AS (SELECT
 
     dcp.student_id,
     dcp.student_barcode,
@@ -178,3 +178,6 @@ LEFT JOIN baseline
 
 LEFT JOIN endline
     ON dcp.student_barcode = endline.assessment_barcode
+)
+
+SELECT * FROM final
