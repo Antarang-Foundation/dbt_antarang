@@ -79,12 +79,15 @@ t2 AS (
         record_type
     FROM {{ ref('seed_recordtype') }}
 
-)
+),
 
-SELECT 
+final as (SELECT 
     s.*,
     t2.record_type
 
 FROM source s
 LEFT JOIN t2
     ON s.record_type_id = t2.record_type_id
+)
+
+select *  from final

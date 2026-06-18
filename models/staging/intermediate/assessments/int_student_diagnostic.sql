@@ -1,8 +1,7 @@
 WITH int_student_global AS (
 
     SELECT
-        student_id, student_barcode, gender, birth_date, student_age, religion, caste, father_education, father_occupation,
-        mother_education, mother_occupation, batch_no, batch_academic_year, batch_language, facilitator_id, facilitator_name,
+        student_id, student_barcode, gender, batch_no, batch_academic_year, batch_language, facilitator_id, facilitator_name,
         facilitator_email, school_id, school_name, school_taluka, school_ward, school_district, school_state, school_partner,
         school_area, donor_id, batch_donor, batch_grade
     FROM {{ ref('dev_int_global_dcp') }}
@@ -306,25 +305,14 @@ endline AS (
     FROM diagnostics_scored
     WHERE assessment_type = 'Endline'
 
-)
+),
 
-SELECT
+final as (SELECT
 
     COALESCE(bl.student_id, el.student_id) AS student_id,
     COALESCE(bl.student_barcode, el.student_barcode) AS student_barcode,
 
     COALESCE(bl.gender, el.gender) AS gender,
-    COALESCE(bl.birth_date, el.birth_date) AS birth_date,
-    COALESCE(bl.student_age, el.student_age) AS student_age,
-
-    COALESCE(bl.religion, el.religion) AS religion,
-    COALESCE(bl.caste, el.caste) AS caste,
-
-    COALESCE(bl.father_education, el.father_education) AS father_education,
-    COALESCE(bl.father_occupation, el.father_occupation) AS father_occupation,
-
-    COALESCE(bl.mother_education, el.mother_education) AS mother_education,
-    COALESCE(bl.mother_occupation, el.mother_occupation) AS mother_occupation,
 
     COALESCE(bl.batch_no, el.batch_no) AS batch_no,
     COALESCE(bl.batch_academic_year, el.batch_academic_year) AS batch_academic_year,
@@ -425,3 +413,6 @@ FROM baseline bl
 
 FULL OUTER JOIN endline el
     ON bl.student_barcode = el.student_barcode
+)
+
+SELECT * from final

@@ -50,6 +50,7 @@ final AS (
         s.ca1_no,
 
         rt.record_type,
+        rt.record_type_id,
 
         s.owner_id,
 
