@@ -42,6 +42,8 @@ t1 as (
             Q6_11_Marks__c as q6_11_marks,
             Q6_12__c as q6_12, 
             Q6_12_Marks__c as q6_12_marks,
+            Q6_13__c as q6_13,
+            Q6_13_Marks__c as q6_13_marks,
 
             X6_Options_that_fit_into_Industry__c as q6_total_marks,
 
@@ -63,10 +65,10 @@ t3 as (select cdm2_id, assessment_barcode, record_type, created_on, created_from
 
 when cdm2_no is not null and (q5 is not null or q6_1 is not null or q6_2 is not null or q6_1 is not null or q6_2 is not null 
 or q6_3 is not null or q6_4 is not null or q6_5 is not null or q6_6 is not null or q6_7 is not null or q6_8 is not null 
-or q6_9 is not null or q6_10 is not null or q6_11 is not null or q6_12 is not null) then 1 
+or q6_9 is not null or q6_10 is not null or q6_11 is not null or q6_12 is not null or q6_13 is not null ) then 1 
 
 when cdm2_no is not null and (q5 is null and q6_1 is null and q6_2 is null and q6_3 is null and q6_4 is null and q6_5 is null and q6_6 is null and 
-q6_7 is null and q6_8 is null and q6_9 is null and q6_10 is null and q6_11 is null and q6_12 is null) then 0 end) is_non_null,
+q6_7 is null and q6_8 is null and q6_9 is null and q6_10 is null and q6_11 is null and q6_12 is null and q6_13 is null) then 0 end) is_non_null,
 
 t1.* except(cdm2_id, assessment_barcode, record_type_id, created_on, created_from_form, cdm2_no) 
 

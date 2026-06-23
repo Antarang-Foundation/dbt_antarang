@@ -1,7 +1,7 @@
 with
 stg_facilitator AS (
     SELECT facilitator_id, facilitator_name, facilitator_gender, facilitator_language, facilitator_work_status, facilitator_area, 
-    facilitator_academic_year FROM {{ ref('dev_stg_facilitator') }}
+    facilitator_academic_year, payment_type FROM {{ ref('dev_stg_facilitator') }}
 ),
 
 stg_school AS (
@@ -20,7 +20,7 @@ batch_donor_id, no_of_students_facilitated FROM {{ ref('dev_stg_batch') }}
 
 final AS (
     SELECT facilitator_id, facilitator_name, facilitator_gender, facilitator_language, facilitator_work_status, facilitator_area, 
-    facilitator_academic_year, batch_no, batch_school_id, batch_academic_year, batch_grade, batch_completed, 
+    facilitator_academic_year, payment_type, batch_no, batch_school_id, batch_academic_year, batch_grade, batch_completed, 
     batch_language, batch_facilitator_id, no_of_students_facilitated, school_id, school_name, school_language, 
     school_academic_year, school_state, school_district, school_partner, school_ward, school_taluka, batch_donor
     FROM stg_batch b

@@ -10,16 +10,16 @@ WITH assessments AS (
         assessment_academic_year,
         assessment_batch_id,
 
-        q11_1,
-        q11_2,
-        q11_3,
-        q11_4,
-        q11_5,
-        q11_6,
-        q11_7,
-        q11_8,
-        q11_9,
-        q11_10,
+        q11_1 AS q11_2,
+        q11_2 AS q11_3,
+        q11_3 AS q11_4,
+        q11_4 AS q11_5,
+        q11_5 AS q11_6,
+        q11_6 AS q11_7,
+        q11_7 AS q11_8,
+        q11_8 AS q11_9,
+        q11_9 AS q11_10,
+        q11_10 AS q11_1,
         q11_marks,
 
         q15_1,
@@ -123,9 +123,9 @@ el AS (
 
     WHERE rn = 1
 
-)
+),
 
-SELECT
+final as (SELECT
 
     s.student_id,
     s.student_barcode,
@@ -225,3 +225,6 @@ LEFT JOIN el
     ON s.student_barcode = el.assessment_barcode
    AND SAFE_CAST(s.batch_academic_year AS INT64)
        = SAFE_CAST(el.assessment_academic_year AS INT64)
+)
+
+select * from final
