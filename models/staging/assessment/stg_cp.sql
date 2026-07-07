@@ -42,6 +42,61 @@ t1 as (
             Data_Clean_up__c as data_cleanup,
             Marks_Recalculated__c as marks_recalculated,
             Student_Linked__c as student_linked, 
+            Q1_C1__c as q1_c1,
+            Q1_C1_Ans__c as q1_c1_ans,
+            Q1_C1_Faci__c as q1_c1_faci,
+            Q1_C2__c as q1_c2,
+            Q1_C2_Ans__c as q1_c2_ans,
+            Q1_C2_Faci__c as q1_c2_faci,
+            A_Q2_C1__c as a_q2_c1,
+            A_Q2_C2__c as a_q2_c2,
+            A_Q3_C1__c as a_q3_c1,
+            A_Q3_C1_Ans__c as a_q3_c1_ans,
+            A_Q3_C2__c as a_q3_c2,
+            A_Q3_C2_Ans__c as a_q3_c2_ans,
+            A_Q4_C1__c as a_q4_c1,
+            A_Q4_C1_Ans__c as a_q4_c1_ans,
+            A_Q4_C2__c as a_q4_c2,
+            A_Q5_C1__c as a_q5_c1,
+            A_Q5_C2__c as a_q5_c2,
+            A_Q4_C2_Ans__c as a_q4_c2_ans,
+            A_Q6_C1__c as a_q6_c1,
+            A_Q6_C1_Ans__c as a_q6_c1_ans,
+            A_Q6_C2__c as a_q6_c2,
+            A_Q6_C2_Ans__c as a_q6_c2_ans,
+            A_Q7_C1__c as a_q7_c1,
+            A_Q7_C1_Ans__c as a_q7_c1_ans,
+            A_Q7_C2__c as a_q7_c2,
+            A_Q7_C2_Ans__c as a_q7_c2_ans,
+            A_Q8_C1__c as a_q8_c1,
+            A_Q8_C1_Ans__c as a_q8_c1_ans,
+            A_Q8_C2__c as a_q8_c2,
+            A_Q8_C2_Ans__c as a_q8_c2_ans,
+            B_Q2_C1__c as b_q2_c1,
+            B_Q2_C1_Ans__c as b_q2_c1_ans,
+            B_Q2_C2__c as b_q2_c2,
+            B_Q2_C2_Ans__c as b_q2_c2_ans,
+            B_Q3_C1__c as b_q3_c1,
+            B_Q3_C2__c as b_q3_c2,
+            B_Q4_C1__c as b_q4_c1,
+            B_Q4_C1_Ans__c as b_q4_c1_ans,
+            B_Q4_C2__c as b_q4_c2,
+            B_Q4_C2_Ans__c as b_q4_c2_ans,
+            B_Q5_C1__c as b_q5_c1,
+            B_Q5_C1_Ans__c as b_q5_c1_ans,
+            B_Q5_C2__c as b_q5_c2,
+            B_Q5_C2_Ans__c as b_q5_c2_ans,
+            B_Q6_C1__c as b_q6_c1,
+            B_Q6_C1_Ans__c as b_q6_c1_ans,
+            B_Q6_C2__c as b_q6_c2,
+            B_Q6_C2_Ans__c as b_q6_c2_ans,
+            B_Q7_C1__c as b_q7_c1,
+            B_Q7_C2__c as b_q7_c2,
+            Q2__c as q2,
+            Q2_Other__c as q2_other,
+            Q3__c as q3,
+            Q4__c as q4,
+            Q4_Ans__c as q4_ans
 
     from t0 
 ),
@@ -51,13 +106,176 @@ t2 as (select record_type_id,record_type from {{ ref('seed_recordtype') }}),
 t3 as 
 (select cp_id, assessment_barcode, record_type, created_on, created_from_form, cp_no,
 
-(case 
+(CASE
+    WHEN cp_no IS NOT NULL
+AND (
+       q7 IS NOT NULL
+    OR q8 IS NOT NULL
+    OR q9_1 IS NOT NULL
+    OR q9_2 IS NOT NULL
+    OR q9_3 IS NOT NULL
+    OR q9_4 IS NOT NULL
+    OR q9_5 IS NOT NULL
+    OR q9_6 IS NOT NULL
+    OR q9_7 IS NOT NULL
+    OR q10 IS NOT NULL
 
-when cp_no is not null and (q7 is not null or q8 is not null or q9_1 is not null or q9_2 is not null 
-or q9_3 is not null or q9_4 is not null or q9_5 is not null or q9_6 is not null or q9_7 is not null or q10 is not null) then 1 
+    OR q1_c1 IS NOT NULL
+    OR q1_c1_ans IS NOT NULL
+    OR q1_c1_faci IS NOT NULL
+    OR q1_c2 IS NOT NULL
+    OR q1_c2_ans IS NOT NULL
+    OR q1_c2_faci IS NOT NULL
 
-when cp_no is not null and (q7 is null and q8 is null and q9_1 is null and q9_2 is null and q9_3 is null and q9_4 is null and q9_5 is null and q9_6 is null 
-and q9_7 is null and q10 is null) then 0 end) is_non_null,
+    OR a_q2_c1 IS NOT NULL
+    OR a_q2_c2 IS NOT NULL
+
+    OR a_q3_c1 IS NOT NULL
+    OR a_q3_c1_ans IS NOT NULL
+    OR a_q3_c2 IS NOT NULL
+    OR a_q3_c2_ans IS NOT NULL
+
+    OR a_q4_c1 IS NOT NULL
+    OR a_q4_c1_ans IS NOT NULL
+    OR a_q4_c2 IS NOT NULL
+    OR a_q4_c2_ans IS NOT NULL
+
+    OR a_q5_c1 IS NOT NULL
+    OR a_q5_c2 IS NOT NULL
+
+    OR b_q2_c1 IS NOT NULL
+    OR b_q2_c1_ans IS NOT NULL
+    OR b_q2_c2 IS NOT NULL
+    OR b_q2_c2_ans IS NOT NULL
+
+    OR b_q3_c1 IS NOT NULL
+    OR b_q3_c2 IS NOT NULL
+
+    OR b_q4_c1 IS NOT NULL
+    OR b_q4_c1_ans IS NOT NULL
+    OR b_q4_c2 IS NOT NULL
+    OR b_q4_c2_ans IS NOT NULL
+
+    OR b_q5_c1 IS NOT NULL
+    OR b_q5_c1_ans IS NOT NULL
+    OR b_q5_c2 IS NOT NULL
+    OR b_q5_c2_ans IS NOT NULL
+
+    OR a_q6_c1 IS NOT NULL
+    OR a_q6_c1_ans IS NOT NULL
+    OR a_q6_c2 IS NOT NULL
+    OR a_q6_c2_ans IS NOT NULL
+
+    OR b_q6_c1 IS NOT NULL
+    OR b_q6_c1_ans IS NOT NULL
+    OR b_q6_c2 IS NOT NULL
+    OR b_q6_c2_ans IS NOT NULL
+
+    OR a_q7_c1 IS NOT NULL
+    OR a_q7_c1_ans IS NOT NULL
+    OR a_q7_c2 IS NOT NULL
+    OR a_q7_c2_ans IS NOT NULL
+
+    OR b_q7_c1 IS NOT NULL
+    OR b_q7_c2 IS NOT NULL
+
+    OR a_q8_c1 IS NOT NULL
+    OR a_q8_c1_ans IS NOT NULL
+    OR a_q8_c2 IS NOT NULL
+    OR a_q8_c2_ans IS NOT NULL
+
+    OR q2 IS NOT NULL
+    OR q2_other IS NOT NULL
+    OR q3 IS NOT NULL
+    OR q4 IS NOT NULL
+    OR q4_ans IS NOT NULL
+)
+THEN 1
+
+WHEN cp_no IS NOT NULL
+AND (
+       q7 IS NOT NULL
+    OR q8 IS NOT NULL
+    OR q9_1 IS NOT NULL
+    OR q9_2 IS NOT NULL
+    OR q9_3 IS NOT NULL
+    OR q9_4 IS NOT NULL
+    OR q9_5 IS NOT NULL
+    OR q9_6 IS NOT NULL
+    OR q9_7 IS NOT NULL
+    OR q10 IS NOT NULL
+
+    OR q1_c1 IS NOT NULL
+    OR q1_c1_ans IS NOT NULL
+    OR q1_c1_faci IS NOT NULL
+    OR q1_c2 IS NOT NULL
+    OR q1_c2_ans IS NOT NULL
+    OR q1_c2_faci IS NOT NULL
+
+    OR a_q2_c1 IS NOT NULL
+    OR a_q2_c2 IS NOT NULL
+
+    OR a_q3_c1 IS NOT NULL
+    OR a_q3_c1_ans IS NOT NULL
+    OR a_q3_c2 IS NOT NULL
+    OR a_q3_c2_ans IS NOT NULL
+
+    OR a_q4_c1 IS NOT NULL
+    OR a_q4_c1_ans IS NOT NULL
+    OR a_q4_c2 IS NOT NULL
+    OR a_q4_c2_ans IS NOT NULL
+
+    OR a_q5_c1 IS NOT NULL
+    OR a_q5_c2 IS NOT NULL
+
+    OR b_q2_c1 IS NOT NULL
+    OR b_q2_c1_ans IS NOT NULL
+    OR b_q2_c2 IS NOT NULL
+    OR b_q2_c2_ans IS NOT NULL
+
+    OR b_q3_c1 IS NOT NULL
+    OR b_q3_c2 IS NOT NULL
+
+    OR b_q4_c1 IS NOT NULL
+    OR b_q4_c1_ans IS NOT NULL
+    OR b_q4_c2 IS NOT NULL
+    OR b_q4_c2_ans IS NOT NULL
+
+    OR b_q5_c1 IS NOT NULL
+    OR b_q5_c1_ans IS NOT NULL
+    OR b_q5_c2 IS NOT NULL
+    OR b_q5_c2_ans IS NOT NULL
+
+    OR a_q6_c1 IS NOT NULL
+    OR a_q6_c1_ans IS NOT NULL
+    OR a_q6_c2 IS NOT NULL
+    OR a_q6_c2_ans IS NOT NULL
+
+    OR b_q6_c1 IS NOT NULL
+    OR b_q6_c1_ans IS NOT NULL
+    OR b_q6_c2 IS NOT NULL
+    OR b_q6_c2_ans IS NOT NULL
+
+    OR a_q7_c1 IS NOT NULL
+    OR a_q7_c1_ans IS NOT NULL
+    OR a_q7_c2 IS NOT NULL
+    OR a_q7_c2_ans IS NOT NULL
+
+    OR b_q7_c1 IS NOT NULL
+    OR b_q7_c2 IS NOT NULL
+
+    OR a_q8_c1 IS NOT NULL
+    OR a_q8_c1_ans IS NOT NULL
+    OR a_q8_c2 IS NOT NULL
+    OR a_q8_c2_ans IS NOT NULL
+
+    OR q2 IS NOT NULL
+    OR q2_other IS NOT NULL
+    OR q3 IS NOT NULL
+    OR q4 IS NOT NULL
+    OR q4_ans IS NOT NULL
+)
+THEN 0 END) is_non_null,
 
 t1.* except(cp_id, assessment_barcode, record_type_id, created_on, created_from_form, cp_no) 
 
