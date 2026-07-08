@@ -1,1 +1,0 @@
-select * from {{ref('cp_metadata')}}

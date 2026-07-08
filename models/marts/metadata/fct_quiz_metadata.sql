@@ -1,1 +1,0 @@
-select * from {{ref('quiz_metadata')}}

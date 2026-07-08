@@ -1,1 +1,0 @@
-select * from {{ref('cdm2_metadata')}}
