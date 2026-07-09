@@ -307,8 +307,13 @@ pp.Q17e_pp_Student_Certificates, pp.Q17f_pp_Student_Assessments, pp.Q17g_pp_Care
 pp.Q18A_pp_program_inc_of_all_students, pp.Q18B_pp_supporting_students_raining_after_school, pp.Q18C_pp_encouraging_students_choosing_careers,
 pp.Q19_pp_leave_school, pp.Q20_pp_thin_for_students, pp.pp_id, pp.pp_uuid, pp.pp_submission_time
 FROM pre_latest p
-    FULL OUTER JOIN po_latest po ON p.school_name = po.school_name --Remove the latest join it should be 'A=B, A=C, A=D'
-    FULL OUTER JOIN pp_latest pp ON p.school_name = pp.school_name
+    FULL OUTER JOIN po_latest po
+ON p.school_name = po.school_name
+AND p.batch_academic_year = po.batch_academic_year
+
+FULL OUTER JOIN pp_latest pp
+ON COALESCE(p.school_name, po.school_name) = pp.school_name
+AND COALESCE(p.batch_academic_year, po.batch_academic_year) = pp.batch_academic_year
 ),
 
 hm_assessment_dedup AS (
