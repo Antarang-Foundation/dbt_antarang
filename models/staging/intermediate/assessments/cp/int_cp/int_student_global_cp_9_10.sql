@@ -88,6 +88,7 @@ el as (
 final as (select
 
     dcp.*,
+    COALESCE(bl.assessment_barcode, el.assessment_barcode) AS assessment_barcode,
 
     ---------------- Baseline ----------------
 

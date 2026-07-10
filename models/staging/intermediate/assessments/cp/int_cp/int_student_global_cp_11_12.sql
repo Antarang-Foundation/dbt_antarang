@@ -105,7 +105,7 @@ select
     dcp.batch_donor,
     dcp.batch_grade,
 
-    dcp.student_barcode as assessment_barcode,
+    COALESCE(bl.assessment_barcode, el.assessment_barcode) AS assessment_barcode,
 
     ---------------- Baseline ----------------
 
@@ -184,10 +184,12 @@ select
 from dcp
 
 left join bl
-    on dcp.student_barcode = bl.assessment_barcode
+    on dcp.student_barcode = bl.assessment_barcode 
 
 left join el
-    on dcp.student_barcode = el.assessment_barcode
+    on dcp.student_barcode = el.assessment_barcode 
 )
 
 select * from final
+
+
