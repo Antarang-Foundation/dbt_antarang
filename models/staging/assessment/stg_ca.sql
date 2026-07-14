@@ -30,7 +30,7 @@ WITH source AS (
 
     FROM {{ source('salesforce', 'CDM3__c') }}
 
-    WHERE IsDeleted = FALSE
+    WHERE IsDeleted = FALSE AND (lower(Name)) not like '%test%'
 
 ),
 

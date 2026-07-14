@@ -179,6 +179,7 @@ left join bl
 
 left join el
     on dcp.student_barcode = el.assessment_barcode
+where student_id is not null
 )
 
 select * from final

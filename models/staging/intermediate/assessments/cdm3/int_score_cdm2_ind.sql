@@ -15,32 +15,32 @@ final AS (
         -- BASELINE TOTAL
         ------------------------------------------------------------------
 
-        COALESCE(SAFE_CAST(bl_q3_1_marks AS INT64),0) +
-        COALESCE(SAFE_CAST(bl_q3_2_marks AS INT64),0) +
-        COALESCE(SAFE_CAST(bl_q3_3_marks AS INT64),0) +
-        COALESCE(SAFE_CAST(bl_q3_4_marks AS INT64),0) +
-        COALESCE(SAFE_CAST(bl_q3_5_marks AS INT64),0) +
-        COALESCE(SAFE_CAST(bl_q3_6_marks AS INT64),0) +
-        COALESCE(SAFE_CAST(bl_q3_7_marks AS INT64),0) +
-        COALESCE(SAFE_CAST(bl_q3_8_marks AS INT64),0) +
-        COALESCE(SAFE_CAST(bl_q3_9_marks AS INT64),0) +
-        COALESCE(SAFE_CAST(bl_q3_10_marks AS INT64),0)
+        COALESCE(SAFE_CAST(bl_q3_1_marks AS INT64)) +
+        COALESCE(SAFE_CAST(bl_q3_2_marks AS INT64)) +
+        COALESCE(SAFE_CAST(bl_q3_3_marks AS INT64)) +
+        COALESCE(SAFE_CAST(bl_q3_4_marks AS INT64)) +
+        COALESCE(SAFE_CAST(bl_q3_5_marks AS INT64)) +
+        COALESCE(SAFE_CAST(bl_q3_6_marks AS INT64)) +
+        COALESCE(SAFE_CAST(bl_q3_7_marks AS INT64)) +
+        COALESCE(SAFE_CAST(bl_q3_8_marks AS INT64)) +
+        COALESCE(SAFE_CAST(bl_q3_9_marks AS INT64)) +
+        COALESCE(SAFE_CAST(bl_q3_10_marks AS INT64))
         AS bl_q3_total_marks,
 
         ------------------------------------------------------------------
         -- ENDLINE TOTAL
         ------------------------------------------------------------------
 
-        COALESCE(SAFE_CAST(el_q3_1_marks AS INT64),0) +
-        COALESCE(SAFE_CAST(el_q3_2_marks AS INT64),0) +
-        COALESCE(SAFE_CAST(el_q3_3_marks AS INT64),0) +
-        COALESCE(SAFE_CAST(el_q3_4_marks AS INT64),0) +
-        COALESCE(SAFE_CAST(el_q3_5_marks AS INT64),0) +
-        COALESCE(SAFE_CAST(el_q3_6_marks AS INT64),0) +
-        COALESCE(SAFE_CAST(el_q3_7_marks AS INT64),0) +
-        COALESCE(SAFE_CAST(el_q3_8_marks AS INT64),0) +
-        COALESCE(SAFE_CAST(el_q3_9_marks AS INT64),0) +
-        COALESCE(SAFE_CAST(el_q3_10_marks AS INT64),0)
+        COALESCE(SAFE_CAST(el_q3_1_marks AS INT64)) +
+        COALESCE(SAFE_CAST(el_q3_2_marks AS INT64)) +
+        COALESCE(SAFE_CAST(el_q3_3_marks AS INT64)) +
+        COALESCE(SAFE_CAST(el_q3_4_marks AS INT64)) +
+        COALESCE(SAFE_CAST(el_q3_5_marks AS INT64)) +
+        COALESCE(SAFE_CAST(el_q3_6_marks AS INT64)) +
+        COALESCE(SAFE_CAST(el_q3_7_marks AS INT64)) +
+        COALESCE(SAFE_CAST(el_q3_8_marks AS INT64)) +
+        COALESCE(SAFE_CAST(el_q3_9_marks AS INT64)) +
+        COALESCE(SAFE_CAST(el_q3_10_marks AS INT64))
         AS el_q3_total_marks
 
     FROM base

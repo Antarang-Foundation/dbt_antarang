@@ -225,6 +225,7 @@ LEFT JOIN el
     ON s.student_barcode = el.assessment_barcode
    AND SAFE_CAST(s.batch_academic_year AS INT64)
        = SAFE_CAST(el.assessment_academic_year AS INT64)
+WHERE student_id IS NOT NULL
 )
 
 select * from final
