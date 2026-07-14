@@ -103,22 +103,22 @@ final as (SELECT
     bl.q2_a_marks AS bl_q2_a_marks,
     bl.q2_b_marks AS bl_q2_b_marks,
 
-    CASE WHEN REGEXP_CONTAINS(bl.q2_a, r'(^|,)A(,|$)') THEN 1 ELSE 0 END AS bl_2a_a,
-    CASE WHEN REGEXP_CONTAINS(bl.q2_a, r'(^|,)B(,|$)') THEN 1 ELSE 0 END AS bl_2a_b,
-    CASE WHEN REGEXP_CONTAINS(bl.q2_a, r'(^|,)C(,|$)') THEN 1 ELSE 0 END AS bl_2a_c,
-    CASE WHEN REGEXP_CONTAINS(bl.q2_a, r'(^|,)D(,|$)') THEN 1 ELSE 0 END AS bl_2a_d,
-    CASE WHEN REGEXP_CONTAINS(bl.q2_a, r'(^|,)E(,|$)') THEN 1 ELSE 0 END AS bl_2a_e,
-    CASE WHEN REGEXP_CONTAINS(bl.q2_a, r'(^|,)F(,|$)') THEN 1 ELSE 0 END AS bl_2a_f,
-    CASE WHEN REGEXP_CONTAINS(bl.q2_a, r'(^|,)G(,|$)') THEN 1 ELSE 0 END AS bl_2a_g,
-    CASE WHEN REGEXP_CONTAINS(bl.q2_a, r'(^|,)H(,|$)') THEN 1 ELSE 0 END AS bl_2a_h,
+    CASE WHEN REGEXP_CONTAINS(bl.q2_a, r'(^|,)A(,|$)') THEN 1 END AS bl_2a_a,
+    CASE WHEN REGEXP_CONTAINS(bl.q2_a, r'(^|,)B(,|$)') THEN 1 END AS bl_2a_b,
+    CASE WHEN REGEXP_CONTAINS(bl.q2_a, r'(^|,)C(,|$)') THEN 1 END AS bl_2a_c,
+    CASE WHEN REGEXP_CONTAINS(bl.q2_a, r'(^|,)D(,|$)') THEN 1 END AS bl_2a_d,
+    CASE WHEN REGEXP_CONTAINS(bl.q2_a, r'(^|,)E(,|$)') THEN 1 END AS bl_2a_e,
+    CASE WHEN REGEXP_CONTAINS(bl.q2_a, r'(^|,)F(,|$)') THEN 1 END AS bl_2a_f,
+    CASE WHEN REGEXP_CONTAINS(bl.q2_a, r'(^|,)G(,|$)') THEN 1 END AS bl_2a_g,
+    CASE WHEN REGEXP_CONTAINS(bl.q2_a, r'(^|,)H(,|$)') THEN 1 END AS bl_2a_h,
 
-    CASE WHEN REGEXP_CONTAINS(bl.q2_b, r'(^|,)A(,|$)') THEN 1 ELSE 0 END AS bl_2b_a,
-    CASE WHEN REGEXP_CONTAINS(bl.q2_b, r'(^|,)B(,|$)') THEN 1 ELSE 0 END AS bl_2b_b,
-    CASE WHEN REGEXP_CONTAINS(bl.q2_b, r'(^|,)C(,|$)') THEN 1 ELSE 0 END AS bl_2b_c,
-    CASE WHEN REGEXP_CONTAINS(bl.q2_b, r'(^|,)D(,|$)') THEN 1 ELSE 0 END AS bl_2b_d,
-    CASE WHEN REGEXP_CONTAINS(bl.q2_b, r'(^|,)E(,|$)') THEN 1 ELSE 0 END AS bl_2b_e,
-    CASE WHEN REGEXP_CONTAINS(bl.q2_b, r'(^|,)F(,|$)') THEN 1 ELSE 0 END AS bl_2b_f,
-    CASE WHEN REGEXP_CONTAINS(bl.q2_b, r'(^|,)G(,|$)') THEN 1 ELSE 0 END AS bl_2b_g,
+    CASE WHEN REGEXP_CONTAINS(bl.q2_b, r'(^|,)A(,|$)') THEN 1 END AS bl_2b_a,
+    CASE WHEN REGEXP_CONTAINS(bl.q2_b, r'(^|,)B(,|$)') THEN 1 END AS bl_2b_b,
+    CASE WHEN REGEXP_CONTAINS(bl.q2_b, r'(^|,)C(,|$)') THEN 1 END AS bl_2b_c,
+    CASE WHEN REGEXP_CONTAINS(bl.q2_b, r'(^|,)D(,|$)') THEN 1 END AS bl_2b_d,
+    CASE WHEN REGEXP_CONTAINS(bl.q2_b, r'(^|,)E(,|$)') THEN 1 END AS bl_2b_e,
+    CASE WHEN REGEXP_CONTAINS(bl.q2_b, r'(^|,)F(,|$)') THEN 1 END AS bl_2b_f,
+    CASE WHEN REGEXP_CONTAINS(bl.q2_b, r'(^|,)G(,|$)') THEN 1 END AS bl_2b_g,
 
     /* ================= EL ================= */
 
@@ -127,22 +127,22 @@ final as (SELECT
     el.q2_a_marks AS el_q2_a_marks,
     el.q2_b_marks AS el_q2_b_marks,
 
-    CASE WHEN REGEXP_CONTAINS(el.q2_a, r'(^|,)A(,|$)') THEN 1 ELSE 0 END AS el_q2_a_a,
-    CASE WHEN REGEXP_CONTAINS(el.q2_a, r'(^|,)B(,|$)') THEN 1 ELSE 0 END AS el_q2_a_b,
-    CASE WHEN REGEXP_CONTAINS(el.q2_a, r'(^|,)C(,|$)') THEN 1 ELSE 0 END AS el_q2_a_c,
-    CASE WHEN REGEXP_CONTAINS(el.q2_a, r'(^|,)D(,|$)') THEN 1 ELSE 0 END AS el_q2_a_d,
-    CASE WHEN REGEXP_CONTAINS(el.q2_a, r'(^|,)E(,|$)') THEN 1 ELSE 0 END AS el_q2_a_e,
-    CASE WHEN REGEXP_CONTAINS(el.q2_a, r'(^|,)F(,|$)') THEN 1 ELSE 0 END AS el_q2_a_f,
-    CASE WHEN REGEXP_CONTAINS(el.q2_a, r'(^|,)G(,|$)') THEN 1 ELSE 0 END AS el_q2_a_g,
-    CASE WHEN REGEXP_CONTAINS(el.q2_a, r'(^|,)H(,|$)') THEN 1 ELSE 0 END AS el_q2_a_h,
+    CASE WHEN REGEXP_CONTAINS(el.q2_a, r'(^|,)A(,|$)') THEN 1 END AS el_q2_a_a,
+    CASE WHEN REGEXP_CONTAINS(el.q2_a, r'(^|,)B(,|$)') THEN 1 END AS el_q2_a_b,
+    CASE WHEN REGEXP_CONTAINS(el.q2_a, r'(^|,)C(,|$)') THEN 1 END AS el_q2_a_c,
+    CASE WHEN REGEXP_CONTAINS(el.q2_a, r'(^|,)D(,|$)') THEN 1 END AS el_q2_a_d,
+    CASE WHEN REGEXP_CONTAINS(el.q2_a, r'(^|,)E(,|$)') THEN 1 END AS el_q2_a_e,
+    CASE WHEN REGEXP_CONTAINS(el.q2_a, r'(^|,)F(,|$)') THEN 1 END AS el_q2_a_f,
+    CASE WHEN REGEXP_CONTAINS(el.q2_a, r'(^|,)G(,|$)') THEN 1 END AS el_q2_a_g,
+    CASE WHEN REGEXP_CONTAINS(el.q2_a, r'(^|,)H(,|$)') THEN 1 END AS el_q2_a_h,
 
-    CASE WHEN REGEXP_CONTAINS(el.q2_b, r'(^|,)A(,|$)') THEN 1 ELSE 0 END AS el_q2_b_a,
-    CASE WHEN REGEXP_CONTAINS(el.q2_b, r'(^|,)B(,|$)') THEN 1 ELSE 0 END AS el_q2_b_b,
-    CASE WHEN REGEXP_CONTAINS(el.q2_b, r'(^|,)C(,|$)') THEN 1 ELSE 0 END AS el_q2_b_c,
-    CASE WHEN REGEXP_CONTAINS(el.q2_b, r'(^|,)D(,|$)') THEN 1 ELSE 0 END AS el_q2_b_d,
-    CASE WHEN REGEXP_CONTAINS(el.q2_b, r'(^|,)E(,|$)') THEN 1 ELSE 0 END AS el_q2_b_e,
-    CASE WHEN REGEXP_CONTAINS(el.q2_b, r'(^|,)F(,|$)') THEN 1 ELSE 0 END AS el_q2_b_f,
-    CASE WHEN REGEXP_CONTAINS(el.q2_b, r'(^|,)G(,|$)') THEN 1 ELSE 0 END AS el_q2_b_g
+    CASE WHEN REGEXP_CONTAINS(el.q2_b, r'(^|,)A(,|$)') THEN 1 END AS el_q2_b_a,
+    CASE WHEN REGEXP_CONTAINS(el.q2_b, r'(^|,)B(,|$)') THEN 1 END AS el_q2_b_b,
+    CASE WHEN REGEXP_CONTAINS(el.q2_b, r'(^|,)C(,|$)') THEN 1 END AS el_q2_b_c,
+    CASE WHEN REGEXP_CONTAINS(el.q2_b, r'(^|,)D(,|$)') THEN 1 END AS el_q2_b_d,
+    CASE WHEN REGEXP_CONTAINS(el.q2_b, r'(^|,)E(,|$)') THEN 1 END AS el_q2_b_e,
+    CASE WHEN REGEXP_CONTAINS(el.q2_b, r'(^|,)F(,|$)') THEN 1 END AS el_q2_b_f,
+    CASE WHEN REGEXP_CONTAINS(el.q2_b, r'(^|,)G(,|$)') THEN 1 END AS el_q2_b_g
 
 FROM int_student_global s
 
@@ -152,7 +152,7 @@ LEFT JOIN bl
 LEFT JOIN el
     ON s.student_id = el.assessment_student_id
 
-WHERE s.batch_academic_year >= 2026
+WHERE s.batch_academic_year >= 2026 and s.student_id is not null
 )
 
 select * from final

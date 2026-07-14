@@ -196,6 +196,7 @@ LEFT JOIN baseline
 
 LEFT JOIN endline
     ON dcp.student_barcode = endline.assessment_barcode
+WHERE student_id IS NOT NULL
 )
 
 SELECT * FROM final
