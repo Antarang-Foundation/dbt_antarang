@@ -22,6 +22,7 @@ WITH int_student_global AS (
         batch_donor,
         batch_grade
     FROM {{ ref('dev_int_global_dcp') }}
+    WHERE batch_grade in ('Grade 9', 'Grade 10')
 
 ),
 
