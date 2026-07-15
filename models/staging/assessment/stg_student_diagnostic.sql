@@ -69,7 +69,7 @@ WITH source AS (
 
     FROM {{ source('salesforce', 'Student_Diagnostic__c') }}
     
-    WHERE IsDeleted = FALSE and (lower(Full_Name__c) not like '%test%'
+    WHERE IsDeleted = FALSE and lower(Name) not like '%test%'
 ),
 
 t2 AS (
