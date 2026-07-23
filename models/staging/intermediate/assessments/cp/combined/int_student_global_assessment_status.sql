@@ -9,6 +9,7 @@ t1 as (SELECT
 
     student_id,
     student_barcode,
+    sd2_barcode,
     first_barcode,
     student_grade,
     student_details_2_submitted,

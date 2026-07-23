@@ -16,30 +16,51 @@ t5 as (select * from t1 LEFT JOIN t4 on t1.batch_id = t4.somrt_batch_id order by
 t6 as (select  batch_id , sum(distinct no_of_students_facilitated) as `total_students`, count(distinct bl_cdm1_no) `bl_cdm1`, count(distinct bl_cdm2_no) `bl_cdm2`, 
 count(distinct bl_cp_no) `bl_cp`, count(distinct bl_cs_no) `bl_cs`, count(distinct bl_fp_no) `bl_fp`, count(distinct el_cdm1_no) `el_cdm1`, 
 count(distinct el_cdm2_no) `el_cdm2`, count(distinct el_cp_no) `el_cp`, count(distinct el_cs_no) `el_cs`, count(distinct el_fp_no) `el_fp`, 
-count(distinct saf_no) `saf`, count(distinct sar_no) `sar` from {{ref('int_student_global_assessment_status')}} group by batch_id order by batch_id),
+count(distinct saf_no) `saf`, count(distinct sar_no) `sar`, count(distinct sd2_barcode) `total_sd2_students` from {{ref('int_student_global_assessment_status')}} group by batch_id order by batch_id),
+
+diagnostics as (Select batch_no, count(bl_sd_no) `bl_sd`, count(el_sd_no) `el_sd` from {{ref('int_student_diagnostic')}} group by batch_no
+),
+
+cdm3 as (Select batch_no, count(distinct bl_ca2_no) `bl_ca2`, count(distinct el_ca2_no) `el_ca2` from {{ref('int_student_global_cdm2_ind')}} group by batch_no
+),
 
 t7 as (
-    
-select t5.*,
 
-(case 
-when t5.omr_type = 'Self Awareness + Feedback' or t5.omr_type = 'Quiz + Feedback' then t6.saf
-when t5.omr_type = 'Realities + Quiz' then t6.sar
-when t5.omr_type = 'Career Decision Making- 1A' then t6.bl_cdm1
-when t5.omr_type = 'Career Decision Making- 1B' then t6.el_cdm1
-when t5.omr_type = 'Career Decision Making- 2A' then t6.bl_cdm2
-when t5.omr_type = 'Career Decision Making- 2B' then t6.el_cdm2
-when t5.omr_type = 'Career Planning A' then t6.bl_cp
-when t5.omr_type = 'Career Planning B' then t6.el_cp
-when t5.omr_type = 'Career Skills A' then t6.bl_cs
-when t5.omr_type = 'Career Skills B' then t6.el_cs
-when t5.omr_type = 'Planning for Future A' then t6.bl_fp
-when t5.omr_type = 'Planning for Future B' then t6.el_fp
-when t5.omr_type = 'Student Details' then t6.total_students
-end) `omr_upload_count`
+select
+    t5.*,
 
- from t5 INNER JOIN t6 on t5.batch_id = t6.batch_id order by t5.batch_id, t5.omr_type),
+    case
+        when t5.omr_type in ('Self Awareness + Feedback', 'Quiz + Feedback') then t6.saf
+        when t5.omr_type = 'Realities + Quiz' then t6.sar
+        when t5.omr_type = 'Career Decision Making- 1A' then t6.bl_cdm1
+        when t5.omr_type = 'Career Decision Making- 1B' then t6.el_cdm1
+        when t5.omr_type = 'Career Decision Making- 2A' then t6.bl_cdm2
+        when t5.omr_type = 'Career Decision Making- 2B' then t6.el_cdm2
+        when t5.omr_type = 'Career Planning A' then t6.bl_cp
+        when t5.omr_type = 'Career Planning B' then t6.el_cp
+        when t5.omr_type = 'Career Skills A' then t6.bl_cs
+        when t5.omr_type = 'Career Skills B' then t6.el_cs
+        when t5.omr_type = 'Planning for Future A' then t6.bl_fp
+        when t5.omr_type = 'Planning for Future B' then t6.el_fp
+        when t5.omr_type = 'Student Details' then t6.total_students
+        when t5.omr_type = 'Career Decision Making- 3A' then cdm3.bl_ca2
+        when t5.omr_type = 'Career Decision Making- 3B' then cdm3.el_ca2
+        when t5.omr_type = 'Student Diagnositcs A' then diagnostics.bl_sd
+        when t5.omr_type = 'Student Diagnositcs B' then diagnostics.el_sd
+        when t5.omr_type = 'Student Details 2' then t6.total_sd2_students
+    end as omr_upload_count
 
+from t5
+inner join t6
+    on t5.batch_id = t6.batch_id
+left join diagnostics
+    on t5.batch_no = diagnostics.batch_no
+left join cdm3
+    on t5.batch_no = cdm3.batch_no
+
+order by t5.batch_id, t5.omr_type
+
+),
  
 t8 AS (
   SELECT 
@@ -132,10 +153,9 @@ THEN (
 )
 END AS TAT3
   FROM t7
-  WHERE school_partner not in ('KMCT', 'Learning Links Foundation', 'Akanksha Foundation') --108 entries excluded
+  --WHERE school_partner not in ('KMCT', 'Learning Links Foundation', 'Akanksha Foundation') --108 entries excluded
 )
 
 select * from t8
-
 
 --WHERE school_partner in ('KMCT', 'Learning Links Foundation', 'Akanksha Foundation')
