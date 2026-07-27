@@ -1,51 +1,321 @@
-district_id,district_name,industry,option,career_type,weight
-a0q7F000005PEZQQA4,Varanasi,Q6.11,a,Emerging,0.7
-a0q7F000005PEZQQA4,Varanasi,Q6.11,d,Steady,0.3
-a0q7F000005PEZQQA4,Varanasi,Q6.11,e,Emerging,0.7
-a0q7F000005PEZQQA4,Varanasi,Q6.11,c,Steady,0.3
-a0q7F000005PEZQQA4,Varanasi,Q6.7,a,Emerging,0.7
-a0q7F000005PEZQQA4,Varanasi,Q6.7,e,Emerging,0.7
-a0q7F000005PEZQQA4,Varanasi,Q6.7,h,Steady,0.3
-a0q7F000005PEZQQA4,Varanasi,Q6.7,b,Steady,0.3
-a0q7F000005PEZQQA4,Varanasi,Q6.7,d,Emerging,0.7
-a0q7F000005PEZQQA4,Varanasi,Q6.7,g,Steady,0.3
-a0q7F000005PEZQQA4,Varanasi,Q6.8,e,Emerging,0.7
-a0q7F000005PEZQQA4,Varanasi,Q6.8,f,Steady,0.3
-a0q7F000005PEZQQA4,Varanasi,Q6.8,a,Emerging,0.7
-a0q7F000005PEZQQA4,Varanasi,Q6.8,c,Steady,0.3
-a0q7F000005PEZQQA4,Varanasi,Q6.8,h,Steady,0.3
-a0q7F000005PEZQQA4,Varanasi,Q6.13,b,Steady,0.3
-a0q7F000005PEZQQA4,Varanasi,Q6.13,d,Emerging,0.7
-a0q7F000005PEZQQA4,Varanasi,Q6.13,h,Steady,0.3
-a0q7F000005PEZQQA4,Varanasi,Q6.13,e,Emerging,0.7
-a0q7F000005PEZQQA4,Varanasi,Q6.13,f,Steady,0.3
-a0q7F000005PEZQQA4,Varanasi,Q6.2,a,Emerging,0.7
-a0q7F000005PEZQQA4,Varanasi,Q6.2,b,Steady,0.3
-a0q7F000005PEZQQA4,Varanasi,Q6.2,d,Emerging,0.7
-a0q7F000005PEZQQA4,Varanasi,Q6.2,f,Steady,0.3
-a0q7F000005PEZQQA4,Varanasi,Q6.2,h,Steady,0.3
-a0q7F000005PEZQQA4,Varanasi,Q6.3,a,Emerging,0.7
-a0q7F000005PEZQQA4,Varanasi,Q6.3,b,Steady,0.3
-a0q7F000005PEZQQA4,Varanasi,Q6.3,d,Emerging,0.7
-a0q7F000005PEZQQA4,Varanasi,Q6.3,e,Emerging,0.7
-a0q7F000005PEZQQA4,Varanasi,Q6.3,h,Steady,0.3
-a0q7F000005PEZQQA4,Varanasi,Q6.6,a,Emerging,0.7
-a0q7F000005PEZQQA4,Varanasi,Q6.6,d,Emerging,0.7
-a0q7F000005PEZQQA4,Varanasi,Q6.6,g,Steady,0.3
-a0q7F000005PEZQQA4,Varanasi,Q6.6,b,Steady,0.3
-a0q7F000005PEZQQA4,Varanasi,Q6.6,e,Emerging,0.7
-a0q7F000005PEZQQA4,Varanasi,Q6.9,b,Steady,0.3
-a0q7F000005PEZQQA4,Varanasi,Q6.9,e,Emerging,0.7
-a0q7F000005PEZQQA4,Varanasi,Q6.9,h,Steady,0.3
-a0q7F000005PEZQQA4,Varanasi,Q6.9,a,Emerging,0.7
-a0q7F000005PEZQQA4,Varanasi,Q6.9,c,Steady,0.3
-a0q7F000005PEZQQA4,Varanasi,Q6.12,b,Steady,0.3
-a0q7F000005PEZQQA4,Varanasi,Q6.12,g,Emerging,0.7
-a0q7F000005PEZQQA4,Varanasi,Q6.12,e,Emerging,0.7
-a0q7F000005PEZQQA4,Varanasi,Q6.12,f,Steady,0.3
-a0q7F000005PEZQQA4,Varanasi,Q6.12,h,Steady,0.3
-a0q7F000005PEZQQA4,Varanasi,Q6.10,a,Emerging,0.7
-a0q7F000005PEZQQA4,Varanasi,Q6.10,b,Steady,0.3
-a0q7F000005PEZQQA4,Varanasi,Q6.10,c,Emerging,0.7
-a0q7F000005PEZQQA4,Varanasi,Q6.10,g,Emerging,0.7
-a0q7F000005PEZQQA4,Varanasi,Q6.10,h,Steady,0.3
+state_id,state_name,question_no,industry_code,industry_name,option,career_option,is_correct,career_type
+a0v7F000003cyavQAA,Maharashtra,Q6.11,II,Industry Independent,A,Accountant,1,Steady
+a0v7F000003cyavQAA,Maharashtra,Q6.11,II,Industry Independent,B,Photographer,-1,
+a0v7F000003cyavQAA,Maharashtra,Q6.11,II,Industry Independent,C,Salesperson,1,Emerging
+a0v7F000003cyavQAA,Maharashtra,Q6.11,II,Industry Independent,D,Entrepreneur,1,Emerging
+a0v7F000003cyavQAA,Maharashtra,Q6.11,II,Industry Independent,E,Office Administrator,1,Steady
+a0v7F000003cyavQAA,Maharashtra,Q6.11,II,Industry Independent,F,City Planner,-1,
+a0v7F000003cyavQAA,Maharashtra,Q6.11,II,Industry Independent,G,Sports Coach,-1,
+a0v7F000003cyavQAA,Maharashtra,Q6.11,II,Industry Independent,H,Logistics & Supply Chain Professional,1,Emerging
+a0v9C00000010e3QAA,Nagaland,Q6.11,II,Industry Independent,A,Accountant,1,Steady
+a0v9C00000010e3QAA,Nagaland,Q6.11,II,Industry Independent,B,Photographer,-1,
+a0v9C00000010e3QAA,Nagaland,Q6.11,II,Industry Independent,C,Salesperson,1,Steady
+a0v9C00000010e3QAA,Nagaland,Q6.11,II,Industry Independent,D,Entrepreneur,1,Emerging
+a0v9C00000010e3QAA,Nagaland,Q6.11,II,Industry Independent,E,Office Administrator,1,Steady
+a0v9C00000010e3QAA,Nagaland,Q6.11,II,Industry Independent,F,City Planner,-1,
+a0v9C00000010e3QAA,Nagaland,Q6.11,II,Industry Independent,G,Sports Coach,-1,
+a0v9C00000010e3QAA,Nagaland,Q6.11,II,Industry Independent,H,Logistics & Supply Chain Professional,1,Emerging
+a0v9C000000004IQAQ,Goa,Q6.11,II,Industry Independent,A,Accountant,1,Steady
+a0v9C000000004IQAQ,Goa,Q6.11,II,Industry Independent,B,Photographer,-1,
+a0v9C000000004IQAQ,Goa,Q6.11,II,Industry Independent,C,Salesperson,1,Steady
+a0v9C000000004IQAQ,Goa,Q6.11,II,Industry Independent,D,Entrepreneur,1,Emerging
+a0v9C000000004IQAQ,Goa,Q6.11,II,Industry Independent,E,Office Administrator,1,Steady
+a0v9C000000004IQAQ,Goa,Q6.11,II,Industry Independent,F,City Planner,-1,
+a0v9C000000004IQAQ,Goa,Q6.11,II,Industry Independent,G,Sports Coach,-1,
+a0v9C000000004IQAQ,Goa,Q6.11,II,Industry Independent,H,Logistics & Supply Chain Professional,1,Emerging
+a0vOW0000006JCrYAM,Haryana,Q6.11,II,Industry Independent,A,Accountant,1,Steady
+a0vOW0000006JCrYAM,Haryana,Q6.11,II,Industry Independent,B,Photographer,-1,
+a0vOW0000006JCrYAM,Haryana,Q6.11,II,Industry Independent,C,Salesperson,1,Steady
+a0vOW0000006JCrYAM,Haryana,Q6.11,II,Industry Independent,D,Entrepreneur,1,Emerging
+a0vOW0000006JCrYAM,Haryana,Q6.11,II,Industry Independent,E,Office Administrator,1,Steady
+a0vOW0000006JCrYAM,Haryana,Q6.11,II,Industry Independent,F,City Planner,-1,
+a0vOW0000006JCrYAM,Haryana,Q6.11,II,Industry Independent,G,Sports Coach,-1,
+a0vOW0000006JCrYAM,Haryana,Q6.11,II,Industry Independent,H,Logistics & Supply Chain Professional,1,Emerging
+a0v7F000003cyavQAA,Maharashtra,Q6.7,ADA,Art Design & Architecture,A,Architect,1,Steady
+a0v7F000003cyavQAA,Maharashtra,Q6.7,ADA,Art Design & Architecture,B,Sales Person,-1,
+a0v7F000003cyavQAA,Maharashtra,Q6.7,ADA,Art Design & Architecture,C,Police Officer,-1,
+a0v7F000003cyavQAA,Maharashtra,Q6.7,ADA,Art Design & Architecture,D,Fashion Designer,1,Steady
+a0v7F000003cyavQAA,Maharashtra,Q6.7,ADA,Art Design & Architecture,E,Interior Designer,1,Emerging
+a0v7F000003cyavQAA,Maharashtra,Q6.7,ADA,Art Design & Architecture,F,Chef,-1,
+a0v7F000003cyavQAA,Maharashtra,Q6.7,ADA,Art Design & Architecture,G,Digital Illustrator,1,Emerging
+a0v7F000003cyavQAA,Maharashtra,Q6.7,ADA,Art Design & Architecture,H,Animator,1,Emerging
+a0v9C00000010e3QAA,Nagaland,Q6.7,ADA,Art Design & Architecture,A,Architect,1,Steady
+a0v9C00000010e3QAA,Nagaland,Q6.7,ADA,Art Design & Architecture,B,Sales Person,-1,
+a0v9C00000010e3QAA,Nagaland,Q6.7,ADA,Art Design & Architecture,C,Police Officer,-1,
+a0v9C00000010e3QAA,Nagaland,Q6.7,ADA,Art Design & Architecture,D,Fashion Designer,1,Steady
+a0v9C00000010e3QAA,Nagaland,Q6.7,ADA,Art Design & Architecture,E,Interior Designer,1,Steady
+a0v9C00000010e3QAA,Nagaland,Q6.7,ADA,Art Design & Architecture,F,Chef,-1,
+a0v9C00000010e3QAA,Nagaland,Q6.7,ADA,Art Design & Architecture,G,Digital Illustrator,1,Emerging
+a0v9C00000010e3QAA,Nagaland,Q6.7,ADA,Art Design & Architecture,H,Animator,1,Emerging
+a0v9C000000004IQAQ,Goa,Q6.7,ADA,Art Design & Architecture,A,Fashion Designer,1,Steady
+a0v9C000000004IQAQ,Goa,Q6.7,ADA,Art Design & Architecture,B,Accountant,-1,
+a0v9C000000004IQAQ,Goa,Q6.7,ADA,Art Design & Architecture,C,Plumber,-1,
+a0v9C000000004IQAQ,Goa,Q6.7,ADA,Art Design & Architecture,D,Graphic Designer,1,Steady
+a0v9C000000004IQAQ,Goa,Q6.7,ADA,Art Design & Architecture,E,Architect,1,Emerging
+a0v9C000000004IQAQ,Goa,Q6.7,ADA,Art Design & Architecture,F,Hospital Administrator,-1,
+a0v9C000000004IQAQ,Goa,Q6.7,ADA,Art Design & Architecture,G,Interior Designer,1,Emerging
+a0v9C000000004IQAQ,Goa,Q6.7,ADA,Art Design & Architecture,H,Animator,1,Emerging
+a0vOW0000006JCrYAM,Haryana,Q6.7,ADA,Art Design & Architecture,A,Architect,1,Steady
+a0vOW0000006JCrYAM,Haryana,Q6.7,ADA,Art Design & Architecture,B,Sales person,-1,
+a0vOW0000006JCrYAM,Haryana,Q6.7,ADA,Art Design & Architecture,C,Police Officer,-1,
+a0vOW0000006JCrYAM,Haryana,Q6.7,ADA,Art Design & Architecture,D,Fashion Designer,1,Steady
+a0vOW0000006JCrYAM,Haryana,Q6.7,ADA,Art Design & Architecture,E,Interior Designer,1,Emerging
+a0vOW0000006JCrYAM,Haryana,Q6.7,ADA,Art Design & Architecture,F,Chef,-1,
+a0vOW0000006JCrYAM,Haryana,Q6.7,ADA,Art Design & Architecture,G,Digital Illustrator,1,Emerging
+a0vOW0000006JCrYAM,Haryana,Q6.7,ADA,Art Design & Architecture,H,Animator,1,Emerging
+a0v7F000003cyavQAA,Maharashtra,Q6.8,ME,Media & Entertainment,A,Performing Artist,1,Steady
+a0v7F000003cyavQAA,Maharashtra,Q6.8,ME,Media & Entertainment,B,Lawyer,-1,
+a0v7F000003cyavQAA,Maharashtra,Q6.8,ME,Media & Entertainment,C,Digital Content Creator,1,Emerging
+a0v7F000003cyavQAA,Maharashtra,Q6.8,ME,Media & Entertainment,D,Social Worker,-1,
+a0v7F000003cyavQAA,Maharashtra,Q6.8,ME,Media & Entertainment,E,News Reporter,1,Steady
+a0v7F000003cyavQAA,Maharashtra,Q6.8,ME,Media & Entertainment,F,Radio Jockey (RJ),1,Steady
+a0v7F000003cyavQAA,Maharashtra,Q6.8,ME,Media & Entertainment,G,Artificial Intelligence,-1,
+a0v7F000003cyavQAA,Maharashtra,Q6.8,ME,Media & Entertainment,H,Digital Marketing Professional,1,Emerging
+a0v9C00000010e3QAA,Nagaland,Q6.8,ME,Media & Entertainment,A,Performing Artist,1,Steady
+a0v9C00000010e3QAA,Nagaland,Q6.8,ME,Media & Entertainment,B,Lawyer,-1,
+a0v9C00000010e3QAA,Nagaland,Q6.8,ME,Media & Entertainment,C,Digital Content Creator,1,Emerging
+a0v9C00000010e3QAA,Nagaland,Q6.8,ME,Media & Entertainment,D,Social Worker,-1,
+a0v9C00000010e3QAA,Nagaland,Q6.8,ME,Media & Entertainment,E,News Reporter,1,Steady
+a0v9C00000010e3QAA,Nagaland,Q6.8,ME,Media & Entertainment,F,Radio Jockey (RJ),1,Steady
+a0v9C00000010e3QAA,Nagaland,Q6.8,ME,Media & Entertainment,G,Artificial Intelligence,-1,
+a0v9C00000010e3QAA,Nagaland,Q6.8,ME,Media & Entertainment,H,Digital Marketing Professional,1,Emerging
+a0v9C000000004IQAQ,Goa,Q6.8,ME,Media & Entertainment,A,Journalist,1,Steady
+a0v9C000000004IQAQ,Goa,Q6.8,ME,Media & Entertainment,B,Teacher,-1,
+a0v9C000000004IQAQ,Goa,Q6.8,ME,Media & Entertainment,C,Digital Content Creator,1,Emerging
+a0v9C000000004IQAQ,Goa,Q6.8,ME,Media & Entertainment,D,Lawyer,-1,
+a0v9C000000004IQAQ,Goa,Q6.8,ME,Media & Entertainment,E,Video Producer,1,Steady
+a0v9C000000004IQAQ,Goa,Q6.8,ME,Media & Entertainment,F,Film Director,1,Steady
+a0v9C000000004IQAQ,Goa,Q6.8,ME,Media & Entertainment,G,Environmental Scientist,-1,
+a0v9C000000004IQAQ,Goa,Q6.8,ME,Media & Entertainment,H,Social Media Manager,1,Emerging
+a0vOW0000006JCrYAM,Haryana,Q6.8,ME,Media & Entertainment,A,Performing Artist,1,Steady
+a0vOW0000006JCrYAM,Haryana,Q6.8,ME,Media & Entertainment,B,Lawyer,-1,
+a0vOW0000006JCrYAM,Haryana,Q6.8,ME,Media & Entertainment,C,Digital Content Creator,1,Emerging
+a0vOW0000006JCrYAM,Haryana,Q6.8,ME,Media & Entertainment,D,Social Worker,-1,
+a0vOW0000006JCrYAM,Haryana,Q6.8,ME,Media & Entertainment,E,News Reporter,1,Steady
+a0vOW0000006JCrYAM,Haryana,Q6.8,ME,Media & Entertainment,F,Radio Jockey (RJ),1,Steady
+a0vOW0000006JCrYAM,Haryana,Q6.8,ME,Media & Entertainment,G,Artificial Intelligence,-1,
+a0vOW0000006JCrYAM,Haryana,Q6.8,ME,Media & Entertainment,H,Digital Marketing Professional,1,Emerging
+a0v7F000003cyavQAA,Maharashtra,Q6.13,AGRI,Agriculture,A,Sales Person,-1,
+a0v7F000003cyavQAA,Maharashtra,Q6.13,AGRI,Agriculture,B,Organic Farming,1,Emerging
+a0v7F000003cyavQAA,Maharashtra,Q6.13,AGRI,Agriculture,C,Investment Manager,-1,
+a0v7F000003cyavQAA,Maharashtra,Q6.13,AGRI,Agriculture,D,Livestock Rearing,1,Steady
+a0v7F000003cyavQAA,Maharashtra,Q6.13,AGRI,Agriculture,E,Food Producer,1,Emerging
+a0v7F000003cyavQAA,Maharashtra,Q6.13,AGRI,Agriculture,F,Horticulturist,1,Emerging
+a0v7F000003cyavQAA,Maharashtra,Q6.13,AGRI,Agriculture,G,Insurance Advisor,-1,
+a0v7F000003cyavQAA,Maharashtra,Q6.13,AGRI,Agriculture,H,Food Processing Professional,1,Emerging
+a0v9C00000010e3QAA,Nagaland,Q6.13,AGRI,Agriculture,A,Sales Person,-1,
+a0v9C00000010e3QAA,Nagaland,Q6.13,AGRI,Agriculture,B,Organic Farming,1,Emerging
+a0v9C00000010e3QAA,Nagaland,Q6.13,AGRI,Agriculture,C,Investment Manager,-1,
+a0v9C00000010e3QAA,Nagaland,Q6.13,AGRI,Agriculture,D,Livestock Rearing,1,Emerging
+a0v9C00000010e3QAA,Nagaland,Q6.13,AGRI,Agriculture,E,Food Producer,1,Emerging
+a0v9C00000010e3QAA,Nagaland,Q6.13,AGRI,Agriculture,F,Horticulturist,1,Emerging
+a0v9C00000010e3QAA,Nagaland,Q6.13,AGRI,Agriculture,G,Insurance Advisor,-1,
+a0v9C00000010e3QAA,Nagaland,Q6.13,AGRI,Agriculture,H,Food Processing Professional,1,Emerging
+a0v9C000000004IQAQ,Goa,Q6.13,AGRI,Agriculture,A,Chef,-1,
+a0v9C000000004IQAQ,Goa,Q6.13,AGRI,Agriculture,B,Agricultural Scientist,1,Emerging
+a0v9C000000004IQAQ,Goa,Q6.13,AGRI,Agriculture,C,Website Developer,-1,
+a0v9C000000004IQAQ,Goa,Q6.13,AGRI,Agriculture,D,Agricultural Entrepreneur,1,Emerging
+a0v9C000000004IQAQ,Goa,Q6.13,AGRI,Agriculture,E,Horticulturist,1,Emerging
+a0v9C000000004IQAQ,Goa,Q6.13,AGRI,Agriculture,F,Organic Farming Expert,1,Emerging
+a0v9C000000004IQAQ,Goa,Q6.13,AGRI,Agriculture,G,Cyber Security Specialist,-1,
+a0v9C000000004IQAQ,Goa,Q6.13,AGRI,Agriculture,H,Agricultural Extension Officer,1,Emerging
+a0vOW0000006JCrYAM,Haryana,Q6.13,AGRI,Agriculture,A,Sales person,-1,
+a0vOW0000006JCrYAM,Haryana,Q6.13,AGRI,Agriculture,B,Organic Farming,1,Emerging
+a0vOW0000006JCrYAM,Haryana,Q6.13,AGRI,Agriculture,C,Investment Manager,-1,
+a0vOW0000006JCrYAM,Haryana,Q6.13,AGRI,Agriculture,D,Livestock rearing,1,Steady
+a0vOW0000006JCrYAM,Haryana,Q6.13,AGRI,Agriculture,E,Food Producer,1,Emerging
+a0vOW0000006JCrYAM,Haryana,Q6.13,AGRI,Agriculture,F,Horticulturist,1,Emerging
+a0vOW0000006JCrYAM,Haryana,Q6.13,AGRI,Agriculture,G,Insurance Advisor,-1,
+a0vOW0000006JCrYAM,Haryana,Q6.13,AGRI,Agriculture,H,Food Processing Professional,1,Emerging
+a0v7F000003cyavQAA,Maharashtra,Q6.2,HC,Healthcare,A,Nurse,1,Emerging
+a0v7F000003cyavQAA,Maharashtra,Q6.2,HC,Healthcare,B,Medical Lab Technician,1,Emerging
+a0v7F000003cyavQAA,Maharashtra,Q6.2,HC,Healthcare,C,Teacher,-1,
+a0v7F000003cyavQAA,Maharashtra,Q6.2,HC,Healthcare,D,Hospital Administrator,1,Emerging
+a0v7F000003cyavQAA,Maharashtra,Q6.2,HC,Healthcare,E,Commercial Pilot,-1,
+a0v7F000003cyavQAA,Maharashtra,Q6.2,HC,Healthcare,F,Pharmacist,1,Steady
+a0v7F000003cyavQAA,Maharashtra,Q6.2,HC,Healthcare,G,Advertising Professional,-1,
+a0v7F000003cyavQAA,Maharashtra,Q6.2,HC,Healthcare,H,Physiotherapist,1,Emerging
+a0v9C00000010e3QAA,Nagaland,Q6.2,HC,Healthcare,A,Nurse,1,Steady
+a0v9C00000010e3QAA,Nagaland,Q6.2,HC,Healthcare,B,Medical Lab Technician,1,Steady
+a0v9C00000010e3QAA,Nagaland,Q6.2,HC,Healthcare,C,Teacher,-1,
+a0v9C00000010e3QAA,Nagaland,Q6.2,HC,Healthcare,D,Hospital Administrator,1,Emerging
+a0v9C00000010e3QAA,Nagaland,Q6.2,HC,Healthcare,E,Commercial Pilot,-1,
+a0v9C00000010e3QAA,Nagaland,Q6.2,HC,Healthcare,F,Pharmacist,1,Steady
+a0v9C00000010e3QAA,Nagaland,Q6.2,HC,Healthcare,G,Advertising Professional,-1,
+a0v9C00000010e3QAA,Nagaland,Q6.2,HC,Healthcare,H,Physiotherapist,1,Steady
+a0v9C000000004IQAQ,Goa,Q6.2,HC,Healthcare,A,Nurse,1,Steady
+a0v9C000000004IQAQ,Goa,Q6.2,HC,Healthcare,B,Medical Lab Technician,1,Steady
+a0v9C000000004IQAQ,Goa,Q6.2,HC,Healthcare,C,Teacher,-1,
+a0v9C000000004IQAQ,Goa,Q6.2,HC,Healthcare,D,Hospital Administrator,1,Emerging
+a0v9C000000004IQAQ,Goa,Q6.2,HC,Healthcare,E,Commercial Pilot,-1,
+a0v9C000000004IQAQ,Goa,Q6.2,HC,Healthcare,F,Pharmacist,1,Steady
+a0v9C000000004IQAQ,Goa,Q6.2,HC,Healthcare,G,Advertising Professional,-1,
+a0v9C000000004IQAQ,Goa,Q6.2,HC,Healthcare,H,Physiotherapist,1,Steady
+a0vOW0000006JCrYAM,Haryana,Q6.2,HC,Healthcare,A,Nurse,1,Steady
+a0vOW0000006JCrYAM,Haryana,Q6.2,HC,Healthcare,B,Medical Lab Technician,1,Steady
+a0vOW0000006JCrYAM,Haryana,Q6.2,HC,Healthcare,C,Teacher,-1,
+a0vOW0000006JCrYAM,Haryana,Q6.2,HC,Healthcare,D,Hospital Administrator,1,Emerging
+a0vOW0000006JCrYAM,Haryana,Q6.2,HC,Healthcare,E,Commercial Pilot,-1,
+a0vOW0000006JCrYAM,Haryana,Q6.2,HC,Healthcare,F,Pharmacist,1,Emerging
+a0vOW0000006JCrYAM,Haryana,Q6.2,HC,Healthcare,G,Advertising Professional,-1,
+a0vOW0000006JCrYAM,Haryana,Q6.2,HC,Healthcare,H,Physiotherapist,1,Steady
+a0v7F000003cyavQAA,Maharashtra,Q6.3,WF,Wellness & Fitness,A,Yoga Instructor,1,Emerging
+a0v7F000003cyavQAA,Maharashtra,Q6.3,WF,Wellness & Fitness,B,Sportsperson,1,Steady
+a0v7F000003cyavQAA,Maharashtra,Q6.3,WF,Wellness & Fitness,C,Nurse,-1,
+a0v7F000003cyavQAA,Maharashtra,Q6.3,WF,Wellness & Fitness,D,Beautician,1,Emerging
+a0v7F000003cyavQAA,Maharashtra,Q6.3,WF,Wellness & Fitness,E,Nutritionist,1,Emerging
+a0v7F000003cyavQAA,Maharashtra,Q6.3,WF,Wellness & Fitness,F,College,-1,
+a0v7F000003cyavQAA,Maharashtra,Q6.3,WF,Wellness & Fitness,G,Social Service,-1,
+a0v7F000003cyavQAA,Maharashtra,Q6.3,WF,Wellness & Fitness,H,Mental Health Counselor,1,Emerging
+a0v9C00000010e3QAA,Nagaland,Q6.3,WF,Wellness & Fitness,A,Yoga Instructor,1,Emerging
+a0v9C00000010e3QAA,Nagaland,Q6.3,WF,Wellness & Fitness,B,Sportsperson,1,Steady
+a0v9C00000010e3QAA,Nagaland,Q6.3,WF,Wellness & Fitness,C,Nurse,-1,
+a0v9C00000010e3QAA,Nagaland,Q6.3,WF,Wellness & Fitness,D,Beautician,1,Steady
+a0v9C00000010e3QAA,Nagaland,Q6.3,WF,Wellness & Fitness,E,Nutritionist,1,Emerging
+a0v9C00000010e3QAA,Nagaland,Q6.3,WF,Wellness & Fitness,F,College,-1,
+a0v9C00000010e3QAA,Nagaland,Q6.3,WF,Wellness & Fitness,G,Social Service,-1,
+a0v9C00000010e3QAA,Nagaland,Q6.3,WF,Wellness & Fitness,H,Mental Health Counselor,1,Emerging
+a0v9C000000004IQAQ,Goa,Q6.3,WF,Wellness & Fitness,A,Yoga Instructor,1,Emerging
+a0v9C000000004IQAQ,Goa,Q6.3,WF,Wellness & Fitness,B,Sportsperson,1,Steady
+a0v9C000000004IQAQ,Goa,Q6.3,WF,Wellness & Fitness,C,Nurse,-1,
+a0v9C000000004IQAQ,Goa,Q6.3,WF,Wellness & Fitness,D,Beautician,1,Steady
+a0v9C000000004IQAQ,Goa,Q6.3,WF,Wellness & Fitness,E,Nutritionist,1,Emerging
+a0v9C000000004IQAQ,Goa,Q6.3,WF,Wellness & Fitness,F,College,-1,
+a0v9C000000004IQAQ,Goa,Q6.3,WF,Wellness & Fitness,G,Social Service,-1,
+a0v9C000000004IQAQ,Goa,Q6.3,WF,Wellness & Fitness,H,Mental Health Counselor,1,Emerging
+a0vOW0000006JCrYAM,Haryana,Q6.3,WF,Wellness & Fitness,A,Yoga Instructor,1,Emerging
+a0vOW0000006JCrYAM,Haryana,Q6.3,WF,Wellness & Fitness,B,Sportperson,1,Steady
+a0vOW0000006JCrYAM,Haryana,Q6.3,WF,Wellness & Fitness,C,Nurse,-1,
+a0vOW0000006JCrYAM,Haryana,Q6.3,WF,Wellness & Fitness,D,Beautician,1,Steady
+a0vOW0000006JCrYAM,Haryana,Q6.3,WF,Wellness & Fitness,E,Nutritionist,1,Emerging
+a0vOW0000006JCrYAM,Haryana,Q6.3,WF,Wellness & Fitness,F,College,-1,
+a0vOW0000006JCrYAM,Haryana,Q6.3,WF,Wellness & Fitness,G,Social Service,-1,
+a0vOW0000006JCrYAM,Haryana,Q6.3,WF,Wellness & Fitness,H,Mental Health Counselor,1,Emerging
+a0v7F000003cyavQAA,Maharashtra,Q6.6,TH,Tourism & Hospitality,A,Hotel Staffs,1,Emerging
+a0v7F000003cyavQAA,Maharashtra,Q6.6,TH,Tourism & Hospitality,B,Travel Services Planner,1,Emerging
+a0v7F000003cyavQAA,Maharashtra,Q6.6,TH,Tourism & Hospitality,C,Nutritionist,-1,
+a0v7F000003cyavQAA,Maharashtra,Q6.6,TH,Tourism & Hospitality,D,Chef,1,Emerging
+a0v7F000003cyavQAA,Maharashtra,Q6.6,TH,Tourism & Hospitality,E,Travel Agent,1,Steady
+a0v7F000003cyavQAA,Maharashtra,Q6.6,TH,Tourism & Hospitality,F,Architect,-1,
+a0v7F000003cyavQAA,Maharashtra,Q6.6,TH,Tourism & Hospitality,G,Commercial Pilot,1,Steady
+a0v7F000003cyavQAA,Maharashtra,Q6.6,TH,Tourism & Hospitality,H,Journalist,-1,
+a0v9C00000010e3QAA,Nagaland,Q6.6,TH,Tourism & Hospitality,A,Hotel Staffs,1,Steady
+a0v9C00000010e3QAA,Nagaland,Q6.6,TH,Tourism & Hospitality,B,Travel Services Planner,1,Emerging
+a0v9C00000010e3QAA,Nagaland,Q6.6,TH,Tourism & Hospitality,C,Nutritionist,-1,
+a0v9C00000010e3QAA,Nagaland,Q6.6,TH,Tourism & Hospitality,D,Chef,1,Steady
+a0v9C00000010e3QAA,Nagaland,Q6.6,TH,Tourism & Hospitality,E,Travel Agent,1,Steady
+a0v9C00000010e3QAA,Nagaland,Q6.6,TH,Tourism & Hospitality,F,Architect,-1,
+a0v9C00000010e3QAA,Nagaland,Q6.6,TH,Tourism & Hospitality,G,Commercial Pilot,1,Emerging
+a0v9C00000010e3QAA,Nagaland,Q6.6,TH,Tourism & Hospitality,H,Journalist,-1,
+a0v9C000000004IQAQ,Goa,Q6.6,TH,Tourism & Hospitality,A,Hotel Staffs,1,Steady
+a0v9C000000004IQAQ,Goa,Q6.6,TH,Tourism & Hospitality,B,Travel Services Planner,1,Emerging
+a0v9C000000004IQAQ,Goa,Q6.6,TH,Tourism & Hospitality,C,Nutritionist,-1,
+a0v9C000000004IQAQ,Goa,Q6.6,TH,Tourism & Hospitality,D,Chef,1,Steady
+a0v9C000000004IQAQ,Goa,Q6.6,TH,Tourism & Hospitality,E,Travel Agent,1,Steady
+a0v9C000000004IQAQ,Goa,Q6.6,TH,Tourism & Hospitality,F,Architect,-1,
+a0v9C000000004IQAQ,Goa,Q6.6,TH,Tourism & Hospitality,G,Commercial Pilot,1,Emerging
+a0v9C000000004IQAQ,Goa,Q6.6,TH,Tourism & Hospitality,H,Journalist,-1,
+a0vOW0000006JCrYAM,Haryana,Q6.6,TH,Tourism & Hospitality,A,Hotel staffs,1,Emerging
+a0vOW0000006JCrYAM,Haryana,Q6.6,TH,Tourism & Hospitality,B,Travel Services Planner,1,Steady
+a0vOW0000006JCrYAM,Haryana,Q6.6,TH,Tourism & Hospitality,C,Nutritionist,-1,
+a0vOW0000006JCrYAM,Haryana,Q6.6,TH,Tourism & Hospitality,D,Chef,1,Emerging
+a0vOW0000006JCrYAM,Haryana,Q6.6,TH,Tourism & Hospitality,E,Travel Agent,1,Steady
+a0vOW0000006JCrYAM,Haryana,Q6.6,TH,Tourism & Hospitality,F,Architect,-1,
+a0vOW0000006JCrYAM,Haryana,Q6.6,TH,Tourism & Hospitality,G,Commercial Pilot,1,Steady
+a0vOW0000006JCrYAM,Haryana,Q6.6,TH,Tourism & Hospitality,H,Journalist,-1,
+a0v7F000003cyavQAA,Maharashtra,Q6.9,IT,IT / Software,A,Cyber Security Specialist,1,Emerging
+a0v7F000003cyavQAA,Maharashtra,Q6.9,IT,IT / Software,B,Computer Professional,1,Steady
+a0v7F000003cyavQAA,Maharashtra,Q6.9,IT,IT / Software,C,Website Development,1,Steady
+a0v7F000003cyavQAA,Maharashtra,Q6.9,IT,IT / Software,D,Fire Fighter,-1,
+a0v7F000003cyavQAA,Maharashtra,Q6.9,IT,IT / Software,E,Software Developer,1,Emerging
+a0v7F000003cyavQAA,Maharashtra,Q6.9,IT,IT / Software,F,Engineer,-1,
+a0v7F000003cyavQAA,Maharashtra,Q6.9,IT,IT / Software,G,Urban Planner,-1,
+a0v7F000003cyavQAA,Maharashtra,Q6.9,IT,IT / Software,H,Artificial Intelligence Expert,1,Emerging
+a0v9C00000010e3QAA,Nagaland,Q6.9,IT,IT / Software,A,Cyber Security Specialist,1,Emerging
+a0v9C00000010e3QAA,Nagaland,Q6.9,IT,IT / Software,B,Computer Professional,1,Steady
+a0v9C00000010e3QAA,Nagaland,Q6.9,IT,IT / Software,C,Website Development,1,Emerging
+a0v9C00000010e3QAA,Nagaland,Q6.9,IT,IT / Software,D,Fire Fighter,-1,
+a0v9C00000010e3QAA,Nagaland,Q6.9,IT,IT / Software,E,Software Developer,1,Emerging
+a0v9C00000010e3QAA,Nagaland,Q6.9,IT,IT / Software,F,Engineer,-1,
+a0v9C00000010e3QAA,Nagaland,Q6.9,IT,IT / Software,G,Urban Planner,-1,
+a0v9C00000010e3QAA,Nagaland,Q6.9,IT,IT / Software,H,Artificial Intelligence Expert,1,Emerging
+a0v9C000000004IQAQ,Goa,Q6.9,IT,IT / Software,A,Cyber Security Specialist,1,Emerging
+a0v9C000000004IQAQ,Goa,Q6.9,IT,IT / Software,B,Computer Professional,1,Steady
+a0v9C000000004IQAQ,Goa,Q6.9,IT,IT / Software,C,Website Development,1,Emerging
+a0v9C000000004IQAQ,Goa,Q6.9,IT,IT / Software,D,Fire Fighter,-1,
+a0v9C000000004IQAQ,Goa,Q6.9,IT,IT / Software,E,Software Developer,1,Emerging
+a0v9C000000004IQAQ,Goa,Q6.9,IT,IT / Software,F,Engineer,-1,
+a0v9C000000004IQAQ,Goa,Q6.9,IT,IT / Software,G,Urban Planner,-1,
+a0v9C000000004IQAQ,Goa,Q6.9,IT,IT / Software,H,Artificial Intelligence Expert,1,Emerging
+a0vOW0000006JCrYAM,Haryana,Q6.9,IT,IT / Software,A,Cyber Security Specialist,1,Emerging
+a0vOW0000006JCrYAM,Haryana,Q6.9,IT,IT / Software,B,Computer Professional,1,Steady
+a0vOW0000006JCrYAM,Haryana,Q6.9,IT,IT / Software,C,Website development,1,Steady
+a0vOW0000006JCrYAM,Haryana,Q6.9,IT,IT / Software,D,Fire fighter,-1,
+a0vOW0000006JCrYAM,Haryana,Q6.9,IT,IT / Software,E,Software Developer,1,Emerging
+a0vOW0000006JCrYAM,Haryana,Q6.9,IT,IT / Software,F,Engineer,-1,
+a0vOW0000006JCrYAM,Haryana,Q6.9,IT,IT / Software,G,Urban Planner,-1,
+a0vOW0000006JCrYAM,Haryana,Q6.9,IT,IT / Software,H,Artificial Intelligence Expert,1,Emerging
+a0v7F000003cyavQAA,Maharashtra,Q6.12,ENV,Environment & Biosciences,A,Pharmacist,-1,
+a0v7F000003cyavQAA,Maharashtra,Q6.12,ENV,Environment & Biosciences,B,Environmental Scientist,1,Emerging
+a0v7F000003cyavQAA,Maharashtra,Q6.12,ENV,Environment & Biosciences,C,Plumber,-1,
+a0v7F000003cyavQAA,Maharashtra,Q6.12,ENV,Environment & Biosciences,D,Coach,-1,
+a0v7F000003cyavQAA,Maharashtra,Q6.12,ENV,Environment & Biosciences,E,Food Scientist,1,Emerging
+a0v7F000003cyavQAA,Maharashtra,Q6.12,ENV,Environment & Biosciences,F,City Planner,1,Emerging
+a0v7F000003cyavQAA,Maharashtra,Q6.12,ENV,Environment & Biosciences,G,Botanist,1,Steady
+a0v7F000003cyavQAA,Maharashtra,Q6.12,ENV,Environment & Biosciences,H,Renewable Energy Specialist,1,Emerging
+a0v9C00000010e3QAA,Nagaland,Q6.12,ENV,Environment & Biosciences,A,Pharmacist,-1,
+a0v9C00000010e3QAA,Nagaland,Q6.12,ENV,Environment & Biosciences,B,Environmental Scientist,1,Emerging
+a0v9C00000010e3QAA,Nagaland,Q6.12,ENV,Environment & Biosciences,C,Plumber,-1,
+a0v9C00000010e3QAA,Nagaland,Q6.12,ENV,Environment & Biosciences,D,Coach,-1,
+a0v9C00000010e3QAA,Nagaland,Q6.12,ENV,Environment & Biosciences,E,Food Scientist,1,Emerging
+a0v9C00000010e3QAA,Nagaland,Q6.12,ENV,Environment & Biosciences,F,City Planner,1,Emerging
+a0v9C00000010e3QAA,Nagaland,Q6.12,ENV,Environment & Biosciences,G,Botanist,1,Emerging
+a0v9C00000010e3QAA,Nagaland,Q6.12,ENV,Environment & Biosciences,H,Renewable Energy Specialist,1,Emerging
+a0v9C000000004IQAQ,Goa,Q6.12,ENV,Environment & Biosciences,A,Pharmacist,-1,
+a0v9C000000004IQAQ,Goa,Q6.12,ENV,Environment & Biosciences,B,Environmental Scientist,1,Emerging
+a0v9C000000004IQAQ,Goa,Q6.12,ENV,Environment & Biosciences,C,Plumber,-1,
+a0v9C000000004IQAQ,Goa,Q6.12,ENV,Environment & Biosciences,D,Coach,-1,
+a0v9C000000004IQAQ,Goa,Q6.12,ENV,Environment & Biosciences,E,Food Scientist,1,Emerging
+a0v9C000000004IQAQ,Goa,Q6.12,ENV,Environment & Biosciences,F,City Planner,1,Emerging
+a0v9C000000004IQAQ,Goa,Q6.12,ENV,Environment & Biosciences,G,Botanist,1,Emerging
+a0v9C000000004IQAQ,Goa,Q6.12,ENV,Environment & Biosciences,H,Renewable Energy Specialist,1,Emerging
+a0vOW0000006JCrYAM,Haryana,Q6.12,ENV,Environment & Biosciences,A,Pharmacist,-1,
+a0vOW0000006JCrYAM,Haryana,Q6.12,ENV,Environment & Biosciences,B,Environmental Scientist,1,Emerging
+a0vOW0000006JCrYAM,Haryana,Q6.12,ENV,Environment & Biosciences,C,Plumber,-1,
+a0vOW0000006JCrYAM,Haryana,Q6.12,ENV,Environment & Biosciences,D,Coach,-1,
+a0vOW0000006JCrYAM,Haryana,Q6.12,ENV,Environment & Biosciences,E,Food Scientist,1,Emerging
+a0vOW0000006JCrYAM,Haryana,Q6.12,ENV,Environment & Biosciences,F,City Planner,1,Emerging
+a0vOW0000006JCrYAM,Haryana,Q6.12,ENV,Environment & Biosciences,G,Botanist,1,Steady
+a0vOW0000006JCrYAM,Haryana,Q6.12,ENV,Environment & Biosciences,H,Renewable Energy Specialist,1,Emerging
+a0v7F000003cyavQAA,Maharashtra,Q6.10,ENG,Engineering & Trades,A,EV Mechanic,1,Emerging
+a0v7F000003cyavQAA,Maharashtra,Q6.10,ENG,Engineering & Trades,B,Plumber,1,Steady
+a0v7F000003cyavQAA,Maharashtra,Q6.10,ENG,Engineering & Trades,C,Engineer,1,Steady
+a0v7F000003cyavQAA,Maharashtra,Q6.10,ENG,Engineering & Trades,D,Accountant,-1,
+a0v7F000003cyavQAA,Maharashtra,Q6.10,ENG,Engineering & Trades,E,Artificial Intelligence,-1,
+a0v7F000003cyavQAA,Maharashtra,Q6.10,ENG,Engineering & Trades,F,Photographer,-1,
+a0v7F000003cyavQAA,Maharashtra,Q6.10,ENG,Engineering & Trades,G,Smart Infrastructure Technician,1,Emerging
+a0v7F000003cyavQAA,Maharashtra,Q6.10,ENG,Engineering & Trades,H,Building / Machinery Technician,1,Steady
+a0v9C00000010e3QAA,Nagaland,Q6.10,ENG,Engineering & Trades,A,EV Mechanic,1,Emerging
+a0v9C00000010e3QAA,Nagaland,Q6.10,ENG,Engineering & Trades,B,Plumber,1,Steady
+a0v9C00000010e3QAA,Nagaland,Q6.10,ENG,Engineering & Trades,C,Engineer,1,Steady
+a0v9C00000010e3QAA,Nagaland,Q6.10,ENG,Engineering & Trades,D,Accountant,-1,
+a0v9C00000010e3QAA,Nagaland,Q6.10,ENG,Engineering & Trades,E,Artificial Intelligence,-1,
+a0v9C00000010e3QAA,Nagaland,Q6.10,ENG,Engineering & Trades,F,Photographer,-1,
+a0v9C00000010e3QAA,Nagaland,Q6.10,ENG,Engineering & Trades,G,Smart Infrastructure Technician,1,Emerging
+a0v9C00000010e3QAA,Nagaland,Q6.10,ENG,Engineering & Trades,H,Building / Machinery Technician,1,Steady
+a0v9C000000004IQAQ,Goa,Q6.10,ENG,Engineering & Trades,A,EV Mechanic,1,Emerging
+a0v9C000000004IQAQ,Goa,Q6.10,ENG,Engineering & Trades,B,Plumber,1,Steady
+a0v9C000000004IQAQ,Goa,Q6.10,ENG,Engineering & Trades,C,Engineer,1,Steady
+a0v9C000000004IQAQ,Goa,Q6.10,ENG,Engineering & Trades,D,Accountant,-1,
+a0v9C000000004IQAQ,Goa,Q6.10,ENG,Engineering & Trades,E,Artificial Intelligence,-1,
+a0v9C000000004IQAQ,Goa,Q6.10,ENG,Engineering & Trades,F,Photographer,-1,
+a0v9C000000004IQAQ,Goa,Q6.10,ENG,Engineering & Trades,G,Smart Infrastructure Technician,1,Emerging
+a0v9C000000004IQAQ,Goa,Q6.10,ENG,Engineering & Trades,H,Building / Machinery Technician,1,Steady
+a0vOW0000006JCrYAM,Haryana,Q6.10,ENG,Engineering & Trades,A,EV Mechanic,1,Emerging
+a0vOW0000006JCrYAM,Haryana,Q6.10,ENG,Engineering & Trades,B,Plumber,1,Steady
+a0vOW0000006JCrYAM,Haryana,Q6.10,ENG,Engineering & Trades,C,Engineer,1,Steady
+a0vOW0000006JCrYAM,Haryana,Q6.10,ENG,Engineering & Trades,D,Accountant,-1,
+a0vOW0000006JCrYAM,Haryana,Q6.10,ENG,Engineering & Trades,E,Artificial Intelligence,-1,
+a0vOW0000006JCrYAM,Haryana,Q6.10,ENG,Engineering & Trades,F,Photographer,-1,
+a0vOW0000006JCrYAM,Haryana,Q6.10,ENG,Engineering & Trades,G,Smart Infrastructure Technician,1,Emerging
+a0vOW0000006JCrYAM,Haryana,Q6.10,ENG,Engineering & Trades,H,Building / Machinery Technician,1,Steady

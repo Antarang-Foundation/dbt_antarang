@@ -1,0 +1,11 @@
+SELECT student_id, student_barcode, gender, batch_no, batch_academic_year, batch_language, facilitator_id, facilitator_name, 
+facilitator_email, school_id, school_name, school_taluka, school_ward, school_district, school_state, school_partner, school_area, 
+donor_id, batch_donor, batch_grade, assessment_barcode, bl_createddate, bl_ca2_no, geography_wise_emerging_careers, 
+geography_wise_steady_careers, bl_student_correct_answers, bl_student_correct_answers_emerging, 
+bl_student_correct_answers_emerging_pct, bl_student_correct_answers_steady, bl_student_correct_answers_steady_pct, 
+bl_ii_emerging_count, bl_ada_emerging_count, bl_me_emerging_count, bl_agri_emerging_count, bl_healthcare_emerging_count, 
+bl_wf_emerging_count, bl_th_emerging_count, bl_it_emerging_count, bl_env_emerging_count, bl_eng_emerging_count, el_createddate, 
+el_ca2_no, el_student_correct_answers, el_student_correct_answers_emerging, el_student_correct_answers_emerging_pct, 
+el_student_correct_answers_steady, el_student_correct_answers_steady_pct, el_ii_emerging_count, el_ada_emerging_count, 
+el_me_emerging_count, el_agri_emerging_count, el_healthcare_emerging_count, el_wf_emerging_count, el_th_emerging_count, 
+el_it_emerging_count, el_env_emerging_count, el_eng_emerging_count FROM {{ ref("int_student_global_industry") }}
