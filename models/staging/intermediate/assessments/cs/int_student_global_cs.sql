@@ -56,10 +56,7 @@ with
         from {{ ref("stg_cs") }}
 
         where
-            data_cleanup = true
-            and marks_recalculated = true
-            and student_linked = true
-            and safe_cast(assessment_academic_year as int64) >= 2026
+            safe_cast(assessment_academic_year as int64) >= 2026
 
     ),
 
