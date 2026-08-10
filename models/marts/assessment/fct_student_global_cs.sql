@@ -145,7 +145,7 @@ bl AS (
             WHEN bl_q5_total_marks BETWEEN 1 AND 4 THEN '1-4 CRS'
             WHEN bl_q5_total_marks BETWEEN 5 AND 7 THEN '5-7 CRS'
             WHEN bl_q5_total_marks BETWEEN 8 AND 9 THEN '8-9 CRS'
-            ELSE NULL
+            ELSE 'DNA'
         END AS bl_q5_marks_bucket,
 
         CASE
@@ -324,7 +324,7 @@ el AS (
             WHEN el_q5_total_marks BETWEEN 1 AND 4 THEN '1-4 CRS'
             WHEN el_q5_total_marks BETWEEN 5 AND 7 THEN '5-7 CRS'
             WHEN el_q5_total_marks BETWEEN 8 AND 9 THEN '8-9 CRS'
-            ELSE NULL
+            ELSE 'DNA'
         END AS el_q5_marks_bucket,
 
         CASE

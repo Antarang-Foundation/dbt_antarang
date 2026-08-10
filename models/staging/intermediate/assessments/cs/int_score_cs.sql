@@ -221,7 +221,7 @@ with
                 then '3-4 Experiential Opportunities'
                 when bl_q4_total_marks between 5 and 7
                 then '5-7 Experiential Opportunities'
-                else null
+                else 'DNA'
             end as bl_q4_marks_bucket,
 
             case
@@ -356,7 +356,7 @@ with
                 then '3-4 Experiential Opportunities'
                 when el_q4_total_marks between 5 and 7
                 then '5-7 Experiential Opportunities'
-                else null
+                else 'DNA'
             end as el_q4_marks_bucket,
 
             case
