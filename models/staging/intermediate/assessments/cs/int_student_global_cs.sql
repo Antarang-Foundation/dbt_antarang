@@ -91,7 +91,7 @@ with
 
         from {{ ref("dev_int_global_dcp") }}
 
-        where safe_cast(batch_academic_year as int64) >= 2026
+        where batch_grade in ('Grade 11', 'Grade 12') and safe_cast(batch_academic_year as int64) >= 2026
 
     ),
 

@@ -49,18 +49,17 @@ END AS bl_q5_avg_marks,
      AND bl_q5_8_marks IS NULL
      AND bl_q5_9_marks IS NULL
     THEN NULL
-    WHEN (
-        IFNULL(SAFE_CAST(bl_q5_1_marks AS INT64),0) +
-        IFNULL(SAFE_CAST(bl_q5_2_marks AS INT64),0) +
-        IFNULL(SAFE_CAST(bl_q5_3_marks AS INT64),0) +
-        IFNULL(SAFE_CAST(bl_q5_4_marks AS INT64),0) +
-        IFNULL(SAFE_CAST(bl_q5_5_marks AS INT64),0) +
-        IFNULL(SAFE_CAST(bl_q5_6_marks AS INT64),0) +
-        IFNULL(SAFE_CAST(bl_q5_7_marks AS INT64),0) +
-        IFNULL(SAFE_CAST(bl_q5_8_marks AS INT64),0) +
-        IFNULL(SAFE_CAST(bl_q5_9_marks AS INT64),0)
-    ) >= 2 THEN 1
-    ELSE 0
+
+    ELSE
+        IF(COALESCE(SAFE_CAST(bl_q5_1_marks AS INT64),0) >= 2, 1, 0) +
+        IF(COALESCE(SAFE_CAST(bl_q5_2_marks AS INT64),0) >= 2, 1, 0) +
+        IF(COALESCE(SAFE_CAST(bl_q5_3_marks AS INT64),0) >= 2, 1, 0) +
+        IF(COALESCE(SAFE_CAST(bl_q5_4_marks AS INT64),0) >= 2, 1, 0) +
+        IF(COALESCE(SAFE_CAST(bl_q5_5_marks AS INT64),0) >= 2, 1, 0) +
+        IF(COALESCE(SAFE_CAST(bl_q5_6_marks AS INT64),0) >= 2, 1, 0) +
+        IF(COALESCE(SAFE_CAST(bl_q5_7_marks AS INT64),0) >= 2, 1, 0) +
+        IF(COALESCE(SAFE_CAST(bl_q5_8_marks AS INT64),0) >= 2, 1, 0) +
+        IF(COALESCE(SAFE_CAST(bl_q5_9_marks AS INT64),0) >= 2, 1, 0)
 END AS bl_q5_total_marks,
 
         CASE
@@ -227,19 +226,16 @@ END AS el_q5_avg_marks,
      AND el_q5_9_marks IS NULL
     THEN NULL
 
-    WHEN
-        IF(SAFE_CAST(el_q5_1_marks AS INT64) >= 2, 1, 0) +
-        IF(SAFE_CAST(el_q5_2_marks AS INT64) >= 2, 1, 0) +
-        IF(SAFE_CAST(el_q5_3_marks AS INT64) >= 2, 1, 0) +
-        IF(SAFE_CAST(el_q5_4_marks AS INT64) >= 2, 1, 0) +
-        IF(SAFE_CAST(el_q5_5_marks AS INT64) >= 2, 1, 0) +
-        IF(SAFE_CAST(el_q5_6_marks AS INT64) >= 2, 1, 0) +
-        IF(SAFE_CAST(el_q5_7_marks AS INT64) >= 2, 1, 0) +
-        IF(SAFE_CAST(el_q5_8_marks AS INT64) >= 2, 1, 0) +
-        IF(SAFE_CAST(el_q5_9_marks AS INT64) >= 2, 1, 0) >= 1
-    THEN 1
-
-    ELSE 0
+    ELSE
+        IF(COALESCE(SAFE_CAST(el_q5_1_marks AS INT64),0) >= 2, 1, 0) +
+        IF(COALESCE(SAFE_CAST(el_q5_2_marks AS INT64),0) >= 2, 1, 0) +
+        IF(COALESCE(SAFE_CAST(el_q5_3_marks AS INT64),0) >= 2, 1, 0) +
+        IF(COALESCE(SAFE_CAST(el_q5_4_marks AS INT64),0) >= 2, 1, 0) +
+        IF(COALESCE(SAFE_CAST(el_q5_5_marks AS INT64),0) >= 2, 1, 0) +
+        IF(COALESCE(SAFE_CAST(el_q5_6_marks AS INT64),0) >= 2, 1, 0) +
+        IF(COALESCE(SAFE_CAST(el_q5_7_marks AS INT64),0) >= 2, 1, 0) +
+        IF(COALESCE(SAFE_CAST(el_q5_8_marks AS INT64),0) >= 2, 1, 0) +
+        IF(COALESCE(SAFE_CAST(el_q5_9_marks AS INT64),0) >= 2, 1, 0)
 END AS el_q5_total_marks,
 
         CASE
@@ -362,17 +358,29 @@ el AS (
     FROM el_1
 ),
 
-final_select as (SELECT
+final_select AS (
+SELECT
     el.*,
 
     /* =========================
-       BL vs EL DELTA
+       BL vs EL Q4 BUCKET CHANGE
     ========================= */
+    CASE
+    WHEN bl_q4_total_marks IS NULL OR el_q4_total_marks IS NULL THEN NULL
+    WHEN el_q4_total_marks > bl_q4_total_marks THEN 'Improvement'
+    WHEN el_q4_total_marks < bl_q4_total_marks THEN 'Area for Growth'
+    ELSE 'No Change'
+END AS bl_el_q4_score,
 
-    (el_q4_total_marks - bl_q4_total_marks) AS bl_el_q4_score,
-
-    (el_q5_total_marks - bl_q5_total_marks) AS bl_el_q5_score
-  
+    /* =========================
+       BL vs EL Q5 BUCKET CHANGE
+    ========================= */
+    CASE
+    WHEN bl_q5_total_marks IS NULL OR el_q5_total_marks IS NULL THEN NULL
+    WHEN el_q5_total_marks > bl_q5_total_marks THEN 'Improvement'
+    WHEN el_q5_total_marks < bl_q5_total_marks THEN 'Area for Growth'
+    ELSE 'No Change'
+END AS bl_el_q5_score
 
 FROM el
 ),
@@ -398,3 +406,4 @@ FROM final_select
 )
 
 select * from final
+

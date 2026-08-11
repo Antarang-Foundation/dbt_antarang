@@ -94,11 +94,11 @@ with
 
         select
             source.*,
-            case when trim(bl_q4_1_1_answer) = 'A' then 1 else 0 end as bl_q4_1_1_marks,
+            case when trim(bl_q4_1_1) = 'A' then 1 else 0 end as bl_q4_1_1_marks,
 
-            case when trim(bl_q4_1_2_answer) = 'A' then 1 else 0 end as bl_q4_1_2_marks,
-            case when trim(bl_q4_2_1_ans) = 'A' then 1 else 0 end as bl_q4_2_1_marks,
-            case when trim(bl_q4_2_2_ans) = 'A' then 1 else 0 end as bl_q4_2_2_marks,
+            case when trim(bl_q4_1_2) = 'A' then 1 else 0 end as bl_q4_1_2_marks,
+            case when trim(bl_q4_2_1) = 'A' then 1 else 0 end as bl_q4_2_1_marks,
+            case when trim(bl_q4_2_2) = 'A' then 1 else 0 end as bl_q4_2_2_marks,
             case when trim(bl_q4_4_1) = 'A' then 1 else 0 end as bl_q4_4_1_marks,
             case when trim(bl_q4_4_2) = 'A' then 1 else 0 end as bl_q4_4_2_marks,
             case when trim(bl_q4_5_1) = 'A' then 1 else 0 end as bl_q4_5_1_marks,
@@ -116,32 +116,43 @@ with
                 when coalesce(trim(bl_q4_9), '') = '' then 0 else 1
             end as bl_q4_9_marks,
             case
+                when bl_q4_3_1 = '*'
+                then '*'
                 when bl_q4_3_1 is null or trim(bl_q4_3_1) = ''
-                then 0
+                then '0'
                 when bl_q4_3_1 = 'I'
-                then 0
-                else 1
+                then '0'
+                else '1'
             end as bl_q4_3_1_marks,
+
             case
+                when bl_q4_3_2 = '*'
+                then '*'
                 when bl_q4_3_2 is null or trim(bl_q4_3_2) = ''
-                then 0
+                then '0'
                 when bl_q4_3_2 = 'I'
-                then 0
-                else 1
+                then '0'
+                else '1'
             end as bl_q4_3_2_marks,
+
             case
+                when bl_q4_7_1 = '*'
+                then '*'
                 when bl_q4_7_1 is null or trim(bl_q4_7_1) = ''
-                then 0
+                then '0'
                 when bl_q4_7_1 = 'I'
-                then 0
-                else 1
+                then '0'
+                else '1'
             end as bl_q4_7_1_marks,
+
             case
+                when bl_q4_7_2 = '*'
+                then '*'
                 when bl_q4_7_2 is null or trim(bl_q4_7_2) = ''
-                then 0
+                then '0'
                 when bl_q4_7_2 = 'I'
-                then 0
-                else 1
+                then '0'
+                else '1'
             end as bl_q4_7_2_marks
         from source
     ),
@@ -166,11 +177,11 @@ with
                 else
                     coalesce(bl_q4_1_1_marks, 0)
                     + coalesce(bl_q4_2_1_marks, 0)
-                    + coalesce(bl_q4_3_1_marks, 0)
+                    + coalesce(safe_cast(bl_q4_3_1_marks as int64), 0)
                     + coalesce(bl_q4_4_1_marks, 0)
                     + coalesce(bl_q4_5_1_marks, 0)
                     + coalesce(bl_q4_6_1_marks, 0)
-                    + coalesce(bl_q4_7_1_marks, 0)
+                    + coalesce(safe_cast(bl_q4_7_1_marks as int64), 0)
                     + coalesce(bl_q4_8_marks, 0)
                     + coalesce(bl_q4_9_marks, 0)
             end as bl_q4_total_marks_cp1,
@@ -190,11 +201,11 @@ with
                 else
                     coalesce(bl_q4_1_2_marks, 0)
                     + coalesce(bl_q4_2_2_marks, 0)
-                    + coalesce(bl_q4_3_2_marks, 0)
+                    + coalesce(safe_cast(bl_q4_3_2_marks as int64), 0)
                     + coalesce(bl_q4_4_2_marks, 0)
                     + coalesce(bl_q4_5_2_marks, 0)
                     + coalesce(bl_q4_6_2_marks, 0)
-                    + coalesce(bl_q4_7_2_marks, 0)
+                    + coalesce(safe_cast(bl_q4_7_2_marks as int64), 0)
                     + coalesce(bl_q4_8_marks, 0)
                     + coalesce(bl_q4_9_marks, 0)
             end as bl_q4_total_marks_cp2
@@ -247,10 +258,10 @@ with
         select
             bl_cri.*,
 
-            case when trim(el_q4_1_1_answer) = 'A' then 1 else 0 end as el_q4_1_1_marks,
-            case when trim(el_q4_1_2_answer) = 'A' then 1 else 0 end as el_q4_1_2_marks,
-            case when trim(el_q4_2_1_ans) = 'A' then 1 else 0 end as el_q4_2_1_marks,
-            case when trim(el_q4_2_2_ans) = 'A' then 1 else 0 end as el_q4_2_2_marks,
+            case when trim(el_q4_1_1) = 'A' then 1 else 0 end as el_q4_1_1_marks,
+            case when trim(el_q4_1_2) = 'A' then 1 else 0 end as el_q4_1_2_marks,
+            case when trim(el_q4_2_1) = 'A' then 1 else 0 end as el_q4_2_1_marks,
+            case when trim(el_q4_2_2) = 'A' then 1 else 0 end as el_q4_2_2_marks,
             case when trim(el_q4_4_1) = 'A' then 1 else 0 end as el_q4_4_1_marks,
             case when trim(el_q4_4_2) = 'A' then 1 else 0 end as el_q4_4_2_marks,
             case when trim(el_q4_5_1) = 'A' then 1 else 0 end as el_q4_5_1_marks,
@@ -270,35 +281,43 @@ with
             end as el_q4_9_marks,
 
             case
+                when el_q4_3_1 = '*'
+                then '*'
                 when el_q4_3_1 is null or trim(el_q4_3_1) = ''
-                then 0
+                then '0'
                 when el_q4_3_1 = 'I'
-                then 0
-                else 1
+                then '0'
+                else '1'
             end as el_q4_3_1_marks,
 
             case
+                when el_q4_3_2 = '*'
+                then '*'
                 when el_q4_3_2 is null or trim(el_q4_3_2) = ''
-                then 0
+                then '0'
                 when el_q4_3_2 = 'I'
-                then 0
-                else 1
+                then '0'
+                else '1'
             end as el_q4_3_2_marks,
 
             case
+                when el_q4_7_1 = '*'
+                then '*'
                 when el_q4_7_1 is null or trim(el_q4_7_1) = ''
-                then 0
+                then '0'
                 when el_q4_7_1 = 'I'
-                then 0
-                else 1
+                then '0'
+                else '1'
             end as el_q4_7_1_marks,
 
             case
+                when el_q4_7_2 = '*'
+                then '*'
                 when el_q4_7_2 is null or trim(el_q4_7_2) = ''
-                then 0
+                then '0'
                 when el_q4_7_2 = 'I'
-                then 0
-                else 1
+                then '0'
+                else '1'
             end as el_q4_7_2_marks
 
         from bl_cri
@@ -325,11 +344,11 @@ with
                 else
                     coalesce(el_q4_1_1_marks, 0)
                     + coalesce(el_q4_2_1_marks, 0)
-                    + coalesce(el_q4_3_1_marks, 0)
+                    + coalesce(safe_cast(el_q4_3_1_marks as int64), 0)
                     + coalesce(el_q4_4_1_marks, 0)
                     + coalesce(el_q4_5_1_marks, 0)
                     + coalesce(el_q4_6_1_marks, 0)
-                    + coalesce(el_q4_7_1_marks, 0)
+                    + coalesce(safe_cast(el_q4_7_1_marks as int64), 0)
                     + coalesce(el_q4_8_marks, 0)
                     + coalesce(el_q4_9_marks, 0)
             end as el_q4_total_marks_cp1,
@@ -349,11 +368,11 @@ with
                 else
                     coalesce(el_q4_1_2_marks, 0)
                     + coalesce(el_q4_2_2_marks, 0)
-                    + coalesce(el_q4_3_2_marks, 0)
+                    + coalesce(safe_cast(el_q4_3_2_marks as int64), 0)
                     + coalesce(el_q4_4_2_marks, 0)
                     + coalesce(el_q4_5_2_marks, 0)
                     + coalesce(el_q4_6_2_marks, 0)
-                    + coalesce(el_q4_7_2_marks, 0)
+                    + coalesce(safe_cast(el_q4_7_2_marks as int64), 0)
                     + coalesce(el_q4_8_marks, 0)
                     + coalesce(el_q4_9_marks, 0)
             end as el_q4_total_marks_cp2
@@ -548,3 +567,4 @@ with
 
 select *
 from final
+
