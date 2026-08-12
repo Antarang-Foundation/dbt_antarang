@@ -58,3 +58,5 @@ sources:
         description: this is attendance sheet
       - name: CDM3__c
         description: this is CA source
+      - name: HM_Master_Sheet
+        description: this is HM Orientation Sheet
