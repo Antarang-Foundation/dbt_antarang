@@ -1,11 +1,13 @@
 WITH session_data AS (
 
     SELECT DISTINCT
+    school_state,
+    school_district,
+        school_taluka,
+        school_partner,
         batch_academic_year,
         batch_no,
         batch_grade,
-        school_district,
-        school_taluka,
         facilitator_name,
 
         CASE
@@ -48,7 +50,7 @@ WITH session_data AS (
 
     from {{ref('int_global_session')}}
 
-    WHERE session_type = 'Student'
+    WHERE session_type = 'Student' and batch_academic_year is not null
 ),
 
 
@@ -60,6 +62,8 @@ batch_data AS (
         batch_grade,
         school_district,
         school_taluka,
+        school_state,
+        school_partner,
         facilitator_name,
 
         STRING_AGG(DISTINCT session_code, ', ') AS session_code,
@@ -99,6 +103,8 @@ batch_data AS (
         batch_grade,
         school_district,
         school_taluka,
+        school_state,
+        school_partner,
         facilitator_name
 ),
 
@@ -162,12 +168,13 @@ final_data AS (
 
 
 final as (SELECT
-
+    school_state,
+    school_district,
+    school_taluka,
+    school_partner,
     batch_academic_year,
     batch_no,
     batch_grade,
-    school_district,
-    school_taluka,
     facilitator_name,
     session_code,
     remaining_session,

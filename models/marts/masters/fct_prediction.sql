@@ -75,16 +75,16 @@ summary as (
 final as (
 
     select
-        school_name,
-        batch_no,
-        batch_grade,
-        facilitator_name,
-        facilitator_email,
         school_state,
         school_district,
         school_taluka,
         school_area,
         school_partner,
+        school_name,
+        batch_no,
+        batch_grade,
+        facilitator_name,
+        facilitator_email,
         batch_donor,
         batch_academic_year,
         fac_start_date,

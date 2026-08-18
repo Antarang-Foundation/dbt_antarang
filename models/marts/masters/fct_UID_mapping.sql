@@ -1,6 +1,10 @@
 with
     source as (
         select
+        school_state,
+        school_district,
+        school_taluka,
+        school_ward, school_partner,
             batch_academic_year,
             first_barcode,
             student_barcode,
@@ -13,10 +17,9 @@ with
             birth_year,
             school_name,
             batch_no,
-            batch_grade,
-            school_district,
-            school_state
+            batch_grade
         from {{ ref("dev_int_global_dcp") }}
+        where first_barcode is not null
     ),
     mapping as (
         select
