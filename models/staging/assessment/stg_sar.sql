@@ -38,6 +38,7 @@ t1 as (
         
 
     from t0 
+    where lower(Name) not like '%test%'
 ),
 
 t2 as (select record_type_id,record_type from {{ ref('seed_recordtype') }}),
