@@ -3,7 +3,7 @@ t1 AS (
     SELECT 
         student_id, first_barcode, student_grade, student_barcode, student_batch_id, gender, birth_year, 
         batch_no, batch_academic_year, batch_grade, batch_language, no_of_students_facilitated, fac_start_date, facilitator_name, facilitator_id,
-        school_id, school_name, school_state, school_district, school_taluka, school_partner, school_area, batch_donor
+        school_id, school_name, school_state, school_district, school_taluka, school_partner, school_area, school_ward, batch_donor
     FROM {{ref('fct_student_global')}}
 ),
 
@@ -53,7 +53,7 @@ t6 AS (
 
 SELECT distinct 
 batch_no, batch_academic_year, batch_grade, batch_language, no_of_students_facilitated, fac_start_date, facilitator_name, facilitator_id,
-school_id, school_name, school_state, school_district, school_taluka, school_partner, school_area, batch_donor, 
+school_id, school_name, school_state, school_district, school_taluka, school_partner, school_area, school_ward, batch_donor, 
 batch_max_overall_attendance, total_student_session_att_batchwise, total_reached_students
 FROM t6
 

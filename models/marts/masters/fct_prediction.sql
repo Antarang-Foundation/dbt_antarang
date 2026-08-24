@@ -17,6 +17,7 @@ with base as (
         school_district,
         school_partner,
         school_taluka,
+        school_ward,
         school_area,
         total_student_present,
 
@@ -44,6 +45,7 @@ summary as (
         school_state,
         school_district,
         school_taluka,
+        school_ward,
         school_area,
         school_partner,
         batch_donor,
@@ -66,6 +68,7 @@ summary as (
         school_state,
         school_district,
         school_taluka,
+        school_ward,
         school_area,
         school_partner,
         batch_donor
@@ -78,6 +81,7 @@ final as (
         school_state,
         school_district,
         school_taluka,
+        school_ward,
         school_area,
         school_partner,
         school_name,

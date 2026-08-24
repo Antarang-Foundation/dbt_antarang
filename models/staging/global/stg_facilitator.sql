@@ -19,6 +19,7 @@ renamed as (
         Gender__c as facilitator_gender,
         Date_of_Joining__c as joining_date
     from source 
+    where lower(Name) not like '%test%'
 ),
 
 recordtypes as (select record_type_id,record_type from {{ ref('seed_recordtype') }}),

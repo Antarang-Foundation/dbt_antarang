@@ -178,7 +178,7 @@ END AS omr_upload_count,
     -- TAT1 : Session Date → OMR Received Date
     ------------------------------------------------------------------
     CASE
-        WHEN sess.session_date IS NOT NULL THEN
+        WHEN sess.session_date IS NOT NULL AND sess.total_student_present IS NOT NULL THEN 
             CASE
                 WHEN COALESCE(s.omr_received_date, CURRENT_DATE()) >= sess.session_date THEN
                     (
@@ -207,7 +207,7 @@ END AS omr_upload_count,
     -- TAT2 : Session Date → First OMR Upload Date
     ------------------------------------------------------------------
     CASE
-        WHEN sess.session_date IS NOT NULL THEN
+        WHEN sess.session_date IS NOT NULL AND sess.total_student_present IS NOT NULL THEN
             CASE
                 WHEN COALESCE(s.first_omr_upload_date, CURRENT_DATE()) >= sess.session_date THEN
                     (

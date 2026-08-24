@@ -20,7 +20,7 @@ with t0 as (
         --Tagged_for_Experiential_Learning__c as Tagged_for_Experiential_Learning,
         --Tagged_for_Digital_Learning__c as Tagged_for_Digital_Learning__c
 
-    from {{ source('salesforce', 'Account') }} where IsDeleted = false
+    from {{ source('salesforce', 'Account') }} where IsDeleted = false and lower(name) not like '%test%'
 ),
 
 t1 as (select record_type_id, record_type from {{ ref('seed_recordtype') }}),
@@ -47,5 +47,5 @@ left join t5 on t2.school_ward_id = t5.ward_id
 left join t6 on t2.school_taluka_id = t6.taluka_id 
 
 order by school_id)
-select * from t7 where school_name not like '%test%' or school_name not like '%Test%' 
+select * from t7 
     

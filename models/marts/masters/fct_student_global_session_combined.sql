@@ -1,5 +1,6 @@
 select distinct batch_no,
     student_barcode,
+    sd2_barcode,
     student_name,
     caste,
     school_name,
@@ -49,7 +50,6 @@ select distinct batch_no,
     batch_max_session_parent_attendance
 from
     {{ ref("int_student_global_session_combined") }}
-
 /*select 
 student_barcode, student_name, caste, school_name, school_area, school_district, school_partner, school_state, school_taluka, 
 batch_academic_year, batch_donor, batch_grade, batch_language, batch_no, fac_start_date, facilitator_email, facilitator_name, gender, 
