@@ -68,7 +68,7 @@ t8 AS (
 
     -- TAT1: Session → OMR received
     CASE 
-WHEN session_date IS NOT NULL
+WHEN session_date IS NOT NULL AND total_student_present IS NOT NULL
 THEN (
   CASE 
     WHEN COALESCE(omr_received_date, CURRENT_DATE()) >= session_date THEN
@@ -97,7 +97,7 @@ END AS TAT1,
 
     -- TAT2: OMR received → First upload
 CASE 
-WHEN omr_received_date IS NOT NULL
+WHEN omr_received_date IS NOT NULL AND total_student_present IS NOT NULL
 THEN (
   CASE 
     WHEN COALESCE(first_omr_upload_date, CURRENT_DATE()) >= omr_received_date THEN
@@ -126,7 +126,7 @@ END AS TAT2,
 
     -- TAT3: Session → First upload
   CASE 
-WHEN session_date IS NOT NULL
+WHEN session_date IS NOT NULL AND total_student_present IS NOT NULL
 THEN (
   CASE 
     WHEN COALESCE(first_omr_upload_date, CURRENT_DATE()) >= session_date THEN
@@ -157,5 +157,4 @@ END AS TAT3
 )
 
 select * from t8
-
 --WHERE school_partner in ('KMCT', 'Learning Links Foundation', 'Akanksha Foundation')

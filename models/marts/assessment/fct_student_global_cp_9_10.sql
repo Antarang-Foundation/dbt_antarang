@@ -187,7 +187,11 @@ with
                     + if(regexp_contains(bl_q4_9, r'(^|,\s*)O($|,\s*)'), 1, 0)
                     + if(regexp_contains(bl_q4_9, r'(^|,\s*)P($|,\s*)'), 0.5, 0)
             end as bl_q4_9_marks,
-            case when trim(bl_q4_10) = 'A' then 1 else 0 end as bl_q4_10_marks
+            case 
+    when trim(bl_q4_10) = 'A' then 2
+    when trim(bl_q4_10) = 'B' then 1
+    else 0
+end as bl_q4_10_marks
         from source
 
     ),
@@ -375,7 +379,11 @@ with
                     + if(regexp_contains(el_q4_9, r'(^|,\s*)P($|,\s*)'), 0.5, 0)
             end as el_q4_9_marks,
 
-            case when trim(el_q4_10) = 'A' then 1 else 0 end as el_q4_10_marks
+            case 
+    when trim(el_q4_10) = 'A' then 2
+    when trim(el_q4_10) = 'B' then 1
+    else 0
+end as el_q4_10_marks
 
         from bl_final
     ),

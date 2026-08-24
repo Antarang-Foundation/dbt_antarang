@@ -5,6 +5,8 @@ WITH session_data AS (
     school_district,
         school_taluka,
         school_partner,
+        school_ward,
+        school_area,
         batch_academic_year,
         batch_no,
         batch_grade,
@@ -64,6 +66,8 @@ batch_data AS (
         school_taluka,
         school_state,
         school_partner,
+        school_ward,
+        school_area,
         facilitator_name,
 
         STRING_AGG(DISTINCT session_code, ', ') AS session_code,
@@ -105,6 +109,8 @@ batch_data AS (
         school_taluka,
         school_state,
         school_partner,
+        school_ward,
+        school_area,
         facilitator_name
 ),
 
@@ -171,6 +177,8 @@ final as (SELECT
     school_state,
     school_district,
     school_taluka,
+    school_ward,
+    school_area,
     school_partner,
     batch_academic_year,
     batch_no,

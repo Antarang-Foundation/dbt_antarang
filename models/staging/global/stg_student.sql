@@ -78,7 +78,8 @@ renamed as (
 
     from source
 
-    where Full_Name__c not like '%test%' or Full_Name__c not like '%Test%' 
+    where (lower(Full_Name__c) not like '%test%' or Id in ('003OW00000NemiDYAR', '003OW00000S958SYAR', '003OW000008EoyRYAS', 
+        '003OW00000GFxwEYAT', '003OW00000GLlCRYA1'))
 ),
 
 recordtypes as (select record_type_id, record_type from {{ ref('seed_recordtype') }}),
