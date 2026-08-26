@@ -249,23 +249,17 @@ final as (SELECT
     ) AS Count_sessions_in_4_days,
 
 
-    -- 5-7 days
+
+    -- 5-14 days
     (
-        SELECT COUNTIF(diff > 4 AND diff <= 7)
+        SELECT COUNTIF(diff > 4 AND diff <= 14)
         FROM UNNEST(session_diffs) AS diff
-    ) AS Count_sessions_in_7_days,
+    ) AS Count_sessions_in_14_days,
 
 
-    -- 8-15 days
+    -- 15-30 days
     (
-        SELECT COUNTIF(diff > 7 AND diff <= 15)
-        FROM UNNEST(session_diffs) AS diff
-    ) AS Count_sessions_in_15_days,
-
-
-    -- 16-30 days
-    (
-        SELECT COUNTIF(diff > 15 AND diff <= 30)
+        SELECT COUNTIF(diff > 14 AND diff <= 30)
         FROM UNNEST(session_diffs) AS diff
     ) AS Count_sessions_in_30_days,
 
