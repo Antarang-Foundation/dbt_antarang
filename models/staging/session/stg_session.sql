@@ -30,7 +30,8 @@ with
             Total_Amount__c as total_amount,
             Guardian_Parent_Count__c as parent_present_count,
             Session_Mode__c as session_mode,
-            Session_Status__c as session_status
+            Session_Status__c as session_status,
+            Rescheduled_Counter__c as rescheduled_counter
         from t0
         
     ),
