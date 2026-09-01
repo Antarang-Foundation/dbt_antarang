@@ -31,7 +31,8 @@ with
             Guardian_Parent_Count__c as parent_present_count,
             Session_Mode__c as session_mode,
             Session_Status__c as session_status,
-            Rescheduled_Counter__c as rescheduled_counter
+            Rescheduled_Counter__c as rescheduled_counter,
+            Scheduling_Type__c as scheduling_type
         from t0
         
     ),
