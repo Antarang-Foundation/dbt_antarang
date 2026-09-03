@@ -36,8 +36,14 @@ with
             end as current_grade,
 
             case
-                when first_barcode != student_barcode then 'Linked' else 'Not Linked'
-            end as linking_status
+    when first_barcode != student_barcode
+      or (g9_barcode is not null and g9_barcode != student_barcode)
+      or (g10_barcode is not null and g10_barcode != student_barcode)
+      or (g11_barcode is not null and g11_barcode != student_barcode)
+      or (g12_barcode is not null and g12_barcode != student_barcode)
+    then 'Linked'
+    else 'Not Linked'
+end as linking_status
         from source
     )
 
