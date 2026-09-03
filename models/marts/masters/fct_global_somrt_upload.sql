@@ -76,7 +76,7 @@ THEN (
         SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM d) NOT IN (1,7))
         FROM UNNEST(
           GENERATE_DATE_ARRAY(
-            session_date,
+            DATE_ADD(session_date, INTERVAL 1 DAY),
             COALESCE(omr_received_date, CURRENT_DATE())
           )
         ) d
@@ -86,7 +86,7 @@ THEN (
         SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM d) NOT IN (1,7))
         FROM UNNEST(
           GENERATE_DATE_ARRAY(
-            COALESCE(omr_received_date, CURRENT_DATE()),
+           DATE_ADD(COALESCE(omr_received_date, CURRENT_DATE()), INTERVAL 1 DAY),
             session_date
           )
         ) d
@@ -105,7 +105,7 @@ THEN (
         SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM d) NOT IN (1,7))
         FROM UNNEST(
           GENERATE_DATE_ARRAY(
-            omr_received_date,
+            DATE_ADD(omr_received_date, INTERVAL 1 DAY),
             COALESCE(first_omr_upload_date, CURRENT_DATE())
           )
         ) d
@@ -115,7 +115,7 @@ THEN (
         SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM d) NOT IN (1,7))
         FROM UNNEST(
           GENERATE_DATE_ARRAY(
-            COALESCE(first_omr_upload_date, CURRENT_DATE()),
+            DATE_ADD(COALESCE(first_omr_upload_date, CURRENT_DATE()), INTERVAL 1 DAY),
             omr_received_date
           )
         ) d
@@ -134,7 +134,7 @@ THEN (
         SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM d) NOT IN (1,7))
         FROM UNNEST(
           GENERATE_DATE_ARRAY(
-            session_date,
+            DATE_ADD(session_date, INTERVAL 1 DAY),
             COALESCE(first_omr_upload_date, CURRENT_DATE())
           )
         ) d
@@ -144,7 +144,7 @@ THEN (
         SELECT COUNTIF(EXTRACT(DAYOFWEEK FROM d) NOT IN (1,7))
         FROM UNNEST(
           GENERATE_DATE_ARRAY(
-            COALESCE(first_omr_upload_date, CURRENT_DATE()),
+            DATE_ADD(COALESCE(first_omr_upload_date, CURRENT_DATE()), INTERVAL 1 DAY),
             session_date
           )
         ) d
