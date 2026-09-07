@@ -29,7 +29,7 @@ t1 as (select record_type_id, record_type from {{ ref('seed_recordtype') }}),
         select * except (record_type_id)
         from 
             t0
-            left join t1 using (record_type_id) where record_type = 'School'
+            inner join t1 using (record_type_id) where record_type = 'School'
     ),
 
 t3 as (select * from {{ ref('seed_state') }}),
@@ -48,4 +48,3 @@ left join t6 on t2.school_taluka_id = t6.taluka_id
 
 order by school_id)
 select * from t7 
-    
