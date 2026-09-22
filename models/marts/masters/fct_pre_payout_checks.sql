@@ -1,5 +1,10 @@
 with
-    source as (select * from {{ ref("int_global_session") }}),
+
+    source as (
+        select *
+        from {{ ref("fct_global_session") }}
+        where session_date is not null
+    ),
 
     holiday_calendar_raw as (
 
@@ -60,7 +65,7 @@ with
                 generate_date_array(date '2026-12-26', date '2027-01-05')
             ) as holiday_date
 
-        -- Maharashtra: Mumbai + Pune + Thane + Dharashiv/Osmanabad
+        -- Maharashtra
         union all
 
         select 'Maharashtra', holiday_date
@@ -254,69 +259,162 @@ with
         select
             source.*,
 
+            /*
+        1 = session is within geography-wise threshold working hours
+        0 = session is outside geography-wise threshold working hours
+        */
             case
-                when school_state = 'Nagaland'
-                then '08:00 AM - 03:30 PM'
+                when session_start_time is null
+                then null
 
-                when school_district in ('Udaipur', 'Dungarpur')
-                then '07:30 AM - 04:00 PM'
+                -- Nagaland: 08:00 AM - 03:30 PM
+                when
+                    school_state = 'Nagaland'
+                    and safe.parse_time(
+                        '%H:%M:%E*S', regexp_replace(session_start_time, r'Z$', '')
+                    )
+                    between time '08:00:00' and time '15:30:00'
+                then 1
 
-                when school_state = 'Goa'
-                then '08:00 AM - 01:45 PM'
+                -- Udaipur / Dungarpur: 07:30 AM - 04:00 PM
+                when
+                    school_district in ('Udaipur', 'Dungarpur')
+                    and safe.parse_time(
+                        '%H:%M:%E*S', regexp_replace(session_start_time, r'Z$', '')
+                    )
+                    between time '07:30:00' and time '16:00:00'
+                then 1
 
-                when school_district = 'Yamunanagar'
-                then '08:00 AM - 03:30 PM'
+                -- Goa: 08:00 AM - 01:45 PM
+                when
+                    school_state = 'Goa'
+                    and safe.parse_time(
+                        '%H:%M:%E*S', regexp_replace(session_start_time, r'Z$', '')
+                    )
+                    between time '08:00:00' and time '13:45:00'
+                then 1
 
+                -- Yamunanagar: 08:00 AM - 03:30 PM
+                when
+                    school_district = 'Yamunanagar'
+                    and safe.parse_time(
+                        '%H:%M:%E*S', regexp_replace(session_start_time, r'Z$', '')
+                    )
+                    between time '08:00:00' and time '15:30:00'
+                then 1
+
+                -- Mumbai / Thane / Pune / Dharashiv / Osmanabad:
+                -- 07:00 AM - 06:00 PM
                 when
                     school_district
                     in ('Mumbai', 'Thane', 'Pune', 'Dharashiv', 'Osmanabad')
-                then '07:00 AM - 06:00 PM'
+                    and safe.parse_time(
+                        '%H:%M:%E*S', regexp_replace(session_start_time, r'Z$', '')
+                    )
+                    between time '07:00:00' and time '18:00:00'
+                then 1
 
-                else null
+                else 0
             end as school_timing,
 
+            /*
+        1 = session is outside working hours
+        0 = session is within working hours
+        */
             case
+                when session_start_time is null
+                then null
+
                 when
                     school_state = 'Nagaland'
-                    and safe_cast(session_start_time as time)
-                    not between time '08:00:00'
-                    and time '15:30:00'
+                    and (
+                        safe.parse_time(
+                            '%H:%M:%E*S', regexp_replace(session_start_time, r'Z$', '')
+                        )
+                        < time '08:00:00'
+                        or safe.parse_time(
+                            '%H:%M:%E*S', regexp_replace(session_start_time, r'Z$', '')
+                        )
+                        > time '15:30:00'
+                    )
                 then 1
 
                 when
                     school_district in ('Udaipur', 'Dungarpur')
-                    and safe_cast(session_start_time as time)
-                    not between time '07:30:00'
-                    and time '16:00:00'
+                    and (
+                        safe.parse_time(
+                            '%H:%M:%E*S', regexp_replace(session_start_time, r'Z$', '')
+                        )
+                        < time '07:30:00'
+                        or safe.parse_time(
+                            '%H:%M:%E*S', regexp_replace(session_start_time, r'Z$', '')
+                        )
+                        > time '16:00:00'
+                    )
                 then 1
 
                 when
                     school_state = 'Goa'
-                    and safe_cast(session_start_time as time)
-                    not between time '08:00:00'
-                    and time '13:45:00'
+                    and (
+                        safe.parse_time(
+                            '%H:%M:%E*S', regexp_replace(session_start_time, r'Z$', '')
+                        )
+                        < time '08:00:00'
+                        or safe.parse_time(
+                            '%H:%M:%E*S', regexp_replace(session_start_time, r'Z$', '')
+                        )
+                        > time '13:45:00'
+                    )
                 then 1
 
                 when
                     school_district = 'Yamunanagar'
-                    and safe_cast(session_start_time as time)
-                    not between time '08:00:00'
-                    and time '15:30:00'
+                    and (
+                        safe.parse_time(
+                            '%H:%M:%E*S', regexp_replace(session_start_time, r'Z$', '')
+                        )
+                        < time '08:00:00'
+                        or safe.parse_time(
+                            '%H:%M:%E*S', regexp_replace(session_start_time, r'Z$', '')
+                        )
+                        > time '15:30:00'
+                    )
                 then 1
 
                 when
                     school_district
                     in ('Mumbai', 'Thane', 'Pune', 'Dharashiv', 'Osmanabad')
-                    and safe_cast(session_start_time as time)
-                    not between time '07:00:00'
-                    and time '18:00:00'
+                    and (
+                        safe.parse_time(
+                            '%H:%M:%E*S', regexp_replace(session_start_time, r'Z$', '')
+                        )
+                        < time '07:00:00'
+                        or safe.parse_time(
+                            '%H:%M:%E*S', regexp_replace(session_start_time, r'Z$', '')
+                        )
+                        > time '18:00:00'
+                    )
                 then 1
 
                 else 0
             end as beyond_working_hours_flag,
 
+            /*
+        School working status
+
+        1 = Holiday
+        0 = School Day
+        NULL = session date is NULL
+
+        Holiday is determined from the geography-wise
+        holiday_calendar created above.
+        */
             case
-                when h.holiday_date is not null then 1 else 0
+                when source.session_date is null
+                then null
+                when h.holiday_date is not null
+                then 1
+                else 0
             end as school_working_status
 
         from source
@@ -334,46 +432,111 @@ with
                     and source.school_district
                     in ('Mumbai', 'Pune', 'Thane', 'Dharashiv', 'Osmanabad')
                 )
-                or h.geography = source.school_state
+                or (
+                    h.geography = source.school_state
+                    and source.school_state in ('Haryana', 'Goa', 'Nagaland')
+                )
             )
 
     ),
 
+    /*
+Unique session-level data for calculating the
+same-day facilitator session counter.
+
+This prevents multiple source rows belonging to
+the same session_id from increasing the counter.
+*/
+    session_counter_base as (
+
+    select
+        session_id,
+        any_value(facilitator_email) as facilitator_email,
+        safe_cast(session_date as date) as session_date,
+        any_value(session_start_time) as session_start_time
+
+    from school_timing_calculations
+
+    group by session_id, session_date
+
+),
+
+    session_counter_calculations as (
+
+    select
+        session_id,
+
+        case
+            when session_date is null then null
+            else row_number() over (
+                partition by facilitator_email, session_date
+                order by
+                    safe.parse_time(
+                        '%H:%M:%E*S',
+                        regexp_replace(session_start_time, r'Z$', '')
+                    ),
+                    session_id
+            )
+        end as session_counter,
+
+        count(*) over (
+            partition by facilitator_email, session_date
+        ) as daily_session_count
+
+    from session_counter_base
+
+),
+
     session_calculations as (
 
         select
-            *,
+            st.*,
 
-            format_date('%B %Y', safe_cast(session_date as date)) as session_month_year,
+            format_date(
+                '%B %Y', safe_cast(st.session_date as date)
+            ) as session_month_year,
 
-            format_date('%A', safe_cast(session_date as date)) as session_day,
+            format_date('%A', safe_cast(st.session_date as date)) as session_day,
 
             format_time(
-                '%I:%M %p', safe_cast(session_start_time as time)
+                '%I:%M %p',
+                safe.parse_time(
+                    '%H:%M:%E*S', regexp_replace(st.session_start_time, r'Z$', '')
+                )
             ) as session_time,
 
-            lag(safe_cast(session_start_time as time)) over (
-                partition by facilitator_email, safe_cast(session_date as date)
-                order by safe_cast(session_start_time as time), session_id
+            /*
+        Previous session for the same PSO
+        on the same date.
+        */
+            lag(
+                safe.parse_time(
+                    '%H:%M:%E*S', regexp_replace(st.session_start_time, r'Z$', '')
+                )
+            ) over (
+                partition by st.facilitator_email, safe_cast(st.session_date as date)
+                order by
+                    safe.parse_time(
+                        '%H:%M:%E*S', regexp_replace(st.session_start_time, r'Z$', '')
+                    ),
+                    st.session_id
             ) as previous_session_time,
 
-            row_number() over (
-                partition by facilitator_email, safe_cast(session_date as date)
-                order by safe_cast(session_start_time as time), session_id
-            ) as session_counter,
+            sc.session_counter,
 
-            count(*) over (
-                partition by facilitator_email, safe_cast(session_date as date)
-            ) as daily_session_count
+            sc.daily_session_count
 
-        from school_timing_calculations
+        from school_timing_calculations st
+
+        left join session_counter_calculations sc
+    on st.session_id = sc.session_id
 
     ),
 
     attendance_calculations as (
 
         select
-            *,
+            * except (session_status),
 
             case
                 when session_type = 'Parent'
@@ -403,21 +566,30 @@ with
                 else null
             end as gap_in_attendance,
 
-            case
-                when session_date is not null and total_student_present is not null
-                then 1
+           case
+    when session_date is not null
+         and (
+             total_student_present is not null
+             or total_parent_present is not null
+         )
+        then 1
 
-                when session_date is not null and total_parent_present is not null
-                then 0
+    when session_date is not null
+         and total_student_present is null
+         and total_parent_present is null
+        then 0
 
-                else null
-            end as calculated_session_status,
-
-            case
-                when session_status is not null and session_date is not null
-                then 1
-                else 0
-            end as session_completed_flag
+    else null
+end as session_status,
+case
+    when session_date is not null
+         and (
+             total_student_present is not null
+             or total_parent_present is not null
+         )
+        then 1
+    else 0
+end as session_completed_flag
 
         from session_calculations
 
@@ -429,33 +601,31 @@ with
             *,
 
             /*
-        Actual Attendance TAT cannot yet be calculated because
-        attendance_submitted is BOOLEAN, not a submission date.
+        Attendance TAT:
 
-        Once attendance_submitted_date is added to int_global_session,
-        replace NULL below with:
+        TAT is calculated only when:
+        - Total Attendance > 0
+        - Individual Attendance = 0
 
-        date_diff(
-            safe_cast(attendance_submitted_date as date),
-            safe_cast(session_date as date),
-            day
-        )
-        */
-            cast(null as int64) as attendance_tat,
-
-            /*
-        1 = Total Attendance exists,
-            Individual Attendance is still 0,
-            and 7 or more days have passed since the session.
+        TAT = number of days from the session date to today.
         */
             case
                 when
                     total_attendance > 0
-                    and coalesce(individual_attendance, 0) = 0
+                    and individual_attendance = 0
+                    and session_date is not null
+                then date_diff(current_date(), safe_cast(session_date as date), day)
+                else null
+            end as attendance_tat,
+
+            case
+                when
+                    total_attendance > 0
+                    and individual_attendance = 0
+                    and session_date is not null
                     and date_diff(current_date(), safe_cast(session_date as date), day)
                     >= 7
                 then 1
-
                 else 0
             end as attendance_tat_7_days_flag
 
@@ -468,11 +638,17 @@ with
         select
             *,
 
+            /*
+        Difference between consecutive sessions
+        for the same PSO on the same date.
+        */
             case
                 when previous_session_time is not null
                 then
                     time_diff(
-                        safe_cast(session_start_time as time),
+                        safe.parse_time(
+                            '%H:%M:%E*S', regexp_replace(session_start_time, r'Z$', '')
+                        ),
                         previous_session_time,
                         minute
                     )
@@ -488,6 +664,9 @@ with
         select
             *,
 
+            /*
+        Gap displayed as HH:MM
+        */
             case
                 when gap_minutes is not null
                 then
@@ -499,22 +678,28 @@ with
                 else null
             end as gap_between_sessions,
 
+            /*
+        Session gap label
+        */
             case
                 when gap_minutes = 0
                 then 'Same day Same time'
 
                 when gap_minutes > 0 and gap_minutes < 45
-                then '<45 mins'
+                then 'less than 45 mins'
 
                 when gap_minutes >= 45 and gap_minutes <= 60
-                then '<45-60 mins'
+                then '45-60 mins'
 
                 when gap_minutes > 60
-                then '>60 mins'
+                then 'more than 60 mins'
 
                 else null
             end as session_gap_label,
 
+            /*
+        Control label
+        */
             case
                 when gap_minutes = 0
                 then 'Same day Same time'
@@ -545,72 +730,79 @@ with
 
         from gap_calculations
 
+    ),
+
+    final as (
+
+        select
+
+            school_state,
+
+            school_district,
+
+            school_taluka,
+            school_ward,
+
+            batch_donor,
+
+            school_partner,
+
+            batch_language,
+
+            batch_academic_year,
+
+            school_name,
+
+            batch_no,
+
+            batch_grade,
+
+            facilitator_name,
+
+            facilitator_email,
+
+            session_name,
+
+            session_date,
+
+            session_month_year,
+
+            session_day,
+
+            session_time,
+
+            school_timing,
+
+            session_status,
+
+            school_working_status,
+
+            gap_between_sessions,
+
+            session_gap_label,
+
+            session_counter,
+
+            total_attendance,
+
+            individual_attendance,
+
+            gap_in_attendance,
+
+            attendance_tat,
+
+            control_label
+
+        from final_calculations
+        --where daily_session_count >= 4
+  where session_status is not null
+        order by facilitator_name, session_date
+
+        /*
+    Show all sessions for days where
+    the facilitator conducted >= 4 sessions.
+    */
+
     )
 
-select
-
-    session_date as select_date_range,
-
-    school_state,
-
-    school_district as payout_district,
-
-    school_district as district,
-
-    school_taluka,
-
-    batch_donor,
-
-    school_partner,
-
-    batch_language,
-
-    batch_academic_year,
-
-    school_name,
-
-    batch_no,
-
-    batch_grade,
-
-    facilitator_name,
-
-    facilitator_email,
-
-    session_name,
-
-    session_date,
-
-    session_month_year,
-
-    session_day,
-
-    session_time,
-
-    school_timing,
-
-    calculated_session_status as session_status,
-
-    school_working_status,
-
-    gap_between_sessions,
-
-    session_gap_label,
-
-    session_counter,
-
-    total_attendance,
-
-    individual_attendance,
-
-    gap_in_attendance,
-
-    attendance_tat,
-
-    attendance_tat_7_days_flag,
-
-    control_label
-
-from final_calculations
-
-where daily_session_count >= 4
+select * from final
