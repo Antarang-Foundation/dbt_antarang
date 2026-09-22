@@ -413,8 +413,8 @@ with
                 when source.session_date is null
                 then null
                 when h.holiday_date is not null
-                then 1
-                else 0
+                then 0
+                else 1
             end as school_working_status
 
         from source
@@ -616,7 +616,7 @@ end as session_completed_flag
                     and session_date is not null
                 then date_diff(current_date(), safe_cast(session_date as date), day)
                 else null
-            end as attendance_tat,
+            end as attendance_tat, --Attendace daal diya hai tho kya hoga we dont have that tat
 
             case
                 when
@@ -726,7 +726,7 @@ end as session_completed_flag
                 then 'IA missing'
 
                 else null
-            end as control_label
+            end as control_label --concatenate blank ke saath 45 min hai tho that, its basically , , or, Blank ko NULL
 
         from gap_calculations
 
