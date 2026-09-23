@@ -464,29 +464,42 @@ the same session_id from increasing the counter.
     session_counter_calculations as (
 
     select
-        session_id,
+        *,
 
-        case
-            when session_date is null then null
-            else row_number() over (
-                partition by facilitator_email, session_date
-                order by
-                    safe.parse_time(
-                        '%H:%M:%E*S',
-                        regexp_replace(session_start_time, r'Z$', '')
-                    ),
-                    session_id
-            )
-        end as session_counter,
+        row_number() over (
+            partition by
+                facilitator_email,
+                session_date
+            order by
+                safe.parse_time(
+                    '%H:%M:%E*S',
+                    regexp_replace(session_start_time, r'Z$', '')
+                ),
+                session_id
+        ) as session_counter,
 
         count(*) over (
-            partition by facilitator_email, session_date
-        ) as daily_session_count
+            partition by
+                facilitator_email,
+                session_date
+        ) as daily_session_count,
+
+        count(*) over (
+    partition by
+        facilitator_email,
+        session_date,
+        format_time(
+            '%H:%M',
+            safe.parse_time(
+                '%H:%M:%E*S',
+                regexp_replace(session_start_time, r'Z$', '')
+            )
+        )
+) as overlapping_session_count
 
     from session_counter_base
 
 ),
-
     session_calculations as (
 
         select
@@ -523,13 +536,13 @@ the same session_id from increasing the counter.
             ) as previous_session_time,
 
             sc.session_counter,
-
-            sc.daily_session_count
+sc.daily_session_count,
+sc.overlapping_session_count
 
         from school_timing_calculations st
 
-        left join session_counter_calculations sc
-    on st.session_id = sc.session_id
+left join session_counter_calculations sc
+        on st.session_id = sc.session_id
 
     ),
 
@@ -661,76 +674,146 @@ end as session_completed_flag
 
     final_calculations as (
 
-        select
-            *,
+    select
+        *,
 
-            /*
+        /*
         Gap displayed as HH:MM
         */
-            case
-                when gap_minutes is not null
-                then
-                    format(
-                        '%02d:%02d',
-                        cast(floor(gap_minutes / 60) as int64),
-                        mod(gap_minutes, 60)
-                    )
-                else null
-            end as gap_between_sessions,
+        case
+            when gap_minutes is not null
+            then format(
+                '%02d:%02d',
+                cast(floor(gap_minutes / 60) as int64),
+                mod(gap_minutes, 60)
+            )
+            else null
+        end as gap_between_sessions,
 
-            /*
+
+        /*
         Session gap label
         */
-            case
-                when gap_minutes = 0
-                then 'Same day Same time'
+        case
+            when daily_session_count = 1
+                then null
 
-                when gap_minutes > 0 and gap_minutes < 45
+            when previous_session_time is null
+                then 'No Gap'
+
+            when gap_minutes = 0
+                then 'Same Day Same Time'
+
+            when gap_minutes > 0
+                 and gap_minutes < 45
                 then 'less than 45 mins'
 
-                when gap_minutes >= 45 and gap_minutes <= 60
+            when gap_minutes >= 45
+                 and gap_minutes <= 60
                 then '45-60 mins'
 
-                when gap_minutes > 60
+            when gap_minutes > 60
                 then 'more than 60 mins'
 
-                else null
-            end as session_gap_label,
+            else null
+        end as session_gap_label,
+
+
+        /*
+        Only 1 session
+        */
+        case
+            when daily_session_count = 1
+            then 'Only 1 session'
+            else null
+        end as only_1_session,
+
+
+        /*
+        Overlapping sessions
+        */
+        case
+    when overlapping_session_count > 1
+    then 'Same Day Same Time'
+    else null
+end as overlapping,
+
+
+        /*
+        Gap buckets
+        */
+        case
+            when gap_minutes > 0
+                 and gap_minutes < 45
+            then 'less than 45 mins'
+            else null
+        end as less_than_45_mins,
+
+        case
+            when gap_minutes >= 45
+                 and gap_minutes <= 60
+            then '45-60 mins'
+            else null
+        end as between_45_60_mins,
+
+        case
+            when gap_minutes > 60
+            then 'more than 60 mins'
+            else null
+        end as more_than_60_mins,
+
+
+        /*
+        Control label
+
+        Gap categories are kept as ONE selection.
+        Other control conditions can be combined.
+        */
+        case
 
             /*
-        Control label
-        */
-            case
-                when gap_minutes = 0
+            Gap category
+            */
+            when gap_minutes is null
+                then 'NULL'
+
+            when gap_minutes = 0
                 then 'Same day Same time'
 
-                when gap_minutes > 0 and gap_minutes < 45
+            when gap_minutes > 0
+                 and gap_minutes < 45
                 then '<45 mins'
 
-                when gap_minutes >= 45 and gap_minutes <= 60
+            when gap_minutes >= 45
+                 and gap_minutes <= 60
                 then '<45-60 mins'
 
-                when gap_minutes > 60
+            when gap_minutes > 60
                 then '>60 mins'
 
-                when daily_session_count >= 4
+            /*
+            Other controls
+            */
+            when daily_session_count >= 4
                 then 'Session counter greater than 4'
 
-                when beyond_working_hours_flag = 1
+            when beyond_working_hours_flag = 1
                 then 'Session beyond working hour'
 
-                when session_completed_flag = 0
+            when session_completed_flag = 0
                 then 'Session not completed'
 
-                when total_attendance > 0 and coalesce(individual_attendance, 0) = 0
+            when total_attendance > 0
+                 and coalesce(individual_attendance, 0) = 0
                 then 'IA missing'
 
-                else null
-            end as control_label --concatenate blank ke saath 45 min hai tho that, its basically , , or, Blank ko NULL
+            else null
 
-        from gap_calculations
+        end as control_label
 
-    ),
+    from gap_calculations
+
+),
 
     final as (
 
@@ -780,8 +863,15 @@ end as session_completed_flag
             gap_between_sessions,
 
             session_gap_label,
+overlapping,
+            only_1_session,
+    less_than_45_mins,
+    between_45_60_mins,
+    more_than_60_mins,
 
             session_counter,
+
+            daily_session_count,
 
             total_attendance,
 
