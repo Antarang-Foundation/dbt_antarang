@@ -278,7 +278,7 @@ with
 
                 -- Udaipur / Dungarpur: 07:30 AM - 04:00 PM
                 when
-                    school_district in ('Udaipur', 'Dungarpur')
+                    school_state in ('Rajasthan')
                     and safe.parse_time(
                         '%H:%M:%E*S', regexp_replace(session_start_time, r'Z$', '')
                     )
@@ -296,7 +296,7 @@ with
 
                 -- Yamunanagar: 08:00 AM - 03:30 PM
                 when
-                    school_district = 'Yamunanagar'
+                    school_state = 'Haryana'
                     and safe.parse_time(
                         '%H:%M:%E*S', regexp_replace(session_start_time, r'Z$', '')
                     )
@@ -306,8 +306,8 @@ with
                 -- Mumbai / Thane / Pune / Dharashiv / Osmanabad:
                 -- 07:00 AM - 06:00 PM
                 when
-                    school_district
-                    in ('Mumbai', 'Thane', 'Pune', 'Dharashiv', 'Osmanabad')
+                    school_state
+                    in ('Maharashtra')
                     and safe.parse_time(
                         '%H:%M:%E*S', regexp_replace(session_start_time, r'Z$', '')
                     )
@@ -518,6 +518,13 @@ the same session_id from increasing the counter.
                 )
             ) as session_time,
 
+            format_time(
+                '%H:%M %p',
+                safe.parse_time(
+                    '%H:%M:%E*S', regexp_replace(st.session_start_time, r'Z$', '')
+                )
+            ) as session_time_24HRS,
+
             /*
         Previous session for the same PSO
         on the same date.
@@ -696,10 +703,7 @@ end as session_completed_flag
         */
         case
             when daily_session_count = 1
-                then null
-
-            when previous_session_time is null
-                then 'No Gap'
+                then 'Only 1 session'
 
             when gap_minutes = 0
                 then 'Same Day Same Time'
@@ -715,7 +719,8 @@ end as session_completed_flag
             when gap_minutes > 60
                 then 'more than 60 mins'
 
-            else null
+            when gap_minutes is NULL then 'NULL'
+
         end as session_gap_label,
 
 
@@ -854,6 +859,8 @@ end as overlapping,
 
             session_time,
 
+            session_time_24HRS,
+
             school_timing,
 
             session_status,
@@ -886,7 +893,7 @@ overlapping,
         from final_calculations
         --where daily_session_count >= 4
   where session_status is not null
-        order by facilitator_name, session_date
+        order by facilitator_name, session_date, session_time_24HRS
 
         /*
     Show all sessions for days where
