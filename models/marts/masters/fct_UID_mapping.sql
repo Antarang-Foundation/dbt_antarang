@@ -62,58 +62,38 @@ mapping as (
 
 ),
 
-/* 
-Get facilitator information from the current/latest year.
-This is similar to the b table in the other query.
-*/
-current_facilitator as (
-
-    select distinct
-        school_name,
-        batch_grade,
-        batch_academic_year,
-        facilitator_name as current_facilitator_name,
-        facilitator_email
-    from {{ ref("dev_int_global_dcp") }}
-    where batch_academic_year = 2026
-      and school_name is not null
-
-),
-
-final_mapping as (
+batch_facilitator as (
 
     select
-        m.*,
+        cast(batch_no as string) as batch_no,
+        facilitator_name,
+        facilitator_email
 
-        cf.current_facilitator_name,
-        cf.facilitator_email
+    from {{ ref("dev_int_global_dcp") }}
 
-    from mapping m
+    where batch_no is not null
+      and facilitator_name is not null
+      and facilitator_email is not null
 
-    left join current_facilitator cf
-        on m.school_name = cf.school_name
-        and m.current_grade = cf.batch_grade
+    qualify row_number() over (
+        partition by cast(batch_no as string)
+        order by batch_academic_year desc
+    ) = 1
 
 ),
 
 final as (
 
     select
-        *,
-        
-        first_value(current_facilitator_name ignore nulls) over (
-            partition by school_name
-            order by batch_academic_year desc
-            rows between unbounded preceding and unbounded following
-        ) as latest_facilitator_name,
+        m.*,
 
-        first_value(facilitator_email ignore nulls) over (
-            partition by school_name
-            order by batch_academic_year desc
-            rows between unbounded preceding and unbounded following
-        ) as latest_facilitator_email
+        bf.facilitator_name as latest_facilitator_name,
+        bf.facilitator_email as latest_facilitator_email
 
-    from final_mapping
+    from mapping m
+
+    left join batch_facilitator bf
+        on cast(m.batch_no as string) = bf.batch_no
 
 )
 
