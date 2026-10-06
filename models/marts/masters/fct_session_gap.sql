@@ -1,8 +1,8 @@
 WITH session_data AS (
 
     SELECT DISTINCT
-    school_state,
-    school_district,
+        school_state,
+        school_district,
         school_taluka,
         school_partner,
         school_ward,
@@ -11,34 +11,144 @@ WITH session_data AS (
         batch_no,
         batch_grade,
         facilitator_name,
+        fac_start_date,
+        fac_end_date,
 
         CASE
-            WHEN total_student_present IS NULL
+            WHEN session_date IS NULL
+                OR total_student_present IS NULL
             THEN session_code
         END AS remaining_session,
 
-        CASE WHEN session_name LIKE '01.%' THEN session_date END AS S1_date,
-        CASE WHEN session_name LIKE '02.%' THEN session_date END AS S2_date,
-        CASE WHEN session_name LIKE '03.%' THEN session_date END AS S3_date,
-        CASE WHEN session_name LIKE '04.%' THEN session_date END AS S4_date,
-        CASE WHEN session_name LIKE '05.%' THEN session_date END AS S5_date,
-        CASE WHEN session_name LIKE '06.%' THEN session_date END AS S6_date,
-        CASE WHEN session_name LIKE '07.%' THEN session_date END AS S7_date,
-        CASE WHEN session_name LIKE '08.%' THEN session_date END AS S8_date,
-        CASE WHEN session_name LIKE '09.%' THEN session_date END AS S9_date,
-        CASE WHEN session_name LIKE '10.%' THEN session_date END AS S10_date,
-        CASE WHEN session_name LIKE '11.%' THEN session_date END AS S11_date,
-        CASE WHEN session_name LIKE '12.%' THEN session_date END AS S12_date,
-        CASE WHEN session_name LIKE '13.%' THEN session_date END AS S13_date,
-        CASE WHEN session_name LIKE '14.%' THEN session_date END AS S14_date,
-        CASE WHEN session_name LIKE '15.%' THEN session_date END AS S15_date,
-        CASE WHEN session_name LIKE '16.%' THEN session_date END AS S16_date,
-        CASE WHEN session_name LIKE '17.%' THEN session_date END AS S17_date,
-        CASE WHEN session_name LIKE '18.%' THEN session_date END AS S18_date,
+        CASE
+            WHEN session_name LIKE '01.%'
+                AND session_date IS NOT NULL
+                AND total_student_present IS NOT NULL
+            THEN session_date
+        END AS S1_date,
+
+        CASE
+            WHEN session_name LIKE '02.%'
+                AND session_date IS NOT NULL
+                AND total_student_present IS NOT NULL
+            THEN session_date
+        END AS S2_date,
+
+        CASE
+            WHEN session_name LIKE '03.%'
+                AND session_date IS NOT NULL
+                AND total_student_present IS NOT NULL
+            THEN session_date
+        END AS S3_date,
+
+        CASE
+            WHEN session_name LIKE '04.%'
+                AND session_date IS NOT NULL
+                AND total_student_present IS NOT NULL
+            THEN session_date
+        END AS S4_date,
+
+        CASE
+            WHEN session_name LIKE '05.%'
+                AND session_date IS NOT NULL
+                AND total_student_present IS NOT NULL
+            THEN session_date
+        END AS S5_date,
+
+        CASE
+            WHEN session_name LIKE '06.%'
+                AND session_date IS NOT NULL
+                AND total_student_present IS NOT NULL
+            THEN session_date
+        END AS S6_date,
+
+        CASE
+            WHEN session_name LIKE '07.%'
+                AND session_date IS NOT NULL
+                AND total_student_present IS NOT NULL
+            THEN session_date
+        END AS S7_date,
+
+        CASE
+            WHEN session_name LIKE '08.%'
+                AND session_date IS NOT NULL
+                AND total_student_present IS NOT NULL
+            THEN session_date
+        END AS S8_date,
+
+        CASE
+            WHEN session_name LIKE '09.%'
+                AND session_date IS NOT NULL
+                AND total_student_present IS NOT NULL
+            THEN session_date
+        END AS S9_date,
+
+        CASE
+            WHEN session_name LIKE '10.%'
+                AND session_date IS NOT NULL
+                AND total_student_present IS NOT NULL
+            THEN session_date
+        END AS S10_date,
+
+        CASE
+            WHEN session_name LIKE '11.%'
+                AND session_date IS NOT NULL
+                AND total_student_present IS NOT NULL
+            THEN session_date
+        END AS S11_date,
+
+        CASE
+            WHEN session_name LIKE '12.%'
+                AND session_date IS NOT NULL
+                AND total_student_present IS NOT NULL
+            THEN session_date
+        END AS S12_date,
+
+        CASE
+            WHEN session_name LIKE '13.%'
+                AND session_date IS NOT NULL
+                AND total_student_present IS NOT NULL
+            THEN session_date
+        END AS S13_date,
+
+        CASE
+            WHEN session_name LIKE '14.%'
+                AND session_date IS NOT NULL
+                AND total_student_present IS NOT NULL
+            THEN session_date
+        END AS S14_date,
+
+        CASE
+            WHEN session_name LIKE '15.%'
+                AND session_date IS NOT NULL
+                AND total_student_present IS NOT NULL
+            THEN session_date
+        END AS S15_date,
+
+        CASE
+            WHEN session_name LIKE '16.%'
+                AND session_date IS NOT NULL
+                AND total_student_present IS NOT NULL
+            THEN session_date
+        END AS S16_date,
+
+        CASE
+            WHEN session_name LIKE '17.%'
+                AND session_date IS NOT NULL
+                AND total_student_present IS NOT NULL
+            THEN session_date
+        END AS S17_date,
+
+        CASE
+            WHEN session_name LIKE '18.%'
+                AND session_date IS NOT NULL
+                AND total_student_present IS NOT NULL
+            THEN session_date
+        END AS S18_date,
 
         CASE
             WHEN session_date IS NOT NULL
-             AND total_student_present IS NOT NULL
+                AND total_student_present IS NOT NULL
             THEN 1
         END AS Sessions_completed,
 
@@ -46,15 +156,16 @@ WITH session_data AS (
 
         CASE
             WHEN session_date IS NOT NULL
-             AND total_student_present IS NOT NULL
+                AND total_student_present IS NOT NULL
             THEN session_code
         END AS Session_Completion
 
-    from {{ref('int_global_session')}}
+    FROM {{ ref('int_global_session') }}
 
-    WHERE session_type = 'Student' and batch_academic_year is not null
+    WHERE session_type = 'Student'
+        AND batch_academic_year IS NOT NULL
+
 ),
-
 
 batch_data AS (
 
@@ -69,6 +180,9 @@ batch_data AS (
         school_ward,
         school_area,
         facilitator_name,
+        fac_start_date,
+        fac_end_date,
+
 
         STRING_AGG(DISTINCT session_code, ', ') AS session_code,
 
@@ -111,9 +225,11 @@ batch_data AS (
         school_partner,
         school_ward,
         school_area,
-        facilitator_name
-),
+        facilitator_name,
+        fac_start_date,
+        fac_end_date
 
+),
 
 diff_data AS (
 
@@ -136,13 +252,11 @@ diff_data AS (
         DATE_DIFF(S15_date, S14_date, DAY) AS S15_S14Diff,
         DATE_DIFF(S16_date, S15_date, DAY) AS S16_S15Diff,
         DATE_DIFF(S17_date, S16_date, DAY) AS S17_S16Diff,
-        DATE_DIFF(S18_date, S17_date, DAY) AS S18_S17Diff,
-
-        Sessions_completed - 1 AS Sessions_completed_adjusted
+        DATE_DIFF(S18_date, S17_date, DAY) AS S18_S17Diff
 
     FROM batch_data
-),
 
+),
 
 final_data AS (
 
@@ -170,122 +284,113 @@ final_data AS (
         ] AS session_diffs
 
     FROM diff_data
+
 ),
 
+final AS (
 
-final as (SELECT
-    school_state,
-    school_district,
-    school_taluka,
-    school_ward,
-    school_area,
-    school_partner,
-    batch_academic_year,
-    batch_no,
-    batch_grade,
-    facilitator_name,
-    session_code,
-    remaining_session,
-    total_sessions,
-    completed_sessions,
+    SELECT
+        school_state,
+        school_district,
+        school_taluka,
+        school_ward,
+        school_area,
+        school_partner,
+        batch_academic_year,
+        batch_no,
+        batch_grade,
+        facilitator_name,
+        fac_start_date,
+        fac_end_date,
+        session_code,
+        remaining_session,
+        total_sessions,
+        completed_sessions,
 
-    S2_S1Diff,
-    S3_S2Diff,
-    S4_S3Diff,
-    S5_S4Diff,
-    S6_S5Diff,
-    S7_S6Diff,
-    S8_S7Diff,
-    S9_S8Diff,
-    S10_S9Diff,
-    S11_S10Diff,
-    S12_S11Diff,
-    S13_S12Diff,
-    S14_S13Diff,
-    S15_S14Diff,
-    S16_S15Diff,
-    S17_S16Diff,
-    S18_S17Diff,
+        S2_S1Diff,
+        S3_S2Diff,
+        S4_S3Diff,
+        S5_S4Diff,
+        S6_S5Diff,
+        S7_S6Diff,
+        S8_S7Diff,
+        S9_S8Diff,
+        S10_S9Diff,
+        S11_S10Diff,
+        S12_S11Diff,
+        S13_S12Diff,
+        S14_S13Diff,
+        S15_S14Diff,
+        S16_S15Diff,
+        S17_S16Diff,
+        S18_S17Diff,
 
+        -- Maximum gap
+        (
+            SELECT MAX(diff)
+            FROM UNNEST(session_diffs) AS diff
+            WHERE diff IS NOT NULL
+        ) AS Max_difference,
 
-    -- Maximum difference
-    (
-        SELECT MAX(COALESCE(diff, 0))
-        FROM UNNEST(session_diffs) AS diff
-    ) AS Max_difference,
+        -- Minimum gap
+        (
+            SELECT MIN(diff)
+            FROM UNNEST(session_diffs) AS diff
+            WHERE diff IS NOT NULL
+        ) AS Min_difference,
 
+        -- Average gap
+        CAST(
+            ROUND(
+                (
+                    SELECT SUM(diff)
+                    FROM UNNEST(session_diffs) AS diff
+                    WHERE diff IS NOT NULL
+                )
+                / NULLIF(completed_sessions - 1, 0),
+                0
+            ) AS INT64
+        ) AS Avg_Session_completion_days,
 
-    -- Minimum difference
-    (
-        SELECT MIN(COALESCE(diff, 500))
-        FROM UNNEST(session_diffs) AS diff
-    ) AS Min_difference,
+        -- Same day
+        (
+            SELECT COUNTIF(diff = 0)
+            FROM UNNEST(session_diffs) AS diff
+            WHERE diff IS NOT NULL
+        ) AS Same_day_sessions_count,
 
+        -- 1-4 days
+        (
+            SELECT COUNTIF(diff > 0 AND diff <= 4)
+            FROM UNNEST(session_diffs) AS diff
+            WHERE diff IS NOT NULL
+        ) AS Count_sessions_in_4_days,
 
-    -- Average session completion days
-    CAST(
-        ROUND(
-            (
-                SELECT SUM(COALESCE(diff, 0))
-                FROM UNNEST(session_diffs) AS diff
-            )
-            / NULLIF(Sessions_completed_adjusted, 0),
-            0
-        ) AS INT64
-    ) AS Avg_Session_completion_days,
+        -- 5-14 days
+        (
+            SELECT COUNTIF(diff > 4 AND diff <= 14)
+            FROM UNNEST(session_diffs) AS diff
+            WHERE diff IS NOT NULL
+        ) AS Count_sessions_in_14_days,
 
+        -- 15-30 days
+        (
+            SELECT COUNTIF(diff > 14 AND diff <= 30)
+            FROM UNNEST(session_diffs) AS diff
+            WHERE diff IS NOT NULL
+        ) AS Count_sessions_in_30_days,
 
-    -- Same day
-    (
-        SELECT COUNTIF(diff = 0)
-        FROM UNNEST(session_diffs) AS diff
-    ) AS Same_day_sessions_count,
+        -- More than 30 days
+        (
+            SELECT COUNTIF(diff > 30)
+            FROM UNNEST(session_diffs) AS diff
+            WHERE diff IS NOT NULL
+        ) AS Count_sessions_more_than_30_days
 
+        
+    FROM final_data
 
-    -- 1-4 days
-    (
-        SELECT COUNTIF(diff > 0 AND diff <= 4)
-        FROM UNNEST(session_diffs) AS diff
-    ) AS Count_sessions_in_4_days,
-
-
-
-    -- 5-14 days
-    (
-        SELECT COUNTIF(diff > 4 AND diff <= 14)
-        FROM UNNEST(session_diffs) AS diff
-    ) AS Count_sessions_in_14_days,
-
-
-    -- 15-30 days
-    (
-        SELECT COUNTIF(diff > 14 AND diff <= 30)
-        FROM UNNEST(session_diffs) AS diff
-    ) AS Count_sessions_in_30_days,
-
-
-    -- More than 30 days
-    (
-        SELECT COUNTIF(diff > 30)
-        FROM UNNEST(session_diffs) AS diff
-    ) AS Count_sessions_more_than_30_days,
-
-
-    -- 31-60 days
-    (
-        SELECT COUNTIF(diff > 30 AND diff <= 60)
-        FROM UNNEST(session_diffs) AS diff
-    ) AS Count_sessions_in_60_days,
-
-
-    -- More than 60 days
-    (
-        SELECT COUNTIF(diff > 60)
-        FROM UNNEST(session_diffs) AS diff
-    ) AS Count_sessions_more_than_60_days
-
-
-FROM final_data
 )
 
-select * from final
+SELECT *
+FROM final
