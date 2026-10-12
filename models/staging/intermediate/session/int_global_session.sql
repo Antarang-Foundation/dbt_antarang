@@ -49,16 +49,17 @@ t4 as (
         end as batch_status,
 
          MAX(
-        CASE 
+        CASE
             WHEN LOWER(session_name) LIKE '%endline%' 
+            and total_student_present is not null
             THEN session_date 
         END
     ) OVER (PARTITION BY batch_no) AS fac_end_date
 
     from t3
-)
+),
 
-select
+t5 as (select
     batch_id, batch_no, batch_academic_year, batch_grade, batch_language,
     no_of_students_facilitated, fac_start_date, fac_end_date,
     allocation_email_sent, batch_facilitator_id, facilitator_id, facilitator_name, facilitator_email, joining_date,
@@ -88,3 +89,6 @@ select
     batch_status
 
 from t4
+)
+
+select * from t5
