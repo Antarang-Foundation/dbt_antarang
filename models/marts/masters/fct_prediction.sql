@@ -1,172 +1,538 @@
 with
+
+    holiday_calendar_raw as (
+
+        -- Rajasthan: Udaipur and Dungarpur
+
+        select 'Rajasthan' as geography, holiday_date
+
+        from unnest([
+
+            date '2026-04-03', date '2026-04-11',
+
+            date '2026-04-14', date '2026-04-19',
+
+            date '2026-05-28', date '2026-06-17',
+
+            date '2026-06-26', date '2026-08-09',
+
+            date '2026-08-15', date '2026-08-26',
+
+            date '2026-08-28', date '2026-09-04',
+
+            date '2026-08-30', date '2026-10-02',
+
+            date '2026-10-11', date '2026-10-19',
+
+            date '2026-10-20', date '2026-11-24',
+
+            date '2026-12-25', date '2027-01-26',
+
+            date '2027-03-06', date '2027-03-10',
+
+            date '2027-03-21', date '2027-03-22',
+
+            date '2027-03-26'
+
+        ]) as holiday_date
+
+        union all
+
+        select 'Rajasthan', holiday_date
+
+        from unnest(generate_date_array(
+
+            date '2026-05-15', date '2026-06-20'
+
+        )) as holiday_date
+
+        union all
+
+        select 'Rajasthan', holiday_date
+
+        from unnest(generate_date_array(
+
+            date '2026-11-04', date '2026-11-14'
+
+        )) as holiday_date
+
+        union all
+
+        select 'Rajasthan', holiday_date
+
+        from unnest(generate_date_array(
+
+            date '2026-12-26', date '2027-01-05'
+
+        )) as holiday_date
+
+        -- Maharashtra
+
+        union all
+
+        select 'Maharashtra', holiday_date
+
+        from unnest([
+
+            date '2026-07-25', date '2026-08-15',
+
+            date '2026-08-26', date '2026-08-28',
+
+            date '2026-09-04', date '2026-09-05',
+
+            date '2026-09-25', date '2026-10-02',
+
+            date '2026-10-11', date '2026-10-20',
+
+            date '2026-11-24', date '2026-12-04',
+
+            date '2026-12-25', date '2027-01-01',
+
+            date '2027-01-15', date '2027-01-26',
+
+            date '2027-02-19', date '2027-03-06',
+
+            date '2027-03-10', date '2027-03-22',
+
+            date '2027-03-26'
+
+        ]) as holiday_date
+
+        union all
+
+        select 'Maharashtra', holiday_date
+
+        from unnest(generate_date_array(
+
+            date '2026-09-14', date '2026-09-19'
+
+        )) as holiday_date
+
+        union all
+
+        select 'Maharashtra', holiday_date
+
+        from unnest(generate_date_array(
+
+            date '2026-11-06', date '2026-11-18'
+
+        )) as holiday_date
+
+        union all
+
+        select 'Maharashtra', holiday_date
+
+        from unnest(generate_date_array(
+
+            date '2026-12-25', date '2027-01-04'
+
+        )) as holiday_date
+
+        -- Haryana
+
+        union all
+
+        select 'Haryana', holiday_date
+
+        from unnest([
+
+            date '2026-08-15', date '2026-08-28',
+
+            date '2026-09-04', date '2026-09-23',
+
+            date '2026-10-02', date '2026-10-20',
+
+            date '2026-10-26', date '2026-11-24',
+
+            date '2026-12-25', date '2027-01-26',
+
+            date '2027-02-26'
+
+        ]) as holiday_date
+
+        union all
+
+        select 'Haryana', holiday_date
+
+        from unnest(generate_date_array(
+
+            date '2026-11-07', date '2026-11-13'
+
+        )) as holiday_date
+
+        union all
+
+        select 'Haryana', holiday_date
+
+        from unnest(generate_date_array(
+
+            date '2027-01-01', date '2027-01-17'
+
+        )) as holiday_date
+
+        -- Goa
+
+        union all
+
+        select 'Goa', holiday_date
+
+        from unnest([
+
+            date '2026-08-15', date '2026-08-26',
+
+            date '2026-10-02', date '2026-10-20',
+
+            date '2026-12-03', date '2026-12-19',
+
+            date '2027-01-26', date '2027-03-10',
+
+            date '2027-03-22'
+
+        ]) as holiday_date
+
+        union all
+
+        select 'Goa', holiday_date
+
+        from unnest(generate_date_array(
+
+            date '2026-09-14', date '2026-09-19'
+
+        )) as holiday_date
+
+        union all
+
+        select 'Goa', holiday_date
+
+        from unnest(generate_date_array(
+
+            date '2026-11-02', date '2026-11-21'
+
+        )) as holiday_date
+
+        union all
+
+        select 'Goa', holiday_date
+
+        from unnest(generate_date_array(
+
+            date '2026-12-24', date '2027-01-02'
+
+        )) as holiday_date
+
+        -- Nagaland
+
+        union all
+
+        select 'Nagaland', holiday_date
+
+        from unnest([
+
+            date '2026-01-01', date '2026-01-26',
+
+            date '2026-03-04', date '2026-03-21',
+
+            date '2026-05-28', date '2026-08-15',
+
+            date '2026-08-26', date '2026-09-04',
+
+            date '2026-10-02', date '2026-11-08',
+
+            date '2026-11-24', date '2026-12-01'
+
+        ]) as holiday_date
+
+        union all
+
+        select 'Nagaland', holiday_date
+
+        from unnest(generate_date_array(
+
+            date '2026-04-03', date '2026-04-05'
+
+        )) as holiday_date
+
+        union all
+
+        select 'Nagaland', holiday_date
+
+        from unnest(generate_date_array(
+
+            date '2026-10-19', date '2026-10-21'
+
+        )) as holiday_date
+
+        union all
+
+        select 'Nagaland', holiday_date
+
+        from unnest(generate_date_array(
+
+            date '2026-12-22', date '2026-12-31'
+
+        )) as holiday_date
+
+    ),
+
+    holiday_calendar as (
+
+        select distinct geography, holiday_date
+
+        from holiday_calendar_raw
+
+    ),
+
     base as (
 
         select
+
             facilitator_name,
+
             facilitator_email,
+
             school_name,
+
             batch_academic_year,
+
             batch_no,
+
             batch_grade,
+
             batch_donor,
+
             fac_start_date,
+
             fac_end_date,
+
             session_date,
+
             session_name,
+
             session_code,
+
             school_state,
+
             school_district,
+
             school_partner,
+
             school_taluka,
+
             school_ward,
+
             school_area,
+
             total_student_present,
 
+            batch_expected_sessions,
+
             case
-                when session_date is not null and total_student_present is not null
+
+                when session_date is not null
+
+                    and total_student_present is not null
+
                 then session_code
+
             end as session_completion
 
         from {{ ref("int_global_session") }}
+        where session_type = 'Student'
 
     ),
 
     summary as (
 
         select
+
             facilitator_name,
+
             facilitator_email,
+
             school_name,
+
             batch_academic_year,
+
             batch_no,
+
             batch_grade,
+
             fac_start_date,
+
             fac_end_date,
+
             school_state,
+
             school_district,
+
             school_taluka,
+
             school_ward,
+
             school_area,
+
             school_partner,
+
             batch_donor,
 
             count(distinct session_code) as total_sessions,
-            count(distinct session_completion) as completed_sessions
+            count(distinct session_completion) as completed_sessions,
+            max(safe_cast(batch_expected_sessions as int64)) as batch_expected_sessions
 
         from base
 
         group by
+
             facilitator_name,
+
             facilitator_email,
+
             school_name,
+
             batch_academic_year,
+
             batch_no,
+
             batch_grade,
+
             fac_start_date,
+
             fac_end_date,
+
             school_state,
+
             school_district,
+
             school_taluka,
+
             school_ward,
+
             school_area,
+
             school_partner,
+
             batch_donor
 
     ),
 
-    final as (
+    final AS (
+    SELECT
+        *,
+        total_sessions - completed_sessions AS pending_sessions,
+
+        CASE
+            -- Rajasthan: retain the existing pending-session calculation.
+            WHEN school_state = 'Rajasthan' THEN
+                DATE_ADD(
+                    COALESCE(
+                        SAFE_CAST(fac_start_date AS DATE),
+                        CURRENT_DATE("Asia/Kolkata")
+                    ),
+                    INTERVAL (
+                        (total_sessions - completed_sessions) * 14
+                    ) DAY
+                )
+
+            -- Other states: use expected sessions, at 14 days per session.
+            ELSE
+                DATE_ADD(
+                    COALESCE(
+                        SAFE_CAST(fac_start_date AS DATE),
+                        CURRENT_DATE("Asia/Kolkata")
+                    ),
+                    INTERVAL (
+                        COALESCE(batch_expected_sessions, 0) * 14
+                    ) DAY
+                )
+        END AS five_days_tat
+    FROM summary
+),
+
+prediction_dates AS (
+
+    SELECT
+
+        *,
+
+        five_days_tat AS predicted_date_tat
+
+    FROM final
+
+),
+
+prediction AS (
 
         select
-            school_state,
-            school_district,
-            school_taluka,
-            school_ward,
-            school_area,
-            school_partner,
-            school_name,
-            batch_no,
-            batch_grade,
-            facilitator_name,
-            facilitator_email,
-            batch_donor,
-            batch_academic_year,
-            fac_start_date,
-            fac_end_date,
-            total_sessions,
-            completed_sessions,
 
-            total_sessions - completed_sessions as pending_sessions,
-
-            -- Predicted Date TAT
-            case
-                when fac_start_date is null
-                then
-                    current_date("Asia/Kolkata") + (
-                        (total_sessions - completed_sessions)
-                        * case when school_state = "Rajasthan" then 15 else 7 end
-                    )
-
-                else
-                    date(fac_start_date) + (
-                        (total_sessions - completed_sessions)
-                        * case when school_state = "Rajasthan" then 15 else 7 end
-                    )
-            end as predicted_date_tat
-
-        from summary
-
-    ),
-
-    prediction as (
-
-        select
             *,
 
-            -- Existing Predicted Days TAT
             concat(
+
                 case
-                    when extract(month from predicted_date_tat) = 1
-                    then "Jan"
-                    when extract(month from predicted_date_tat) = 2
-                    then "Feb"
-                    when extract(month from predicted_date_tat) = 3
-                    then "Mar"
-                    when extract(month from predicted_date_tat) = 4
-                    then "Apr"
-                    when extract(month from predicted_date_tat) = 5
-                    then "May"
-                    when extract(month from predicted_date_tat) = 6
-                    then "Jun"
-                    when extract(month from predicted_date_tat) = 7
-                    then "Jul"
-                    when extract(month from predicted_date_tat) = 8
-                    then "Aug"
-                    when extract(month from predicted_date_tat) = 9
-                    then "Sep"
-                    when extract(month from predicted_date_tat) = 10
-                    then "Oct"
-                    when extract(month from predicted_date_tat) = 11
-                    then "Nov"
-                    else "Dec"
+
+                    when extract(month from predicted_date_tat) = 1 then 'Jan'
+
+                    when extract(month from predicted_date_tat) = 2 then 'Feb'
+
+                    when extract(month from predicted_date_tat) = 3 then 'Mar'
+
+                    when extract(month from predicted_date_tat) = 4 then 'Apr'
+
+                    when extract(month from predicted_date_tat) = 5 then 'May'
+
+                    when extract(month from predicted_date_tat) = 6 then 'Jun'
+
+                    when extract(month from predicted_date_tat) = 7 then 'Jul'
+
+                    when extract(month from predicted_date_tat) = 8 then 'Aug'
+
+                    when extract(month from predicted_date_tat) = 9 then 'Sep'
+
+                    when extract(month from predicted_date_tat) = 10 then 'Oct'
+
+                    when extract(month from predicted_date_tat) = 11 then 'Nov'
+
+                    else 'Dec'
+
                 end,
-                " Week ",
+
+                ' Week ',
+
                 cast(
-                    floor((extract(day from predicted_date_tat) - 1) / 7) + 1 as string
+
+                    floor(
+
+                        (extract(day from predicted_date_tat) - 1) / 7
+
+                    ) + 1 as string
+
                 )
+
             ) as predicted_days_tat,
 
-            -- Formula Prediction Week
             concat(
+
                 format_date('%a', predicted_date_tat),
-                ", ",
+
+                ', ',
+
                 format_date('%b', predicted_date_tat),
-                " Week ",
+
+                ' Week ',
+
                 cast(
-                    floor((extract(day from predicted_date_tat) - 1) / 7) + 1 as string
+
+                    floor(
+
+                        (extract(day from predicted_date_tat) - 1) / 7
+
+                    ) + 1 as string
+
                 )
+
             ) as formula_prediction_week
 
-        from final
+        from prediction_dates
 
         where batch_academic_year is not null
 
@@ -175,31 +541,127 @@ with
     t1 as (
 
         select
-            school_state,
-            school_district,
-            school_taluka,
-            school_ward,
-            school_area,
-            school_partner,
-            school_name,
-            batch_no,
-            batch_grade,
-            facilitator_name,
-            facilitator_email,
-            batch_donor,
-            batch_academic_year,
-            fac_start_date,
-            fac_end_date,
-            total_sessions,
-            completed_sessions,
-            pending_sessions,
-            predicted_date_tat,
 
-            formula_prediction_week as predicted_days_tat
+            p.school_state,
 
-        from prediction
+            p.school_district,
+
+            p.school_taluka,
+
+            p.school_ward,
+
+            p.school_area,
+
+            p.school_partner,
+
+            p.school_name,
+
+            p.batch_no,
+
+            p.batch_grade,
+
+            p.facilitator_name,
+
+            p.facilitator_email,
+
+            p.batch_donor,
+
+            p.batch_academic_year,
+
+            p.fac_start_date,
+
+            p.fac_end_date,
+
+            p.total_sessions,
+
+            p.completed_sessions,
+
+            p.pending_sessions,
+
+            p.predicted_date_tat,
+
+            p.five_days_tat,
+
+            -- School working status for predicted date:
+
+            -- 1 = School Day
+
+            -- 0 = Sunday or applicable holiday
+
+            -- NULL = Predicted date is NULL
+
+            case
+
+                when p.predicted_date_tat is null then null
+
+                when extract(
+
+                    dayofweek from p.predicted_date_tat
+
+                ) = 1 then 0
+
+                when exists (
+
+                    select 1
+
+                    from holiday_calendar h
+
+                    where h.holiday_date = p.predicted_date_tat
+
+                      and (
+
+                          (
+
+                              h.geography = 'Rajasthan'
+
+                              and p.school_district in (
+
+                                  'Udaipur', 'Dungarpur'
+
+                              )
+
+                          )
+
+                          or (
+
+                              h.geography = 'Maharashtra'
+
+                              and p.school_district in (
+
+                                  'Mumbai', 'Pune', 'Thane',
+
+                                  'Dharashiv', 'Osmanabad'
+
+                              )
+
+                          )
+
+                          or (
+
+                              h.geography = p.school_state
+
+                              and p.school_state in (
+
+                                  'Haryana', 'Goa', 'Nagaland'
+
+                              )
+
+                          )
+
+                      )
+
+                ) then 0
+
+                else 1
+
+            end as school_working_status,
+
+            p.formula_prediction_week as predicted_days_tat
+
+        from prediction p
 
     )
 
 select *
+
 from t1
