@@ -30,6 +30,12 @@ t1 as (
         Reality_6_Family_2__c as r6f2, Reality_6_Family_2_Ans__c as r6f2_marks, 
         Reality_7_Family_3__c as r7f3, Reality_7_Family_3_Ans__c as r7f3_marks, 
         Reality_8_Family_4__c as r8f4, Reality_8_Family_4_Ans__c as r8f4_marks,
+        Reality_9__c as r9, Reality_9_Ans__c as r9_marks,
+        Reality_10__c as r10, Reality_10_Ans__c as r10_marks,
+        Reality_11__c as r11, Reality_11_Ans__c as r11_marks,
+        Reality_12__c as r12, Reality_12_Ans__c as r12_marks,
+
+
 
         Error_Status__c as error_status, 
         Data_Clean_up__c as data_cleanup,
@@ -48,7 +54,7 @@ t3 as (select sar_id, assessment_barcode, record_type, created_on, created_from_
 
 when sar_no is not null and (sar_q1 is not null or sar_q2 is not null or sar_q3 is not null or sar_q4 is not null or sar_q5 is not null or 
 r1s1 is not null or r2s2 is not null or r3s3 is not null or r4s4 is not null or r5f1 is not null or r6f2 is not null or r7f3 is not null or 
-r8f4 is not null) then 1 
+r8f4 is not null or r9 is not null or r10 is not null or r11 is not null or r12 is not null) then 1 
 
 when sar_no is not null and (sar_q1 is null and sar_q2 is null and sar_q3 is null and sar_q4 is null and sar_q5 is null and 
 r1s1 is null and r2s2 is null and r3s3 is null and r4s4 is null and r5f1 is null and r6f2 is null and r7f3 is null and 
@@ -63,10 +69,10 @@ then 0 end) sar_atleast_one_quiz,
 (case 
 
 when sar_no is not null and (r1s1 is not null or r2s2 is not null or r3s3 is not null or r4s4 is not null or r5f1 is not null or 
-r6f2 is not null or r7f3 is not null or r8f4 is not null) then 1 
+r6f2 is not null or r7f3 is not null or r8f4 is not null or r9 is not null or r10 is not null or r11 is not null or r12 is not null) then 1 
 
 when sar_no is not null and (r1s1 is null and r2s2 is null and r3s3 is null and r4s4 is null and r5f1 is null and r6f2 is null and r7f3 is null and 
-r8f4 is null) then 0 end) sar_atleast_one_reality,
+r8f4 is null and r9 is not null and r10 is not null and r11 is not null and r12 is not null) then 0 end) sar_atleast_one_reality,
 
 t1.* except(sar_id, assessment_barcode, record_type_id, created_on, created_from_form, sar_no)
 
