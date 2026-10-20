@@ -36,7 +36,9 @@ with source as (
         Q6_12__c as q6_12,
         Q6_12_Marks__c as q6_12_marks,
         X6_Options_that_fit_into_Industry__c as q6_total_marks,
-        (X5_Confident_about_chosen_career__c + X6_Options_that_fit_into_Industry__c) as cdm2_total_marks,
+        SAFE_CAST(X5_Confident_about_chosen_career__c AS NUMERIC)
+    + SAFE_CAST(X6_Options_that_fit_into_Industry__c AS NUMERIC)
+    AS cdm2_total_marks,
         Error_Status__c as error_status,
         Data_Clean_up__c as data_cleanup,
         Marks_Recalculated__c as marks_recalculated,

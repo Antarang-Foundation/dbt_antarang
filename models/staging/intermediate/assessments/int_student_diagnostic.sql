@@ -31,16 +31,55 @@ diagnostics_base AS (
             ORDER BY a.created_by_date DESC
         ) AS rn,
 
-        CASE WHEN a.a_q1 = '*' THEN NULL ELSE COALESCE(a.a_q1_marks, a.b_q1_marks) END AS q1,
-        CASE WHEN a.a_q2 = '*' THEN NULL ELSE COALESCE(a.a_q2_marks, a.b_q2_marks) END AS q2,
-        CASE WHEN a.a_q3 = '*' THEN NULL ELSE COALESCE(a.a_q3_marks, a.b_q3_marks) END AS q3,
-        CASE WHEN a.a_q4 = '*' THEN NULL ELSE COALESCE(a.a_q4_marks, a.b_q4_marks) END AS q4,
-        CASE WHEN a.a_q5 = '*' THEN NULL ELSE COALESCE(a.a_q5_marks, a.b_q5_marks) END AS q5,
-        CASE WHEN a.a_q6 = '*' THEN NULL ELSE COALESCE(a.a_q6_marks, a.b_q6_marks) END AS q6,
-        CASE WHEN a.a_q7 = '*' THEN NULL ELSE COALESCE(a.a_q7_marks, a.b_q7_marks) END AS q7,
-        CASE WHEN a.a_q8 = '*' THEN NULL ELSE COALESCE(a.a_q8_marks, a.b_q8_marks) END AS q8,
-        CASE WHEN a.a_q9 = '*' THEN NULL ELSE COALESCE(a.a_q9_marks, a.b_q9_marks) END AS q9,
-        CASE WHEN a.a_q10 = '*' THEN NULL ELSE COALESCE(a.a_q10_marks, a.b_q10_marks) END AS q10
+                CASE WHEN a.a_q1 = '*' THEN NULL
+             ELSE COALESCE(SAFE_CAST(a.a_q1_marks AS FLOAT64),
+                           SAFE_CAST(a.b_q1_marks AS FLOAT64))
+        END AS q1,
+
+        CASE WHEN a.a_q2 = '*' THEN NULL
+             ELSE COALESCE(SAFE_CAST(a.a_q2_marks AS FLOAT64),
+                           SAFE_CAST(a.b_q2_marks AS FLOAT64))
+        END AS q2,
+
+        CASE WHEN a.a_q3 = '*' THEN NULL
+             ELSE COALESCE(SAFE_CAST(a.a_q3_marks AS FLOAT64),
+                           SAFE_CAST(a.b_q3_marks AS FLOAT64))
+        END AS q3,
+
+        CASE WHEN a.a_q4 = '*' THEN NULL
+             ELSE COALESCE(SAFE_CAST(a.a_q4_marks AS FLOAT64),
+                           SAFE_CAST(a.b_q4_marks AS FLOAT64))
+        END AS q4,
+
+        CASE WHEN a.a_q5 = '*' THEN NULL
+             ELSE COALESCE(SAFE_CAST(a.a_q5_marks AS FLOAT64),
+                           SAFE_CAST(a.b_q5_marks AS FLOAT64))
+        END AS q5,
+
+        CASE WHEN a.a_q6 = '*' THEN NULL
+             ELSE COALESCE(SAFE_CAST(a.a_q6_marks AS FLOAT64),
+                           SAFE_CAST(a.b_q6_marks AS FLOAT64))
+        END AS q6,
+
+        CASE WHEN a.a_q7 = '*' THEN NULL
+             ELSE COALESCE(SAFE_CAST(a.a_q7_marks AS FLOAT64),
+                           SAFE_CAST(a.b_q7_marks AS FLOAT64))
+        END AS q7,
+
+        CASE WHEN a.a_q8 = '*' THEN NULL
+             ELSE COALESCE(SAFE_CAST(a.a_q8_marks AS FLOAT64),
+                           SAFE_CAST(a.b_q8_marks AS FLOAT64))
+        END AS q8,
+
+        CASE WHEN a.a_q9 = '*' THEN NULL
+             ELSE COALESCE(SAFE_CAST(a.a_q9_marks AS FLOAT64),
+                           SAFE_CAST(a.b_q9_marks AS FLOAT64))
+        END AS q9,
+
+        CASE WHEN a.a_q10 = '*' THEN NULL
+             ELSE COALESCE(SAFE_CAST(a.a_q10_marks AS FLOAT64),
+                           SAFE_CAST(a.b_q10_marks AS FLOAT64))
+        END AS q10
     FROM {{ ref('stg_student_diagnostic') }} a
 ),
 
