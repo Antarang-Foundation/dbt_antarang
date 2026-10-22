@@ -358,8 +358,12 @@ partner_source AS (
         ca1.bl_ca1_numbers,
         ca1.el_ca1_numbers,
         ca2.bl_ca2_numbers,
-        ca2.el_ca2_numbers
+        ca2.el_ca2_numbers,
+        t6.total_students AS partner_total_students,
+        t6.total_sd2_students AS partner_total_sd2_students
     FROM t8
+    LEFT JOIN t6
+        ON t8.batch_id = t6.batch_id
     LEFT JOIN assessment_status_numbers s
         ON t8.batch_id = s.batch_id
     LEFT JOIN diagnostic_numbers d
@@ -383,15 +387,19 @@ partner_source AS (
 
 -- Expand each batch-level array into one row per non-NULL assessment number.
 partner_assessments AS (
-    SELECT DISTINCT
+    SELECT
         p.*,
         a.assessment_type AS generated_assessment_type,
         a.assessment_object AS generated_assessment_object,
         a.record_type AS generated_record_type,
-        assessment_no AS generated_assessment_no
+        ARRAY_LENGTH(a.assessment_numbers) AS generated_assessment_count
     FROM partner_source p
     CROSS JOIN UNNEST([
-        STRUCT('Career Planning A' AS assessment_type, 'Career Planning' AS assessment_object, 'Baseline' AS record_type, p.bl_cp_numbers AS assessment_numbers),
+        STRUCT('Student Details' AS assessment_type, 'Demographic' AS assessment_object, CAST(NULL AS STRING) AS record_type,
+              ARRAY(SELECT CAST(n AS STRING) FROM UNNEST(GENERATE_ARRAY(1, GREATEST(COALESCE(p.partner_total_students, 0), 0))) AS n) AS assessment_numbers),
+        STRUCT('Student Details 2', 'Student Details 2', CAST(NULL AS STRING),
+              ARRAY(SELECT CAST(n AS STRING) FROM UNNEST(GENERATE_ARRAY(1, GREATEST(COALESCE(p.partner_total_sd2_students, 0), 0))) AS n)),
+        STRUCT('Career Planning A', 'Career Planning', 'Baseline', p.bl_cp_numbers),
         STRUCT('Career Planning B', 'Career Planning', 'Endline', p.el_cp_numbers),
         STRUCT('Career Skills A', 'Career Skill', 'Baseline', p.bl_cs_numbers),
         STRUCT('Career Skills B', 'Career Skill', 'Endline', p.el_cs_numbers),
@@ -405,15 +413,14 @@ partner_assessments AS (
         STRUCT('Student Diagnositcs B', 'Student Diagnostic', 'Endline', p.el_sd_numbers),
         STRUCT('Feedback', 'Future Planning', 'Endline', p.el_fp_numbers)
     ]) a
-    CROSS JOIN UNNEST(a.assessment_numbers) AS assessment_no
-    WHERE assessment_no IS NOT NULL
+    WHERE ARRAY_LENGTH(a.assessment_numbers) > 0
 ),
 
 partner_upload_counts AS (
     SELECT
         batch_id,
         generated_assessment_type,
-        COUNT(DISTINCT generated_assessment_no) AS upload_count
+        MAX(generated_assessment_count) AS upload_count
     FROM partner_assessments
     GROUP BY batch_id, generated_assessment_type
 ),
@@ -444,9 +451,9 @@ partner_output AS (
             bl_cdm2_numbers, el_cdm2_numbers, bl_cp_numbers, el_cp_numbers,
             bl_cs_numbers, el_cs_numbers, el_fp_numbers,
             bl_sd_numbers, el_sd_numbers, bl_ca1_numbers, el_ca1_numbers,
-            bl_ca2_numbers, el_ca2_numbers,
+            bl_ca2_numbers, el_ca2_numbers, partner_total_students, partner_total_sd2_students,
             generated_assessment_type, generated_assessment_object,
-            generated_record_type, generated_assessment_no
+            generated_record_type, generated_assessment_count
         ),
         CAST(NULL AS STRING) AS somrt_id,
         CAST(NULL AS STRING) AS somrt_no,
@@ -455,7 +462,7 @@ partner_output AS (
         CAST(NULL AS STRING) AS somrt_batch_no,
         p.generated_assessment_type AS omr_type,
         p.generated_assessment_object AS omr_assessment_object,
-        1 AS omr_assessment_count,
+        p.generated_assessment_count AS omr_assessment_count,
         p.generated_record_type AS omr_assessment_record_type,
         CAST(NULL AS INT64) AS omr_received_count,
         CAST(NULL AS STRING) AS omr_received_by,
