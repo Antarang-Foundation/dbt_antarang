@@ -1,50 +1,116 @@
-with t0 as (
-    select
-        id as school_id,
-        name as school_name,
-        RecordTypeId as record_type_id,
-        Medium_Language_of_Instruction__c as school_language,
-        CAST(Academic_Year__c as STRING) as school_academic_year,
-        School_Timing__c as school_timing,
-        Partner__c as school_partner,
-        State__c as school_state_id,
-        District__c as school_district_id, 
-        City__c as school_taluka_id,
-        Ward__c as school_ward_id,
-        Enrolled_Grade_9__c as enrolled_g9,
-        Enrolled_Grade_10__c as enrolled_g10,
-        Enrolled_Grade_11__c as enrolled_g11,
-        Enrolled_Grade_12__c as enrolled_g12,
-        Tagged_for_Counselling__c as tagged_for_counselling,
-        School_Area__c as school_area
-        --Tagged_for_Experiential_Learning__c as Tagged_for_Experiential_Learning,
-        --Tagged_for_Digital_Learning__c as Tagged_for_Digital_Learning__c
-
-    from {{ source('salesforce', 'Account') }} where IsDeleted = false and lower(name) not like '%test%'
+WITH t0 AS (
+    SELECT
+        id AS school_id,
+        name AS school_name,
+        RecordTypeId AS record_type_id,
+        Medium_Language_of_Instruction__c AS school_language,
+        CAST(Academic_Year__c AS STRING) AS school_academic_year,
+        School_Timing__c AS school_timing,
+        COALESCE(Partner__c, 'No Partner') AS school_partner,
+        State__c AS school_state_id,
+        District__c AS school_district_id,
+        City__c AS school_taluka_id,
+        Ward__c AS school_ward_id,
+        Enrolled_Grade_9__c AS enrolled_g9,
+        Enrolled_Grade_10__c AS enrolled_g10,
+        Enrolled_Grade_11__c AS enrolled_g11,
+        Enrolled_Grade_12__c AS enrolled_g12,
+        Tagged_for_Counselling__c AS tagged_for_counselling,
+        School_Area__c AS school_area,
+        Address__c AS school_address,
+        Principal_Name__c AS principal_name,
+        Phone AS phone
+    FROM {{ source('salesforce', 'Account') }}
+    WHERE IsDeleted = FALSE
+      AND LOWER(name) NOT LIKE '%test%'
 ),
 
-t1 as (select record_type_id, record_type from {{ ref('seed_recordtype') }}),
-    
-    t2 as (
-        select * except (record_type_id)
-        from 
-            t0
-            inner join t1 using (record_type_id) where record_type = 'School'
-    ),
+t1 AS (
+    SELECT record_type_id, record_type
+    FROM {{ ref('seed_recordtype') }}
+    WHERE record_type = 'School'
+),
 
-t3 as (select * from {{ ref('seed_state') }}),
-t4 as (select * from {{ ref('seed_district') }}),
-t5 as (select * from {{ ref('seed_ward') }}),
-t6 as (select * from {{ ref('seed_taluka') }}),
+t2 AS (
+    SELECT
+        t0.school_id,
+        t0.school_name,
+        t0.school_language,
+        t0.school_academic_year,
+        t0.school_timing,
+        t0.school_partner,
+        t0.enrolled_g9,
+        t0.enrolled_g10,
+        t0.enrolled_g11,
+        t0.enrolled_g12,
+        t0.tagged_for_counselling,
+        t0.school_area,
+        t0.school_address,
+        t1.record_type,
+        t0.school_state_id,
+        t0.school_district_id,
+        t0.school_ward_id,
+        t0.school_taluka_id,
+        t0.principal_name,
+        t0.phone
+    FROM t0
+    INNER JOIN t1
+        ON t0.record_type_id = t1.record_type_id
+),
 
-t7 as (select * except (school_state_id, state_id, state_name, state_code, school_district_id, district_id, district_name, school_ward_id, ward_id, ward_name, school_taluka_id, taluka_id, taluka_name), state_name as school_state, district_name as school_district, ward_name as school_ward, taluka_name as school_taluka
+t3 AS (
+    SELECT state_name, state_id
+    FROM {{ ref('seed_state') }}
+),
 
-from t2 
+t4 AS (
+    SELECT district_name, district_id
+    FROM {{ ref('seed_district') }}
+),
 
-left join t3 on t2.school_state_id = t3.state_id 
-left join t4 on t2.school_district_id = t4.district_id 
-left join t5 on t2.school_ward_id = t5.ward_id 
-left join t6 on t2.school_taluka_id = t6.taluka_id 
+t5 AS (
+    SELECT ward_name, ward_id
+    FROM {{ ref('seed_ward') }}
+),
 
-order by school_id)
-select * from t7 
+t6 AS (
+    SELECT taluka_name, taluka_id
+    FROM {{ ref('seed_taluka') }}
+),
+
+t7 AS (
+    SELECT
+        t2.*,
+        t3.state_name AS school_state,
+        t4.district_name AS school_district,
+        t5.ward_name AS school_ward,
+        t6.taluka_name AS school_taluka
+    FROM t2
+    LEFT JOIN t3
+        ON t2.school_state_id = t3.state_id
+    LEFT JOIN t4
+        ON t2.school_district_id = t4.district_id
+    LEFT JOIN t5
+        ON t2.school_ward_id = t5.ward_id
+    LEFT JOIN t6
+        ON t2.school_taluka_id = t6.taluka_id
+),
+
+t8 AS (
+    SELECT DISTINCT
+        ward_id,
+        TRIM(school_name) AS school_name,
+        pmshree_school
+    FROM {{ ref('seed_pmshree') }}
+),
+
+t9 as (SELECT
+    t7.*,
+    COALESCE(t8.pmshree_school, FALSE) AS pmshree_school
+FROM t7
+LEFT JOIN t8
+    ON t7.school_ward_id = t8.ward_id
+    AND TRIM(t7.school_name) = t8.school_name
+)
+
+select * from t9

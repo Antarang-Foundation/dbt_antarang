@@ -79,7 +79,7 @@ with
 
         left join
             int_student_global as student
-            on sar.assessment_barcode = student.student_barcode
+            on student.student_barcode = sar.assessment_barcode
 
         where
             safe_cast(sar.assessment_academic_year as int64) >= 2026
