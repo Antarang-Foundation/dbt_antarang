@@ -415,37 +415,58 @@ with
 
     ),
 
-    final AS (
+    
+
+tat_base AS (
     SELECT
         *,
         total_sessions - completed_sessions AS pending_sessions,
 
-        CASE
-            -- Rajasthan: retain the existing pending-session calculation.
-            WHEN school_state = 'Rajasthan' THEN
-                DATE_ADD(
-                    COALESCE(
-                        SAFE_CAST(fac_start_date AS DATE),
-                        CURRENT_DATE("Asia/Kolkata")
-                    ),
-                    INTERVAL (
-                        (total_sessions - completed_sessions) * 14
-                    ) DAY
-                )
+        COALESCE(
+            SAFE_CAST(fac_start_date AS DATE),
+            CURRENT_DATE("Asia/Kolkata")
+        ) AS tat_start_date
 
-            -- Other states: use expected sessions, at 14 days per session.
-            ELSE
-                DATE_ADD(
-                    COALESCE(
-                        SAFE_CAST(fac_start_date AS DATE),
-                        CURRENT_DATE("Asia/Kolkata")
-                    ),
-                    INTERVAL (
-                        COALESCE(batch_expected_sessions, 0) * 14
-                    ) DAY
-                )
-        END AS five_days_tat
     FROM summary
+),
+
+final AS (
+    SELECT
+        *,
+
+        -- 5 working days per pending session
+        (
+            SELECT ARRAY_AGG(d ORDER BY d)
+                [SAFE_OFFSET(pending_sessions * 5 - 1)]
+            FROM UNNEST(
+                GENERATE_DATE_ARRAY(
+                    DATE_ADD(tat_start_date, INTERVAL 1 DAY),
+                    DATE_ADD(
+                        tat_start_date,
+                        INTERVAL (pending_sessions * 10 + 14) DAY
+                    )
+                )
+            ) AS d
+            WHERE EXTRACT(DAYOFWEEK FROM d) NOT IN (1, 7)
+        ) AS five_days_tat,
+
+        -- 15 working days per pending session
+        (
+            SELECT ARRAY_AGG(d ORDER BY d)
+                [SAFE_OFFSET(pending_sessions * 15 - 1)]
+            FROM UNNEST(
+                GENERATE_DATE_ARRAY(
+                    DATE_ADD(tat_start_date, INTERVAL 1 DAY),
+                    DATE_ADD(
+                        tat_start_date,
+                        INTERVAL (pending_sessions * 30 + 14) DAY
+                    )
+                )
+            ) AS d
+            WHERE EXTRACT(DAYOFWEEK FROM d) NOT IN (1, 7)
+        ) AS fifteen_days_tat
+
+    FROM tat_base
 ),
 
 prediction_dates AS (
@@ -581,6 +602,7 @@ prediction AS (
             p.predicted_date_tat,
 
             p.five_days_tat,
+            p.fifteen_days_tat,
 
             -- School working status for predicted date:
 
