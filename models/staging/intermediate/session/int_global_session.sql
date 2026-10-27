@@ -50,11 +50,12 @@ t4 as (
 
          MAX(
         CASE
-            WHEN LOWER(session_name) LIKE '%endline%' 
-            and total_student_present is not null
-            THEN session_date 
-        END
-    ) OVER (PARTITION BY batch_no) AS fac_end_date
+    WHEN LOWER(session_name) LIKE '%endline%'
+         AND LOWER(session_name) NOT LIKE '%15. rem 6: endline%'
+         AND total_student_present IS NOT NULL
+    THEN session_date
+END
+) OVER (PARTITION BY batch_no) AS fac_end_date
 
     from t3
 ),
@@ -91,4 +92,4 @@ t5 as (select
 from t4
 )
 
-select * from t5
+select *  from t5
