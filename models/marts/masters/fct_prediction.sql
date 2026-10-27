@@ -337,7 +337,7 @@ with
             end as session_completion
 
         from {{ ref("int_global_session") }}
-        where session_type = 'Student'
+        where session_type in ('Student', 'Remedial')
 
     ),
 
@@ -598,8 +598,6 @@ prediction AS (
             p.completed_sessions,
 
             p.pending_sessions,
-
-            p.predicted_date_tat,
 
             p.five_days_tat,
             p.fifteen_days_tat,
