@@ -32,7 +32,8 @@ with
             Session_Mode__c as session_mode,
             Session_Status__c as session_status,
             Rescheduled_Counter__c as rescheduled_counter,
-            Scheduling_Type__c as scheduling_type
+            Scheduling_Type__c as scheduling_type,
+            Session_Lead__c as session_lead
         from t0
         
     ),
