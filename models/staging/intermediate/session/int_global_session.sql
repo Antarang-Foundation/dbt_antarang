@@ -71,7 +71,7 @@ t5 as (select
     session_date, session_start_time, session_grade, session_no, rescheduled_counter, scheduling_type,
     omr_required, omrs_received, total_student_present, total_parent_present, log_reason, 
     attendance_submitted, present_count, attendance_count,
-    payment_status, parent_present_count, session_mode,
+    payment_status, parent_present_count, session_mode, session_lead,
     batch_expected_sessions, batch_expected_student_type_session, batch_expected_parent_type_session, 
     batch_expected_flexible_type_session, batch_expected_counseling_type_session,
     batch_scheduled_sessions, batch_student_type_scheduled_sessions, batch_parent_type_scheduled_sessions, 
