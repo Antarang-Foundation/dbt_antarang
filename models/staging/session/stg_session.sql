@@ -33,7 +33,12 @@ with
             Session_Status__c as session_status,
             Rescheduled_Counter__c as rescheduled_counter,
             Scheduling_Type__c as scheduling_type,
-            Session_Lead__c as session_lead
+            Session_Lead__c as session_lead,
+            HM_Attended__c as hm_attended,
+            LastModifiedDate as last_modified_date,
+            Late_Schedule__c as late_schedule
+
+
         from t0
         
     ),
