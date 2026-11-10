@@ -3,6 +3,7 @@ WITH batches AS (
 ),
 schools AS (
     SELECT * FROM {{ ref("dev_stg_school") }}
+    where school_state != 'Uttar Pradesh'
 ),
 facilitators AS (
     SELECT * FROM {{ ref("dev_stg_facilitator") }}
