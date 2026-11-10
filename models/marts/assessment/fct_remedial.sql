@@ -54,10 +54,9 @@ final AS (
         dcp.batch_donor,
         dcp.batch_grade,
 
-        remedial.el_no,
         remedial.assessment_barcode,
         remedial.el_CreatedDate,
-        remedial.record_type_id,
+        remedial.el_no,
 
         remedial.q1_1,
         remedial.q1_2,
@@ -129,9 +128,7 @@ final AS (
         remedial.q10_marks,
 
         remedial.q11,
-        remedial.q11_marks,
-
-        remedial.record_type
+        remedial.q11_marks
 
     FROM dcp
     INNER JOIN remedial
