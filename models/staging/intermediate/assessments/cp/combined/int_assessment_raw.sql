@@ -91,15 +91,52 @@ with
         cs.* except (assessment_barcode, bl_assessment_batch_id, bl_created_on, bl_created_from_form, bl_assessment_grade, bl_assessment_academic_year, 
         el_assessment_batch_id, bl_is_non_null, el_created_on, el_created_from_form, el_assessment_grade, el_assessment_academic_year, el_is_non_null),
 
-        fp.* except (assessment_barcode, bl_assessment_batch_id, bl_created_on, bl_created_from_form, bl_assessment_grade, bl_assessment_academic_year, 
-        el_assessment_batch_id, bl_is_non_null, el_created_on, el_created_from_form, el_assessment_grade, el_assessment_academic_year, el_is_non_null),
-        
-        saf.* except (assessment_barcode, record_type, assessment_batch_id, created_on, created_from_form, assessment_grade, assessment_academic_year, 
-        is_non_null, saf_atleast_one_interest, saf_atleast_one_aptitude, saf_atleast_one_quiz, saf_atleast_one_feedback),
+        fp.* EXCEPT (
+    assessment_barcode,
+    bl_assessment_batch_id,
+    bl_created_on,
+    bl_created_from_form,
+    bl_assessment_grade,
+    bl_assessment_academic_year,
+    el_assessment_batch_id,
+    bl_is_non_null,
+    el_created_on,
+    el_created_from_form,
+    el_assessment_grade,
+    el_assessment_academic_year,
+    el_is_non_null
+),
 
-        sar.* except (assessment_barcode, record_type, assessment_batch_id, created_on, created_from_form, assessment_grade, assessment_academic_year, 
-        is_non_null, sar_atleast_one_quiz, sar_atleast_one_reality)  
+-- Single record_type column
+COALESCE(saf.record_type, sar.record_type) AS record_type,
 
+saf.* EXCEPT (
+    assessment_barcode,
+    record_type,
+    assessment_batch_id,
+    created_on,
+    created_from_form,
+    assessment_grade,
+    assessment_academic_year,
+    is_non_null,
+    saf_atleast_one_interest,
+    saf_atleast_one_aptitude,
+    saf_atleast_one_quiz,
+    saf_atleast_one_feedback
+),
+
+sar.* EXCEPT (
+    assessment_barcode,
+    record_type,
+    assessment_batch_id,
+    created_on,
+    created_from_form,
+    assessment_grade,
+    assessment_academic_year,
+    is_non_null,
+    sar_atleast_one_quiz,
+    sar_atleast_one_reality
+)
         from 
             cdm1 
 
